@@ -27,3 +27,9 @@
 *.exe
 *.out
 *.app
+
+# Vim swap files
+*.swp
+
+# Temporary files under linux
+*~
