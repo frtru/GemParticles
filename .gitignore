@@ -23,6 +23,10 @@
 *.a
 *.lib
 
+# Visual Studio compilation logs and temporary files
+*.tlog
+*.lastbuildstate
+
 # Executables
 *.exe
 *.out
@@ -33,3 +37,5 @@
 
 # Temporary files under linux
 *~
+
+# V
