@@ -1,11 +1,30 @@
+/*************************************************************************
+ * Copyright (c) 2016 François Trudel
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+*************************************************************************/
 #include "fountain.hh"
 
 #include <algorithm>
 
 namespace Gem {
 namespace Particle {
-Fountain::Fountain(const glm::f32vec3& a_spawnLocation) 
-  : ISource(0.0), // TODO: Fetch emission rate externally (parameter)
+Fountain::Fountain(const glm::f32vec3& a_spawnLocation,/*
+  const glm::f32vec3& a_spawnVelocity,
+  const glm::f32vec3& a_spawnAcceleration,
+  const glm::u8vec4& a_startColor,
+  const glm::u8vec4& a_EndColor,
+  float lifetime = 1.0f,*/
+  double a_dEmissionRate)
+  : ISource(a_dEmissionRate),
     m_spawnLocation(a_spawnLocation) {
   // TODO: Every parameter except for the acceleration
   // should be received from external party
