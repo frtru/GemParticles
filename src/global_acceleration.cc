@@ -11,32 +11,18 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_SOURCE_HH
-#define FOUNTAIN_SOURCE_HH
-
-#include "source.hh"
+#include "global_acceleration.hh"
 
 namespace Gem {
 namespace Particle {
-class FountainSource : public Source {
-private:
-  static const glm::f32vec3 DEFAULT_SPEED;
+void GlobalAcceleration::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
+  // TODO: Deal with the delta double precision casted to float later
+  // (GLM vec3 or vec4 doesn't support operations with doubles...)
+  const float fDt = (float)a_dt;
 
-public:
-	FountainSource() = delete;
-  FountainSource(const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity = DEFAULT_SPEED,
-    float a_fLifetime = 1.0f,
-    double a_dEmissionRate = 100.0);
-	~FountainSource() = default;
-
-  // TODO: Copyable and moveable?<
-
-private:
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-} /* class FountainSource*/;
+  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+    a_pPool->m_velocity[i] += GRAVITY_ACCEL * fDt;
+  }
+}
 } /* namespace Particle */
 } /* namespace Gem */
-
-#endif /* end of include guard: FOUNTAIN_SOURCE_HH */

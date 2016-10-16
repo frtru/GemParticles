@@ -19,8 +19,12 @@
 //Other libraries' .h files
 //Your project's .h files
 #include "particle_system.hh"
-#include "fountain_source.hh"
 #include "timer.hh"
+
+// TODO: Temporary includes since test suite
+// is not built yet...
+#include "fountain_source.hh"
+#include "global_acceleration.hh"
 
 int main(int argc, const char *argv[]) {
     (void)argc;(void)argv;
@@ -28,6 +32,7 @@ int main(int argc, const char *argv[]) {
     Gem::Particle::System sys(100000);
     sys.AddSource(std::make_unique<Gem::Particle::FountainSource>(
       Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })));
+    sys.AddDynamic(std::make_unique<Gem::Particle::GlobalAcceleration>());
 
     std::cout << sizeof(Gem::Particle::Particle) << std::endl;
     while(true) {

@@ -11,32 +11,30 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_SOURCE_HH
-#define FOUNTAIN_SOURCE_HH
+#ifndef GLOBAL_ACCELERATION_HH
+#define GLOBAL_ACCELERATION_HH
 
-#include "source.hh"
+#include "dynamic.hh"
 
+/* TODO: Since this is a global acceleration updater
+ * providing methods to modify the acceleration (because
+ * it surely wouldn't always be just gravity...) would be a good idea
+ */
 namespace Gem {
 namespace Particle {
-class FountainSource : public Source {
+class GlobalAcceleration : public Dynamic {
 private:
-  static const glm::f32vec3 DEFAULT_SPEED;
+  const glm::f32vec3 GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
 
 public:
-	FountainSource() = delete;
-  FountainSource(const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity = DEFAULT_SPEED,
-    float a_fLifetime = 1.0f,
-    double a_dEmissionRate = 100.0);
-	~FountainSource() = default;
+  GlobalAcceleration() = default;
+  ~GlobalAcceleration() = default;
 
-  // TODO: Copyable and moveable?<
+	// TODO: Copyable and moveable?<
 
-private:
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-} /* class FountainSource*/;
+  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
+} /* class DefaultDynamic*/;
 } /* namespace Particle */
 } /* namespace Gem */
 
-#endif /* end of include guard: FOUNTAIN_SOURCE_HH */
+#endif /* end of include guard: GLOBAL_ACCELERATION_HH */
