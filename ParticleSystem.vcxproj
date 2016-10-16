@@ -22,15 +22,15 @@
     <ClCompile Include="src\app.cc" />
     <ClCompile Include="src\default_dynamic.cc" />
     <ClCompile Include="src\fountain_source.cc" />
-    <ClCompile Include="src\isource.cc" />
+    <ClCompile Include="src\source.cc" />
     <ClCompile Include="src\particle_pool.cc" />
     <ClCompile Include="src\particle_system.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\default_dynamic.hh" />
     <ClInclude Include="src\fountain_source.hh" />
-    <ClInclude Include="src\idynamic.hh" />
-    <ClInclude Include="src\isource.hh" />
+    <ClInclude Include="src\dynamic.hh" />
+    <ClInclude Include="src\source.hh" />
     <ClInclude Include="src\particle.hh" />
     <ClInclude Include="src\particle_pool.hh" />
     <ClInclude Include="src\particle_system.hh" />

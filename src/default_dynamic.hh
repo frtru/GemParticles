@@ -14,14 +14,14 @@
 #ifndef DEFAULT_DYNAMIC_HH
 #define DEFAULT_DYNAMIC_HH
 
-#include "idynamic.hh"
+#include "dynamic.hh"
 
 namespace Gem {
 namespace Particle {
-class DefaultDynamic : public IDynamic {
+class DefaultDynamic : public Dynamic {
 public:
-  DefaultDynamic() {}
-  ~DefaultDynamic() {}
+  DefaultDynamic() = default;
+  ~DefaultDynamic() = default;
 
 	// TODO: Copyable and moveable?<
 

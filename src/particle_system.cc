@@ -22,13 +22,13 @@ System::System(std::size_t a_unMaxParticleCount)
   m_vDynamics.push_back(std::make_unique<DefaultDynamic>());
 }
 
-System::~System() {}
-
 void System::Udpate(double a_dt){
-  for (auto& dyn : m_vDynamics) {
-    dyn->Update(a_dt,m_pParticlePool);
+  for (auto& source : m_vSources) {
+    source->Emit(a_dt, m_pParticlePool);
   }
-  //TODO: Update the sources as welll
+  for (auto& dynamic : m_vDynamics) {
+    dynamic->Update(a_dt, m_pParticlePool);
+  }
 }
 } /* namespace Particle */
 } /* namespace Gem */

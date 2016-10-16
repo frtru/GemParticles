@@ -22,7 +22,7 @@ void DefaultDynamic::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
 
   // TODO: See if 3 for's are better for branch prediction here
   // or a merged for with a if else
-  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
     a_pPool->m_lifetime[i] -= fDt;
     if (a_pPool->m_lifetime[i] <= 0.0f) {
       a_pPool->Sleep(i);
@@ -33,13 +33,13 @@ void DefaultDynamic::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
 
   // TODO: See if 2 for's is better for data caching, since 
   // one loop is dedicated to velocities and the other to positions
-  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
     a_pPool->m_position[i] += a_pPool->m_velocity[i] * fDt;
   }
-  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+/*  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
     a_pPool->m_velocity[i] += a_pPool->m_acceleration[i] * fDt;
   }
-
+  */
 }
 } /* namespace Particle */
 } /* namespace Gem */

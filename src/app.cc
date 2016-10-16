@@ -15,6 +15,7 @@
  * all copies or substantial portions of the Software.
 *************************************************************************/
 #include <vector>
+#include <limits>
 //Other libraries' .h files
 //Your project's .h files
 #include "particle_system.hh"
@@ -24,8 +25,9 @@
 int main(int argc, const char *argv[]) {
     (void)argc;(void)argv;
 
-    Gem::Particle::System sys(2000000);
-    sys.AddSource(std::make_unique<Gem::Particle::FountainSource>(Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })));
+    Gem::Particle::System sys(100000);
+    sys.AddSource(std::make_unique<Gem::Particle::FountainSource>(
+      Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })));
 
     std::cout << sizeof(Gem::Particle::Particle) << std::endl;
     while(true) {

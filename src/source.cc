@@ -11,18 +11,23 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "isource.hh"
+#include "source.hh"
 
 #include <algorithm>
 
 namespace Gem {
 namespace Particle {
-ISource::ISource(double a_dEmissionRate)
-  : m_dEmissionRate(a_dEmissionRate) {}
+Source::Source(const glm::f32vec3& a_spawnLocation,
+    const glm::f32vec3& a_spawnVelocity,
+    float a_fLifetime,
+    double a_dEmissionRate)
+  : m_spawnLocation(a_spawnLocation),
+  m_spawnVelocity(a_spawnVelocity),
+  m_fLifetime(a_fLifetime),
+  m_dEmissionRate(a_dEmissionRate)
+  {}
 
-ISource::~ISource() {}
-
-void ISource::Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
+void Source::Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
   const std::size_t maxNewParticles = 
     static_cast<std::size_t>(a_dt*m_dEmissionRate);
   const std::size_t firstParticleIndex = 

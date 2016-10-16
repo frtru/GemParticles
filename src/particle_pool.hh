@@ -50,12 +50,8 @@ public:
   // it might be useful to keep it.
   std::unique_ptr<float[]       > m_lifetime;
   std::unique_ptr<glm::u8vec4[] >	m_color;
-  //TODO: See if following is necessary
-//  std::unique_ptr<glm::u8vec4[] >	m_startColor;
-//  std::unique_ptr<glm::u8vec4[] >	m_endColor;
   std::unique_ptr<glm::f32vec3[]>	m_position;
   std::unique_ptr<glm::f32vec3[]>	m_velocity;
-  std::unique_ptr<glm::f32vec3[]>	m_acceleration;
 public:
   Pool() = delete;
   explicit Pool(std::size_t a_unMaxParticleCount);
@@ -65,7 +61,7 @@ public:
   Pool& operator=(Pool&& other) = delete;
   Pool& operator=(const Pool& other) = delete;
 
-  ~Pool();
+  ~Pool() = default;
   
   std::size_t GetParticleCount() const {
     return m_unParticleCount;

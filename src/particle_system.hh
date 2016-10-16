@@ -33,28 +33,27 @@
 
 #include "particle.hh"
 #include "particle_pool.hh"
-#include "isource.hh"
-#include "idynamic.hh"
+#include "source.hh"
+#include "dynamic.hh"
 
 namespace Gem {
 namespace Particle {
 class System {
 public:
-  System() = delete;
-  explicit System(std::size_t a_unMaxParticleCount);
+  explicit System(std::size_t a_unMaxParticleCount = 10000);
 
   System(System&& other) = delete;
   System(const System& other) = delete;
   System& operator=(System&& other) = delete;
   System& operator=(const System& other) = delete;
 
-  ~System();
+  ~System() = default;
 
   void Udpate(double a_dt);
-  void AddSource(std::unique_ptr<ISource> a_pSource) { 
+  void AddSource(std::unique_ptr<Source> a_pSource) { 
     m_vSources.push_back(std::move(a_pSource)); 
   }
-  void AddDynamic(std::unique_ptr<IDynamic> a_pDynamic) { 
+  void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) { 
     m_vDynamics.push_back(std::move(a_pDynamic)); 
   }
 
@@ -63,9 +62,9 @@ private:
   std::unique_ptr<Pool>   m_pParticlePool; 
   // TODO: See if shared_ptr would be better so that
   // something else can have a copy of those to change
-  // some parameters
-  std::vector<std::unique_ptr<ISource> >  m_vSources;
-  std::vector<std::unique_ptr<IDynamic> > m_vDynamics;
+  // some parameters more easily
+  std::vector<std::unique_ptr<Source> >  m_vSources;
+  std::vector<std::unique_ptr<Dynamic> > m_vDynamics;
 } /* class System*/;
 } /* namespace Particle */
 } /* namespace Gem */

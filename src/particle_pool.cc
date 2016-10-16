@@ -18,15 +18,10 @@ namespace Particle {
 Pool::Pool(std::size_t a_unMaxParticleCount)
   : m_lifetime(new float[a_unMaxParticleCount]),
     m_color(new glm::u8vec4[a_unMaxParticleCount]),
-  //m_startColor(new glm::u8vec4[a_unMaxParticleCount]),
-  //m_endColor(new glm::u8vec4[a_unMaxParticleCount]),
   m_position(new glm::f32vec3[a_unMaxParticleCount]),
   m_velocity(new glm::f32vec3[a_unMaxParticleCount]),
-  m_acceleration(new glm::f32vec3[a_unMaxParticleCount]),
   m_unParticleCount(a_unMaxParticleCount),
   m_unActiveParticleCount(0) {}
-
-Pool::~Pool() {}
 
 void Pool::Sleep(std::size_t a_unParticleID) {
   // NOTE:  Should include the following check since 
@@ -66,8 +61,6 @@ void Pool::SwapPositions(
     m_position[a_unSecondPosition]);
   std::swap(m_velocity[a_unFirstPosition],
     m_velocity[a_unSecondPosition]);
-  std::swap(m_acceleration[a_unFirstPosition],
-    m_acceleration[a_unSecondPosition]);
 }
 
 //TODO: (NICE TO HAVE) The property to extend or reduce the capacity of the pool

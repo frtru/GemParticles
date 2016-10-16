@@ -11,38 +11,28 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SOURCE_HH
-#define SOURCE_HH
+#ifndef DYNAMIC_HH
+#define DYNAMIC_HH
 
-#include <glm/glm.hpp>
+#include <memory>
 
 #include "particle_pool.hh"
 
 namespace Gem {
 namespace Particle {
-class ISource {
+class Dynamic {
 public:
-	ISource() = delete;
-	ISource(double a_dEmissionRate = 0.0);
-	~ISource();
+	Dynamic() = default;
+	virtual ~Dynamic() = default;
 
-  double GetEmissionRate() const { return m_dEmissionRate; }
-  void SetEmissionRate(double a_dEmissionRate) {
-    m_dEmissionRate = a_dEmissionRate;
-  }
+	// TODO: Copyable and moveable?<
 
-  // TODO: Copyable and moveable?<
-  void Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool);
+  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) = 0;
+
 private:
-  // Private initialization of the particles before emission
-  // in the subclasses
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) = 0;
 
-  // TODO: Set this correctly
-  double  m_dEmissionRate; // should this really be private? get/set?
-} /* class ISource*/;
+} /* class Dynamic*/;
 } /* namespace Particle */
 } /* namespace Gem */
 
-#endif /* end of include guard: SOURCE_HH */
+#endif /* end of include guard: DYNAMIC_HH */

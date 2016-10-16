@@ -11,33 +11,47 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_SOURCE_HH
-#define FOUNTAIN_SOURCE_HH
+#ifndef SOURCE_HH
+#define SOURCE_HH
 
-#include "source.hh"
+#include <glm/glm.hpp>
+
+#include "particle_pool.hh"
 
 namespace Gem {
 namespace Particle {
-class FountainSource : public Source {
-private:
-  static const glm::f32vec3 DEFAULT_SPEED;
-//  const glm::f32vec3 GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
-
+class Source {
 public:
-	FountainSource() = delete;
-  FountainSource(const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity = DEFAULT_SPEED,
-    float a_fLifetime = 1.0f,
-    double a_dEmissionRate = 100.0);
-	~FountainSource() = default;
+	Source() = delete;
+	Source(const glm::f32vec3& a_spawnLocation,
+    const glm::f32vec3& a_spawnVelocity,
+    float a_fLifetime,
+    double a_dEmissionRate);
+	~Source() = default;
+
+  /*TODO: When you'll be at the point to set the rate through
+  the UI, it will be the time start caring about those things
+  double GetEmissionRate() const { return m_dEmissionRate; }
+  void SetEmissionRate(double a_dEmissionRate) {
+    m_dEmissionRate = a_dEmissionRate;
+  }*/
 
   // TODO: Copyable and moveable?<
+  void Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool);
+
+protected:
+  float         m_fLifetime;
+  double        m_dEmissionRate;
+  glm::f32vec3  m_spawnLocation;
+  glm::f32vec3  m_spawnVelocity;
 
 private:
+  // Private initialization of the particles before emission
+  // in the subclasses
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-} /* class FountainSource*/;
+    std::size_t a_unStartID, std::size_t a_unEndID) = 0;
+} /* class Source*/;
 } /* namespace Particle */
 } /* namespace Gem */
 
-#endif /* end of include guard: FOUNTAIN_SOURCE_HH */
+#endif /* end of include guard: SOURCE_HH */
