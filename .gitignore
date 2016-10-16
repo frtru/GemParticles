@@ -27,6 +27,7 @@
 *.tlog
 *.lastbuildstate
 *.idb
+*.TMP
 
 # Executables
 *.exe
