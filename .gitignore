@@ -26,6 +26,7 @@
 # Visual Studio compilation logs and temporary files
 *.tlog
 *.lastbuildstate
+*.idb
 
 # Executables
 *.exe
