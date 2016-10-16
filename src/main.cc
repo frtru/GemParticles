@@ -13,14 +13,17 @@
 *************************************************************************/
 //C system files
 //C++ system files
-#include <iostream>
-#include <vector>
 //Other libraries' .h files
 //Your project's .h files
 #include "app.hh"
 
+using namespace Gem::Particle;
+
 int main(int argc, const char *argv[]) {
   (void)argc;(void)argv;
+  App::Init();
   
+  App::Run();
+
   return 0;
 }

@@ -14,32 +14,17 @@
 #ifndef APP_HH
 #define APP_HH
 
-#include "particle_system.hh"
+#include <string>
 
 namespace Gem {
 namespace Particle {
-class App {
-public:
-  App();
-
-  App(App&& other) = delete;
-  App(const App& other) = delete;
-  App& operator=(App&& other) = delete;
-  App& operator=(const App& other) = delete;
-
-  ~App();
-
-  void LoadConfig(const std::string& a_sConfigName);
-  void SaveConfig(const std::string& a_sConfigName);
-  void Run();
-
-  //TODO: GPU updater/renderer goes here
-
-private:
-  System m_particleSystem;
-}; /* class App*/
+namespace App {
+void Init();
+void LoadConfig(const std::string& a_sConfigName);
+void SaveConfig(const std::string& a_sConfigName);
+void Run();
+}
 } /* namespace Particle */
 } /* namespace Gem */
-
 
 #endif /* end of include guard: APP_HH */

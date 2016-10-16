@@ -22,7 +22,7 @@ constexpr double MICRO_PER_SEC  = 1.0e06;
 constexpr double MILLI_PER_SEC  = 1.0e03;
 
 template <typename DurationType>
-unsigned long long GetTimeElapsed() {
+unsigned long long UpdateAndGetTimeElapsed() {
   static std::chrono::time_point<std::chrono::steady_clock> previous =
     std::chrono::steady_clock::now();
   auto current = std::chrono::steady_clock::now();
@@ -31,8 +31,8 @@ unsigned long long GetTimeElapsed() {
   return elapsedTime.count();
 }
 
-inline double GetFPS() {
-  return NANO_PER_SEC/GetTimeElapsed<std::chrono::nanoseconds>();
+inline double UpdateAndGetFPS() {
+  return NANO_PER_SEC/UpdateAndGetTimeElapsed<std::chrono::nanoseconds>();
 }
 
 // Chrono version to prevent changing the current time at every
