@@ -31,7 +31,7 @@ public:
 
 private:
 
-} /* class Dynamic*/;
+} /* class IDynamic*/;
 } /* namespace Particle */
 } /* namespace Gem */
 

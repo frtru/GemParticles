@@ -32,7 +32,7 @@ void Pool::Sleep(std::size_t a_unParticleID) {
   // NOTE:  Should include the following check since 
   // no guarantee about ID and that activeparticlecount !=0
   // if (m_unActiveParticleCount > 0) 
-  SwapPoolPositions(a_unParticleID,m_unActiveParticleCount-1);
+  SwapPositions(a_unParticleID,m_unActiveParticleCount-1);
   --m_unActiveParticleCount;
 }
 
@@ -46,11 +46,11 @@ void Pool::Wake(std::size_t a_unParticleID) {
   // NOTE:  Should include the following check since 
   // no guarantee about ID and that activeparticlecount != m_vParticles.size()
   // if (m_unActiveParticleCount < m_vPool.size()) 
-  SwapPoolPositions(a_unParticleID,m_unActiveParticleCount);
+  //SwapPositions(a_unParticleID,m_unActiveParticleCount);
   ++m_unActiveParticleCount;
 }
 
-void Pool::SwapPoolPositions(
+void Pool::SwapPositions(
     std::size_t a_unFirstPosition,
     std::size_t a_unSecondPosition) {
   //TODO:Change the followings for a

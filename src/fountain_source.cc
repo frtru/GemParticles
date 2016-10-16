@@ -11,13 +11,13 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "fountain.hh"
+#include "fountain_source.hh"
 
 #include <algorithm>
 
 namespace Gem {
 namespace Particle {
-Fountain::Fountain(const glm::f32vec3& a_spawnLocation,/*
+FountainSource::FountainSource(const glm::f32vec3& a_spawnLocation,/*
   const glm::f32vec3& a_spawnVelocity,
   const glm::f32vec3& a_spawnAcceleration,
   const glm::u8vec4& a_startColor,
@@ -30,9 +30,9 @@ Fountain::Fountain(const glm::f32vec3& a_spawnLocation,/*
   // should be received from external party
 }
 
-Fountain::~Fountain() {}
+FountainSource::~FountainSource() {}
 
-void Fountain::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+void FountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     // TODO: See if += is possible and if 

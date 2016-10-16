@@ -18,16 +18,14 @@
 //Other libraries' .h files
 //Your project's .h files
 #include "particle_system.hh"
-#include "euler_model.hh"
-#include "fountain.hh"
+#include "fountain_source.hh"
 #include "timer.hh"
 
 int main(int argc, const char *argv[]) {
     (void)argc;(void)argv;
 
     Gem::Particle::System sys(2000000);
-    sys.AddDynamic(new Gem::Particle::EulerModel);
-    sys.AddSource(new Gem::Particle::Fountain({ 0.0f,0.0f,0.0f }));
+    sys.AddSource(std::make_unique<Gem::Particle::FountainSource>(Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })));
 
     std::cout << sizeof(Gem::Particle::Particle) << std::endl;
     while(true) {

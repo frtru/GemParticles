@@ -78,7 +78,7 @@ public:
   void Wake(std::size_t a_unParticleID);
 
 private:
-  void SwapPoolPositions(
+  void SwapPositions(
       std::size_t a_unFirstPosition,
       std::size_t a_unSecondPosition);
 

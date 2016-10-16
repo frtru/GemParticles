@@ -41,7 +41,7 @@ private:
 
   // TODO: Set this correctly
   double  m_dEmissionRate; // should this really be private? get/set?
-} /* class Source*/;
+} /* class ISource*/;
 } /* namespace Particle */
 } /* namespace Gem */
 

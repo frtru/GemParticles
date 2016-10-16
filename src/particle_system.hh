@@ -51,17 +51,21 @@ public:
   ~System();
 
   void Udpate(double a_dt);
-
-  void AddSource(ISource* a_pSource)    { m_vSources.push_back(a_pSource); }
-  void AddDynamic(IDynamic* a_pDynamic) { m_vDynamics.push_back(a_pDynamic); }
+  void AddSource(std::unique_ptr<ISource> a_pSource) { 
+    m_vSources.push_back(std::move(a_pSource)); 
+  }
+  void AddDynamic(std::unique_ptr<IDynamic> a_pDynamic) { 
+    m_vDynamics.push_back(std::move(a_pDynamic)); 
+  }
 
 private:
   // TODO: See if raw class (Pool) is faster
   std::unique_ptr<Pool>   m_pParticlePool; 
-  //TODO: Add std::shared_ptr or something instead of raw pointers
-  //........actually why not unique_ptr at this point
-  std::vector<ISource*>	  m_vSources;
-  std::vector<IDynamic*>	m_vDynamics;
+  // TODO: See if shared_ptr would be better so that
+  // something else can have a copy of those to change
+  // some parameters
+  std::vector<std::unique_ptr<ISource> >  m_vSources;
+  std::vector<std::unique_ptr<IDynamic> > m_vDynamics;
 } /* class System*/;
 } /* namespace Particle */
 } /* namespace Gem */

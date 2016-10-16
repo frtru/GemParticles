@@ -11,23 +11,23 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "euler_model.hh"
+#ifndef DEFAULT_DYNAMIC_HH
+#define DEFAULT_DYNAMIC_HH
+
+#include "idynamic.hh"
 
 namespace Gem {
 namespace Particle {
-EulerModel::EulerModel(){
-}
+class DefaultDynamic : public IDynamic {
+public:
+  DefaultDynamic() {}
+  ~DefaultDynamic() {}
 
-EulerModel::~EulerModel(){
-}
+	// TODO: Copyable and moveable?<
 
-void EulerModel::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
-  // TODO: Deal with the delta double precision casted to float later
-  const float fDt = (float)a_dt;
-  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_position[i] += a_pPool->m_velocity[i] * fDt;
-    a_pPool->m_velocity[i] += a_pPool->m_acceleration[i] * fDt;
-  }
-}
+  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
+} /* class DefaultDynamic*/;
 } /* namespace Particle */
 } /* namespace Gem */
+
+#endif /* end of include guard: DEFAULT_DYNAMIC_HH */

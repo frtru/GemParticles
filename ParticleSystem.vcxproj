@@ -20,15 +20,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app.cc" />
-    <ClCompile Include="src\euler_model.cc" />
-    <ClCompile Include="src\fountain.cc" />
+    <ClCompile Include="src\default_dynamic.cc" />
+    <ClCompile Include="src\fountain_source.cc" />
     <ClCompile Include="src\isource.cc" />
     <ClCompile Include="src\particle_pool.cc" />
     <ClCompile Include="src\particle_system.cc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\euler_model.hh" />
-    <ClInclude Include="src\fountain.hh" />
+    <ClInclude Include="src\default_dynamic.hh" />
+    <ClInclude Include="src\fountain_source.hh" />
     <ClInclude Include="src\idynamic.hh" />
     <ClInclude Include="src\isource.hh" />
     <ClInclude Include="src\particle.hh" />
