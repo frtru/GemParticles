@@ -35,7 +35,7 @@ public:
 private:
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
-} /* class FountainSource*/;
+}; /* class FountainSource*/
 } /* namespace Particle */
 } /* namespace Gem */
 

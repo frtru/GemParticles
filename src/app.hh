@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 FranÃ§ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,30 +11,35 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLOBAL_ACCELERATION_HH
-#define GLOBAL_ACCELERATION_HH
+#ifndef APP_HH
+#define APP_HH
 
-#include "dynamic.hh"
+#include "particle_system.hh"
 
-/* TODO: Since this is a global acceleration updater
- * providing methods to modify the acceleration (because
- * it surely wouldn't always be just gravity...) would be a good idea
- */
 namespace Gem {
 namespace Particle {
-class GlobalAcceleration : public Dynamic {
-private:
-  const glm::f32vec3 GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
-
+class App {
 public:
-  GlobalAcceleration() = default;
-  ~GlobalAcceleration() = default;
+  App();
 
-	// TODO: Copyable and moveable?<
+  App(App&& other) = delete;
+  App(const App& other) = delete;
+  App& operator=(App&& other) = delete;
+  App& operator=(const App& other) = delete;
 
-  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
-}; /* class DefaultDynamic*/
+  ~App();
+
+  void LoadConfig(const std::string& a_sConfigName);
+  void SaveConfig(const std::string& a_sConfigName);
+  void Run();
+
+  //TODO: GPU updater/renderer goes here
+
+private:
+  System m_particleSystem;
+}; /* class App*/
 } /* namespace Particle */
 } /* namespace Gem */
 
-#endif /* end of include guard: GLOBAL_ACCELERATION_HH */
+
+#endif /* end of include guard: APP_HH */

@@ -42,14 +42,17 @@ class System {
 public:
   explicit System(std::size_t a_unMaxParticleCount = 10000);
 
-  System(System&& other) = delete;
+  System(System&& other);
   System(const System& other) = delete;
   System& operator=(System&& other) = delete;
   System& operator=(const System& other) = delete;
 
   ~System() = default;
-
-  void Udpate(double a_dt);
+  
+  void Update(double a_dt);
+  const std::unique_ptr<Pool>& GetParticles() const {
+    return m_pParticlePool; 
+  }
   void AddSource(std::unique_ptr<Source> a_pSource) { 
     m_vSources.push_back(std::move(a_pSource)); 
   }
@@ -65,7 +68,7 @@ private:
   // some parameters more easily
   std::vector<std::unique_ptr<Source> >  m_vSources;
   std::vector<std::unique_ptr<Dynamic> > m_vDynamics;
-} /* class System*/;
+}; /* class System*/;
 } /* namespace Particle */
 } /* namespace Gem */
 

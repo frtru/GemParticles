@@ -50,7 +50,7 @@ private:
   // in the subclasses
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) = 0;
-} /* class Source*/;
+}; /* class Source*/
 } /* namespace Particle */
 } /* namespace Gem */
 

@@ -11,30 +11,16 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLOBAL_ACCELERATION_HH
-#define GLOBAL_ACCELERATION_HH
+//C system files
+//C++ system files
+#include <iostream>
+#include <vector>
+//Other libraries' .h files
+//Your project's .h files
+#include "app.hh"
 
-#include "dynamic.hh"
-
-/* TODO: Since this is a global acceleration updater
- * providing methods to modify the acceleration (because
- * it surely wouldn't always be just gravity...) would be a good idea
- */
-namespace Gem {
-namespace Particle {
-class GlobalAcceleration : public Dynamic {
-private:
-  const glm::f32vec3 GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
-
-public:
-  GlobalAcceleration() = default;
-  ~GlobalAcceleration() = default;
-
-	// TODO: Copyable and moveable?<
-
-  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
-}; /* class DefaultDynamic*/
-} /* namespace Particle */
-} /* namespace Gem */
-
-#endif /* end of include guard: GLOBAL_ACCELERATION_HH */
+int main(int argc, const char *argv[]) {
+  (void)argc;(void)argv;
+  
+  return 0;
+}

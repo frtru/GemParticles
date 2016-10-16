@@ -35,7 +35,7 @@ struct Particle {
   glm::f32vec3	position;
   glm::f32vec3	velocity;
   glm::f32vec3	acceleration;
-} /* struct Particle*/;
+}; /* struct Particle*/
 } /* namespace Particle */
 } /* namespace Gem */
 

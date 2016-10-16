@@ -26,7 +26,7 @@ public:
 	// TODO: Copyable and moveable?<
 
   virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
-} /* class DefaultDynamic*/;
+}; /* class DefaultDynamic*/
 } /* namespace Particle */
 } /* namespace Gem */
 

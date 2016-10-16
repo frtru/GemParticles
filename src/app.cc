@@ -1,6 +1,3 @@
-//C system files
-//C++ system files
-#include <iostream>
 /*************************************************************************
  * Copyright (c) 2016 François Trudel
  *
@@ -14,10 +11,9 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
+#include "app.hh"
+
 #include <vector>
-//Other libraries' .h files
-//Your project's .h files
-#include "particle_system.hh"
 #include "timer.hh"
 
 // TODO: Temporary includes since test suite
@@ -25,18 +21,44 @@
 #include "fountain_source.hh"
 #include "global_acceleration.hh"
 
-int main(int argc, const char *argv[]) {
-    (void)argc;(void)argv;
-
-    Gem::Particle::System sys(2000000);
-    sys.AddSource(std::make_unique<Gem::Particle::FountainSource>(
-      Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })));
-    sys.AddDynamic(std::make_unique<Gem::Particle::GlobalAcceleration>());
-
-    while(true) {
-      std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
-      sys.Udpate((float)timer::chrono::GetTimeElapsed<std::chrono::nanoseconds>() / timer::NANO_PER_SEC);
-      timer::chrono::Update();
-    }
-    return 0;
+namespace Gem {
+namespace Particle {
+App::App()
+  : m_particleSystem(100000) {
+//TODO: When loading a config will be available 
+//fill the particlesystem with what the config have
+//and remove that temporary hardcoded effect
+  m_particleSystem.AddSource(
+    std::make_unique<Gem::Particle::FountainSource>(
+      Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })
+    )
+  );
+  m_particleSystem.AddDynamic(
+    std::make_unique<Gem::Particle::GlobalAcceleration>()
+  );
 }
+App::~App() {
+}
+void App::LoadConfig(const std::string& a_sConfigName) {
+  //TODO
+}
+void App::SaveConfig(const std::string& a_sConfigName) {
+  //TODO
+}
+void App::Run() {
+  while (true) {
+    //TODO: See how UI with anttweakbar goes, but
+    //events subscription should go here if there's any
+   double dt = timer::chrono::GetTimeElapsed<std::chrono::nanoseconds>()
+      / timer::NANO_PER_SEC;
+    m_particleSystem.Update(dt);
+    
+    //TODO: Render here
+    //m_particleSystem.Render()
+    
+    timer::chrono::Update();
+  }
+}
+} /* namespace Particle */
+} /* namespace Gem */
+

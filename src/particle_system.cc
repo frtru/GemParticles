@@ -18,11 +18,15 @@
 namespace Gem {
 namespace Particle {
 System::System(std::size_t a_unMaxParticleCount) 
-  : m_pParticlePool (new Pool(a_unMaxParticleCount)) {
+  : m_pParticlePool(new Pool(a_unMaxParticleCount)) {
   m_vDynamics.push_back(std::make_unique<DefaultDynamic>());
 }
-
-void System::Udpate(double a_dt){
+System::System(System&& other)
+  : m_pParticlePool(std::move(other.m_pParticlePool)),
+  m_vDynamics(std::move(other.m_vDynamics)),
+  m_vSources(std::move(other.m_vSources)) {
+}
+void System::Update(double a_dt){
   for (auto& source : m_vSources) {
     source->Emit(a_dt, m_pParticlePool);
   }

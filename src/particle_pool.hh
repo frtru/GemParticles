@@ -80,7 +80,7 @@ private:
 
   std::size_t m_unParticleCount;
   std::size_t m_unActiveParticleCount;
-} /* class Pool*/;
+}; /* class Pool*/
 } /* namespace Particle */
 } /* namespace Gem */
 
