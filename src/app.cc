@@ -16,6 +16,8 @@
 //C++ system files
 #include <iostream>
 //Other libraries' .h files
+#include <gl/glew.h>
+#include <gl/glfw3.h>
 //Your project's .h files
 #include "timer.hh"
 #include "shader.hh"
@@ -30,20 +32,40 @@ namespace Gem {
 namespace Particle {
 namespace App {
 namespace {
+GLFWwindow* window; 
+void OpenGLSetup() {
+  // GLFW initialization
+
+  /* Initialize the library */
+  if (!glfwInit())
+    std::cerr << "OpenGLSetup -> glfwInit failed!" << std::endl;
+
+  /* Create a windowed mode window and its OpenGL context */
+  window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+  if (!window) {
+    glfwTerminate();
+    std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
+  }
+
+  /* Make the window's context current */
+  glfwMakeContextCurrent(window);
+
+	//Context/OpenGL initialization
+	//TODO:
+
+  // GLEW initialization
+  if (GLEW_OK != glewInit()) {
+	  std::cerr << "GLEW is not initialized!" << std::endl;
+  }
+}
 //TODO : Remove the follower shadermanager instance when it'll be a namespace
 ShaderManager ShaderManagerInstance;
 System particle_system(100000);
 //TODO: GPU updater/renderer goes here
 }
 void Init() {
-  //Context/OpenGL initialization
-  //TODO:
-  
-  // GLEW initialization
-  if (GLEW_OK != glewInit()) {
-    std::cerr << "GLEW is not initialized!" << std::endl;
-  }
-  
+  OpenGLSetup();
+
   // Shaders initialization
   ShaderManagerInstance.LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
   ShaderManagerInstance.LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
@@ -61,14 +83,8 @@ void Init() {
     std::make_unique<Gem::Particle::GlobalAcceleration>()
   );
 }
-void LoadConfig(const std::string& a_sConfigName) {
-  //TODO
-}
-void SaveConfig(const std::string& a_sConfigName) {
-  //TODO
-}
 void Run() {
-  while (true) {
+  while (!glfwWindowShouldClose(window)) {
     std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
@@ -79,9 +95,23 @@ void Run() {
     //TODO: Render here
     //m_particleSystem.Render()
 
+    /* Swap front and back buffers */
+    glfwSwapBuffers(window);
+
+    /* Poll for and process events */
+    glfwPollEvents();
     timer::chrono::Update();
   }
+  glfwTerminate();
 }
+
+void LoadConfig(const std::string& a_sConfigName) {
+  //TODO
+}
+void SaveConfig(const std::string& a_sConfigName) {
+  //TODO
+}
+
 } /* namespace App */
 } /* namespace Particle */
 } /* namespace Gem */
