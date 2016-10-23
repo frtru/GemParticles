@@ -18,6 +18,7 @@
 //Other libraries' .h files
 //Your project's .h files
 #include "timer.hh"
+#include "shader.hh"
 #include "particle_system.hh"
 
 // TODO: Temporary includes since test suite
@@ -29,10 +30,28 @@ namespace Gem {
 namespace Particle {
 namespace App {
 namespace {
+//TODO : Remove the follower shadermanager instance when it'll be a namespace
+ShaderManager ShaderManagerInstance;
 System particle_system(100000);
 //TODO: GPU updater/renderer goes here
 }
 void Init() {
+  //Context/OpenGL initialization
+  //TODO:
+  
+  // GLEW initialization
+  if (GLEW_OK != glewInit()) {
+    std::cerr << "GLEW is not initialized!" << std::endl;
+  }
+  
+  // Shaders initialization
+  ShaderManagerInstance.LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
+  ShaderManagerInstance.LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
+  
+  ShaderManagerInstance.CreateAndLink();
+  ShaderManagerInstance.Bind();
+
+  // Particle system initialization
   particle_system.AddSource(
     std::make_unique<Gem::Particle::FountainSource>(
       Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })

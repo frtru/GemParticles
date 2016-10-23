@@ -24,6 +24,7 @@
     <ClCompile Include="src\fountain_source.cc" />
     <ClCompile Include="src\global_acceleration.cc" />
     <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\shader.cc" />
     <ClCompile Include="src\source.cc" />
     <ClCompile Include="src\particle_pool.cc" />
     <ClCompile Include="src\particle_system.cc" />
@@ -34,6 +35,7 @@
     <ClInclude Include="src\fountain_source.hh" />
     <ClInclude Include="src\dynamic.hh" />
     <ClInclude Include="src\global_acceleration.hh" />
+    <ClInclude Include="src\shader.hh" />
     <ClInclude Include="src\source.hh" />
     <ClInclude Include="src\particle.hh" />
     <ClInclude Include="src\particle_pool.hh" />
@@ -80,10 +82,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\public;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\private;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,27 +97,37 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\public;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\private;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\public;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\private;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <WarningLevel>Level3</WarningLevel>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\public;C:\Users\Francois\dev\toolbox\sandbox\C_CPP\particules\source\private;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
