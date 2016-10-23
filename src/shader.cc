@@ -18,26 +18,38 @@
 
 namespace Gem {
 namespace Particle {
-ShaderManager::ShaderManager()
-  :m_unProgram(0), m_unNumShaders(0) {
-  m_shaders = {
+namespace ShaderManager {
+namespace {
+  GLuint                        program;
+  std::map<GLenum, GLuint>      shaders;
+  std::map<std::string, GLuint> attrib_list;
+  std::map<std::string, GLuint> uniform_location_list;
+}
+
+void Init() {
+  program = 0;
+  shaders = {
     { GL_VERTEX_SHADER, 0 },
     { GL_FRAGMENT_SHADER, 0 },
     { GL_GEOMETRY_SHADER, 0 },
     { GL_TESS_CONTROL_SHADER, 0 },
     { GL_TESS_EVALUATION_SHADER, 0 },
     { GL_COMPUTE_SHADER, 0 } };
-  m_attribList.clear();
-  m_unifLocationList.clear();
+  attrib_list.clear();
+  uniform_location_list.clear();
 }
 
-ShaderManager::~ShaderManager() {
-  if (m_unProgram != -1) {
+void Terminate() {
+  if (program != -1) {
     Dispose();
   }
 }
 
-void ShaderManager::LoadFromFile(GLenum which, const char* fileName) {
+GLuint GetProgramID()                         { return program; }
+GLuint GetAttribLocation(const char* attrib)  { return attrib_list[attrib]; }
+GLuint GetUniformLocation(const char* unif)   { return uniform_location_list[unif]; }
+
+void LoadFromFile(GLenum which, const char* fileName) {
   std::ifstream fparser;
   fparser.open(fileName, std::ios_base::in);
   if (fparser) {
@@ -52,7 +64,14 @@ void ShaderManager::LoadFromFile(GLenum which, const char* fileName) {
   }
 }
 
-void ShaderManager::LoadFromText(GLenum type, const std::string& text) {
+void LoadFromText(GLenum type, const std::string& text) {
+  //Type must be one of the supported and registered
+  //types in the initialization
+  if (shaders.count(type) == 0) {
+    std::cerr << "ShaderManager::LoadFromText -> "
+              << "Type received is not recognized/supported" << std::endl;
+  }
+
   GLuint shader = glCreateShader(type);
   const char* cstr = text.c_str();
   glShaderSource(shader, 1, &cstr, nullptr);
@@ -71,71 +90,74 @@ void ShaderManager::LoadFromText(GLenum type, const std::string& text) {
     delete[] infoLog;
     return;
   }
-  m_shaders[type] = shader;
+  shaders[type] = shader;
 }
 
-void ShaderManager::CreateAndLink() {
-  m_unProgram = glCreateProgram();
-  if (m_shaders[GL_VERTEX_SHADER] != 0)
-    glAttachShader(m_unProgram, m_shaders[GL_VERTEX_SHADER]);
-  if (m_shaders[GL_FRAGMENT_SHADER] != 0)
-    glAttachShader(m_unProgram, m_shaders[GL_FRAGMENT_SHADER]);
-  if (m_shaders[GL_GEOMETRY_SHADER] != 0)
-    glAttachShader(m_unProgram, m_shaders[GL_GEOMETRY_SHADER]);
-  if (m_shaders[GL_TESS_CONTROL_SHADER] != 0)
-    glAttachShader(m_unProgram, m_shaders[GL_TESS_CONTROL_SHADER]);
-  if (m_shaders[GL_TESS_EVALUATION_SHADER] != 0)
-    glAttachShader(m_unProgram, m_shaders[GL_TESS_EVALUATION_SHADER]);
-  if (m_shaders[GL_COMPUTE_SHADER] != 0)
-    glAttachShader(m_unProgram, m_shaders[GL_COMPUTE_SHADER]);
+void LoadFromPreCompiledText(GLenum type, const std::string& src) {
+  //TODO:
+}
+void LoadFromPreCompiledFile(GLenum type, const char* fileName) {
+  //TODO:
+}
+
+void CreateAndLink() {
+  program = glCreateProgram();
+  if (shaders[GL_VERTEX_SHADER] != 0)
+    glAttachShader(program, shaders[GL_VERTEX_SHADER]);
+  if (shaders[GL_FRAGMENT_SHADER] != 0)
+    glAttachShader(program, shaders[GL_FRAGMENT_SHADER]);
+  if (shaders[GL_GEOMETRY_SHADER] != 0)
+    glAttachShader(program, shaders[GL_GEOMETRY_SHADER]);
+  if (shaders[GL_TESS_CONTROL_SHADER] != 0)
+    glAttachShader(program, shaders[GL_TESS_CONTROL_SHADER]);
+  if (shaders[GL_TESS_EVALUATION_SHADER] != 0)
+    glAttachShader(program, shaders[GL_TESS_EVALUATION_SHADER]);
+  if (shaders[GL_COMPUTE_SHADER] != 0)
+    glAttachShader(program, shaders[GL_COMPUTE_SHADER]);
 
   ///link + check
   GLint status;
-  glLinkProgram(m_unProgram);
-  glGetProgramiv(m_unProgram, GL_LINK_STATUS, &status);
+  glLinkProgram(program);
+  glGetProgramiv(program, GL_LINK_STATUS, &status);
   if (status == GL_FALSE) {
     GLint infoLogSize;
-    glGetProgramiv(m_unProgram, GL_INFO_LOG_LENGTH, &infoLogSize);
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
-    glGetProgramInfoLog(m_unProgram, infoLogSize, nullptr, infoLog);
+    glGetProgramInfoLog(program, infoLogSize, nullptr, infoLog);
     delete[] infoLog;
   }
 
   // TODO: Shouldn't this be in the dispose/detach function
-  glDetachShader(m_unProgram, m_shaders[GL_VERTEX_SHADER]);
-  glDetachShader(m_unProgram, m_shaders[GL_FRAGMENT_SHADER]);
-  glDetachShader(m_unProgram, m_shaders[GL_GEOMETRY_SHADER]);
-  glDetachShader(m_unProgram, m_shaders[GL_TESS_CONTROL_SHADER]);
-  glDetachShader(m_unProgram, m_shaders[GL_TESS_EVALUATION_SHADER]);
-  glDetachShader(m_unProgram, m_shaders[GL_COMPUTE_SHADER]);
+  glDetachShader(program, shaders[GL_VERTEX_SHADER]);
+  glDetachShader(program, shaders[GL_FRAGMENT_SHADER]);
+  glDetachShader(program, shaders[GL_GEOMETRY_SHADER]);
+  glDetachShader(program, shaders[GL_TESS_CONTROL_SHADER]);
+  glDetachShader(program, shaders[GL_TESS_EVALUATION_SHADER]);
+  glDetachShader(program, shaders[GL_COMPUTE_SHADER]);
 
-  glDeleteShader(m_shaders[GL_VERTEX_SHADER]);
-  glDeleteShader(m_shaders[GL_FRAGMENT_SHADER]);
-  glDeleteShader(m_shaders[GL_GEOMETRY_SHADER]);
-  glDeleteShader(m_shaders[GL_TESS_CONTROL_SHADER]);
-  glDeleteShader(m_shaders[GL_TESS_EVALUATION_SHADER]);
-  glDeleteShader(m_shaders[GL_COMPUTE_SHADER]);
+  glDeleteShader(shaders[GL_VERTEX_SHADER]);
+  glDeleteShader(shaders[GL_FRAGMENT_SHADER]);
+  glDeleteShader(shaders[GL_GEOMETRY_SHADER]);
+  glDeleteShader(shaders[GL_TESS_CONTROL_SHADER]);
+  glDeleteShader(shaders[GL_TESS_EVALUATION_SHADER]);
+  glDeleteShader(shaders[GL_COMPUTE_SHADER]);
 }
 
-void ShaderManager::Bind() const {
-  glUseProgram(m_unProgram);
+void RegisterAttribute(const char* attrib) {
+  attrib_list[attrib] = glGetAttribLocation(program, attrib);
 }
 
-void ShaderManager::Detach() const {
-  glUseProgram(0);
+void RegisterUniform(const char* unif) {
+  uniform_location_list[unif] = glGetUniformLocation(program, unif);
 }
 
-void ShaderManager::RegisterAttribute(const char* attrib) {
-  m_attribList[attrib] = glGetAttribLocation(m_unProgram, attrib);
-}
+void Bind()   { glUseProgram(program); }
+void Detach() { glUseProgram(0); }
 
-void ShaderManager::RegisterUniform(const char* unif) {
-  m_unifLocationList[unif] = glGetUniformLocation(m_unProgram, unif);
+void Dispose() {
+  glDeleteProgram(program);
+  program = -1;
 }
-
-void ShaderManager::Dispose() {
-  glDeleteProgram(m_unProgram);
-  m_unProgram = -1;
-}
+} /* namespace ShaderManager */
 } /* namespace Particle */
 } /* namespace Gem */

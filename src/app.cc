@@ -33,6 +33,9 @@ namespace Particle {
 namespace App {
 namespace {
 GLFWwindow* window; 
+System particle_system(100000);
+//TODO: GPU updater/renderer goes here
+
 void OpenGLSetup() {
   // GLFW initialization
 
@@ -58,20 +61,18 @@ void OpenGLSetup() {
 	  std::cerr << "GLEW is not initialized!" << std::endl;
   }
 }
-//TODO : Remove the follower shadermanager instance when it'll be a namespace
-ShaderManager ShaderManagerInstance;
-System particle_system(100000);
-//TODO: GPU updater/renderer goes here
 }
+
 void Init() {
   OpenGLSetup();
 
   // Shaders initialization
-  ShaderManagerInstance.LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
-  ShaderManagerInstance.LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
+  ShaderManager::Init();
+  ShaderManager::LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
+  ShaderManager::LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
   
-  ShaderManagerInstance.CreateAndLink();
-  ShaderManagerInstance.Bind();
+  ShaderManager::CreateAndLink();
+  ShaderManager::Bind();
 
   // Particle system initialization
   particle_system.AddSource(
@@ -83,6 +84,7 @@ void Init() {
     std::make_unique<Gem::Particle::GlobalAcceleration>()
   );
 }
+
 void Run() {
   while (!glfwWindowShouldClose(window)) {
     std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
@@ -102,6 +104,9 @@ void Run() {
     glfwPollEvents();
     timer::chrono::Update();
   }
+  // TODO: Handle destruction of the app properly now since we have a 
+  // condition where the window is closed
+  ShaderManager::Terminate();
   glfwTerminate();
 }
 

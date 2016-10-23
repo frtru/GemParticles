@@ -22,37 +22,27 @@
 
 namespace Gem {
 namespace Particle {
-//TODO : Transform this into a namespace just like the app namespace
-class ShaderManager {
+namespace ShaderManager {
+void Init();
+void Terminate();
 
-public:
-  ShaderManager();
-  ~ShaderManager();
+GLuint GetProgramID();
+GLuint GetAttribLocation(const char* attrib);
+GLuint GetUniformLocation(const char* unif);
 
-  GLuint GetProgramID() const { return m_unProgram; }
-  GLuint GetAttribLocation(const char* attrib){ return m_attribList[attrib]; }
-  GLuint GetUniformLocation(const char* unif){ return m_unifLocationList[unif]; }
+void LoadFromText(GLenum type, const std::string& src);
+void LoadFromFile(GLenum type, const char* fileName);
+void LoadFromPreCompiledText(GLenum type, const std::string& src);
+void LoadFromPreCompiledFile(GLenum type, const char* fileName);
+void CreateAndLink();
+void RegisterAttribute(const char* attrib);
+void RegisterUniform(const char* uniform);
 
-  void LoadFromText(GLenum type, const std::string& src);
-  void LoadFromFile(GLenum type, const char* fileName);
-  void LoadFromPreCompiledText(GLenum type, const std::string& src) {}
-  void LoadFromPreCompiledFile(GLenum type, const char* fileName) {}
-  void CreateAndLink();
-  void RegisterAttribute(const char* attrib);
-  void RegisterUniform(const char* uniform);
+void Bind();
+void Detach();
+void Dispose();
 
-  void Bind() const;
-  void Detach() const;
-  void Dispose();
-
-private:
-
-  unsigned int                  m_unNumShaders;
-  GLuint                        m_unProgram;
-  std::map<GLenum,GLuint>       m_shaders;  
-  std::map<std::string, GLuint> m_attribList;
-  std::map<std::string, GLuint> m_unifLocationList;
-}; /* class ShaderManager*/
+} /* namespace ShaderManager*/
 } /* namespace Particle */
 } /* namespace Gem */
 #endif /* end of include guard: SHADER_HH */
