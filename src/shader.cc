@@ -20,10 +20,13 @@ namespace Gem {
 namespace Particle {
 ShaderManager::ShaderManager()
   :m_unProgram(0), m_unNumShaders(0) {
-  m_unShaders[VERTEX_SHADER] = 0;
-  m_unShaders[FRAGMENT_SHADER] = 0;
-  m_unShaders[GEOMETRY_SHADER] = 0;
-  m_unShaders[PIXEL_SHADER] = 0;
+  m_shaders = {
+    { GL_VERTEX_SHADER, 0 },
+    { GL_FRAGMENT_SHADER, 0 },
+    { GL_GEOMETRY_SHADER, 0 },
+    { GL_TESS_CONTROL_SHADER, 0 },
+    { GL_TESS_EVALUATION_SHADER, 0 },
+    { GL_COMPUTE_SHADER, 0 } };
   m_attribList.clear();
   m_unifLocationList.clear();
 }
@@ -66,20 +69,25 @@ void ShaderManager::LoadFromText(GLenum type, const std::string& text) {
     std::cerr << "ShaderManager::LoadFromText -> " 
               << infoLog << std::endl;
     delete[] infoLog;
+    return;
   }
-  m_unShaders[m_unNumShaders++] = shader;
+  m_shaders[type] = shader;
 }
 
 void ShaderManager::CreateAndLink() {
   m_unProgram = glCreateProgram();
-  if (m_unShaders[VERTEX_SHADER] != 0)
-    glAttachShader(m_unProgram, m_unShaders[VERTEX_SHADER]);
-  if (m_unShaders[FRAGMENT_SHADER] != 0)
-    glAttachShader(m_unProgram, m_unShaders[FRAGMENT_SHADER]);
-  if (m_unShaders[GEOMETRY_SHADER] != 0)
-    glAttachShader(m_unProgram, m_unShaders[GEOMETRY_SHADER]);
-  if (m_unShaders[PIXEL_SHADER] != 0)
-    glAttachShader(m_unProgram, m_unShaders[PIXEL_SHADER]);
+  if (m_shaders[GL_VERTEX_SHADER] != 0)
+    glAttachShader(m_unProgram, m_shaders[GL_VERTEX_SHADER]);
+  if (m_shaders[GL_FRAGMENT_SHADER] != 0)
+    glAttachShader(m_unProgram, m_shaders[GL_FRAGMENT_SHADER]);
+  if (m_shaders[GL_GEOMETRY_SHADER] != 0)
+    glAttachShader(m_unProgram, m_shaders[GL_GEOMETRY_SHADER]);
+  if (m_shaders[GL_TESS_CONTROL_SHADER] != 0)
+    glAttachShader(m_unProgram, m_shaders[GL_TESS_CONTROL_SHADER]);
+  if (m_shaders[GL_TESS_EVALUATION_SHADER] != 0)
+    glAttachShader(m_unProgram, m_shaders[GL_TESS_EVALUATION_SHADER]);
+  if (m_shaders[GL_COMPUTE_SHADER] != 0)
+    glAttachShader(m_unProgram, m_shaders[GL_COMPUTE_SHADER]);
 
   ///link + check
   GLint status;
@@ -93,15 +101,20 @@ void ShaderManager::CreateAndLink() {
     delete[] infoLog;
   }
 
-  glDetachShader(m_unProgram, m_unShaders[VERTEX_SHADER]);
-  glDetachShader(m_unProgram, m_unShaders[FRAGMENT_SHADER]);
-  glDetachShader(m_unProgram, m_unShaders[GEOMETRY_SHADER]);
-  glDetachShader(m_unProgram, m_unShaders[PIXEL_SHADER]);
+  // TODO: Shouldn't this be in the dispose/detach function
+  glDetachShader(m_unProgram, m_shaders[GL_VERTEX_SHADER]);
+  glDetachShader(m_unProgram, m_shaders[GL_FRAGMENT_SHADER]);
+  glDetachShader(m_unProgram, m_shaders[GL_GEOMETRY_SHADER]);
+  glDetachShader(m_unProgram, m_shaders[GL_TESS_CONTROL_SHADER]);
+  glDetachShader(m_unProgram, m_shaders[GL_TESS_EVALUATION_SHADER]);
+  glDetachShader(m_unProgram, m_shaders[GL_COMPUTE_SHADER]);
 
-  glDeleteShader(m_unShaders[VERTEX_SHADER]);
-  glDeleteShader(m_unShaders[FRAGMENT_SHADER]);
-  glDeleteShader(m_unShaders[GEOMETRY_SHADER]);
-  glDeleteShader(m_unShaders[PIXEL_SHADER]);
+  glDeleteShader(m_shaders[GL_VERTEX_SHADER]);
+  glDeleteShader(m_shaders[GL_FRAGMENT_SHADER]);
+  glDeleteShader(m_shaders[GL_GEOMETRY_SHADER]);
+  glDeleteShader(m_shaders[GL_TESS_CONTROL_SHADER]);
+  glDeleteShader(m_shaders[GL_TESS_EVALUATION_SHADER]);
+  glDeleteShader(m_shaders[GL_COMPUTE_SHADER]);
 }
 
 void ShaderManager::Bind() const {

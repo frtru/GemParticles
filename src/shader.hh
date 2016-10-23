@@ -24,27 +24,6 @@ namespace Gem {
 namespace Particle {
 //TODO : Transform this into a namespace just like the app namespace
 class ShaderManager {
-public:
-  // Standard enums are
-  //GL_COMPUTE_SHADER
-  //GL_VERTEX_SHADER
-  //GL_TESS_CONTROL_SHADER
-  //GL_TESS_EVALUATION_SHADER
-  //GL_GEOMETRY_SHADER
-  //GL_FRAGMENT_SHADER
-
-  // TODO: Why is this enum there?
-  enum ShaderType {
-    VERTEX_SHADER,
-    FRAGMENT_SHADER,
-    GEOMETRY_SHADER,
-    PIXEL_SHADER,
-    // TODO: Uncomment the following when they will be supported in the .cc file
-    // TESS_CONTROL_SHADER,
-    // TESS_EVALUATION_SHADER,
-    // COMPUTE_SHADER,
-    COUNT
-  };
 
 public:
   ShaderManager();
@@ -70,9 +49,7 @@ private:
 
   unsigned int                  m_unNumShaders;
   GLuint                        m_unProgram;
-  // TODO: change following for a map, with standard enums def as key
-  // and GLuint as value for the return of glCreateShader
-  GLuint                        m_unShaders[ShaderType::COUNT];  
+  std::map<GLenum,GLuint>       m_shaders;  
   std::map<std::string, GLuint> m_attribList;
   std::map<std::string, GLuint> m_unifLocationList;
 }; /* class ShaderManager*/
