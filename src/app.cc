@@ -14,12 +14,12 @@
 #include "app.hh"
 //C system files
 //C++ system files
+#include <memory>
 #include <iostream>
 //Other libraries' .h files
-#include <gl/glew.h>
-#include <gl/glfw3.h>
 //Your project's .h files
 #include "timer.hh"
+#include "opengl_context.hh"
 #include "shader.hh"
 #include "particle_system.hh"
 
@@ -32,40 +32,16 @@ namespace Gem {
 namespace Particle {
 namespace App {
 namespace {
-GLFWwindow* window; 
+std::unique_ptr<GraphicContext> graphic_context;
 System particle_system(100000);
 //TODO: GPU updater/renderer goes here
-
-void OpenGLSetup() {
-  // GLFW initialization
-
-  /* Initialize the library */
-  if (!glfwInit())
-    std::cerr << "OpenGLSetup -> glfwInit failed!" << std::endl;
-
-  /* Create a windowed mode window and its OpenGL context */
-  window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-  if (!window) {
-    glfwTerminate();
-    std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
-  }
-
-  /* Make the window's context current */
-  glfwMakeContextCurrent(window);
-
-	//Context/OpenGL initialization
-	//TODO:
-
-  // GLEW initialization
-  if (GLEW_OK != glewInit()) {
-	  std::cerr << "GLEW is not initialized!" << std::endl;
-  }
-}
 }
 
 void Init() {
-  OpenGLSetup();
-
+  // OpenGL setup
+  graphic_context = std::make_unique<OpenGLContext>();
+  graphic_context->Init();
+  
   // Shaders initialization
   ShaderManager::Init();
   ShaderManager::LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
@@ -86,7 +62,7 @@ void Init() {
 }
 
 void Run() {
-  while (!glfwWindowShouldClose(window)) {
+  while (!graphic_context->PollWindowClosedEvent()) {
     std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
@@ -97,17 +73,13 @@ void Run() {
     //TODO: Render here
     //m_particleSystem.Render()
 
-    /* Swap front and back buffers */
-    glfwSwapBuffers(window);
-
-    /* Poll for and process events */
-    glfwPollEvents();
+    graphic_context->Update();
     timer::chrono::Update();
   }
   // TODO: Handle destruction of the app properly now since we have a 
   // condition where the window is closed
   ShaderManager::Terminate();
-  glfwTerminate();
+  graphic_context->Terminate();
 }
 
 void LoadConfig(const std::string& a_sConfigName) {
