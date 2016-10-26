@@ -32,8 +32,9 @@ void OpenGLContext::Update() {
   glfwPollEvents();
 }
 
-int OpenGLContext::PollWindowClosedEvent() {
-  return glfwWindowShouldClose(m_pWindow);
+bool OpenGLContext::PollWindowClosedEvent() {
+  return glfwWindowShouldClose(m_pWindow) != 0 ||
+         glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS;
 }
 
 void OpenGLContext::InitImpl() {
@@ -53,6 +54,10 @@ void OpenGLContext::InitImpl() {
 
   /* Make the window's context current */
   glfwMakeContextCurrent(m_pWindow);
+
+  /* Ensure we can capture keys being pressed */
+  glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
+
 
   //Context/OpenGL initialization
   //TODO:

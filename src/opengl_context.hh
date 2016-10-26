@@ -31,7 +31,7 @@ public:
   virtual ~OpenGLContext();
 
   virtual void Update() override;
-  virtual int  PollWindowClosedEvent() override;
+  virtual bool PollWindowClosedEvent() override;
 
 protected:
   virtual void InitImpl() override;

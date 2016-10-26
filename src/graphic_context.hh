@@ -22,7 +22,7 @@ public:
   virtual ~GraphicContext() {}
 
   virtual void Update() = 0;
-  virtual int  PollWindowClosedEvent() = 0;
+  virtual bool PollWindowClosedEvent() = 0;
   void Init();
   void Terminate();
 
