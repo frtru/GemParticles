@@ -58,9 +58,8 @@ void OpenGLContext::InitImpl() {
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
 
-
-  //Context/OpenGL initialization
-  //TODO:
+  //TODO: Insert other glfw initialization 
+  //parameters here
 
   // GLEW initialization
   if (GLEW_OK != glewInit()) {
