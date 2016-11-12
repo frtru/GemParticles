@@ -48,6 +48,9 @@
     <ClCompile Include="src\graphic_context.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\camera.cc">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\particle.hh">
@@ -87,6 +90,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl_context.hh">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
