@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+#include "camera.hh"
+
 namespace Gem {
 namespace Particle {
 OpenGLContext::OpenGLContext() 
@@ -58,8 +60,9 @@ void OpenGLContext::InitImpl() {
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
 
-  //TODO: Insert other glfw initialization 
+  //TODO: Insert other glfw and opengl initialization 
   //parameters here
+  Camera::Init();
 
   // GLEW initialization
   if (GLEW_OK != glewInit()) {

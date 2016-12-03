@@ -15,16 +15,39 @@
 #ifndef CAMERA_HH
 #define CAMERA_HH
 
-#include <GL/glew.h>
 #include <map>
 #include <string>
+
+// TODO: This class is now bound to opengl manipulations,
+// might be interesting to rename so that there's a possibility
+// to add a directx compatible camera
+#include <GL/glew.h>
+#include "glm/glm.hpp"
 
 namespace Gem {
 namespace Particle {
 namespace Camera {
-void Init();
+
+constexpr GLenum PROJ_PERSPECTIVE = 0x0000000;
+constexpr GLenum PROJ_ORTHO       = 0x0000001;
+
+void Init(GLenum a_eProjectionType = PROJ_PERSPECTIVE);
 void Terminate();
 
+void SetViewMatrix(const glm::mat4& a_ViewMatrix);
+
+void LookAt(const glm::vec3& a_Eye,
+  const glm::vec3& a_Target,
+  const glm::vec3& a_Up);
+
+void SetProjectionMatrix(const glm::mat4& a_ProjectionMatrix);
+
+void SetPerspectiveProjection(float a_fFOV, float a_fWidth,
+  float a_fHeight, float a_fNear, float a_fFar);
+
+void SetOrthoProjection(float a_fLeft, float a_fRight,
+  float a_fBottom, float a_fTop,
+  float a_fNear, float a_fFar);
 
 } /* namespace Camera*/
 } /* namespace Particle */
