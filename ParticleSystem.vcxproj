@@ -27,10 +27,12 @@
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
+    <ClCompile Include="src\renderer.cc" />
     <ClCompile Include="src\shader.cc" />
     <ClCompile Include="src\source.cc" />
     <ClCompile Include="src\particle_pool.cc" />
     <ClCompile Include="src\particle_system.cc" />
+    <ClCompile Include="src\stub_renderer.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.hh" />
@@ -41,11 +43,13 @@
     <ClInclude Include="src\global_acceleration.hh" />
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\opengl_context.hh" />
+    <ClInclude Include="src\renderer.hh" />
     <ClInclude Include="src\shader.hh" />
     <ClInclude Include="src\source.hh" />
     <ClInclude Include="src\particle.hh" />
     <ClInclude Include="src\particle_pool.hh" />
     <ClInclude Include="src\particle_system.hh" />
+    <ClInclude Include="src\stub_renderer.hh" />
     <ClInclude Include="src\timer.hh" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
