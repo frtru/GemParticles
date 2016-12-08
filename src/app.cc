@@ -21,7 +21,7 @@
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader.hh"
-#include "particle_system.hh"
+#include "particle_module.hh"
 
 // TODO: Temporary includes since test suite
 // is not built yet...
@@ -33,7 +33,6 @@ namespace Particle {
 namespace App {
 namespace {
 std::unique_ptr<GraphicContext> graphic_context;
-System particle_system(100000);
 //TODO: GPU updater/renderer goes here
 }
 
@@ -50,15 +49,18 @@ void Init() {
   ShaderManager::CreateAndLink();
   ShaderManager::Bind();
 
-  // Particle system initialization
-  particle_system.AddSource(
+  // Particle module initialization
+  System wTempSystem(100000);
+  wTempSystem.AddSource(
     std::make_unique<Gem::Particle::FountainSource>(
-      Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })
-      )
-  );
-  particle_system.AddDynamic(
+    Gem::Particle::FountainSource({ 0.0f, 0.0f, 0.0f })
+    )
+    );
+  wTempSystem.AddDynamic(
     std::make_unique<Gem::Particle::GlobalAcceleration>()
-  );
+    );
+
+  ParticleModule::AddSystem("OBVIOUSLY_TEMPORARY", std::move(wTempSystem));
 }
 
 void Run() {
@@ -68,7 +70,8 @@ void Run() {
     //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsed<std::chrono::nanoseconds>()
       / timer::NANO_PER_SEC;
-    particle_system.Update(dt);
+
+    ParticleModule::Update(dt);
 
     //TODO: Render here
     //m_particleSystem.Render()
@@ -76,8 +79,9 @@ void Run() {
     graphic_context->Update();
     timer::chrono::Update();
   }
-  // TODO: Handle destruction of the app properly now since we have a 
-  // condition where the window is closed
+
+  // App destruction
+  ParticleModule::Terminate();
   ShaderManager::Terminate();
   graphic_context->Terminate();
 }

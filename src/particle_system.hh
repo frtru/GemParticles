@@ -68,7 +68,7 @@ private:
   // some parameters more easily
   std::vector<std::unique_ptr<Source> >  m_vSources;
   std::vector<std::unique_ptr<Dynamic> > m_vDynamics;
-}; /* class System*/;
+}; /* class System*/
 } /* namespace Particle */
 } /* namespace Gem */
 
