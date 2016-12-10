@@ -25,6 +25,7 @@
 
 // TODO: Temporary includes since test suite
 // is not built yet...
+#include "stub_renderer.hh"
 #include "fountain_source.hh"
 #include "global_acceleration.hh"
 
@@ -50,17 +51,17 @@ void Init() {
   ShaderManager::Bind();
 
   // Particle module initialization
-  System wTempSystem(100000);
+  ParticleSystemComponent wTempSystem(
+    std::make_unique<StubRenderer>(),
+    100000);
   wTempSystem.AddSource(
-    std::make_unique<Gem::Particle::FountainSource>(
-    Gem::Particle::FountainSource({ 0.0f, 0.0f, 0.0f })
-    )
-    );
+    std::make_unique<FountainSource>(
+    FountainSource({ 0.0f, 0.0f, 0.0f })));
   wTempSystem.AddDynamic(
-    std::make_unique<Gem::Particle::GlobalAcceleration>()
+    std::make_unique<GlobalAcceleration>()
     );
 
-  ParticleModule::AddSystem("OBVIOUSLY_TEMPORARY", std::move(wTempSystem));
+  ParticleSystem::AddSystem("OBVIOUSLY_TEMPORARY", std::move(wTempSystem));
 }
 
 void Run() {
@@ -71,7 +72,7 @@ void Run() {
     double dt = timer::chrono::GetTimeElapsed<std::chrono::nanoseconds>()
       / timer::NANO_PER_SEC;
 
-    ParticleModule::Update(dt);
+    ParticleSystem::Update(dt);
 
     //TODO: Render here
     //m_particleSystem.Render()
@@ -81,7 +82,7 @@ void Run() {
   }
 
   // App destruction
-  ParticleModule::Terminate();
+  ParticleSystem::Terminate();
   ShaderManager::Terminate();
   graphic_context->Terminate();
 }

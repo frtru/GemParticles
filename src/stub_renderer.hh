@@ -20,11 +20,17 @@ namespace Gem {
 namespace Particle {
 class StubRenderer : public Renderer {
 public:
-  StubRenderer() = default;
-  ~StubRenderer() = default;
+  StubRenderer();
+  ~StubRenderer();
 
 	// TODO: Copyable and moveable?<
-  virtual void Render() override;
+  virtual void Render(std::unique_ptr<Pool> a_pParticlePool) override;
+
+private:
+  // TODO: See if the following could be refactored in the base class
+  GLuint m_vertexArrayID;   //VAO
+  GLuint m_vertexBufferID;  //VBO
+
 
 }; /* class StubRenderer*/
 } /* namespace Particle */

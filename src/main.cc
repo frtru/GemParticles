@@ -17,13 +17,11 @@
 //Your project's .h files
 #include "app.hh"
 
-using namespace Gem::Particle;
-
 int main(int argc, const char *argv[]) {
   (void)argc;(void)argv;
-  App::Init();
+  Gem::Particle::App::Init();
   
-  App::Run();
+  Gem::Particle::App::Run();
 
   return 0;
 }

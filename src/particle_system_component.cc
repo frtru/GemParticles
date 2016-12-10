@@ -11,31 +11,32 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef RENDERER_HH
-#define RENDERER_HH
+#include "particle_system_component.hh"
 
-#include <memory>
-
-#include "particle_pool.hh"
-
-// TODO: Find a way like fenbf did for the billboard,
-// glpoint, bool useQuads thingy...
+#include "default_dynamic.hh"
 
 namespace Gem {
 namespace Particle {
-class Renderer {
-public:
-	Renderer() = default;
-	virtual ~Renderer() = default;
-
-	// TODO: Add other methods as the whole process
-  // becomes clearer
-  virtual void Render(std::unique_ptr<Pool> a_pParticlePool) = 0;
-  
-private:
-
-}; /* class Renderer*/
+ParticleSystemComponent::ParticleSystemComponent(
+  const std::string& a_sSystemName,
+  std::size_t a_unMaxParticleCount) 
+  : m_pParticlePool(new Pool(a_unMaxParticleCount)),
+    m_sSystemName(a_sSystemName) {
+  m_vDynamics.push_back(std::make_unique<DefaultDynamic>());
+}
+ParticleSystemComponent::ParticleSystemComponent(ParticleSystemComponent&& other)
+  : m_pParticlePool(std::move(other.m_pParticlePool)),
+  m_vDynamics(std::move(other.m_vDynamics)),
+  m_vSources(std::move(other.m_vSources)) {
+}
+void ParticleSystemComponent::Update(double a_dt){
+  for (auto& source : m_vSources) {
+    source->Emit(a_dt, m_pParticlePool);
+  }
+  for (auto& dynamic : m_vDynamics) {
+    dynamic->Update(a_dt, m_pParticlePool);
+  }
+}
 } /* namespace Particle */
 } /* namespace Gem */
 
-#endif /* end of include guard: RENDERER_HH */

@@ -21,9 +21,6 @@
     <ClCompile Include="src\particle_pool.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\particle_system.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\default_dynamic.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -57,7 +54,10 @@
     <ClCompile Include="src\renderer.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\particle_module.cc">
+    <ClCompile Include="src\particle_system_component.cc">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle_system.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,9 +66,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\particle_pool.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_system.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\timer.hh">
@@ -110,7 +107,10 @@
     <ClInclude Include="src\stub_renderer.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\particle_module.hh">
+    <ClInclude Include="src\particle_system_component.hh">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_system.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
