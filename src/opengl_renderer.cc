@@ -11,23 +11,49 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef STUB_RENDERER_HH
-#define STUB_RENDERER_HH
-
 #include "opengl_renderer.hh"
+
+#include <iostream>
+
+#include <glm/glm.hpp>
+#include <GL/glew.h>
 
 namespace Gem {
 namespace Particle {
-class StubRenderer : public GLRenderer {
-public:
-  StubRenderer();
-  virtual ~StubRenderer() = default;
+GLRenderer::GLRenderer() {
+  // VAO initialization
+  glGenVertexArrays(1, &m_vertexArrayID);
+  glBindVertexArray(m_vertexArrayID);
 
-  virtual void Update() override;
-  virtual void Render() override;
+  // VBO initialization
+  glGenBuffers(1, &m_vertexBufferID);
+  glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
+}
 
-}; /* class StubRenderer*/
+GLRenderer::~GLRenderer() {
+  if (m_vertexBufferID != 0) {
+    Terminate();
+  }
+}
+
+void GLRenderer::Init(Pool* a_pPool) {
+  if (m_pParticlePool == nullptr) {
+
+    m_pParticlePool = a_pPool;
+
+    glBufferData(GL_ARRAY_BUFFER,
+      sizeof(glm::f32vec3),
+      &(m_pParticlePool->m_position[0]),
+      GL_STATIC_DRAW);
+  }
+  else {
+    std::cerr << "WARNING: GLRenderer::Init-> Renderer already initialized with another particle pool." << std::endl;
+  }
+}
+
+void GLRenderer::Terminate() {
+  glDeleteBuffers(1, &m_vertexBufferID);
+  m_vertexBufferID = 0;
+}
 } /* namespace Particle */
 } /* namespace Gem */
-
-#endif /* end of include guard: STUB_RENDERER_HH */

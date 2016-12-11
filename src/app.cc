@@ -21,10 +21,11 @@
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader.hh"
-#include "particle_module.hh"
+#include "particle_system.hh"
 
 // TODO: Temporary includes since test suite
 // is not built yet...
+#include "particle_system_component.hh"
 #include "stub_renderer.hh"
 #include "fountain_source.hh"
 #include "global_acceleration.hh"
@@ -50,18 +51,22 @@ void Init() {
   ShaderManager::CreateAndLink();
   ShaderManager::Bind();
 
-  // Particle module initialization
-  ParticleSystemComponent wTempSystem(
-    std::make_unique<StubRenderer>(),
-    100000);
-  wTempSystem.AddSource(
+  // Temporary part, todo move this into a factory or something
+
+  // Particle system initialization
+  std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
+    std::make_shared<ParticleSystemComponent>(
+      "OBVIOUSLY_TEMPORARY",
+      100000);
+  wTempParticleComp->AddSource(
     std::make_unique<FountainSource>(
     FountainSource({ 0.0f, 0.0f, 0.0f })));
-  wTempSystem.AddDynamic(
+  wTempParticleComp->AddDynamic(
     std::make_unique<GlobalAcceleration>()
     );
 
-  ParticleSystem::AddSystem("OBVIOUSLY_TEMPORARY", std::move(wTempSystem));
+  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
+  ParticleSystem::AddComponents(wTempParticleComp, wTempRenderer);
 }
 
 void Run() {
@@ -73,9 +78,7 @@ void Run() {
       / timer::NANO_PER_SEC;
 
     ParticleSystem::Update(dt);
-
-    //TODO: Render here
-    //m_particleSystem.Render()
+    ParticleSystem::Render();
 
     graphic_context->Update();
     timer::chrono::Update();

@@ -11,12 +11,31 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
+#ifndef OPENGL_RENDERER_HH
+#define OPENGL_RENDERER_HH
+
+#include <GL/glew.h>
+
 #include "renderer.hh"
 
 namespace Gem {
 namespace Particle {
-void Renderer::Init(const System& a_system) {
-  //a_system.GetParticles();
-}
+class GLRenderer : public Renderer {
+public:
+  GLRenderer();
+  virtual ~GLRenderer();
+
+  virtual void Init(Pool* a_pPool) override;
+  virtual void Terminate() override;
+  virtual void Update() = 0;
+  virtual void Render() = 0;
+
+protected:
+  GLuint m_vertexArrayID;   //VAO
+  GLuint m_vertexBufferID;  //VBO
+
+}; /* class GLRenderer */
 } /* namespace Particle */
 } /* namespace Gem */
+
+#endif /* end of include guard: OPENGL_RENDERER_HH */

@@ -18,28 +18,14 @@
 
 namespace Gem {
 namespace Particle {
-
-StubRenderer::StubRenderer() {
-  // VAO initialization
-  glGenVertexArrays(1, &m_vertexArrayID);
-  glBindVertexArray(m_vertexArrayID);
-
-  // VBO initialization
-  glGenBuffers(1, &m_vertexBufferID);
-  glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
-  glBufferData(GL_ARRAY_BUFFER,
-    sizeof(glm::f32vec3),
-    &(a_pParticlePool->m_position[0]),
-    GL_STATIC_DRAW);
+StubRenderer::StubRenderer(){
+  Renderer::m_pParticlePool = nullptr;
 }
+void StubRenderer::Update() {
 
-StubRenderer::~StubRenderer() {
-  glDeleteBuffers(1, &m_vertexBufferID);
 }
-
-void StubRenderer::Render(std::unique_ptr<Pool> a_pParticlePool) {
+void StubRenderer::Render() {
   
 }
-
 } /* namespace Particle */
 } /* namespace Gem */

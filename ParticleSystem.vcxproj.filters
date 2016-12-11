@@ -51,13 +51,13 @@
     <ClCompile Include="src\stub_renderer.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\renderer.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\particle_system_component.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="src\particle_system.cc">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\opengl_renderer.cc">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,6 +111,9 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\particle_system.hh">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\opengl_renderer.hh">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

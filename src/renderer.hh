@@ -28,11 +28,13 @@ public:
 	Renderer() = default;
 	virtual ~Renderer() = default;
 
-	// TODO: Add other methods as the whole process
-  // becomes clearer
-  virtual void Render(std::unique_ptr<Pool> a_pParticlePool) = 0;
+  virtual void Init(Pool* a_pPool) = 0;
+  virtual void Terminate() = 0;
+  virtual void Update() = 0;
+  virtual void Render() = 0;
   
-private:
+protected:
+  Pool* m_pParticlePool;
 
 }; /* class Renderer*/
 } /* namespace Particle */

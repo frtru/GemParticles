@@ -26,10 +26,13 @@ void Terminate();
 void Update(double a_dt);
 void Render();
 
-void GetSystemByName(const std::string& a_szSystemName); // See .CC file for todo
+void AddComponents(
+  const std::shared_ptr<ParticleSystemComponent>& a_pParticleComponent,
+  const std::shared_ptr<Renderer>& a_pRenderer);
 
-void AddSystem(const std::string& a_szSystemName, ParticleSystemComponent&& a_system);
-void RemoveSystem(const std::string& a_szSystemName);  // See .CC file for todo
+// TODOs : See .CC file for todo
+void RemoveSystem(const std::string& a_szSystemName); 
+void GetSystemByName(const std::string& a_szSystemName);
 
 } /* namespace ParticleSystem*/
 } /* namespace Particle */
