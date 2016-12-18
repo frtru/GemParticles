@@ -26,11 +26,10 @@ public:
   void Init();
   void Terminate();
 
-protected:
+private:
   virtual void InitImpl() = 0;
   virtual void TerminateImpl() = 0;
 
-private:
   static bool  m_bInitialized;
   static bool  m_bTerminated;
 }; /* class GraphicContext*/

@@ -30,9 +30,16 @@ public:
   virtual void Update() = 0;
   virtual void Render() = 0;
 
+private:
+  virtual void InitImpl();
+  virtual void TerminateImpl();
+
 protected:
   GLuint m_vertexArrayID;   //VAO
   GLuint m_vertexBufferID;  //VBO
+
+private:
+  bool m_bInitFlag;
 
 }; /* class GLRenderer */
 } /* namespace Particle */

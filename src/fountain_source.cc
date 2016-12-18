@@ -32,8 +32,9 @@ void FountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     a_pPool->m_velocity[i]      = m_spawnVelocity;
     a_pPool->m_position[i]      = m_spawnLocation;
     a_pPool->m_lifetime[i]      = m_fLifetime; 
-    // Default color overwritten by updaters start/end color
-    a_pPool->m_color[i]         = { 0.0f,0.0f,0.0f,0.0f };
+    // Default redish transparent color 
+    // overwritten by updaters start/end color
+    a_pPool->m_color[i]         = { 255u,0u,0u,120u }; 
   }
 }
 } /* namespace Particle */

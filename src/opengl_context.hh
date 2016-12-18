@@ -33,11 +33,10 @@ public:
   virtual void Update() override;
   virtual bool PollWindowClosedEvent() override;
 
-protected:
+private:
   virtual void InitImpl() override;
   virtual void TerminateImpl() override;
 
-private:
   GLFWwindow* m_pWindow;
 
 }; /* class OpenGLContext*/

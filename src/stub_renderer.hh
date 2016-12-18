@@ -26,6 +26,13 @@ public:
   virtual void Update() override;
   virtual void Render() override;
 
+private:
+  virtual void InitImpl() override;
+  virtual void TerminateImpl() override;
+
+  // An extra buffer for color
+  GLuint  m_colorVBOID;
+
 }; /* class StubRenderer*/
 } /* namespace Particle */
 } /* namespace Gem */

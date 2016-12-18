@@ -20,40 +20,75 @@
 
 namespace Gem {
 namespace Particle {
-GLRenderer::GLRenderer() {
-  // VAO initialization
-  glGenVertexArrays(1, &m_vertexArrayID);
-  glBindVertexArray(m_vertexArrayID);
-
-  // VBO initialization
-  glGenBuffers(1, &m_vertexBufferID);
-  glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
+GLRenderer::GLRenderer()
+ : m_bInitFlag(false) {
 }
 
 GLRenderer::~GLRenderer() {
-  if (m_vertexBufferID != 0) {
-    Terminate();
-  }
+  Terminate();
 }
 
 void GLRenderer::Init(Pool* a_pPool) {
-  if (m_pParticlePool == nullptr) {
+  if (!m_bInitFlag) {
+    // VAO initialization
+    glGenVertexArrays(1, &m_vertexArrayID);
+    glBindVertexArray(m_vertexArrayID);
+
+    // VBO initialization
+    glGenBuffers(1, &m_vertexBufferID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
 
     m_pParticlePool = a_pPool;
 
+    const std::size_t wParticleCount = m_pParticlePool->GetParticleCount();
+
     glBufferData(GL_ARRAY_BUFFER,
-      sizeof(glm::f32vec3),
-      &(m_pParticlePool->m_position[0]),
+      sizeof(glm::f32vec3)*wParticleCount,
+      &(m_pParticlePool->m_position[0]), // Why does this needs to be m_position[0]?
       GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+
+    if (GL_ARB_vertex_attrib_binding) {
+      glBindVertexBuffer(0, m_vertexBufferID, 0, sizeof(glm::f32vec3));
+      glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
+      glVertexAttribBinding(0, 0);
+    }
+    else {
+      glVertexAttribPointer(
+        0, 3, 
+        GL_FLOAT, GL_FALSE, 
+        sizeof(glm::f32vec3), (void *)0);
+    }
+
+    InitImpl();
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    m_bInitFlag = true;
   }
   else {
     std::cerr << "WARNING: GLRenderer::Init-> Renderer already initialized with another particle pool." << std::endl;
   }
 }
 
+void GLRenderer::InitImpl() {
+}
+
+void GLRenderer::TerminateImpl() {
+}
+
 void GLRenderer::Terminate() {
-  glDeleteBuffers(1, &m_vertexBufferID);
-  m_vertexBufferID = 0;
+  if (m_bInitFlag) {
+    if (m_vertexBufferID != 0) {
+      glDeleteBuffers(1, &m_vertexBufferID);
+      m_vertexBufferID = 0;
+    }
+    TerminateImpl();
+  }
+  else {
+    std::cerr << "ERROR: GLRenderer::Terminate-> Trying to terminate without prior initialization." << std::endl;
+  }
 }
 } /* namespace Particle */
 } /* namespace Gem */
