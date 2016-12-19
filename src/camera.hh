@@ -34,6 +34,11 @@ constexpr GLenum PROJ_ORTHO       = 0x0000001;
 void Init(GLenum a_eProjectionType = PROJ_PERSPECTIVE);
 void Terminate();
 
+// TODO: See if pointers affect the return type of these functions
+// and if return by value is correct
+glm::mat4 GetViewMatrix();
+glm::mat4 GetProjectionMatrix();
+
 void SetViewMatrix(const glm::mat4& a_ViewMatrix);
 
 void LookAt(const glm::vec3& a_Eye,

@@ -21,6 +21,7 @@
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader.hh"
+#include "camera.hh"
 #include "particle_system.hh"
 
 // TODO: Temporary includes since test suite
@@ -35,7 +36,6 @@ namespace Particle {
 namespace App {
 namespace {
 std::unique_ptr<GraphicContext> graphic_context;
-//TODO: GPU updater/renderer goes here
 }
 
 void Init() {
@@ -50,6 +50,9 @@ void Init() {
   
   ShaderManager::CreateAndLink();
   ShaderManager::Bind();
+
+  // Camera initialization
+  Camera::Init();
 
   // Temporary part, todo move this into a factory or something
 
@@ -78,12 +81,18 @@ void Run() {
       / timer::NANO_PER_SEC;
 
     ParticleSystem::Update(dt);
+
+    // TODO: Pre-rendering setup
+    // 1- Send camera settings to shader
+    glPointSize(10);
     ParticleSystem::Render();
 
     graphic_context->Update();
     timer::chrono::Update();
   }
+}
 
+void Terminate() {
   // App destruction
   ParticleSystem::Terminate();
   ShaderManager::Terminate();

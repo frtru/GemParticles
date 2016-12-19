@@ -32,6 +32,7 @@ public:
 
   virtual void Update() override;
   virtual bool PollWindowClosedEvent() override;
+  virtual void Reshape(int a_width, int a_height) override;
 
 private:
   virtual void InitImpl() override;

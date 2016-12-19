@@ -23,6 +23,9 @@ public:
 
   virtual void Update() = 0;
   virtual bool PollWindowClosedEvent() = 0;
+  virtual void Reshape(int a_width, int a_height) = 0;
+
+  // TODO: Add parameters (width,height,windowedmode,etc.) to the init function
   void Init();
   void Terminate();
 

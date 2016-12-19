@@ -15,8 +15,6 @@
 
 #include <iostream>
 
-#include "camera.hh"
-
 namespace Gem {
 namespace Particle {
 OpenGLContext::OpenGLContext() 
@@ -39,6 +37,10 @@ bool OpenGLContext::PollWindowClosedEvent() {
          glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS;
 }
 
+void OpenGLContext::Reshape(int a_width, int a_height) {
+
+}
+
 void OpenGLContext::InitImpl() {
   // Provide a way to set windowed mode or not, size and other useful parameters
 
@@ -59,15 +61,19 @@ void OpenGLContext::InitImpl() {
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-
-  //TODO: Insert other glfw and opengl initialization 
-  //parameters here
-  Camera::Init();
+  
+  //TODO: Insert other glfw parameters here
 
   // GLEW initialization
   if (GLEW_OK != glewInit()) {
     std::cerr << "GLEW is not initialized!" << std::endl;
   }
+
+  // OpenGL initialization
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glViewport(0, 0, 640, 480);
+
 }
 
 void OpenGLContext::TerminateImpl() {
