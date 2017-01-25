@@ -16,6 +16,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
+#include <iostream>
 namespace Gem {
 namespace Particle {
 StubRenderer::StubRenderer(){
@@ -30,7 +31,7 @@ void StubRenderer::InitImpl() {
 
   glBufferData(GL_ARRAY_BUFFER,
     sizeof(glm::u8vec4)*wParticleCount,
-    &(m_pParticlePool->m_color),
+    m_pParticlePool->m_color.get(),
     GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
@@ -63,15 +64,20 @@ void StubRenderer::Update() {
   // (test performance)
   if (wActiveParticleCount > 0)
   {
+//    std::cout << "sizeof(glm::f32vec3)*wActiveParticleCount = " << sizeof(glm::f32vec3)*wActiveParticleCount << std::endl;
+    std::cout << "&(m_pParticlePool->m_position) = " << &(m_pParticlePool->m_position) << std::endl;
+    std::cout << "&(m_pParticlePool->m_position[0]) = " << &(m_pParticlePool->m_position[0]) << std::endl;
+    std::cout << "m_pParticlePool->m_position.get() = " << m_pParticlePool->m_position.get() << std::endl;
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 
-      &(m_pParticlePool->m_position));
+      m_pParticlePool->m_position.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::u8vec4)*wActiveParticleCount,
-      &(m_pParticlePool->m_color));
+      m_pParticlePool->m_color.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }

@@ -64,17 +64,17 @@ void Init() {
   wTempParticleComp->AddSource(
     std::make_unique<FountainSource>(
     FountainSource({ 0.0f, 0.0f, 0.0f })));
-  wTempParticleComp->AddDynamic(
+/*  wTempParticleComp->AddDynamic(
     std::make_unique<GlobalAcceleration>()
     );
-
+*/
   std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
   ParticleSystem::AddComponents(wTempParticleComp, wTempRenderer);
 }
 
 void Run() {
   while (!graphic_context->PollWindowClosedEvent()) {
-    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
+    //std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsed<std::chrono::nanoseconds>()

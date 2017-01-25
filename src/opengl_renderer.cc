@@ -44,7 +44,7 @@ void GLRenderer::Init(Pool* a_pPool) {
 
     glBufferData(GL_ARRAY_BUFFER,
       sizeof(glm::f32vec3)*wParticleCount,
-      &(m_pParticlePool->m_position[0]), // Why does this needs to be m_position[0]?
+      m_pParticlePool->m_position.get(),
       GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
