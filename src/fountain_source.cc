@@ -18,7 +18,7 @@
 namespace Gem {
 namespace Particle {
 
-glm::f32vec3 const FountainSource::DEFAULT_SPEED = { 0.0f,2.0f,0.0f };
+glm::f32vec3 const FountainSource::DEFAULT_SPEED = { 0.5f,2.0f,0.0f };
 
 FountainSource::FountainSource(const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,

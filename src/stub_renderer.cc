@@ -44,7 +44,7 @@ void StubRenderer::InitImpl() {
   else {
     glVertexAttribPointer(
       1, 4,
-      GL_FLOAT, GL_FALSE,
+      GL_UNSIGNED_BYTE, GL_FALSE,
       sizeof(glm::u8vec4), (void *)0);
   }
 
@@ -57,25 +57,19 @@ void StubRenderer::TerminateImpl() {
   }
 }
 void StubRenderer::Update() {
-  const std::size_t wActiveParticleCount = 
+  const std::size_t wActiveParticleCount =
     m_pParticlePool->GetActiveParticleCount();
 
   // TODO: See if the "if" branching is even necessary here
   // (test performance)
-  if (wActiveParticleCount > 0)
-  {
-//    std::cout << "sizeof(glm::f32vec3)*wActiveParticleCount = " << sizeof(glm::f32vec3)*wActiveParticleCount << std::endl;
-    std::cout << "&(m_pParticlePool->m_position) = " << &(m_pParticlePool->m_position) << std::endl;
-    std::cout << "&(m_pParticlePool->m_position[0]) = " << &(m_pParticlePool->m_position[0]) << std::endl;
-    std::cout << "m_pParticlePool->m_position.get() = " << m_pParticlePool->m_position.get() << std::endl;
-
+  if (wActiveParticleCount > 0) {
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 
       m_pParticlePool->m_position.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, 
+    glBufferSubData(GL_ARRAY_BUFFER, 0,
       sizeof(glm::u8vec4)*wActiveParticleCount,
       m_pParticlePool->m_color.get());
 
@@ -84,11 +78,10 @@ void StubRenderer::Update() {
 }
 void StubRenderer::Render() {
   glBindVertexArray(m_vertexArrayID);
-
   const std::size_t count = m_pParticlePool->GetActiveParticleCount();
-  if (count > 0)
+  if (count > 0) {
     glDrawArrays(GL_POINTS, 0, count); // TODO: Put something to change the points for quads as desired
-
+  }
   glBindVertexArray(0);
 }
 } /* namespace Particle */

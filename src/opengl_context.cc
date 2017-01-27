@@ -25,11 +25,17 @@ OpenGLContext::~OpenGLContext() {
 }
 
 void OpenGLContext::Update() {
+  /* Poll for and process events */
+  glfwPollEvents();
+
   /* Swap front and back buffers */
   glfwSwapBuffers(m_pWindow);
 
-  /* Poll for and process events */
-  glfwPollEvents();
+  /* Once the buffers are swapped, lets clear the canvas*/
+  /* TODO: NOTE: This should be placed as the first thing done
+   in the rendering loop (which currently is the same thing as being
+   placed here, but its a better practice to do the first one*/
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 bool OpenGLContext::PollWindowClosedEvent() {

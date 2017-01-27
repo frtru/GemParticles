@@ -64,16 +64,43 @@ void Init() {
   wTempParticleComp->AddSource(
     std::make_unique<FountainSource>(
     FountainSource({ 0.0f, 0.0f, 0.0f })));
-/*  wTempParticleComp->AddDynamic(
+  wTempParticleComp->AddDynamic(
     std::make_unique<GlobalAcceleration>()
     );
-*/
+
   std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
   ParticleSystem::AddComponents(wTempParticleComp, wTempRenderer);
 }
 
+float points[] = {
+  0.0f,0.0f,0.0f,
+  1.0f,0.0f,0.0f,
+  0.0f,0.0f,0.0f,
+  0.0f,1.0f,0.0f,
+  0.0f,0.0f,0.0f,
+  0.0f,0.0f,1.0f
+};
+
 void Run() {
+
+  GLuint vao = 0;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+  glEnableVertexAttribArray(0);
+
+  GLuint vbo = 0;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(float), points, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+
   while (!graphic_context->PollWindowClosedEvent()) {
+    glBindVertexArray(vao);
+    glDrawArrays(GL_LINES, 0, 2);
+    glDrawArrays(GL_LINES, 2, 2);
+    glDrawArrays(GL_LINES, 4, 2);
+    glBindVertexArray(0);
     //std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
@@ -86,7 +113,7 @@ void Run() {
     // 1- Send camera settings to shader
     glPointSize(10);
     ParticleSystem::Render();
-
+    
     graphic_context->Update();
     timer::chrono::Update();
   }

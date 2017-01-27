@@ -1,6 +1,6 @@
 //A minimal implementation of a fragment shader
 
-#version 330
+#version 400
 
 in  vec4 ex_Color;
 out vec4 out_Color;
