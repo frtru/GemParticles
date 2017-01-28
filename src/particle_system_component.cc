@@ -11,31 +11,32 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "fountain_source.hh"
+#include "particle_system_component.hh"
 
-#include <algorithm>
+#include "default_dynamic.hh"
 
 namespace Gem {
 namespace Particle {
-
-glm::f32vec3 const FountainSource::DEFAULT_SPEED = { 0.5f,2.0f,0.0f };
-
-FountainSource::FountainSource(const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity,
-    float a_fLifetime, double a_dEmissionRate)
-  : Source(a_spawnLocation,a_spawnVelocity,a_fLifetime,
-    a_dEmissionRate) {}
-
-void FountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-  std::size_t a_unStartID, std::size_t a_unEndID) {
-  for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_velocity[i]      = m_spawnVelocity;
-    a_pPool->m_position[i]      = m_spawnLocation;
-    a_pPool->m_lifetime[i]      = m_fLifetime; 
-    // Default redish transparent color 
-    // overwritten by updaters start/end color
-    a_pPool->m_color[i]         = { 255u,0u,0u,120u }; 
+ParticleSystemComponent::ParticleSystemComponent(
+  const std::string& a_sSystemName,
+  std::size_t a_unMaxParticleCount) 
+  : m_pParticlePool(new Pool(a_unMaxParticleCount)),
+    m_sSystemName(a_sSystemName) {
+  m_vDynamics.push_back(std::make_unique<DefaultDynamic>());
+}
+ParticleSystemComponent::ParticleSystemComponent(ParticleSystemComponent&& other)
+  : m_pParticlePool(std::move(other.m_pParticlePool)),
+  m_vDynamics(std::move(other.m_vDynamics)),
+  m_vSources(std::move(other.m_vSources)) {
+}
+void ParticleSystemComponent::Update(double a_dt){
+  for (auto& source : m_vSources) {
+    source->Emit(a_dt, m_pParticlePool);
+  }
+  for (auto& dynamic : m_vDynamics) {
+    dynamic->Update(a_dt, m_pParticlePool);
   }
 }
 } /* namespace Particle */
 } /* namespace Gem */
+

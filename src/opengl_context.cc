@@ -25,16 +25,26 @@ OpenGLContext::~OpenGLContext() {
 }
 
 void OpenGLContext::Update() {
+  /* Poll for and process events */
+  glfwPollEvents();
+
   /* Swap front and back buffers */
   glfwSwapBuffers(m_pWindow);
 
-  /* Poll for and process events */
-  glfwPollEvents();
+  /* Once the buffers are swapped, lets clear the canvas*/
+  /* TODO: NOTE: This should be placed as the first thing done
+   in the rendering loop (which currently is the same thing as being
+   placed here, but its a better practice to do the first one*/
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 bool OpenGLContext::PollWindowClosedEvent() {
   return glfwWindowShouldClose(m_pWindow) != 0 ||
          glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+}
+
+void OpenGLContext::Reshape(int a_width, int a_height) {
+
 }
 
 void OpenGLContext::InitImpl() {
@@ -57,15 +67,19 @@ void OpenGLContext::InitImpl() {
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-
-
-  //Context/OpenGL initialization
-  //TODO:
+  
+  //TODO: Insert other glfw parameters here
 
   // GLEW initialization
   if (GLEW_OK != glewInit()) {
     std::cerr << "GLEW is not initialized!" << std::endl;
   }
+
+  // OpenGL initialization
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glViewport(0, 0, 640, 480);
+
 }
 
 void OpenGLContext::TerminateImpl() {

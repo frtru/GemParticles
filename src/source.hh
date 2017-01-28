@@ -27,7 +27,7 @@ public:
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime,
     double a_dEmissionRate);
-	~Source() = default;
+	virtual ~Source() = default;
 
   /*TODO: When you'll be at the point to set the rate through
   the UI, it will be the time start caring about those things

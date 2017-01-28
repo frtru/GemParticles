@@ -11,19 +11,33 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef RENDERER_HH
+#define RENDERER_HH
 
-int main(int argc, const char *argv[]) {
-  (void)argc;(void)argv;
+#include <memory>
 
-  // Can't get much simpler than that
-  Gem::Particle::App::Init();
-  Gem::Particle::App::Run();
-  Gem::Particle::App::Terminate();
+#include "particle_pool.hh"
 
-  return 0;
-}
+// TODO: Find a way like fenbf did for the billboard,
+// glpoint, bool useQuads thingy...
+
+namespace Gem {
+namespace Particle {
+class Renderer {
+public:
+	Renderer() = default;
+	virtual ~Renderer() = default;
+
+  virtual void Init(Pool* a_pPool) = 0;
+  virtual void Terminate() = 0;
+  virtual void Update() = 0;
+  virtual void Render() = 0;
+  
+protected:
+  Pool* m_pParticlePool;
+
+}; /* class Renderer*/
+} /* namespace Particle */
+} /* namespace Gem */
+
+#endif /* end of include guard: RENDERER_HH */

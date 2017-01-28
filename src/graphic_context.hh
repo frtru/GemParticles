@@ -23,14 +23,16 @@ public:
 
   virtual void Update() = 0;
   virtual bool PollWindowClosedEvent() = 0;
+  virtual void Reshape(int a_width, int a_height) = 0;
+
+  // TODO: Add parameters (width,height,windowedmode,etc.) to the init function
   void Init();
   void Terminate();
 
-protected:
+private:
   virtual void InitImpl() = 0;
   virtual void TerminateImpl() = 0;
 
-private:
   static bool  m_bInitialized;
   static bool  m_bTerminated;
 }; /* class GraphicContext*/

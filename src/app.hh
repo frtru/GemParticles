@@ -20,9 +20,10 @@ namespace Gem {
 namespace Particle {
 namespace App {
 void Init();
+void Run();
+void Terminate();
 void LoadConfig(const std::string& a_sConfigName);
 void SaveConfig(const std::string& a_sConfigName);
-void Run();
 }
 } /* namespace Particle */
 } /* namespace Gem */

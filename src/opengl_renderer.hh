@@ -11,19 +11,38 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef OPENGL_RENDERER_HH
+#define OPENGL_RENDERER_HH
 
-int main(int argc, const char *argv[]) {
-  (void)argc;(void)argv;
+#include <GL/glew.h>
 
-  // Can't get much simpler than that
-  Gem::Particle::App::Init();
-  Gem::Particle::App::Run();
-  Gem::Particle::App::Terminate();
+#include "renderer.hh"
 
-  return 0;
-}
+namespace Gem {
+namespace Particle {
+class GLRenderer : public Renderer {
+public:
+  GLRenderer();
+  virtual ~GLRenderer();
+
+  virtual void Init(Pool* a_pPool) override;
+  virtual void Terminate() override;
+  virtual void Update() = 0;
+  virtual void Render() = 0;
+
+private:
+  virtual void InitImpl();
+  virtual void TerminateImpl();
+
+protected:
+  GLuint m_vertexArrayID;   //VAO
+  GLuint m_vertexBufferID;  //VBO
+
+private:
+  bool m_bInitFlag;
+
+}; /* class GLRenderer */
+} /* namespace Particle */
+} /* namespace Gem */
+
+#endif /* end of include guard: OPENGL_RENDERER_HH */

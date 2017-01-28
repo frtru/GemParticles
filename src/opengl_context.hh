@@ -32,12 +32,12 @@ public:
 
   virtual void Update() override;
   virtual bool PollWindowClosedEvent() override;
+  virtual void Reshape(int a_width, int a_height) override;
 
-protected:
+private:
   virtual void InitImpl() override;
   virtual void TerminateImpl() override;
 
-private:
   GLFWwindow* m_pWindow;
 
 }; /* class OpenGLContext*/

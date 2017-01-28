@@ -11,19 +11,30 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef STUB_RENDERER_HH
+#define STUB_RENDERER_HH
 
-int main(int argc, const char *argv[]) {
-  (void)argc;(void)argv;
+#include "opengl_renderer.hh"
 
-  // Can't get much simpler than that
-  Gem::Particle::App::Init();
-  Gem::Particle::App::Run();
-  Gem::Particle::App::Terminate();
+namespace Gem {
+namespace Particle {
+class StubRenderer : public GLRenderer {
+public:
+  StubRenderer();
+  virtual ~StubRenderer() = default;
 
-  return 0;
-}
+  virtual void Update() override;
+  virtual void Render() override;
+
+private:
+  virtual void InitImpl() override;
+  virtual void TerminateImpl() override;
+
+  // An extra buffer for color
+  GLuint  m_colorVBOID;
+
+}; /* class StubRenderer*/
+} /* namespace Particle */
+} /* namespace Gem */
+
+#endif /* end of include guard: STUB_RENDERER_HH */

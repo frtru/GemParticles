@@ -21,10 +21,13 @@
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader.hh"
+#include "camera.hh"
 #include "particle_system.hh"
 
 // TODO: Temporary includes since test suite
 // is not built yet...
+#include "particle_system_component.hh"
+#include "stub_renderer.hh"
 #include "fountain_source.hh"
 #include "global_acceleration.hh"
 
@@ -33,8 +36,6 @@ namespace Particle {
 namespace App {
 namespace {
 std::unique_ptr<GraphicContext> graphic_context;
-System particle_system(100000);
-//TODO: GPU updater/renderer goes here
 }
 
 void Init() {
@@ -50,34 +51,77 @@ void Init() {
   ShaderManager::CreateAndLink();
   ShaderManager::Bind();
 
+  // Camera initialization
+  Camera::Init();
+
+  // Temporary part, todo move this into a factory or something
+
   // Particle system initialization
-  particle_system.AddSource(
-    std::make_unique<Gem::Particle::FountainSource>(
-      Gem::Particle::FountainSource({ 0.0f,0.0f,0.0f })
-      )
-  );
-  particle_system.AddDynamic(
-    std::make_unique<Gem::Particle::GlobalAcceleration>()
-  );
+  std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
+    std::make_shared<ParticleSystemComponent>(
+      "OBVIOUSLY_TEMPORARY",
+      100000);
+  wTempParticleComp->AddSource(
+    std::make_unique<FountainSource>(
+    FountainSource({ 0.0f, 0.0f, 0.0f })));
+  wTempParticleComp->AddDynamic(
+    std::make_unique<GlobalAcceleration>()
+    );
+
+  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
+  ParticleSystem::AddComponents(wTempParticleComp, wTempRenderer);
 }
 
+float points[] = {
+  0.0f,0.0f,0.0f,
+  1.0f,0.0f,0.0f,
+  0.0f,0.0f,0.0f,
+  0.0f,1.0f,0.0f,
+  0.0f,0.0f,0.0f,
+  0.0f,0.0f,1.0f
+};
+
 void Run() {
+
+  GLuint vao = 0;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+  glEnableVertexAttribArray(0);
+
+  GLuint vbo = 0;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(float), points, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+
   while (!graphic_context->PollWindowClosedEvent()) {
-    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
+    glBindVertexArray(vao);
+    glDrawArrays(GL_LINES, 0, 2);
+    glDrawArrays(GL_LINES, 2, 2);
+    glDrawArrays(GL_LINES, 4, 2);
+    glBindVertexArray(0);
+    //std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsed<std::chrono::nanoseconds>()
       / timer::NANO_PER_SEC;
-    particle_system.Update(dt);
 
-    //TODO: Render here
-    //m_particleSystem.Render()
+    ParticleSystem::Update(dt);
 
+    // TODO: Pre-rendering setup
+    // 1- Send camera settings to shader
+    glPointSize(10);
+    ParticleSystem::Render();
+    
     graphic_context->Update();
     timer::chrono::Update();
   }
-  // TODO: Handle destruction of the app properly now since we have a 
-  // condition where the window is closed
+}
+
+void Terminate() {
+  // App destruction
+  ParticleSystem::Terminate();
   ShaderManager::Terminate();
   graphic_context->Terminate();
 }
