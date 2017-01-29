@@ -28,7 +28,7 @@
 // is not built yet...
 #include "particle_system_component.hh"
 #include "stub_renderer.hh"
-#include "fountain_source.hh"
+#include "spherical_stream_source.hh"
 #include "global_acceleration.hh"
 
 namespace Gem {
@@ -62,8 +62,8 @@ void Init() {
       "OBVIOUSLY_TEMPORARY",
       100000);
   wTempParticleComp->AddSource(
-    std::make_unique<FountainSource>(
-    FountainSource({ 0.0f, 0.0f, 0.0f })));
+    std::make_unique<SphericalStreamSource>(
+    SphericalStreamSource()));
   wTempParticleComp->AddDynamic(
     std::make_unique<GlobalAcceleration>()
     );
@@ -111,7 +111,7 @@ void Run() {
 
     // TODO: Pre-rendering setup
     // 1- Send camera settings to shader
-    glPointSize(10);
+    glPointSize(3);
     ParticleSystem::Render();
     
     graphic_context->Update();

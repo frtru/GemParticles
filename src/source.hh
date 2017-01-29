@@ -21,13 +21,28 @@
 namespace Gem {
 namespace Particle {
 class Source {
+private:
+  static const glm::f32vec3 ORIGIN;
+  static const glm::f32vec3 DEFAULT_SPEED;
+  static const float        DEFAULT_LIFETIME;
+  static const double       DEFAULT_EMISSION_RATE;
+
+protected:  
+  static const glm::u8vec4  DEFAULT_COLOR;
+
 public:
-	Source() = delete;
-	Source(const glm::f32vec3& a_spawnLocation,
+	Source();
+	Source(
+    const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime,
     double a_dEmissionRate);
 	virtual ~Source() = default;
+
+  void SetSpawnLocation(const glm::f32vec3& a_spawnLocation);
+  void SetSpawnVelocity(const glm::f32vec3& a_spawnVelocity);
+  void SetParticleLifetime(float a_fLifetime);
+  void SetEmissionRate(double a_dEmissionRate);
 
   /*TODO: When you'll be at the point to set the rate through
   the UI, it will be the time start caring about those things

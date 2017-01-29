@@ -63,6 +63,7 @@ void StubRenderer::Update() {
   // TODO: See if the "if" branching is even necessary here
   // (test performance)
   if (wActiveParticleCount > 0) {
+    std::cout << "Active particles : " << wActiveParticleCount << std::endl;
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 
