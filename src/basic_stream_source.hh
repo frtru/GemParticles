@@ -11,32 +11,30 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_SOURCE_HH
-#define FOUNTAIN_SOURCE_HH
+#ifndef BASIC_STREAM_SOURCE_HH
+#define BASIC_STREAM_SOURCE_HH
 
 #include "source.hh"
 
 namespace Gem {
 namespace Particle {
-class FountainSource : public Source {
-private:
-  static const glm::f32vec3 DEFAULT_SPEED;
-
+class BasicStreamSource : public Source {
 public:
-	FountainSource() = delete;
-  FountainSource(const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity = DEFAULT_SPEED,
-    float a_fLifetime = 1.0f,
-    double a_dEmissionRate = 100.0);
-	~FountainSource() = default;
+  BasicStreamSource();
+  BasicStreamSource(
+    const glm::f32vec3& a_spawnLocation,
+    const glm::f32vec3& a_spawnVelocity,
+    float a_fLifetime,
+    double a_dEmissionRate);
+	virtual ~BasicStreamSource() = default;
 
   // TODO: Copyable and moveable?<
 
 private:
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
-}; /* class FountainSource*/
+}; /* class BasicStreamSource*/
 } /* namespace Particle */
 } /* namespace Gem */
 
-#endif /* end of include guard: FOUNTAIN_SOURCE_HH */
+#endif /* end of include guard: BASIC_SOURCE_HH */

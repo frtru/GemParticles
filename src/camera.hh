@@ -23,21 +23,21 @@
 // to add a directx compatible camera
 #include <GL/glew.h>
 #include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace Gem {
 namespace Particle {
 namespace Camera {
 
-constexpr GLenum PROJ_PERSPECTIVE = 0x0000000;
-constexpr GLenum PROJ_ORTHO       = 0x0000001;
-
-void Init(GLenum a_eProjectionType = PROJ_PERSPECTIVE);
+void Init();
 void Terminate();
 
 // TODO: See if pointers affect the return type of these functions
 // and if return by value is correct
 glm::mat4 GetViewMatrix();
 glm::mat4 GetProjectionMatrix();
+
+// TODO: Add functions to set View parameters : EYE, TARGET, AND UP VECTORS
 
 void SetViewMatrix(const glm::mat4& a_ViewMatrix);
 

@@ -11,30 +11,43 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "fountain_source.hh"
+#include "random_fountain_source.hh"
 
+#include <cstdlib>
 #include <algorithm>
+
 
 namespace Gem {
 namespace Particle {
+namespace {
+float RandomFloat(float a_fMin, float a_fMax) {
+  return a_fMin + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (a_fMax - a_fMin)));
+}
 
-glm::f32vec3 const FountainSource::DEFAULT_SPEED = { 0.5f,2.0f,0.0f };
+//TODO: If this gonna be reused, change the following so that
+// it can be paramterized, random should be seeded, see if it can be
+// optimized/changed for something cleaner/more C++11
+const glm::f32vec3 RandomInitialLocation() {
+  return {RandomFloat(-1.0f,1.0f), 2.0f, RandomFloat(-1.0f,1.0f) };
+}
+}
 
-FountainSource::FountainSource(const glm::f32vec3& a_spawnLocation,
+RandomFountainSource::RandomFountainSource(const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
-    float a_fLifetime, double a_dEmissionRate)
-  : Source(a_spawnLocation,a_spawnVelocity,a_fLifetime,
-    a_dEmissionRate) {}
+    float a_fLifetime, 
+    double a_dEmissionRate)
+  : Source(a_spawnLocation,
+  a_spawnVelocity,
+  a_fLifetime,
+  a_dEmissionRate) {}
 
-void FountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+void RandomFountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_velocity[i]      = m_spawnVelocity;
+    a_pPool->m_velocity[i]      = RandomInitialLocation();
     a_pPool->m_position[i]      = m_spawnLocation;
     a_pPool->m_lifetime[i]      = m_fLifetime; 
-    // Default redish transparent color 
-    // overwritten by updaters start/end color
-    a_pPool->m_color[i]         = { 255u,0u,0u,120u }; 
+    a_pPool->m_color[i]         = DEFAULT_COLOR; 
   }
 }
 } /* namespace Particle */

@@ -1,120 +1,135 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Fichiers sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{a657774c-5b58-44fa-beb8-492de8522ded}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="Renderers">
+      <UniqueIdentifier>{16c3c585-98a1-414f-b2de-f346312dfab5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers de ressources">
+    <Filter Include="Dynamics">
+      <UniqueIdentifier>{d6d97415-d2b5-427f-afa1-cc7feec5e86b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{d012dbe7-62f2-46c8-b163-ce9c7bbc8813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource files\Shaders">
+      <UniqueIdentifier>{329cd6e0-1842-41e9-a28a-28e9b3323b37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\app.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\particle_pool.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\default_dynamic.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\fountain_source.cc">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\basic_stream_source.cc">
+      <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="src\source.cc">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\default_dynamic.cc">
+      <Filter>Dynamics</Filter>
     </ClCompile>
     <ClCompile Include="src\global_acceleration.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\shader.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\opengl_context.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphic_context.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\camera.cc">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Dynamics</Filter>
     </ClCompile>
     <ClCompile Include="src\stub_renderer.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\particle_system_component.cc">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\particle_system.cc">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Renderers</Filter>
     </ClCompile>
     <ClCompile Include="src\opengl_renderer.cc">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle_pool.cc">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle_system.cc">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particle_system_component.cc">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app.cc" />
+    <ClCompile Include="src\camera.cc" />
+    <ClCompile Include="src\graphic_context.cc" />
+    <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\opengl_context.cc" />
+    <ClCompile Include="src\shader.cc" />
+    <ClCompile Include="src\random_fountain_source.cc">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spherical_stream_source.cc">
+      <Filter>Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\particle.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_pool.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\timer.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\default_dynamic.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fountain_source.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\basic_stream_source.hh">
+      <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="src\source.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\default_dynamic.hh">
+      <Filter>Dynamics</Filter>
     </ClInclude>
     <ClInclude Include="src\dynamic.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Dynamics</Filter>
     </ClInclude>
     <ClInclude Include="src\global_acceleration.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shader.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\graphic_context.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\opengl_context.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\camera.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Dynamics</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\stub_renderer.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_system_component.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_system.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\opengl_renderer.hh">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Renderers</Filter>
     </ClInclude>
+    <ClInclude Include="src\stub_renderer.hh">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_pool.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_system.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_system_component.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app.hh" />
+    <ClInclude Include="src\camera.hh" />
+    <ClInclude Include="src\graphic_context.hh" />
+    <ClInclude Include="src\opengl_context.hh" />
+    <ClInclude Include="src\shader.hh" />
+    <ClInclude Include="src\timer.hh" />
+    <ClInclude Include="src\random_fountain_source.hh">
+      <Filter>Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\spherical_stream_source.hh">
+      <Filter>Sources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\default.comp">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.frag">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.geom">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.tesc">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.tese">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
