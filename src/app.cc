@@ -36,6 +36,7 @@ namespace Particle {
 namespace App {
 namespace {
 std::unique_ptr<GraphicContext> graphic_context;
+glm::mat4 MVP;
 }
 
 void Init() {
@@ -53,8 +54,23 @@ void Init() {
 
   // Camera initialization
   Camera::Init();
+  Camera::LookAt( 
+    glm::vec3(0, 0, 5),   // Camera is at (0,0,5), in World Space
+    glm::vec3(0, 0, 0),   // and looks at the origin
+    glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
+  Camera::SetPerspectiveProjection( 
+    glm::radians(45.0f), 
+    4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
+    0.1f, 100.0f);
+  glm::mat4 MVP = Camera::GetProjectionMatrix() * Camera::GetViewMatrix();
+  ShaderManager::RegisterUniform("MVP");
+  glUniformMatrix4fv(
+    ShaderManager::GetUniformLocation("MVP"),
+    1, false,
+    glm::value_ptr(MVP)
+  );
 
-  // Temporary part, todo move this into a factory or something
+  // TODO:Temporary part, move this into a factory or something
 
   // Particle system initialization
   std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
@@ -72,6 +88,7 @@ void Init() {
   ParticleSystem::AddComponents(wTempParticleComp, wTempRenderer);
 }
 
+// TODO: Add that as debugging option in one of the renderers maybe?
 float points[] = {
   0.0f,0.0f,0.0f,
   1.0f,0.0f,0.0f,
