@@ -27,7 +27,7 @@ float RandomFloat(float a_fMin, float a_fMax) {
 //TODO: If this gonna be reused, change the following so that
 // it can be paramterized, random should be seeded, see if it can be
 // optimized/changed for something cleaner/more C++11
-const glm::f32vec3 RandomInitialLocation() {
+const glm::f32vec3 RandomVelocity() {
   return {RandomFloat(-1.0f,1.0f), 2.0f, RandomFloat(-1.0f,1.0f) };
 }
 }
@@ -44,7 +44,7 @@ RandomFountainSource::RandomFountainSource(const glm::f32vec3& a_spawnLocation,
 void RandomFountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_velocity[i]      = RandomInitialLocation();
+    a_pPool->m_velocity[i]      = RandomVelocity();
     a_pPool->m_position[i]      = m_spawnLocation;
     a_pPool->m_lifetime[i]      = m_fLifetime; 
     a_pPool->m_color[i]         = DEFAULT_COLOR; 

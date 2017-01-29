@@ -18,6 +18,8 @@
 
 namespace Gem {
 namespace Particle {
+// TODO: Rename this for something different than stub...
+// something like basic or debug
 class StubRenderer : public GLRenderer {
 public:
   StubRenderer();

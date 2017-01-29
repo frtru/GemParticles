@@ -24,6 +24,7 @@ namespace Particle {
 
 namespace {
 std::vector<glm::f32vec3> GenerateSphericalBoundCoordinates(
+  // TODO: Solve this : not really being spawned in a spherical shape
   const glm::f32vec3& a_CenterCoordinate,
   float a_fRadius,
   std::size_t a_unNumberOfCoords) {

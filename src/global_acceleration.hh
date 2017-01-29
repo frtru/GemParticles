@@ -16,9 +16,7 @@
 
 #include "dynamic.hh"
 
-/* TODO: Since this is a global acceleration updater
- * providing methods to modify the acceleration (because
- * it surely wouldn't always be just gravity...) would be a good idea
+/* TODO: Rename this for gravity acceleration
  */
 namespace Gem {
 namespace Particle {
