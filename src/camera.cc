@@ -54,13 +54,19 @@ void Init() {
   view_matrix       = glm::mat4();
 }
 
-void Init(const glm::vec3& a_Eye,
-  const glm::vec3& a_Target,
-  const glm::vec3& a_Up) {
-  LookAt(a_Eye, a_Target, a_Up);
+void Terminate() {
 }
 
-void Terminate() {
+const glm::vec3& GetEyePosition() {
+  return eye_position;
+}
+
+const glm::vec3& GetTargetPosition() {
+  return target_position;
+}
+
+const glm::vec3& GetUpVector() {
+  return up_vector;
 }
 
 glm::mat4 GetViewMatrix() {
@@ -69,6 +75,20 @@ glm::mat4 GetViewMatrix() {
 
 glm::mat4 GetProjectionMatrix() {
   return projection_matrix;
+}
+
+// TODO: ...Maybe std::move this or expect && args?
+// since it's not something clients may want to keep
+void SetEyePosition(const glm::vec3& a_vEye) {
+  eye_position = a_vEye;
+}
+
+void SetTargetPosition(const glm::vec3& a_vTarget) {
+  target_position = a_vTarget;
+}
+
+void SetUpVector(const glm::vec3& a_vUp) {
+  up_vector = a_vUp;
 }
 
 void SetViewMatrix(const glm::mat4& a_ViewMatrix) {
