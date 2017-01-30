@@ -38,7 +38,7 @@ void StubRenderer::InitImpl() {
 
   if (GL_ARB_vertex_attrib_binding) {
     glBindVertexBuffer(1, m_colorVBOID, 0, sizeof(glm::u8vec4));
-    glVertexAttribFormat(1, 4, GL_FLOAT, GL_FALSE, 0);
+    glVertexAttribFormat(1, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0);
     glVertexAttribBinding(1, 1);
   }
   else {

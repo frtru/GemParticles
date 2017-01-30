@@ -5,7 +5,7 @@
 uniform mat4x4 MVP;
 
 layout(location = 0) in vec3 vertexPosition_modelspace;
-//layout(location = 1) in vec4 vertexColor;
+layout(location = 1) in vec4 vertexColor;
 
 out vec4 ex_Color;
 
@@ -14,14 +14,14 @@ out vec4 ex_Color;
 void main(void) {
   vec4 vertex = vec4(vertexPosition_modelspace,1.0);
   gl_Position = MVP*vertex;
-  //ex_Color = vertexColor;
+  ex_Color = vertexColor;
   
-  if (vertex.x >= 0.05)
-    ex_Color = vec4(1.0,0.0,0.0,0.8);
-  else if (vertex.y >= 0.05)
-    ex_Color = vec4(0.0,1.0,0.0,0.8);
-  else if (vertex.z >= 0.05)
-    ex_Color = vec4(0.0,0.0,1.0,0.8);
-  else
-    ex_Color = vec4(1.0,1.0,1.0,0.8);    
+//  if (vertex.x >= 0.05)
+//    ex_Color = vec4(1.0,0.0,0.0,0.8);
+//  else if (vertex.y >= 0.05)
+//    ex_Color = vec4(0.0,1.0,0.0,0.8);
+//  else if (vertex.z >= 0.05)
+//    ex_Color = vec4(0.0,0.0,1.0,0.8);
+//  else
+//    ex_Color = vec4(1.0,1.0,1.0,0.8);    
 }

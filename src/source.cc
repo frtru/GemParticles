@@ -24,7 +24,7 @@ double const Source::DEFAULT_EMISSION_RATE  = 100000.0;
 
 // Default redish transparent color 
 // overwritten by updaters start/end color
-glm::u8vec4  const Source::DEFAULT_COLOR    = { 255u,0u,0u,180u };
+glm::u8vec4  const Source::DEFAULT_COLOR    = { 0u,255u,0u,180u };
 
 Source::Source() 
   : m_spawnLocation(ORIGIN),
