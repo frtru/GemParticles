@@ -28,7 +28,7 @@
 // is not built yet...
 #include "particle_system_component.hh"
 #include "stub_renderer.hh"
-#include "spherical_stream_source.hh"
+#include "basic_stream_source.hh"
 #include "global_acceleration.hh"
 
 namespace Gem {
@@ -36,7 +36,7 @@ namespace Particle {
 namespace App {
 namespace {
 std::unique_ptr<GraphicContext> graphic_context;
-glm::mat4 MVP;
+glm::mat4 MVP; // TODO: Move this somewhere else
 }
 
 void Init() {
@@ -78,8 +78,8 @@ void Init() {
       "OBVIOUSLY_TEMPORARY",
       100000);
   wTempParticleComp->AddSource(
-    std::make_unique<SphericalStreamSource>(
-    SphericalStreamSource()));
+    std::make_unique<BasicStreamSource>(
+    BasicStreamSource()));
   wTempParticleComp->AddDynamic(
     std::make_unique<GlobalAcceleration>()
     );
@@ -99,7 +99,6 @@ float points[] = {
 };
 
 void Run() {
-
   GLuint vao = 0;
   glGenVertexArrays(1, &vao);
   glBindVertexArray(vao);
@@ -125,10 +124,6 @@ void Run() {
       / timer::NANO_PER_SEC;
 
     ParticleSystem::Update(dt);
-
-    // TODO: Pre-rendering setup
-    // 1- Send camera settings to shader
-    glPointSize(3);
     ParticleSystem::Render();
     
     graphic_context->Update();
