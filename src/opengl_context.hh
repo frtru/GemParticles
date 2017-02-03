@@ -14,6 +14,8 @@
 #ifndef OPENGL_CONTEXT_HH
 #define OPENGL_CONTEXT_HH
 
+#include <memory>
+
 #include <gl/glew.h>
 #include <gl/glfw3.h>
 
@@ -34,11 +36,13 @@ public:
   virtual bool PollWindowClosedEvent() override;
   virtual void Reshape(int a_width, int a_height) override;
 
+  virtual std::shared_ptr<void> GetWindowHandle() const override;
+
 private:
   virtual void InitImpl() override;
   virtual void TerminateImpl() override;
 
-  GLFWwindow* m_pWindow;
+  std::shared_ptr<GLFWwindow> m_pWindow;
 
 }; /* class OpenGLContext*/
 } /* namespace Particle */

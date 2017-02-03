@@ -22,20 +22,21 @@
 #include "opengl_context.hh"
 #include "shader.hh"
 #include "camera.hh"
+#include "event_handler.hh"
 #include "particle_system.hh"
 
 // TODO: Temporary includes since test suite
 // is not built yet...
 #include "particle_system_component.hh"
 #include "stub_renderer.hh"
-#include "basic_stream_source.hh"
+#include "random_fountain_source.hh"
 #include "global_acceleration.hh"
 
 namespace Gem {
 namespace Particle {
 namespace App {
 namespace {
-std::unique_ptr<GraphicContext> graphic_context;
+std::shared_ptr<GraphicContext> graphic_context;
 glm::mat4 MVP; // TODO: Move this somewhere else
 }
 
@@ -70,6 +71,9 @@ void Init() {
     glm::value_ptr(MVP)
   );
 
+  // Event handler initialization
+  EventHandler::Init(graphic_context);
+
   // TODO:Temporary part, move this into a factory or something
 
   // Particle system initialization
@@ -78,8 +82,8 @@ void Init() {
       "OBVIOUSLY_TEMPORARY",
       100000);
   wTempParticleComp->AddSource(
-    std::make_unique<BasicStreamSource>(
-    BasicStreamSource()));
+    std::make_unique<RandomFountainSource>(
+    RandomFountainSource()));
   wTempParticleComp->AddDynamic(
     std::make_unique<GlobalAcceleration>()
     );

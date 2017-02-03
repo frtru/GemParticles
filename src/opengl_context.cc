@@ -24,12 +24,16 @@ OpenGLContext::~OpenGLContext() {
 
 }
 
+std::shared_ptr<void> OpenGLContext::GetWindowHandle() const {
+  return m_pWindow;
+}
+
 void OpenGLContext::Update() {
   /* Poll for and process events */
   glfwPollEvents();
 
   /* Swap front and back buffers */
-  glfwSwapBuffers(m_pWindow);
+  glfwSwapBuffers(m_pWindow.get());
 
   /* Once the buffers are swapped, lets clear the canvas*/
   /* NOTE: This should be placed as the first thing done
@@ -39,8 +43,8 @@ void OpenGLContext::Update() {
 }
 
 bool OpenGLContext::PollWindowClosedEvent() {
-  return glfwWindowShouldClose(m_pWindow) != 0 ||
-         glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+  return glfwWindowShouldClose(m_pWindow.get()) != 0 ||
+         glfwGetKey(m_pWindow.get(), GLFW_KEY_ESCAPE) == GLFW_PRESS;
 }
 
 void OpenGLContext::Reshape(int a_width, int a_height) {
@@ -56,17 +60,17 @@ void OpenGLContext::InitImpl() {
     std::cerr << "OpenGLSetup -> glfwInit failed!" << std::endl;
 
   /* Create a windowed mode window and its OpenGL context */
-  m_pWindow = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-  if (!m_pWindow) {
+  m_pWindow.reset(glfwCreateWindow(640, 480, "Hello World", NULL, NULL));
+  if (!m_pWindow.get()) {
     glfwTerminate();
     std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
   }
 
   /* Make the window's context current */
-  glfwMakeContextCurrent(m_pWindow);
+  glfwMakeContextCurrent(m_pWindow.get());
 
   /* Ensure we can capture keys being pressed */
-  glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
+  glfwSetInputMode(m_pWindow.get(), GLFW_STICKY_KEYS, GL_TRUE);
   
   //TODO: Insert other glfw parameters here
 
@@ -83,7 +87,7 @@ void OpenGLContext::InitImpl() {
   glEnable(GL_POINT_SMOOTH);
   // TODO: Might have to send the size depending on the 
   // type of particles sent...
-  glPointSize(3);
+  glPointSize(0.1f);
 }
 
 void OpenGLContext::TerminateImpl() {

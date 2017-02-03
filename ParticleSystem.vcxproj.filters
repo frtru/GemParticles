@@ -61,6 +61,7 @@
     <ClCompile Include="src\spherical_stream_source.cc">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\event_handler.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\basic_stream_source.hh">
@@ -111,6 +112,7 @@
     <ClInclude Include="src\spherical_stream_source.hh">
       <Filter>Sources</Filter>
     </ClInclude>
+    <ClInclude Include="src\event_handler.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.comp">
