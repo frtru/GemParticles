@@ -16,10 +16,11 @@
 #include <cstdlib>
 #include <algorithm>
 
-
 namespace Gem {
 namespace Particle {
 namespace {
+const float TWO_PI = 6.28319f;
+const glm::u8vec4 FOUNTAIN_COLOR = { 0u,162u,232u,180u };
 float RandomFloat(float a_fMin, float a_fMax) {
   return a_fMin + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (a_fMax - a_fMin)));
 }
@@ -27,8 +28,10 @@ float RandomFloat(float a_fMin, float a_fMax) {
 //TODO: If this gonna be reused, change the following so that
 // it can be paramterized, random should be seeded, see if it can be
 // optimized/changed for something cleaner/more C++11
-const glm::f32vec3 RandomVelocity() {
-  return {RandomFloat(-1.0f,1.0f), 2.0f, RandomFloat(-1.0f,1.0f) };
+const glm::f32vec3 RandomCircularVelocity() {
+  float theta = RandomFloat(0.0f, TWO_PI);
+  float dist  = RandomFloat(0.0f, 2.0f);
+  return { dist*cos(theta), 2.0f, dist*sin(theta) };
 }
 }
 
@@ -44,10 +47,10 @@ RandomFountainSource::RandomFountainSource(const glm::f32vec3& a_spawnLocation,
 void RandomFountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_velocity[i]      = RandomVelocity();
+    a_pPool->m_velocity[i]      = RandomCircularVelocity();
     a_pPool->m_position[i]      = m_spawnLocation;
     a_pPool->m_lifetime[i]      = m_fLifetime; 
-    a_pPool->m_color[i]         = DEFAULT_COLOR; 
+    a_pPool->m_color[i]         = FOUNTAIN_COLOR; 
   }
 }
 } /* namespace Particle */
