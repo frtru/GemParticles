@@ -39,3 +39,8 @@
 
 # Temporary files under linux
 *~
+
+# .Sln and .vcxproj files will have to be generated locally for each user via CMake
+*.sln
+*.vcxproj
+*.vcxproj.*
