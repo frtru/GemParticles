@@ -18,13 +18,13 @@
 namespace Gem {
 namespace Particle {
 glm::f32vec3 const Source::ORIGIN           = { 0.0f, 0.0f, 0.0f };
-glm::f32vec3 const Source::DEFAULT_SPEED    = { 0.0f, 2.0f, 0.0f };
+glm::f32vec3 const Source::DEFAULT_SPEED    = { 0.5f, 2.0f, 0.0f };
 float const Source::DEFAULT_LIFETIME        = 1.0f;
 double const Source::DEFAULT_EMISSION_RATE  = 100000.0;
 
 // Default redish transparent color 
 // overwritten by updaters start/end color
-glm::u8vec4  const Source::DEFAULT_COLOR    = { 255u,0u,0u,180u };
+glm::u8vec4  const Source::DEFAULT_COLOR    = { 255u,255u,0u,180u };
 
 Source::Source() 
   : m_spawnLocation(ORIGIN),

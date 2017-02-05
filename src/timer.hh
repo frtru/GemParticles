@@ -38,7 +38,7 @@ inline double UpdateAndGetFPS() {
 // Chrono version to prevent changing the current time at every
 // calls to GetTimeElapsed.
 namespace chrono {
-namespace impl {
+namespace {
 struct Clock 
 {
   static std::chrono::steady_clock::time_point current_time;
@@ -51,16 +51,23 @@ std::chrono::steady_clock::time_point Clock::previous_time =
     std::chrono::steady_clock::now();
 } /* namespace impl */
 
+// TODO: There's a compilation error if another file than app.cc include
+// timer.hh and if the following functions are not inline
+
 template <typename DurationType>
 inline unsigned long long GetTimeElapsed() {
   return std::chrono::duration_cast<DurationType>(
-    impl::Clock::current_time -
-    impl::Clock::previous_time).count();
+    Clock::current_time -
+    Clock::previous_time).count();
 }
 
-void Update() {
-  impl::Clock::previous_time = impl::Clock::current_time;
-  impl::Clock::current_time = std::chrono::steady_clock::now();
+inline double GetTimeElapsedInSeconds() {
+  return GetTimeElapsed<std::chrono::nanoseconds>() / NANO_PER_SEC;
+}
+
+inline void Update() {
+  Clock::previous_time = Clock::current_time;
+  Clock::current_time = std::chrono::steady_clock::now();
 }
 
 inline double GetFPS() {

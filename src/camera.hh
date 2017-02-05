@@ -32,12 +32,18 @@ namespace Camera {
 void Init();
 void Terminate();
 
+const glm::vec3& GetEyePosition();
+const glm::vec3& GetTargetPosition();
+const glm::vec3& GetUpVector();
+
 // TODO: See if pointers affect the return type of these functions
 // and if return by value is correct
 glm::mat4 GetViewMatrix();
 glm::mat4 GetProjectionMatrix();
 
-// TODO: Add functions to set View parameters : EYE, TARGET, AND UP VECTORS
+void SetEyePosition(const glm::vec3& a_vEye);
+void SetTargetPosition(const glm::vec3& a_vTarget);
+void SetUpVector(const glm::vec3& a_vUp);
 
 void SetViewMatrix(const glm::mat4& a_ViewMatrix);
 

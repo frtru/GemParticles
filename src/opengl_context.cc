@@ -21,7 +21,25 @@ OpenGLContext::OpenGLContext()
   : m_pWindow(nullptr) {}
 
 OpenGLContext::~OpenGLContext() {
+  // TODO: When closing window first instead of console
+  // it tries to delete the GLFWwindow* which is already
+  // deleted, maybe the shaded_ptr isnt a good idea
+}
 
+void* OpenGLContext::GetWindowHandle() const {
+  return m_pWindow;
+}
+
+std::size_t OpenGLContext::GetWindowWidth() const {
+  int width = 0;
+  glfwGetWindowSize(m_pWindow, &width, NULL);
+  return width;
+}
+
+std::size_t OpenGLContext::GetWindowHeight() const {
+  int height = 0;
+  glfwGetWindowSize(m_pWindow, NULL, &height);
+  return height;
 }
 
 void OpenGLContext::Update() {
@@ -32,7 +50,7 @@ void OpenGLContext::Update() {
   glfwSwapBuffers(m_pWindow);
 
   /* Once the buffers are swapped, lets clear the canvas*/
-  /* TODO: NOTE: This should be placed as the first thing done
+  /* NOTE: This should be placed as the first thing done
    in the rendering loop (which currently is the same thing as being
    placed here, but its a better practice to do the first one*/
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -67,6 +85,7 @@ void OpenGLContext::InitImpl() {
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
+  glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   
   //TODO: Insert other glfw parameters here
 
@@ -79,6 +98,12 @@ void OpenGLContext::InitImpl() {
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0, 640, 480);
+
+  glEnable(GL_POINT_SMOOTH);
+  glEnable(GL_CULL_FACE);
+  // TODO: Might have to send the size depending on the 
+  // type of particles sent...
+  glPointSize(0.1f);
 }
 
 void OpenGLContext::TerminateImpl() {

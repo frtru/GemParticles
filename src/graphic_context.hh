@@ -14,6 +14,8 @@
 #ifndef GRAPHIC_CONTEXT_HH
 #define GRAPHIC_CONTEXT_HH
 
+#include <memory>
+
 namespace Gem {
 namespace Particle {
 class GraphicContext {
@@ -28,6 +30,10 @@ public:
   // TODO: Add parameters (width,height,windowedmode,etc.) to the init function
   void Init();
   void Terminate();
+
+  virtual void* GetWindowHandle() const = 0;
+  virtual std::size_t GetWindowWidth() const = 0;
+  virtual std::size_t GetWindowHeight() const = 0;
 
 private:
   virtual void InitImpl() = 0;

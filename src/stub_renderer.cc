@@ -16,7 +16,7 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-#include <iostream>
+//#include <iostream>
 namespace Gem {
 namespace Particle {
 StubRenderer::StubRenderer(){
@@ -38,7 +38,7 @@ void StubRenderer::InitImpl() {
 
   if (GL_ARB_vertex_attrib_binding) {
     glBindVertexBuffer(1, m_colorVBOID, 0, sizeof(glm::u8vec4));
-    glVertexAttribFormat(1, 4, GL_FLOAT, GL_FALSE, 0);
+    glVertexAttribFormat(1, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0);
     glVertexAttribBinding(1, 1);
   }
   else {
@@ -63,7 +63,7 @@ void StubRenderer::Update() {
   // TODO: See if the "if" branching is even necessary here
   // (test performance)
   if (wActiveParticleCount > 0) {
-    std::cout << "Active particles : " << wActiveParticleCount << std::endl;
+    //std::cout << "Active particles : " << wActiveParticleCount << std::endl;
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 
@@ -81,7 +81,7 @@ void StubRenderer::Render() {
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = m_pParticlePool->GetActiveParticleCount();
   if (count > 0) {
-    glDrawArrays(GL_POINTS, 0, count); // TODO: Put something to change the points for quads as desired
+    glDrawArrays(GL_POINTS, 0, (GLsizei)count); // TODO: Put something to change the points for quads as desired
   }
   glBindVertexArray(0);
 }
