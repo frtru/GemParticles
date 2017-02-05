@@ -31,7 +31,9 @@ public:
   void Init();
   void Terminate();
 
-  virtual std::shared_ptr<void> GetWindowHandle() const = 0;
+  virtual void* GetWindowHandle() const = 0;
+  virtual std::size_t GetWindowWidth() const = 0;
+  virtual std::size_t GetWindowHeight() const = 0;
 
 private:
   virtual void InitImpl() = 0;

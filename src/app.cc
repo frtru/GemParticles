@@ -26,7 +26,7 @@
 #include "particle_system.hh"
 
 // TODO: Temporary includes since test suite
-// is not built yet...
+// or factory/builder are not built yet...
 #include "particle_system_component.hh"
 #include "stub_renderer.hh"
 #include "random_fountain_source.hh"
@@ -36,15 +36,17 @@ namespace Gem {
 namespace Particle {
 namespace App {
 namespace {
+// A pointer to interface, to enable flexibility over
+// window management system or 3D API (GLFW/Windows
+// & OpenGL/Direct3D)
 std::shared_ptr<GraphicContext> graphic_context;
-glm::mat4 MVP; // TODO: Move this somewhere else
 }
 
 void Init() {
   // OpenGL setup
-  graphic_context = std::make_unique<OpenGLContext>();
+  graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
-  
+
   // Shaders initialization
   ShaderManager::Init();
   ShaderManager::LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
@@ -63,13 +65,6 @@ void Init() {
     glm::radians(45.0f), 
     4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
     0.1f, 100.0f);
-  glm::mat4 MVP = Camera::GetProjectionMatrix() * Camera::GetViewMatrix();
-  ShaderManager::RegisterUniform("MVP");
-  glUniformMatrix4fv(
-    ShaderManager::GetUniformLocation("MVP"),
-    1, false,
-    glm::value_ptr(MVP)
-  );
 
   // Event handler initialization
   EventHandler::Init(graphic_context);
@@ -93,6 +88,8 @@ void Init() {
 }
 
 // TODO: Add that as debugging option in one of the renderers maybe?
+// Definitely not in the renderers, since it would be duplicated
+// in every renderers
 float points[] = {
   0.0f,0.0f,0.0f,
   1.0f,0.0f,0.0f,
@@ -121,11 +118,10 @@ void Run() {
     glDrawArrays(GL_LINES, 2, 2);
     glDrawArrays(GL_LINES, 4, 2);
     glBindVertexArray(0);
-    //std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
+    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
-    double dt = timer::chrono::GetTimeElapsed<std::chrono::nanoseconds>()
-      / timer::NANO_PER_SEC;
+    double dt = timer::chrono::GetTimeElapsedInSeconds();
 
     ParticleSystem::Update(dt);
     ParticleSystem::Render();

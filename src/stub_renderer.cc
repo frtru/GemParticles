@@ -81,7 +81,7 @@ void StubRenderer::Render() {
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = m_pParticlePool->GetActiveParticleCount();
   if (count > 0) {
-    glDrawArrays(GL_POINTS, 0, count); // TODO: Put something to change the points for quads as desired
+    glDrawArrays(GL_POINTS, 0, (GLsizei)count); // TODO: Put something to change the points for quads as desired
   }
   glBindVertexArray(0);
 }
