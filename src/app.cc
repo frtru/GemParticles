@@ -23,7 +23,7 @@
 #include "shader.hh"
 #include "camera.hh"
 #include "event_handler.hh"
-#include "particle_system.hh"
+#include "particle_module.hh"
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
@@ -72,10 +72,11 @@ void Init() {
   // TODO:Temporary part, move this into a factory or something
 
   // Particle system initialization
-  std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
-    std::make_shared<ParticleSystemComponent>(
-      "OBVIOUSLY_TEMPORARY",
-      1000000);
+  ParticleModule::Init();
+  ParticleSystemComponent *wTempParticleComp = 
+    new ParticleSystemComponent(
+      1000000,
+      "OBVIOUSLY_TEMPORARY");
   wTempParticleComp->AddSource(
     std::make_unique<RainSource>(
     RainSource(10.0f,100000)));
@@ -83,8 +84,8 @@ void Init() {
     std::make_unique<GlobalAcceleration>()
     );
 
-  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
-  ParticleSystem::AddComponents(wTempParticleComp, wTempRenderer);
+  Renderer *wTempRenderer = new StubRenderer();
+  ParticleModule::AddSystem(ParticleSystem(wTempParticleComp, wTempRenderer));
 }
 
 // TODO: Add that as debugging option in one of the renderers maybe?
@@ -118,14 +119,12 @@ void Run() {
     glDrawArrays(GL_LINES, 2, 2);
     glDrawArrays(GL_LINES, 4, 2);
     glBindVertexArray(0);
-    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
+    //std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsedInSeconds();
 
-    ParticleSystem::Update(dt);
-    ParticleSystem::Render();
-    
+    ParticleModule::Update(dt);    
     graphic_context->Update();
     timer::chrono::Update();
   }
@@ -133,7 +132,7 @@ void Run() {
 
 void Terminate() {
   // App destruction
-  ParticleSystem::Terminate();
+  ParticleModule::Terminate();
   ShaderManager::Terminate();
   graphic_context->Terminate();
 }

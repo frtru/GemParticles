@@ -16,10 +16,11 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-//#include <iostream>
+#include <iostream>
 namespace Gem {
 namespace Particle {
 StubRenderer::StubRenderer(){
+  // TODO: Wtf?
   Renderer::m_pParticlePool = nullptr;
 }
 void StubRenderer::InitImpl() {
@@ -63,7 +64,7 @@ void StubRenderer::Update() {
   // TODO: See if the "if" branching is even necessary here
   // (test performance)
   if (wActiveParticleCount > 0) {
-    //std::cout << "Active particles : " << wActiveParticleCount << std::endl;
+    std::cout << "Active particles : " << wActiveParticleCount << std::endl;
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 

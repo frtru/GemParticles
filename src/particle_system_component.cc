@@ -18,8 +18,8 @@
 namespace Gem {
 namespace Particle {
 ParticleSystemComponent::ParticleSystemComponent(
-  const std::string& a_sSystemName,
-  std::size_t a_unMaxParticleCount) 
+  std::size_t a_unMaxParticleCount,
+  const std::string& a_sSystemName)
   : m_pParticlePool(new Pool(a_unMaxParticleCount)),
     m_sSystemName(a_sSystemName) {
   m_vDynamics.push_back(std::make_unique<DefaultDynamic>());

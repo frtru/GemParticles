@@ -24,26 +24,28 @@
  * and create an array for each
  * 4- See unique_ptr vs vector for pool
  */
-
 #ifndef PARTICLE_SYSTEM_COMPONENT_HH
 #define PARTICLE_SYSTEM_COMPONENT_HH
+
+// TODO: Rename that to remove component from the name...
+// TODO: Move system name into particlesystem...
 
 #include <vector>
 #include <memory>
 
-#include "particle.hh"
 #include "particle_pool.hh"
 #include "source.hh"
 #include "dynamic.hh"
-#include "renderer.hh"
 
 namespace Gem {
 namespace Particle {
+  // TODO : If it possible to use template meta-programmed
+  // in particle system, put the type of pool/particledata as template
 class ParticleSystemComponent {
 public:
   explicit ParticleSystemComponent(
-    const std::string& a_sSystemName = "DEFAULT_SYS_NAME",
-    std::size_t a_unMaxParticleCount = 10000);
+    std::size_t a_unMaxParticleCount,
+    const std::string& a_sSystemName = "DEFAULT_SYS_NAME");
 
   ParticleSystemComponent(ParticleSystemComponent&& other);
   ParticleSystemComponent(const ParticleSystemComponent& other) = delete;
