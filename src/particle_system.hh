@@ -18,26 +18,31 @@
 #include "renderer.hh"
 #include "macro_definitions.hh"
 
+#include <memory>
+
 namespace Gem {
 namespace Particle {
 // TODO: Could maybe try to have template metaprogrammed
 // Component and Renderer?
 class ParticleSystem {
-  DECLARE_DEFAULT_COPYABLE(ParticleSystem)
-  DECLARE_DEFAULT_MOVABLE(ParticleSystem)
+  // TODO: Uncomment this when factory is done
+  //DECLARE_UNCOPYABLE(ParticleSystem)
+  //DECLARE_UNMOVABLE(ParticleSystem)
 public:
-  ParticleSystem(
-    ParticleSystemComponent *a_pComponent,
-    Renderer *a_pRenderer);
+  explicit ParticleSystem(
+    const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
+    const std::shared_ptr<Renderer> &a_pRenderer);
   ~ParticleSystem();
 
-  void Link();
+  void Init();
+  void Terminate();
+
   void Update(double a_dt);
   void Render();
 
 private:
-  ParticleSystemComponent *m_pComponent;
-  Renderer                *m_pRenderer;
+  std::shared_ptr<ParticleSystemComponent> m_pComponent;
+  std::shared_ptr<Renderer>                m_pRenderer;
 }; /* class ParticleSystem */
 } /* namespace Particle */
 } /* namespace Gem */

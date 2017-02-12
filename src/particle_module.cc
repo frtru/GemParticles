@@ -31,6 +31,9 @@ void Init()
 
 void Terminate() 
 {
+  for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
+    m_pSystems->at(i).Terminate();
+  }
   delete m_pSystems;
 }
 
@@ -41,9 +44,9 @@ void Update(double a_dt) {
   // TODO: Evaluate if the copy of the pair could
   // alter performance. Should we just use the index
   // based loop?
-  for (auto system : *m_pSystems) {
-    system.Update(a_dt);
-    system.Render();
+  for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
+    m_pSystems->at(i).Update(a_dt);
+    m_pSystems->at(i).Render();
   }
 }
 
@@ -57,17 +60,17 @@ void GetSystemByName(const std::string& a_szSystemName) {
   */
 }
 
-void AddSystem(ParticleSystem a_rSystem) {
-  a_rSystem.Link();
+void AddSystem(ParticleSystem &&a_rSystem) {
+  a_rSystem.Init();
   m_pSystems->push_back(a_rSystem);
 }
 
-void AddComponents(
-  ParticleSystemComponent *a_pParticleComponent, 
-  Renderer *a_pRenderer) {
-  a_pRenderer->Init(a_pParticleComponent->GetParticles().get());
-  m_pSystems->push_back({ a_pParticleComponent, a_pRenderer });
-}
+/*void AddComponents(
+  const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
+  const std::shared_ptr<Renderer> &a_pRenderer) {
+  a_pRenderer->Init(a_pComponent->GetParticles().get());
+  m_pSystems->push_back(a_pComponent, a_pRenderer});
+}*/
 
 void RemoveSystem(const std::string& a_szSystemName) {
   /*

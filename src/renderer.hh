@@ -28,6 +28,8 @@ public:
 	Renderer() = default;
 	virtual ~Renderer() = default;
 
+  // TODO: See if init/terminate should be changed for 
+  // something more stable, like object construction/destruction
   virtual void Init(Pool* a_pPool) = 0;
   virtual void Terminate() = 0;
   virtual void Update() = 0;

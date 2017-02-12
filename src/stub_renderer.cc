@@ -26,7 +26,11 @@ StubRenderer::StubRenderer(){
 void StubRenderer::InitImpl() {
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
+  std::cout << "StubRenderer::InitImpl -> Generated color VBO ID = ";
+  std::cout << m_colorVBOID << std::endl;
   glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
+  std::cout << "StubRenderer::InitImpl -> Allocated buffer memory for ID = ";
+  std::cout << m_colorVBOID << std::endl;
 
   const std::size_t wParticleCount = m_pParticlePool->GetParticleCount();
 
@@ -53,6 +57,7 @@ void StubRenderer::InitImpl() {
 }
 void StubRenderer::TerminateImpl() {
   if (m_colorVBOID != 0) {
+    std::cout << "StubRenderer::TerminateImpl -> Deallocating color VBO" << std::endl;
     glDeleteBuffers(1, &m_colorVBOID);
     m_colorVBOID = 0;
   }
@@ -64,7 +69,7 @@ void StubRenderer::Update() {
   // TODO: See if the "if" branching is even necessary here
   // (test performance)
   if (wActiveParticleCount > 0) {
-    std::cout << "Active particles : " << wActiveParticleCount << std::endl;
+    //std::cout << "Active particles : " << wActiveParticleCount << std::endl;
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 

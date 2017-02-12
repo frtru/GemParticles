@@ -32,11 +32,19 @@ void GLRenderer::Init(Pool* a_pPool) {
   if (!m_bInitFlag) {
     // VAO initialization
     glGenVertexArrays(1, &m_vertexArrayID);
+    std::cout << "GLRenderer::Init -> Generated VAO ID = ";
+    std::cout << m_vertexArrayID << std::endl;
     glBindVertexArray(m_vertexArrayID);
+    std::cout << "GLRenderer::Init -> Allocated array memory for ID = ";
+    std::cout << m_vertexArrayID << std::endl;
 
     // VBO initialization
     glGenBuffers(1, &m_vertexBufferID);
+    std::cout << "GLRenderer::Init -> Generated vertex VBO ID = ";
+    std::cout << m_vertexBufferID << std::endl;
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
+    std::cout << "GLRenderer::Init -> Allocated buffer memory for ID = ";
+    std::cout << m_vertexBufferID << std::endl;
 
     m_pParticlePool = a_pPool;
 
@@ -81,6 +89,7 @@ void GLRenderer::TerminateImpl() {
 void GLRenderer::Terminate() {
   if (m_bInitFlag) {
     if (m_vertexBufferID != 0) {
+      std::cout << "GLRenderer::Terminate -> Deallocating vertex VBO" << std::endl;
       glDeleteBuffers(1, &m_vertexBufferID);
       m_vertexBufferID = 0;
     }

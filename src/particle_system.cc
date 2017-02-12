@@ -16,19 +16,21 @@
 namespace Gem {
 namespace Particle {
 ParticleSystem::ParticleSystem(
-  ParticleSystemComponent *a_pComponent,
-  Renderer *a_pRenderer)
+  const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
+  const std::shared_ptr<Renderer> &a_pRenderer)
   : m_pComponent(a_pComponent),
     m_pRenderer(a_pRenderer) {
 }
 ParticleSystem::~ParticleSystem(){
-  // Deallocate graphical ressources handled by renderer
-  m_pRenderer->Terminate();
   // TODO: Delete attributes? See ownshership
 }
-void ParticleSystem::Link() {
+void ParticleSystem::Init() {
   // Set a reference to particles data in the renderer
   m_pRenderer->Init(m_pComponent->GetParticles().get());
+}
+void ParticleSystem::Terminate() {
+  // Deallocate graphical ressources handled by renderer
+  m_pRenderer->Terminate();
 }
 void ParticleSystem::Update(double a_dt) {
   // Particles update (dynamics, emission/destruction, etc.)

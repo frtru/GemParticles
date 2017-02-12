@@ -16,6 +16,8 @@
 
 #include "particle_system.hh"
 
+#include <memory>
+
 namespace Gem {
 namespace Particle {
 namespace ParticleModule {
@@ -24,8 +26,12 @@ void Terminate();
 
 void Update(double a_dt);
 
-void AddSystem(ParticleSystem a_System);
+void AddSystem(ParticleSystem &&a_System);
 
+/*void AddComponents(
+  const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
+  const std::shared_ptr<Renderer> &a_pRenderer);
+  */
 // TODOs : See .CC file for todo
 void RemoveSystem(const std::string& a_szSystemName); 
 void GetSystemByName(const std::string& a_szSystemName);

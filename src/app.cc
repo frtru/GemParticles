@@ -73,8 +73,8 @@ void Init() {
 
   // Particle system initialization
   ParticleModule::Init();
-  ParticleSystemComponent *wTempParticleComp = 
-    new ParticleSystemComponent(
+  std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
+    std::make_shared<ParticleSystemComponent>(
       1000000,
       "OBVIOUSLY_TEMPORARY");
   wTempParticleComp->AddSource(
@@ -84,8 +84,8 @@ void Init() {
     std::make_unique<GlobalAcceleration>()
     );
 
-  Renderer *wTempRenderer = new StubRenderer();
-  ParticleModule::AddSystem(ParticleSystem(wTempParticleComp, wTempRenderer));
+  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
+  ParticleModule::AddSystem(std::move(ParticleSystem(wTempParticleComp, wTempRenderer)));
 }
 
 // TODO: Add that as debugging option in one of the renderers maybe?
@@ -119,7 +119,7 @@ void Run() {
     glDrawArrays(GL_LINES, 2, 2);
     glDrawArrays(GL_LINES, 4, 2);
     glBindVertexArray(0);
-    //std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
+    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     //TODO: See how UI with anttweakbar goes, but
     //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsedInSeconds();
