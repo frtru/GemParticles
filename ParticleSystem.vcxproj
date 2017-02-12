@@ -29,6 +29,7 @@
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\opengl_renderer.cc" />
+    <ClCompile Include="src\particle_module.cc" />
     <ClCompile Include="src\particle_system.cc" />
     <ClCompile Include="src\rain_source.cc" />
     <ClCompile Include="src\random_fountain_source.cc" />
@@ -51,6 +52,7 @@
     <ClInclude Include="src\macro_definitions.hh" />
     <ClInclude Include="src\opengl_context.hh" />
     <ClInclude Include="src\opengl_renderer.hh" />
+    <ClInclude Include="src\particle_module.hh" />
     <ClInclude Include="src\particle_system.hh" />
     <ClInclude Include="src\rain_source.hh" />
     <ClInclude Include="src\random_fountain_source.hh" />

@@ -68,6 +68,9 @@
     <ClCompile Include="src\particle_system.cc">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\particle_module.cc">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\basic_stream_source.hh">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="src\macro_definitions.hh">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_module.hh">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
