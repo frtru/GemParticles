@@ -11,18 +11,32 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "global_acceleration.hh"
+#ifndef SIMPLE_GL_RENDERER_HH
+#define SIMPLE_GL_RENDERER_HH
+
+#include "opengl_renderer.hh"
 
 namespace gem {
 namespace particle {
-void GlobalAcceleration::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
-  // TODO: Deal with the delta double precision casted to float later
-  // (GLM vec3 or vec4 doesn't support operations with doubles...)
-  const float fDt = (float)a_dt;
+// TODO: Rename this for something different than stub...
+// something like basic or debug
+class SimpleGLRenderer : public GLRenderer {
+public:
+  SimpleGLRenderer();
+  virtual ~SimpleGLRenderer() = default;
 
-  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_velocity[i] += GRAVITY_ACCEL * fDt;
-  }
-}
+  virtual void Update() override;
+  virtual void Render() override;
+
+private:
+  virtual void InitImpl() override;
+  virtual void TerminateImpl() override;
+
+  // An extra buffer for color
+  GLuint  m_colorVBOID;
+
+}; /* class SimpleGLRenderer*/
 } /* namespace particle */
 } /* namespace gem */
+
+#endif /* end of include guard: SIMPLE_GL_RENDERER_HH */

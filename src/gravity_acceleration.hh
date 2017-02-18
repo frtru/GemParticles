@@ -11,32 +11,25 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef STUB_RENDERER_HH
-#define STUB_RENDERER_HH
+#ifndef GLOBAL_ACCELERATION_HH
+#define GLOBAL_ACCELERATION_HH
 
-#include "opengl_renderer.hh"
+#include "dynamic.hh"
 
 namespace gem {
 namespace particle {
-// TODO: Rename this for something different than stub...
-// something like basic or debug
-class StubRenderer : public GLRenderer {
-public:
-  StubRenderer();
-  virtual ~StubRenderer() = default;
-
-  virtual void Update() override;
-  virtual void Render() override;
-
+class GravityAcceleration : public Dynamic {
 private:
-  virtual void InitImpl() override;
-  virtual void TerminateImpl() override;
+  static const glm::f32vec3 GRAVITY_ACCEL;
+public:
+  GravityAcceleration() = default;
+  ~GravityAcceleration() = default;
 
-  // An extra buffer for color
-  GLuint  m_colorVBOID;
+	// TODO: Copyable and moveable?<
 
-}; /* class StubRenderer*/
+  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
+}; /* class EulerParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: STUB_RENDERER_HH */
+#endif /* end of include guard: GLOBAL_ACCELERATION_HH */

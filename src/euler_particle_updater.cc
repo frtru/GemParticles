@@ -11,32 +11,31 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "particle_system_component.hh"
-
 #include "euler_particle_updater.hh"
 
 namespace gem {
 namespace particle {
-ParticleSystemComponent::ParticleSystemComponent(
-  std::size_t a_unMaxParticleCount,
-  const std::string& a_sSystemName)
-  : m_pParticlePool(new Pool(a_unMaxParticleCount)),
-    m_sSystemName(a_sSystemName) {
-  m_vDynamics.push_back(std::make_unique<EulerParticleUpdater>());
-}
-ParticleSystemComponent::ParticleSystemComponent(ParticleSystemComponent&& other)
-  : m_pParticlePool(std::move(other.m_pParticlePool)),
-  m_vDynamics(std::move(other.m_vDynamics)),
-  m_vEmitters(std::move(other.m_vEmitters)) {
-}
-void ParticleSystemComponent::Update(double a_dt){
-  for (auto& source : m_vEmitters) {
-    source->Emit(a_dt, m_pParticlePool);
+void EulerParticleUpdater::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
+  // TODO: Deal with the delta double precision casted to float later
+  // (GLM vec3 or vec4 doesn't support operations with doubles...)
+  const float fDt = (float)a_dt;
+
+  // TODO: See if 3 for's are better for branch prediction here
+  // or a merged for with a if else
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+    a_pPool->m_lifetime[i] -= fDt;
+    if (a_pPool->m_lifetime[i] <= 0.0f) {
+      a_pPool->Sleep(i);
+    }
   }
-  for (auto& dynamic : m_vDynamics) {
-    dynamic->Update(a_dt, m_pParticlePool);
+
+  // Using the euler model to update the positions and velocities
+
+  // TODO: See if 2 for's is better for data caching, since 
+  // one loop is dedicated to velocities and the other to positions
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+    a_pPool->m_position[i] += a_pPool->m_velocity[i] * fDt;
   }
 }
 } /* namespace particle */
 } /* namespace gem */
-

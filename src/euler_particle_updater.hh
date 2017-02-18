@@ -11,28 +11,23 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLOBAL_ACCELERATION_HH
-#define GLOBAL_ACCELERATION_HH
+#ifndef EULER_PARTICLE_UPDATER
+#define EULER_PARTICLE_UPDATER
 
 #include "dynamic.hh"
 
-/* TODO: Rename this for gravity acceleration
- */
 namespace gem {
 namespace particle {
-class GlobalAcceleration : public Dynamic {
-private:
-  const glm::f32vec3 GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
-
+class EulerParticleUpdater : public Dynamic {
 public:
-  GlobalAcceleration() = default;
-  ~GlobalAcceleration() = default;
+  EulerParticleUpdater() = default;
+  ~EulerParticleUpdater() = default;
 
 	// TODO: Copyable and moveable?<
 
   virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
-}; /* class DefaultDynamic*/
+}; /* class EulerParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: GLOBAL_ACCELERATION_HH */
+#endif /* end of include guard: EULER_PARTICLE_UPDATER */

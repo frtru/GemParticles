@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "stub_renderer.hh"
+#include "simple_opengl_renderer.hh"
 
 #include <glm/glm.hpp>
 #include <GL/glew.h>
@@ -19,17 +19,17 @@
 #include <iostream>
 namespace gem {
 namespace particle {
-StubRenderer::StubRenderer(){
+SimpleGLRenderer::SimpleGLRenderer(){
   // TODO: Wtf?
   Renderer::m_pParticlePool = nullptr;
 }
-void StubRenderer::InitImpl() {
+void SimpleGLRenderer::InitImpl() {
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
-  std::cout << "StubRenderer::InitImpl -> Generated color VBO ID = ";
+  std::cout << "SimpleOpenGLRenderer::InitImpl -> Generated color VBO ID = ";
   std::cout << m_colorVBOID << std::endl;
   glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
-  std::cout << "StubRenderer::InitImpl -> Allocated buffer memory for ID = ";
+  std::cout << "SimpleOpenGLRenderer::InitImpl -> Allocated buffer memory for ID = ";
   std::cout << m_colorVBOID << std::endl;
 
   const std::size_t wParticleCount = m_pParticlePool->GetParticleCount();
@@ -55,14 +55,14 @@ void StubRenderer::InitImpl() {
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
-void StubRenderer::TerminateImpl() {
+void SimpleGLRenderer::TerminateImpl() {
   if (m_colorVBOID != 0) {
-    std::cout << "StubRenderer::TerminateImpl -> Deallocating color VBO" << std::endl;
+    std::cout << "SimpleOpenGLRenderer::TerminateImpl -> Deallocating color VBO" << std::endl;
     glDeleteBuffers(1, &m_colorVBOID);
     m_colorVBOID = 0;
   }
 }
-void StubRenderer::Update() {
+void SimpleGLRenderer::Update() {
   const std::size_t wActiveParticleCount =
     m_pParticlePool->GetActiveParticleCount();
 
@@ -83,7 +83,7 @@ void StubRenderer::Update() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 }
-void StubRenderer::Render() {
+void SimpleGLRenderer::Render() {
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = m_pParticlePool->GetActiveParticleCount();
   if (count > 0) {

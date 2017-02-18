@@ -28,9 +28,9 @@
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
 #include "particle_system_component.hh"
-#include "stub_renderer.hh"
+#include "simple_opengl_renderer.hh"
 #include "rain_emitter.hh"
-#include "global_acceleration.hh"
+#include "gravity_acceleration.hh"
 
 namespace gem {
 namespace particle {
@@ -81,10 +81,10 @@ void Init() {
     std::make_unique<RainEmitter>(
     RainEmitter(10.0f,100000)));
   wTempParticleComp->AddDynamic(
-    std::make_unique<GlobalAcceleration>()
+    std::make_unique<GravityAcceleration>()
     );
 
-  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
+  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<SimpleGLRenderer>();
   particle_module::AddSystem(std::move(ParticleSystem(wTempParticleComp, wTempRenderer)));
 }
 
