@@ -34,7 +34,7 @@
 #include <memory>
 
 #include "particle_pool.hh"
-#include "source.hh"
+#include "emitter.hh"
 #include "dynamic.hh"
 
 namespace gem {
@@ -58,8 +58,8 @@ public:
   const std::unique_ptr<Pool>& GetParticles() const {
     return m_pParticlePool; 
   }
-  void AddSource(std::unique_ptr<Source> a_pSource) { 
-    m_vSources.push_back(std::move(a_pSource)); 
+  void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) { 
+    m_vEmitters.push_back(std::move(a_pEmitter)); 
   }
   void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) { 
     m_vDynamics.push_back(std::move(a_pDynamic)); 
@@ -72,7 +72,7 @@ private:
   // TODO: See if shared_ptr would be better so that
   // something else can have a copy of those to change
   // some parameters more easily
-  std::vector<std::unique_ptr<Source> >  m_vSources;
+  std::vector<std::unique_ptr<Emitter> >  m_vEmitters;
   std::vector<std::unique_ptr<Dynamic> > m_vDynamics;
 }; /* class ParticleSystemComponent */
 } /* namespace particle */

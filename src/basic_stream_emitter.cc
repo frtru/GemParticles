@@ -11,30 +11,33 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_SOURCE_HH
-#define FOUNTAIN_SOURCE_HH
+#include "basic_stream_emitter.hh"
 
-#include "source.hh"
+#include <algorithm>
 
 namespace gem {
 namespace particle {
-class RandomFountainSource : public Source {
-public:
-  RandomFountainSource() = default; // Can be defaulted to base default constructor
-  RandomFountainSource(
-    const glm::f32vec3& a_spawnLocation,
+BasicStreamEmitter::BasicStreamEmitter()
+  : Emitter() {}
+
+BasicStreamEmitter::BasicStreamEmitter(
+  const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
-    float a_fLifetime,
-    double a_dEmissionRate);
-	~RandomFountainSource() = default;
+    float a_fLifetime, 
+    double a_dEmissionRate)
+  : Emitter(a_spawnLocation,
+  a_spawnVelocity,
+  a_fLifetime,
+  a_dEmissionRate) {}
 
-  // TODO: Copyable and moveable?<
-
-private:
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-}; /* class RandomFountainSource*/
+void BasicStreamEmitter::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+  std::size_t a_unStartID, std::size_t a_unEndID) {
+  for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
+    a_pPool->m_velocity[i]      = m_spawnVelocity;
+    a_pPool->m_position[i]      = m_spawnLocation;
+    a_pPool->m_lifetime[i]      = m_fLifetime; 
+    a_pPool->m_color[i]         = DEFAULT_COLOR;
+  }
+}
 } /* namespace particle */
 } /* namespace gem */
-
-#endif /* end of include guard: FOUNTAIN_SOURCE_HH */

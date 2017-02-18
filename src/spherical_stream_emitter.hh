@@ -11,30 +11,28 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef BASIC_STREAM_SOURCE_HH
-#define BASIC_STREAM_SOURCE_HH
+#ifndef FOUNTAIN_EMITTER_HH
+#define FOUNTAIN_EMITTER_HH
 
-#include "source.hh"
+#include "emitter.hh"
 
 namespace gem {
 namespace particle {
-class BasicStreamSource : public Source {
+class SphericalStreamEmitter : public Emitter {
 public:
-  BasicStreamSource();
-  BasicStreamSource(
+  SphericalStreamEmitter() = default; // Can be defaulted to base default constructor
+  SphericalStreamEmitter(
     const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime,
     double a_dEmissionRate);
-	virtual ~BasicStreamSource() = default;
-
-  // TODO: Copyable and moveable?<
+	virtual ~SphericalStreamEmitter() = default;
 
 private:
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
-}; /* class BasicStreamSource*/
+}; /* class RandomFountainEmitter*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: BASIC_SOURCE_HH */
+#endif /* end of include guard: FOUNTAIN_EMITTER_HH */

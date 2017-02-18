@@ -27,10 +27,10 @@ ParticleSystemComponent::ParticleSystemComponent(
 ParticleSystemComponent::ParticleSystemComponent(ParticleSystemComponent&& other)
   : m_pParticlePool(std::move(other.m_pParticlePool)),
   m_vDynamics(std::move(other.m_vDynamics)),
-  m_vSources(std::move(other.m_vSources)) {
+  m_vEmitters(std::move(other.m_vEmitters)) {
 }
 void ParticleSystemComponent::Update(double a_dt){
-  for (auto& source : m_vSources) {
+  for (auto& source : m_vEmitters) {
     source->Emit(a_dt, m_pParticlePool);
   }
   for (auto& dynamic : m_vDynamics) {

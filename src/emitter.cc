@@ -11,28 +11,28 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "source.hh"
+#include "emitter.hh"
 
 #include <algorithm>
 
 namespace gem {
 namespace particle {
-glm::f32vec3 const Source::ORIGIN           = { 0.0f, 0.0f, 0.0f };
-glm::f32vec3 const Source::DEFAULT_SPEED    = { 0.5f, 2.0f, 0.0f };
-float const Source::DEFAULT_LIFETIME        = 1.0f;
-double const Source::DEFAULT_EMISSION_RATE  = 100000.0;
+glm::f32vec3 const Emitter::ORIGIN           = { 0.0f, 0.0f, 0.0f };
+glm::f32vec3 const Emitter::DEFAULT_SPEED    = { 0.5f, 2.0f, 0.0f };
+float const Emitter::DEFAULT_LIFETIME        = 1.0f;
+double const Emitter::DEFAULT_EMISSION_RATE  = 100000.0;
 
 // Default redish transparent color 
 // overwritten by updaters start/end color
-glm::u8vec4  const Source::DEFAULT_COLOR    = { 255u,0u,0u,180u };
+glm::u8vec4  const Emitter::DEFAULT_COLOR    = { 255u,0u,0u,180u };
 
-Source::Source() 
+Emitter::Emitter() 
   : m_spawnLocation(ORIGIN),
   m_spawnVelocity(DEFAULT_SPEED),
   m_fLifetime(DEFAULT_LIFETIME),
   m_dEmissionRate(DEFAULT_EMISSION_RATE) {}
 
-Source::Source(const glm::f32vec3& a_spawnLocation,
+Emitter::Emitter(const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime,
     double a_dEmissionRate)
@@ -41,24 +41,24 @@ Source::Source(const glm::f32vec3& a_spawnLocation,
   m_fLifetime(a_fLifetime),
   m_dEmissionRate(a_dEmissionRate) {}
 
-void Source::SetSpawnLocation(const glm::f32vec3& a_spawnLocation) {
+void Emitter::SetSpawnLocation(const glm::f32vec3& a_spawnLocation) {
   m_spawnLocation = a_spawnLocation;
 }
 
-void Source::SetSpawnVelocity(const glm::f32vec3& a_spawnVelocity) {
+void Emitter::SetSpawnVelocity(const glm::f32vec3& a_spawnVelocity) {
   m_spawnVelocity = a_spawnVelocity;
 }
 
-void Source::SetParticleLifetime(float a_fLifetime) {
+void Emitter::SetParticleLifetime(float a_fLifetime) {
   m_fLifetime = a_fLifetime;
 }
 
-void Source::SetEmissionRate(double a_dEmissionRate) {
+void Emitter::SetEmissionRate(double a_dEmissionRate) {
   m_dEmissionRate = a_dEmissionRate;
 }
 
 
-void Source::Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
+void Emitter::Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
   const std::size_t maxNewParticles = 
     static_cast<std::size_t>(a_dt*m_dEmissionRate);
   const std::size_t firstParticleIndex = 

@@ -29,7 +29,7 @@
 // or factory/builder are not built yet...
 #include "particle_system_component.hh"
 #include "stub_renderer.hh"
-#include "rain_source.hh"
+#include "rain_emitter.hh"
 #include "global_acceleration.hh"
 
 namespace gem {
@@ -77,9 +77,9 @@ void Init() {
     std::make_shared<ParticleSystemComponent>(
       1000000,
       "OBVIOUSLY_TEMPORARY");
-  wTempParticleComp->AddSource(
-    std::make_unique<RainSource>(
-    RainSource(10.0f,100000)));
+  wTempParticleComp->AddEmitter(
+    std::make_unique<RainEmitter>(
+    RainEmitter(10.0f,100000)));
   wTempParticleComp->AddDynamic(
     std::make_unique<GlobalAcceleration>()
     );

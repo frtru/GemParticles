@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "rain_source.hh"
+#include "rain_emitter.hh"
 
 #include <cstdlib>
 #include <algorithm>
@@ -37,13 +37,13 @@ const glm::f32vec3 RandomInitialPosition() {
 }
 }
 
-RainSource::RainSource(float a_fLifetime, double a_dEmissionRate)
-  : Source(glm::vec3(),
+RainEmitter::RainEmitter(float a_fLifetime, double a_dEmissionRate)
+  : Emitter(glm::vec3(),
     glm::vec3(),
     a_fLifetime,
     a_dEmissionRate) {}
 
-void RainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+void RainEmitter::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     a_pPool->m_velocity[i]      = RAIN_INITIAL_VELOCITY;

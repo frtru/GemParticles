@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "spherical_stream_source.hh"
+#include "spherical_stream_emitter.hh"
 
 #include <algorithm>
 #include<random>
@@ -49,17 +49,17 @@ std::vector<glm::f32vec3> GenerateSphericalBoundCoordinates(
 }
 }
 
-SphericalStreamSource::SphericalStreamSource(
+SphericalStreamEmitter::SphericalStreamEmitter(
     const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime, 
     double a_dEmissionRate)
-  : Source(a_spawnLocation,
+  : Emitter(a_spawnLocation,
   a_spawnVelocity,
   a_fLifetime,
   a_dEmissionRate) {}
 
-void SphericalStreamSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+void SphericalStreamEmitter::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   const std::size_t N = a_unEndID - a_unStartID;
   auto coords = GenerateSphericalBoundCoordinates(
