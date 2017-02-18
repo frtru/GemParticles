@@ -65,12 +65,9 @@ public:
   }
 
 private:
-  std::unique_ptr<Pool>     m_pParticlePool; 
-  // TODO: See if shared_ptr would be better so that
-  // something else can have a copy of those to change
-  // some parameters more easily
+  std::unique_ptr<Pool>                   m_pParticlePool; 
   std::vector<std::unique_ptr<Emitter> >  m_vEmitters;
-  std::vector<std::unique_ptr<Dynamic> > m_vDynamics;
+  std::vector<std::unique_ptr<Dynamic> >  m_vDynamics;
 }; /* class ParticleSystemComponent */
 } /* namespace particle */
 } /* namespace gem */

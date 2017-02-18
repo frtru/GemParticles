@@ -36,7 +36,7 @@ void AddSystem(ParticleSystem &&a_System);
 void RemoveSystem(const std::string& a_szSystemName); 
 void GetSystemByName(const std::string& a_szSystemName);
 
-} /* namespace ParticleSystem*/
+} /* namespace particle_module */
 } /* namespace particle */
 } /* namespace gem */
 #endif /* end of include guard: PARTICLE_MODULE_HH */

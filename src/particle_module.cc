@@ -26,15 +26,23 @@ std::vector<ParticleSystem> *m_pSystems;
 
 void Init() 
 {
-  m_pSystems = new std::vector<ParticleSystem>();
+  static bool s_bIsInitialized = false;
+  if (!s_bIsInitialized) {
+    m_pSystems = new std::vector<ParticleSystem>();
+    s_bIsInitialized = true;
+  }
 }
 
 void Terminate() 
 {
-  for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
-    m_pSystems->at(i).Terminate();
+  static bool s_bIsTerminated = false;
+  if (!s_bIsTerminated) {
+    for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
+      m_pSystems->at(i).Terminate();
+    }
+    delete m_pSystems;
+    s_bIsTerminated = true;
   }
-  delete m_pSystems;
 }
 
 void Update(double a_dt) {
@@ -62,7 +70,7 @@ void GetSystemByName(const std::string& a_szSystemName) {
 
 void AddSystem(ParticleSystem &&a_rSystem) {
   a_rSystem.Init();
-  m_pSystems->push_back(a_rSystem);
+  m_pSystems->push_back(std::move(a_rSystem));
 }
 
 /*void AddComponents(

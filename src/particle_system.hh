@@ -25,14 +25,13 @@ namespace particle {
 // TODO: Could maybe try to have template metaprogrammed
 // Component and Renderer?
 class ParticleSystem {
-  // TODO: Uncomment this when factory is done
-  //DECLARE_UNCOPYABLE(ParticleSystem)
-  //DECLARE_UNMOVABLE(ParticleSystem)
+  DECLARE_UNCOPYABLE(ParticleSystem)
+  DECLARE_MOVABLE(ParticleSystem)
 public:
   explicit ParticleSystem(
-    const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
-    const std::shared_ptr<Renderer> &a_pRenderer,
-    std::string&& a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")));
+    std::unique_ptr<ParticleSystemComponent> &&a_pComponent,
+    std::unique_ptr<Renderer> &&a_pRenderer,
+    std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")));
   ~ParticleSystem();
 
   void Init();
@@ -43,8 +42,8 @@ public:
 
 private:
   std::string                               m_sSystemName;
-  std::shared_ptr<ParticleSystemComponent>  m_pComponent;
-  std::shared_ptr<Renderer>                 m_pRenderer;
+  std::unique_ptr<ParticleSystemComponent>  m_pComponent;
+  std::unique_ptr<Renderer>                 m_pRenderer;
 }; /* class ParticleSystem */
 } /* namespace particle */
 } /* namespace gem */

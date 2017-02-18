@@ -36,6 +36,7 @@ public:
   virtual void Render() = 0;
   
 protected:
+  // TODO: If pool is better with managed pointers, change them to shared and here also
   Pool* m_pParticlePool;
 
 }; /* class Renderer*/

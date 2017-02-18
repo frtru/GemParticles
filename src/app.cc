@@ -73,8 +73,8 @@ void Init() {
 
   // Particle system initialization
   particle_module::Init();
-  std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
-    std::make_shared<ParticleSystemComponent>(1000000);
+  std::unique_ptr<ParticleSystemComponent> wTempParticleComp = 
+    std::make_unique<ParticleSystemComponent>(1000000);
   wTempParticleComp->AddEmitter(
     std::make_unique<RainEmitter>(
     RainEmitter(10.0f,100000)));
@@ -82,11 +82,11 @@ void Init() {
     std::make_unique<GravityAcceleration>()
     );
 
-  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<SimpleGLRenderer>();
+  std::unique_ptr<Renderer> wTempRenderer = std::make_unique<SimpleGLRenderer>();
   particle_module::AddSystem(std::move(
     ParticleSystem(
-      wTempParticleComp, 
-      wTempRenderer,
+      std::move(wTempParticleComp), 
+      std::move(wTempRenderer),
       std::move(std::string("OBVIOUSLY_TEMPORARY"))
     )
   ));

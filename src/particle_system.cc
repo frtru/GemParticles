@@ -16,15 +16,26 @@
 namespace gem {
 namespace particle {
 ParticleSystem::ParticleSystem(
-  const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
-  const std::shared_ptr<Renderer> &a_pRenderer,
-  std::string&& a_sSystemName)
-  : m_pComponent(a_pComponent),
-    m_pRenderer(a_pRenderer),
+  std::unique_ptr<ParticleSystemComponent> &&a_pComponent,
+  std::unique_ptr<Renderer> &&a_pRenderer,
+  std::string &&a_sSystemName)
+  : m_pComponent(std::move(a_pComponent)),
+    m_pRenderer(std::move(a_pRenderer)),
     m_sSystemName(std::move(a_sSystemName)) {
 }
 ParticleSystem::~ParticleSystem(){
   // TODO: Delete attributes? See ownshership
+}
+ParticleSystem::ParticleSystem(ParticleSystem&& other) 
+  :m_pComponent(std::move(other.m_pComponent)),
+  m_pRenderer(std::move(other.m_pRenderer)),
+  m_sSystemName(std::move(other.m_sSystemName)) {
+}
+ParticleSystem& ParticleSystem::operator=(ParticleSystem&& other) {
+  m_pComponent = std::move(other.m_pComponent);
+  m_pRenderer = std::move(other.m_pRenderer);
+  m_sSystemName = std::move(other.m_sSystemName);
+  return *this;
 }
 void ParticleSystem::Init() {
   // Set a reference to particles data in the renderer
