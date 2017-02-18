@@ -16,8 +16,8 @@
 #include <cstdlib>
 #include <algorithm>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 namespace {
 const float TWO_PI = 6.28319f;
 const glm::u8vec4 FOUNTAIN_COLOR = { 0u,162u,232u,180u };
@@ -53,5 +53,5 @@ void RandomFountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPoo
     a_pPool->m_color[i]         = FOUNTAIN_COLOR; 
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

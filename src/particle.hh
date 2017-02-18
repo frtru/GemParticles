@@ -6,8 +6,8 @@
 //DEPRECATED: WE'RE USING AN SOA APPROACH
 //INSTEAD OF AOS
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 struct Particle {
 
   Particle() = default;
@@ -36,7 +36,7 @@ struct Particle {
   glm::f32vec3	velocity;
   glm::f32vec3	acceleration;
 }; /* struct Particle*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: PARTICLE_HH */

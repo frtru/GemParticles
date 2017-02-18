@@ -13,8 +13,8 @@
 *************************************************************************/
 #include "particle_pool.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 Pool::Pool(std::size_t a_unMaxParticleCount)
   : m_lifetime(new float[a_unMaxParticleCount]),
     m_color(new glm::u8vec4[a_unMaxParticleCount]),
@@ -74,5 +74,5 @@ void Pool::SwapPositions(
 //{
 //  m_vParticles.resize(m_vParticles.size() - a_unAmount);
 //}
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

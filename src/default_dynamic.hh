@@ -16,8 +16,8 @@
 
 #include "dynamic.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class DefaultDynamic : public Dynamic {
 public:
   DefaultDynamic() = default;
@@ -27,7 +27,7 @@ public:
 
   virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
 }; /* class DefaultDynamic*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: DEFAULT_DYNAMIC_HH */

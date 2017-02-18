@@ -13,8 +13,8 @@
 *************************************************************************/
 #include "default_dynamic.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 void DefaultDynamic::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
   // TODO: Deal with the delta double precision casted to float later
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
@@ -36,10 +36,6 @@ void DefaultDynamic::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
   for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
     a_pPool->m_position[i] += a_pPool->m_velocity[i] * fDt;
   }
-/*  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_velocity[i] += a_pPool->m_acceleration[i] * fDt;
-  }
-  */
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

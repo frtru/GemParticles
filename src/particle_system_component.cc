@@ -15,8 +15,8 @@
 
 #include "default_dynamic.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 ParticleSystemComponent::ParticleSystemComponent(
   std::size_t a_unMaxParticleCount,
   const std::string& a_sSystemName)
@@ -37,6 +37,6 @@ void ParticleSystemComponent::Update(double a_dt){
     dynamic->Update(a_dt, m_pParticlePool);
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 

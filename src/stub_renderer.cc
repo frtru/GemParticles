@@ -17,8 +17,8 @@
 #include <GL/glew.h>
 
 #include <iostream>
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 StubRenderer::StubRenderer(){
   // TODO: Wtf?
   Renderer::m_pParticlePool = nullptr;
@@ -91,5 +91,5 @@ void StubRenderer::Render() {
   }
   glBindVertexArray(0);
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

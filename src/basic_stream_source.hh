@@ -16,8 +16,8 @@
 
 #include "source.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class BasicStreamSource : public Source {
 public:
   BasicStreamSource();
@@ -34,7 +34,7 @@ private:
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
 }; /* class BasicStreamSource*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: BASIC_SOURCE_HH */

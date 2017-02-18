@@ -21,9 +21,9 @@ int main(int argc, const char *argv[]) {
   (void)argc;(void)argv;
 
   // Can't get much simpler than that
-  Gem::Particle::App::Init();
-  Gem::Particle::App::Run();
-  Gem::Particle::App::Terminate();
+  gem::particle::app::Init();
+  gem::particle::app::Run();
+  gem::particle::app::Terminate();
 
   return 0;
 }

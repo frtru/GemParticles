@@ -18,8 +18,8 @@
 
 #include "renderer.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class GLRenderer : public Renderer {
 public:
   GLRenderer();
@@ -42,7 +42,7 @@ private:
   bool m_bInitFlag;
 
 }; /* class GLRenderer */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: OPENGL_RENDERER_HH */

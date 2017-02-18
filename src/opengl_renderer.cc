@@ -18,8 +18,8 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 GLRenderer::GLRenderer()
  : m_bInitFlag(false) {
 }
@@ -99,5 +99,5 @@ void GLRenderer::Terminate() {
     std::cerr << "ERROR: GLRenderer::Terminate-> Trying to terminate without prior initialization." << std::endl;
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

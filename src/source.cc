@@ -15,8 +15,8 @@
 
 #include <algorithm>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 glm::f32vec3 const Source::ORIGIN           = { 0.0f, 0.0f, 0.0f };
 glm::f32vec3 const Source::DEFAULT_SPEED    = { 0.5f, 2.0f, 0.0f };
 float const Source::DEFAULT_LIFETIME        = 1.0f;
@@ -73,5 +73,5 @@ void Source::Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
     a_pPool->Wake(i);
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

@@ -18,8 +18,8 @@
 
 #include "particle_pool.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class Source {
 private:
   static const glm::f32vec3 ORIGIN;
@@ -66,7 +66,7 @@ private:
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) = 0;
 }; /* class Source*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: SOURCE_HH */

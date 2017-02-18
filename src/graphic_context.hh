@@ -16,8 +16,8 @@
 
 #include <memory>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class GraphicContext {
 public:
   GraphicContext() {}
@@ -42,7 +42,7 @@ private:
   static bool  m_bInitialized;
   static bool  m_bTerminated;
 }; /* class GraphicContext*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: GRAPHIC_CONTEXT_HH */

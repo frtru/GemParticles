@@ -13,8 +13,8 @@
 *************************************************************************/
 #include "global_acceleration.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 void GlobalAcceleration::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
   // TODO: Deal with the delta double precision casted to float later
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
@@ -24,5 +24,5 @@ void GlobalAcceleration::Update(double a_dt, const std::unique_ptr<Pool>& a_pPoo
     a_pPool->m_velocity[i] += GRAVITY_ACCEL * fDt;
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

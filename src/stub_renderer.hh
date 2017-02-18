@@ -16,8 +16,8 @@
 
 #include "opengl_renderer.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 // TODO: Rename this for something different than stub...
 // something like basic or debug
 class StubRenderer : public GLRenderer {
@@ -36,7 +36,7 @@ private:
   GLuint  m_colorVBOID;
 
 }; /* class StubRenderer*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: STUB_RENDERER_HH */

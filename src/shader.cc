@@ -16,9 +16,9 @@
 #include <iostream>
 #include <fstream>
 
-namespace Gem {
-namespace Particle {
-namespace ShaderManager {
+namespace gem {
+namespace particle {
+namespace shader_manager {
 namespace {
   GLuint                        program;
   std::map<GLenum, GLuint>      shaders;
@@ -58,7 +58,7 @@ void LoadFromFile(GLenum which, const char* fileName) {
     LoadFromText(which, buffer);
   }
   else {
-    std::cerr << "ShaderManager::LoadFromFile -> "
+    std::cerr << "shader_manager::LoadFromFile -> "
       << "Invalid fileName path : "
       << fileName << std::endl;
   }
@@ -68,7 +68,7 @@ void LoadFromText(GLenum type, const std::string& text) {
   //Type must be one of the supported and registered
   //types in the initialization
   if (shaders.count(type) == 0) {
-    std::cerr << "ShaderManager::LoadFromText -> "
+    std::cerr << "shader_manager::LoadFromText -> "
               << "Type received is not recognized/supported" << std::endl;
   }
 
@@ -85,7 +85,7 @@ void LoadFromText(GLenum type, const std::string& text) {
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
     glGetShaderInfoLog(shader, infoLogSize, nullptr, infoLog);
-    std::cerr << "ShaderManager::LoadFromText -> " 
+    std::cerr << "shader_manager::LoadFromText -> " 
               << infoLog << std::endl;
     delete[] infoLog;
     return;
@@ -158,6 +158,6 @@ void Dispose() {
   glDeleteProgram(program);
   program = -1;
 }
-} /* namespace ShaderManager */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace shader_manager */
+} /* namespace particle */
+} /* namespace gem */

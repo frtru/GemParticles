@@ -21,8 +21,8 @@
 // TODO: Find a way like fenbf did for the billboard,
 // glpoint, bool useQuads thingy...
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class Renderer {
 public:
 	Renderer() = default;
@@ -39,7 +39,7 @@ protected:
   Pool* m_pParticlePool;
 
 }; /* class Renderer*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: RENDERER_HH */

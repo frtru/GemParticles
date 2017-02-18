@@ -54,7 +54,6 @@
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
-    <ClCompile Include="src\shader.cc" />
     <ClCompile Include="src\random_fountain_source.cc">
       <Filter>Sources</Filter>
     </ClCompile>
@@ -70,6 +69,9 @@
     </ClCompile>
     <ClCompile Include="src\particle_module.cc">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader.cc">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,8 +112,6 @@
     <ClInclude Include="src\camera.hh" />
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\opengl_context.hh" />
-    <ClInclude Include="src\shader.hh" />
-    <ClInclude Include="src\timer.hh" />
     <ClInclude Include="src\random_fountain_source.hh">
       <Filter>Sources</Filter>
     </ClInclude>
@@ -130,6 +130,12 @@
     </ClInclude>
     <ClInclude Include="src\particle_module.hh">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader.hh">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

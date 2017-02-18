@@ -23,8 +23,8 @@
 // TODO: Should the shadermanager initialization be 
 // done by this class?
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class OpenGLContext : public GraphicContext {
 public:
   OpenGLContext();
@@ -45,8 +45,8 @@ private:
   GLFWwindow* m_pWindow;
 
 }; /* class OpenGLContext*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: OPENGL_CONTEXT_HH */
 

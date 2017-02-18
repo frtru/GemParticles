@@ -37,8 +37,8 @@
 #include "source.hh"
 #include "dynamic.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
   // TODO : If it possible to use template meta-programmed
   // in particle system, put the type of pool/particledata as template
 class ParticleSystemComponent {
@@ -75,8 +75,8 @@ private:
   std::vector<std::unique_ptr<Source> >  m_vSources;
   std::vector<std::unique_ptr<Dynamic> > m_vDynamics;
 }; /* class ParticleSystemComponent */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 
 #endif /* end of include guard: PARTICLE_SYSTEM_COMPONENT_HH */

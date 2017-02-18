@@ -32,8 +32,8 @@
 
 #include "particle.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class Pool {
 public: 
   /* Pool main principle/property:
@@ -81,7 +81,7 @@ private:
   std::size_t m_unParticleCount;
   std::size_t m_unActiveParticleCount;
 }; /* class Pool*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: PARTICLE_POOL_HH */

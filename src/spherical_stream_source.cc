@@ -19,8 +19,8 @@
 #include<chrono>
 #include <vector>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 
 namespace {
 std::vector<glm::f32vec3> GenerateSphericalBoundCoordinates(
@@ -73,5 +73,5 @@ void SphericalStreamSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPo
     a_pPool->m_color[i]         = DEFAULT_COLOR; 
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

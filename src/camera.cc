@@ -17,9 +17,9 @@
 
 #include "shader.hh"
 
-namespace Gem {
-namespace Particle {
-namespace Camera {
+namespace gem {
+namespace particle {
+namespace camera {
 namespace {
 // Todo: Change the following matrices for pointers
 glm::mat4 projection_matrix;
@@ -60,9 +60,9 @@ glm::vec3 up_vector;
 
 // Some helper functions
 void UpdateMVP() {
-  MVP = Camera::GetProjectionMatrix() * Camera::GetViewMatrix();
+  MVP = camera::GetProjectionMatrix() * camera::GetViewMatrix();
   glUniformMatrix4fv(
-    ShaderManager::GetUniformLocation("MVP"),
+    shader_manager::GetUniformLocation("MVP"),
     1, false,
     glm::value_ptr(MVP)
   );
@@ -80,7 +80,7 @@ void Init() {
   view_matrix       = glm::mat4();
 
 
-  ShaderManager::RegisterUniform("MVP");
+  shader_manager::RegisterUniform("MVP");
   UpdateMVP();
 }
 
@@ -170,6 +170,6 @@ void SetOrthoProjection(float a_fLeft	, float a_fRight,
   UpdateMVP();
 }
 
-} /* namespace Camera */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace camera */
+} /* namespace particle */
+} /* namespace gem */

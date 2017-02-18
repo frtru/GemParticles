@@ -16,8 +16,8 @@
 #include <cstdlib>
 #include <algorithm>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 namespace {
 const float TWO_PI = 6.28319f;
 const glm::f32vec3 RAIN_INITIAL_VELOCITY = { 2.0f, 0.0f, 0.2f };
@@ -52,5 +52,5 @@ void RainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     a_pPool->m_color[i]         = RAIN_COLOR; 
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

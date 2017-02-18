@@ -17,9 +17,9 @@
 #include <map>
 #include <string>
 
-namespace Gem {
-namespace Particle {
-namespace ParticleModule {
+namespace gem {
+namespace particle {
+namespace particle_module {
 namespace {
 std::vector<ParticleSystem> *m_pSystems;
 }
@@ -80,5 +80,5 @@ void RemoveSystem(const std::string& a_szSystemName) {
   */
 }
 } /* namespace ParticleSystem */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

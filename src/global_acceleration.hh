@@ -18,8 +18,8 @@
 
 /* TODO: Rename this for gravity acceleration
  */
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class GlobalAcceleration : public Dynamic {
 private:
   const glm::f32vec3 GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
@@ -32,7 +32,7 @@ public:
 
   virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
 }; /* class DefaultDynamic*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: GLOBAL_ACCELERATION_HH */

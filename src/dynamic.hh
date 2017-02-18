@@ -18,8 +18,8 @@
 
 #include "particle_pool.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class Dynamic {
 public:
 	Dynamic() = default;
@@ -32,7 +32,7 @@ public:
 private:
 
 }; /* class Dynamic*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: DYNAMIC_HH */

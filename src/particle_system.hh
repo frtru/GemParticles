@@ -20,8 +20,8 @@
 
 #include <memory>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 // TODO: Could maybe try to have template metaprogrammed
 // Component and Renderer?
 class ParticleSystem {
@@ -44,7 +44,7 @@ private:
   std::shared_ptr<ParticleSystemComponent> m_pComponent;
   std::shared_ptr<Renderer>                m_pRenderer;
 }; /* class ParticleSystem */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: PARTICLE_SYSTEM_HH */

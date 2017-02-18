@@ -15,8 +15,8 @@
 
 #include <algorithm>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 BasicStreamSource::BasicStreamSource()
   : Source() {}
 
@@ -39,5 +39,5 @@ void BasicStreamSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     a_pPool->m_color[i]         = DEFAULT_COLOR;
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

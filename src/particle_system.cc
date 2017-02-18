@@ -13,8 +13,8 @@
 *************************************************************************/
 #include "particle_system.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 ParticleSystem::ParticleSystem(
   const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
   const std::shared_ptr<Renderer> &a_pRenderer)
@@ -41,6 +41,6 @@ void ParticleSystem::Update(double a_dt) {
 void ParticleSystem::Render() {
   m_pRenderer->Render();
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 

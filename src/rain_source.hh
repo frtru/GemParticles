@@ -16,8 +16,8 @@
 
 #include "source.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class RainSource : public Source {
 public:
   RainSource() = default; // Can be defaulted to base default constructor
@@ -30,7 +30,7 @@ private:
   virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
 }; /* class RandomFountainSource*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: RAIN_SOURCE_HH */
