@@ -17,9 +17,11 @@ namespace gem {
 namespace particle {
 ParticleSystem::ParticleSystem(
   const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
-  const std::shared_ptr<Renderer> &a_pRenderer)
+  const std::shared_ptr<Renderer> &a_pRenderer,
+  std::string&& a_sSystemName)
   : m_pComponent(a_pComponent),
-    m_pRenderer(a_pRenderer) {
+    m_pRenderer(a_pRenderer),
+    m_sSystemName(std::move(a_sSystemName)) {
 }
 ParticleSystem::~ParticleSystem(){
   // TODO: Delete attributes? See ownshership

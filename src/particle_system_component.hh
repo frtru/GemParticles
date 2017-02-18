@@ -44,8 +44,7 @@ namespace particle {
 class ParticleSystemComponent {
 public:
   explicit ParticleSystemComponent(
-    std::size_t a_unMaxParticleCount,
-    const std::string& a_sSystemName = "DEFAULT_SYS_NAME");
+    std::size_t a_unMaxParticleCount);
 
   ParticleSystemComponent(ParticleSystemComponent&& other);
   ParticleSystemComponent(const ParticleSystemComponent& other) = delete;
@@ -66,8 +65,6 @@ public:
   }
 
 private:
-  std::string               m_sSystemName;
-  // TODO: See if raw class (Pool) is faster
   std::unique_ptr<Pool>     m_pParticlePool; 
   // TODO: See if shared_ptr would be better so that
   // something else can have a copy of those to change

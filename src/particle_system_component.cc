@@ -18,10 +18,8 @@
 namespace gem {
 namespace particle {
 ParticleSystemComponent::ParticleSystemComponent(
-  std::size_t a_unMaxParticleCount,
-  const std::string& a_sSystemName)
-  : m_pParticlePool(new Pool(a_unMaxParticleCount)),
-    m_sSystemName(a_sSystemName) {
+  std::size_t a_unMaxParticleCount)
+  : m_pParticlePool(std::make_unique<Pool>(a_unMaxParticleCount)){
   m_vDynamics.push_back(std::make_unique<EulerParticleUpdater>());
 }
 ParticleSystemComponent::ParticleSystemComponent(ParticleSystemComponent&& other)

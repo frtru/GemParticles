@@ -74,9 +74,7 @@ void Init() {
   // Particle system initialization
   particle_module::Init();
   std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
-    std::make_shared<ParticleSystemComponent>(
-      1000000,
-      "OBVIOUSLY_TEMPORARY");
+    std::make_shared<ParticleSystemComponent>(1000000);
   wTempParticleComp->AddEmitter(
     std::make_unique<RainEmitter>(
     RainEmitter(10.0f,100000)));
@@ -85,7 +83,13 @@ void Init() {
     );
 
   std::shared_ptr<Renderer> wTempRenderer = std::make_shared<SimpleGLRenderer>();
-  particle_module::AddSystem(std::move(ParticleSystem(wTempParticleComp, wTempRenderer)));
+  particle_module::AddSystem(std::move(
+    ParticleSystem(
+      wTempParticleComp, 
+      wTempRenderer,
+      std::move(std::string("OBVIOUSLY_TEMPORARY"))
+    )
+  ));
 }
 
 // TODO: Add that as debugging option in one of the renderers maybe?

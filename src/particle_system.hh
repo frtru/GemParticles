@@ -31,7 +31,8 @@ class ParticleSystem {
 public:
   explicit ParticleSystem(
     const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
-    const std::shared_ptr<Renderer> &a_pRenderer);
+    const std::shared_ptr<Renderer> &a_pRenderer,
+    std::string&& a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")));
   ~ParticleSystem();
 
   void Init();
@@ -41,8 +42,9 @@ public:
   void Render();
 
 private:
-  std::shared_ptr<ParticleSystemComponent> m_pComponent;
-  std::shared_ptr<Renderer>                m_pRenderer;
+  std::string                               m_sSystemName;
+  std::shared_ptr<ParticleSystemComponent>  m_pComponent;
+  std::shared_ptr<Renderer>                 m_pRenderer;
 }; /* class ParticleSystem */
 } /* namespace particle */
 } /* namespace gem */
