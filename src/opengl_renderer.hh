@@ -25,7 +25,7 @@ public:
   GLRenderer();
   virtual ~GLRenderer();
 
-  virtual void Init(const std::shared_ptr<Pool> & a_pPool) override;
+  virtual void Init(const std::shared_ptr<ParticlePool> & a_pPool) override;
   virtual void Terminate() override;
   virtual void Update() = 0;
   virtual void Render() = 0;

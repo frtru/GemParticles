@@ -35,9 +35,9 @@
 
 namespace gem {
 namespace particle {
-class Pool {
-  DECLARE_UNCOPYABLE(Pool)
-  DECLARE_UNMOVABLE(Pool)
+class ParticlePool {
+  DECLARE_UNCOPYABLE(ParticlePool)
+  DECLARE_UNMOVABLE(ParticlePool)
 public: 
   /* Pool main principle/property:
   * Active particles are at the front (lower indexes) of the pool,
@@ -56,9 +56,9 @@ public:
   std::unique_ptr<glm::f32vec3[]>	m_position;
   std::unique_ptr<glm::f32vec3[]>	m_velocity;
 public:
-  Pool() = delete;
-  explicit Pool(std::size_t a_unMaxParticleCount);
-  ~Pool() = default;
+  ParticlePool() = delete;
+  explicit ParticlePool(std::size_t a_unMaxParticleCount);
+  ~ParticlePool() = default;
   
   std::size_t GetParticleCount() const {
     return m_unParticleCount;
@@ -77,7 +77,7 @@ private:
 
   std::size_t m_unParticleCount;
   std::size_t m_unActiveParticleCount;
-}; /* class Pool*/
+}; /* class ParticlePool*/
 } /* namespace particle */
 } /* namespace gem */
 

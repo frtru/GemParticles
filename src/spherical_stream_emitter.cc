@@ -59,7 +59,7 @@ SphericalStreamEmitter::SphericalStreamEmitter(
   a_fLifetime,
   a_dEmissionRate) {}
 
-void SphericalStreamEmitter::Init(double a_dt, const std::shared_ptr<Pool>& a_pPool,
+void SphericalStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   const std::size_t N = a_unEndID - a_unStartID;
   auto coords = GenerateSphericalBoundCoordinates(

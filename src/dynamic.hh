@@ -28,7 +28,7 @@ public:
 	Dynamic() = default;
 	virtual ~Dynamic() = default;
 
-  virtual void Update(double a_dt, const std::shared_ptr<Pool>& a_pPool) = 0;
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) = 0;
 }; /* class Dynamic*/
 } /* namespace particle */
 } /* namespace gem */

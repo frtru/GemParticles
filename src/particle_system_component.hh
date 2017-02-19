@@ -51,7 +51,7 @@ public:
   ~ParticleSystemComponent() = default;
 
   void Update(double a_dt);
-  const std::shared_ptr<Pool>& GetParticles() const {
+  const std::shared_ptr<ParticlePool>& GetParticles() const {
     return m_pParticlePool; 
   }
   void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) { 
@@ -62,7 +62,7 @@ public:
   }
 
 private:
-  std::shared_ptr<Pool>                   m_pParticlePool; 
+  std::shared_ptr<ParticlePool>                   m_pParticlePool; 
   std::vector<std::unique_ptr<Emitter> >  m_vEmitters;
   std::vector<std::unique_ptr<Dynamic> >  m_vDynamics;
 }; /* class ParticleSystemComponent */

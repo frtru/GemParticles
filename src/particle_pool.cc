@@ -15,7 +15,7 @@
 
 namespace gem {
 namespace particle {
-Pool::Pool(std::size_t a_unMaxParticleCount)
+ParticlePool::ParticlePool(std::size_t a_unMaxParticleCount)
   : m_lifetime(new float[a_unMaxParticleCount]),
     m_color(new glm::u8vec4[a_unMaxParticleCount]),
   m_position(new glm::f32vec3[a_unMaxParticleCount]),
@@ -23,7 +23,7 @@ Pool::Pool(std::size_t a_unMaxParticleCount)
   m_unParticleCount(a_unMaxParticleCount),
   m_unActiveParticleCount(0) {}
 
-void Pool::Sleep(std::size_t a_unParticleID) {
+void ParticlePool::Sleep(std::size_t a_unParticleID) {
   // NOTE:  Should include the following check since 
   // no guarantee about ID and that activeparticlecount !=0
   // if (m_unActiveParticleCount > 0) 
@@ -37,7 +37,7 @@ void Pool::Sleep(std::size_t a_unParticleID) {
 // available particle just take the one at position
 // m_unActiveParticleCount), in fact the wake function shouldn't
 // need the parameter ID...
-void Pool::Wake(std::size_t a_unParticleID) {
+void ParticlePool::Wake(std::size_t a_unParticleID) {
   // NOTE:  Should include the following check since 
   // no guarantee about ID and that activeparticlecount != m_vParticles.size()
   // if (m_unActiveParticleCount < m_vPool.size()) 
@@ -45,7 +45,7 @@ void Pool::Wake(std::size_t a_unParticleID) {
   ++m_unActiveParticleCount;
 }
 
-void Pool::SwapPositions(
+void ParticlePool::SwapPositions(
     std::size_t a_unFirstPosition,
     std::size_t a_unSecondPosition) {
   //TODO:Change the followings for a
@@ -65,12 +65,12 @@ void Pool::SwapPositions(
 
 //TODO: (NICE TO HAVE) The property to extend or reduce the capacity of the pool
 //NOTE: Easy with the AoS approach
-//void Pool::IncreaseParticleCount(std::size_t a_unAmount)
+//void ParticlePool::IncreaseParticleCount(std::size_t a_unAmount)
 //{
 //  m_vParticles.resize(m_vParticles.size() + a_unAmount);
 //}
 //
-//void Pool::DecreaseParticleCount(std::size_t a_unAmount)
+//void ParticlePool::DecreaseParticleCount(std::size_t a_unAmount)
 //{
 //  m_vParticles.resize(m_vParticles.size() - a_unAmount);
 //}
