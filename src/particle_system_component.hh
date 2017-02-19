@@ -36,25 +36,22 @@
 #include "particle_pool.hh"
 #include "emitter.hh"
 #include "dynamic.hh"
+#include "macro_definitions.hh"
 
 namespace gem {
 namespace particle {
   // TODO : If it possible to use template meta-programmed
   // in particle system, put the type of pool/particledata as template
 class ParticleSystemComponent {
+  DECLARE_UNCOPYABLE(ParticleSystemComponent)
+  DECLARE_UNMOVABLE(ParticleSystemComponent)
 public:
   explicit ParticleSystemComponent(
     std::size_t a_unMaxParticleCount);
-
-  ParticleSystemComponent(ParticleSystemComponent&& other);
-  ParticleSystemComponent(const ParticleSystemComponent& other) = delete;
-  ParticleSystemComponent& operator=(ParticleSystemComponent&& other) = delete;
-  ParticleSystemComponent& operator=(const ParticleSystemComponent& other) = delete;
-
   ~ParticleSystemComponent() = default;
 
   void Update(double a_dt);
-  const std::unique_ptr<Pool>& GetParticles() const {
+  const std::shared_ptr<Pool>& GetParticles() const {
     return m_pParticlePool; 
   }
   void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) { 
@@ -65,7 +62,7 @@ public:
   }
 
 private:
-  std::unique_ptr<Pool>                   m_pParticlePool; 
+  std::shared_ptr<Pool>                   m_pParticlePool; 
   std::vector<std::unique_ptr<Emitter> >  m_vEmitters;
   std::vector<std::unique_ptr<Dynamic> >  m_vDynamics;
 }; /* class ParticleSystemComponent */

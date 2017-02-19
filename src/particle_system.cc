@@ -39,7 +39,7 @@ ParticleSystem& ParticleSystem::operator=(ParticleSystem&& other) {
 }
 void ParticleSystem::Init() {
   // Set a reference to particles data in the renderer
-  m_pRenderer->Init(m_pComponent->GetParticles().get());
+  m_pRenderer->Init(m_pComponent->GetParticles());
 }
 void ParticleSystem::Terminate() {
   // Deallocate graphical ressources handled by renderer

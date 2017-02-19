@@ -31,10 +31,13 @@
 #include <memory>
 
 #include "particle.hh"
+#include "macro_definitions.hh"
 
 namespace gem {
 namespace particle {
 class Pool {
+  DECLARE_UNCOPYABLE(Pool)
+  DECLARE_UNMOVABLE(Pool)
 public: 
   /* Pool main principle/property:
   * Active particles are at the front (lower indexes) of the pool,
@@ -55,12 +58,6 @@ public:
 public:
   Pool() = delete;
   explicit Pool(std::size_t a_unMaxParticleCount);
-
-  Pool(Pool&& other) = delete;
-  Pool(const Pool& other) = delete;
-  Pool& operator=(Pool&& other) = delete;
-  Pool& operator=(const Pool& other) = delete;
-
   ~Pool() = default;
   
   std::size_t GetParticleCount() const {

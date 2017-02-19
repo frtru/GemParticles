@@ -18,7 +18,6 @@
 #include <gl/glfw3.h>
 
 #include "graphic_context.hh"
-//#include "shader.hh"
 
 // TODO: Should the shadermanager initialization be 
 // done by this class?

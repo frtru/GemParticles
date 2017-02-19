@@ -28,7 +28,7 @@ GLRenderer::~GLRenderer() {
   Terminate();
 }
 
-void GLRenderer::Init(Pool* a_pPool) {
+void GLRenderer::Init(const std::shared_ptr<Pool> & a_pPool) {
   if (!m_bInitFlag) {
     // VAO initialization
     glGenVertexArrays(1, &m_vertexArrayID);

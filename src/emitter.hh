@@ -17,10 +17,16 @@
 #include <glm/glm.hpp>
 
 #include "particle_pool.hh"
+#include "macro_definitions.hh"
 
 namespace gem {
 namespace particle {
 class Emitter {
+  // This would normally be a copyable object, but the
+  // only advantage would be to be able to duplicate emitters...
+  // I prefer avoiding implicit unwanted constructions
+  DECLARE_UNCOPYABLE(Emitter)
+  DECLARE_UNMOVABLE(Emitter)
 private:
   static const glm::f32vec3 ORIGIN;
   static const glm::f32vec3 DEFAULT_SPEED;
@@ -51,8 +57,7 @@ public:
     m_dEmissionRate = a_dEmissionRate;
   }*/
 
-  // TODO: Copyable and moveable?<
-  void Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool);
+  void Emit(double a_dt, const std::shared_ptr<Pool>& a_pPool);
 
 protected:
   float         m_fLifetime;
@@ -63,7 +68,7 @@ protected:
 private:
   // Private initialization of the particles before emission
   // in the subclasses
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+  virtual void Init(double a_dt, const std::shared_ptr<Pool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) = 0;
 }; /* class Emitter*/
 } /* namespace particle */

@@ -15,7 +15,7 @@
 
 namespace gem {
 namespace particle {
-void EulerParticleUpdater::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
+void EulerParticleUpdater::Update(double a_dt, const std::shared_ptr<Pool>& a_pPool) {
   // TODO: Deal with the delta double precision casted to float later
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
   const float fDt = (float)a_dt;

@@ -43,7 +43,7 @@ RainEmitter::RainEmitter(float a_fLifetime, double a_dEmissionRate)
     a_fLifetime,
     a_dEmissionRate) {}
 
-void RainEmitter::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+void RainEmitter::Init(double a_dt, const std::shared_ptr<Pool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     a_pPool->m_velocity[i]      = RAIN_INITIAL_VELOCITY;

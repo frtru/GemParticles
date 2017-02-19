@@ -76,8 +76,7 @@ void Init() {
   std::unique_ptr<ParticleSystemComponent> wTempParticleComp = 
     std::make_unique<ParticleSystemComponent>(1000000);
   wTempParticleComp->AddEmitter(
-    std::make_unique<RainEmitter>(
-    RainEmitter(10.0f,100000)));
+    std::make_unique<RainEmitter>(10.0f,100000));
   wTempParticleComp->AddDynamic(
     std::make_unique<GravityAcceleration>()
     );

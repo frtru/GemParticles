@@ -14,11 +14,11 @@
 #ifndef PARTICLE_SYSTEM_HH
 #define PARTICLE_SYSTEM_HH
 
+#include <memory>
+
 #include "particle_system_component.hh"
 #include "renderer.hh"
 #include "macro_definitions.hh"
-
-#include <memory>
 
 namespace gem {
 namespace particle {

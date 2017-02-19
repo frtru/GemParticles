@@ -46,6 +46,9 @@
   ClassName& operator=(ClassName&& other) = default;  \
   private:
 
+// NOTE: When using the next two macros, keep in mind
+// that when they are used in the base class of a hierarchy
+// every child becomes also uncopyable/unmovable.
 #define DECLARE_UNCOPYABLE(ClassName)         \
   ClassName(const ClassName& other) = delete; \
   ClassName& operator=(const ClassName& other) = delete;

@@ -19,20 +19,15 @@ namespace gem {
 namespace particle {
 ParticleSystemComponent::ParticleSystemComponent(
   std::size_t a_unMaxParticleCount)
-  : m_pParticlePool(std::make_unique<Pool>(a_unMaxParticleCount)){
+  : m_pParticlePool(std::make_shared<Pool>(a_unMaxParticleCount)){
   m_vDynamics.push_back(std::make_unique<EulerParticleUpdater>());
 }
-ParticleSystemComponent::ParticleSystemComponent(ParticleSystemComponent&& other)
-  : m_pParticlePool(std::move(other.m_pParticlePool)),
-  m_vDynamics(std::move(other.m_vDynamics)),
-  m_vEmitters(std::move(other.m_vEmitters)) {
-}
 void ParticleSystemComponent::Update(double a_dt){
-  for (auto& source : m_vEmitters) {
-    source->Emit(a_dt, m_pParticlePool);
+  for (auto& emmiter : m_vEmitters) {
+    emmiter->Emit(a_dt, m_pParticlePool);
   }
-  for (auto& dynamic : m_vDynamics) {
-    dynamic->Update(a_dt, m_pParticlePool);
+  for (auto& emmiter : m_vDynamics) {
+    emmiter->Update(a_dt, m_pParticlePool);
   }
 }
 } /* namespace particle */
