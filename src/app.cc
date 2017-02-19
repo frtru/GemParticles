@@ -69,26 +69,15 @@ void Init() {
   // Event handler initialization
   event_handler::Init(graphic_context);
 
-  // TODO:Temporary part, move this into a factory or something
-
   // Particle system initialization
   particle_module::Init();
-  std::unique_ptr<ParticleSystemComponent> wTempParticleComp = 
-    std::make_unique<ParticleSystemComponent>(1000000);
-  wTempParticleComp->AddEmitter(
-    std::make_unique<RainEmitter>(10.0f,100000));
-  wTempParticleComp->AddDynamic(
-    std::make_unique<GravityAcceleration>()
-    );
-
-  std::unique_ptr<Renderer> wTempRenderer = std::make_unique<SimpleGLRenderer>();
-  particle_module::AddSystem(std::move(
-    ParticleSystem(
-      std::move(wTempParticleComp), 
-      std::move(wTempRenderer),
-      std::move(std::string("OBVIOUSLY_TEMPORARY"))
-    )
-  ));
+  ParticleSystem wParticleSystem(1000000,
+	  std::make_unique<SimpleGLRenderer>(),
+	  "OBVIOUSLY_TEMPORARY"
+  );
+  wParticleSystem.AddDynamic(std::make_unique<GravityAcceleration>());
+  wParticleSystem.AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
+  particle_module::AddSystem(std::move(wParticleSystem));
 }
 
 // TODO: Add that as debugging option in one of the renderers maybe?

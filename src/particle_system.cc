@@ -13,41 +13,50 @@
 *************************************************************************/
 #include "particle_system.hh"
 
+#include "euler_particle_updater.hh"
+
 namespace gem {
 namespace particle {
 ParticleSystem::ParticleSystem(
-  std::unique_ptr<ParticleSystemComponent> &&a_pComponent,
+  std::size_t a_unMaxParticleCount,
   std::unique_ptr<Renderer> &&a_pRenderer,
   std::string &&a_sSystemName)
-  : m_pComponent(std::move(a_pComponent)),
-    m_pRenderer(std::move(a_pRenderer)),
+  : m_pParticlePool(std::make_shared<ParticlePool>(a_unMaxParticleCount)),
+	m_pRenderer(std::move(a_pRenderer)),
     m_sSystemName(std::move(a_sSystemName)) {
-}
-ParticleSystem::~ParticleSystem(){
-  // TODO: Delete attributes? See ownshership
+	m_vDynamics.push_back(std::make_unique<EulerParticleUpdater>());
 }
 ParticleSystem::ParticleSystem(ParticleSystem&& other) 
-  :m_pComponent(std::move(other.m_pComponent)),
-  m_pRenderer(std::move(other.m_pRenderer)),
-  m_sSystemName(std::move(other.m_sSystemName)) {
+  : m_pParticlePool(std::move(other.m_pParticlePool)),
+	m_pRenderer(std::move(other.m_pRenderer)),
+	m_vEmitters(std::move(other.m_vEmitters)),
+	m_vDynamics(std::move(other.m_vDynamics)),
+	m_sSystemName(std::move(other.m_sSystemName)) {
 }
 ParticleSystem& ParticleSystem::operator=(ParticleSystem&& other) {
-  m_pComponent = std::move(other.m_pComponent);
+  m_pParticlePool = std::move(other.m_pParticlePool);
   m_pRenderer = std::move(other.m_pRenderer);
+  m_vEmitters = std::move(other.m_vEmitters);
+  m_vDynamics = std::move(other.m_vDynamics);
   m_sSystemName = std::move(other.m_sSystemName);
   return *this;
 }
 void ParticleSystem::Init() {
   // Set a reference to particles data in the renderer
-  m_pRenderer->Init(m_pComponent->GetParticles());
+  m_pRenderer->Init(m_pParticlePool);
 }
 void ParticleSystem::Terminate() {
   // Deallocate graphical ressources handled by renderer
   m_pRenderer->Terminate();
 }
 void ParticleSystem::Update(double a_dt) {
-  // Particles update (dynamics, emission/destruction, etc.)
-  m_pComponent->Update(a_dt);
+  // Particles components update (dynamics, emission/destruction, etc.)
+	for (auto& emmiter : m_vEmitters) {
+		emmiter->Emit(a_dt, m_pParticlePool);
+	}
+	for (auto& dynamic : m_vDynamics) {
+		dynamic->Update(a_dt, m_pParticlePool);
+	}
   // Rendering buffers update
   m_pRenderer->Update();
 }

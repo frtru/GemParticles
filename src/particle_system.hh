@@ -14,10 +14,12 @@
 #ifndef PARTICLE_SYSTEM_HH
 #define PARTICLE_SYSTEM_HH
 
+#include <vector>
 #include <memory>
 
-#include "particle_system_component.hh"
 #include "renderer.hh"
+#include "emitter.hh"
+#include "dynamic.hh"
 #include "macro_definitions.hh"
 
 namespace gem {
@@ -29,10 +31,20 @@ class ParticleSystem {
   DECLARE_MOVABLE(ParticleSystem)
 public:
   explicit ParticleSystem(
-    std::unique_ptr<ParticleSystemComponent> &&a_pComponent,
+	std::size_t a_unMaxParticleCount,
     std::unique_ptr<Renderer> &&a_pRenderer,
     std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")));
-  ~ParticleSystem();
+  ~ParticleSystem() = default;
+
+  const std::shared_ptr<ParticlePool>& GetParticles() const {
+	  return m_pParticlePool;
+  }
+  void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) {
+	  m_vEmitters.push_back(std::move(a_pEmitter));
+  }
+  void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) {
+	  m_vDynamics.push_back(std::move(a_pDynamic));
+  }
 
   // TODO: Remove the PUBLIC init/terminate idiom in classes and put initialization in constructor.
   void Init();
@@ -43,8 +55,10 @@ public:
 
 private:
   std::string                               m_sSystemName;
-  std::unique_ptr<ParticleSystemComponent>  m_pComponent;
+  std::shared_ptr<ParticlePool>             m_pParticlePool;
   std::unique_ptr<Renderer>                 m_pRenderer;
+  std::vector<std::unique_ptr<Emitter> >	m_vEmitters;
+  std::vector<std::unique_ptr<Dynamic> >	m_vDynamics;
 }; /* class ParticleSystem */
 } /* namespace particle */
 } /* namespace gem */
