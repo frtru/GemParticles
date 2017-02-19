@@ -14,6 +14,7 @@
 #include "event_handler.hh"
 
 #include <iostream>
+#include <mutex>
 
 #include <gl/glew.h>
 #include <gl/glfw3.h>
@@ -28,6 +29,8 @@ namespace gem {
 namespace particle {
 namespace event_handler {
 namespace {
+std::once_flag init_flag;
+//std::once_flag terminate_flag;
 // TODO: If it's worth it, move these settings someplace else
 // Camera settings
 glm::vec3 camera_direction;
@@ -148,24 +151,26 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
 }
 
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
-  // TODO: If it's worth it, move these hardcoded values someplace else
-  yaw = -90.0f;
-  pitch = 0.0f;
-  last_x = 0.0f;
-  last_y = 0.0f;
+  std::call_once(init_flag, [&]() {
+    // TODO: If it's worth it, move these hardcoded values someplace else
+    yaw = -90.0f;
+    pitch = 0.0f;
+    last_x = 0.0f;
+    last_y = 0.0f;
 
-  camera_speed = 0.05f;
-  camera_direction = camera::GetTargetPosition() - camera::GetEyePosition();
-  mouse_sensitivity = 0.005f;
+    camera_speed = 0.05f;
+    camera_direction = camera::GetTargetPosition() - camera::GetEyePosition();
+    mouse_sensitivity = 0.005f;
 
-  context_handle = a_pCtxt;
-  mouse_state = FREE_CURSOR;
-  GLFWwindow* window = static_cast<GLFWwindow*>(context_handle->GetWindowHandle());
+    context_handle = a_pCtxt;
+    mouse_state = FREE_CURSOR;
+    GLFWwindow* window = static_cast<GLFWwindow*>(context_handle->GetWindowHandle());
 
-  // Set callbacks
-  glfwSetMouseButtonCallback(window, MouseButtonCallBack);
-  glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
-  glfwSetKeyCallback(window, KeyCallback);
+    // Set callbacks
+    glfwSetMouseButtonCallback(window, MouseButtonCallBack);
+    glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
+    glfwSetKeyCallback(window, KeyCallback);
+  });
 }
 
 void Terminate() {

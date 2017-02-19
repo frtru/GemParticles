@@ -13,6 +13,8 @@
 *************************************************************************/
 #include "camera.hh"
 
+#include <mutex>
+
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "shader.hh"
@@ -21,6 +23,8 @@ namespace gem {
 namespace particle {
 namespace camera {
 namespace {
+std::once_flag  init_flag;
+//std::once_flag terminate_flag;
 // Todo: Change the following matrices for pointers
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;
@@ -75,13 +79,14 @@ void UpdateViewMatrixAndMVP() {
 }
 
 void Init() {
-  //glm::mat4() loads a 4x4 identity matrix
-  projection_matrix = glm::mat4();
-  view_matrix       = glm::mat4();
+  std::call_once(init_flag, [&]() {
+    //glm::mat4() loads a 4x4 identity matrix
+    projection_matrix = glm::mat4();
+    view_matrix = glm::mat4();
 
-
-  shader_manager::RegisterUniform("MVP");
-  UpdateMVP();
+    shader_manager::RegisterUniform("MVP");
+    UpdateMVP();
+  });
 }
 
 void Terminate() {

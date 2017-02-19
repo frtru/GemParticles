@@ -16,33 +16,30 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <mutex>
 
 namespace gem {
 namespace particle {
 namespace particle_module {
 namespace {
+std::once_flag init_flag;
+std::once_flag terminate_flag;
 std::vector<ParticleSystem> *m_pSystems;
 }
 
-void Init() 
-{
-  static bool s_bIsInitialized = false;
-  if (!s_bIsInitialized) {
+void Init() {
+  std::call_once(init_flag,[&](){
     m_pSystems = new std::vector<ParticleSystem>();
-    s_bIsInitialized = true;
-  }
+  });
 }
 
-void Terminate() 
-{
-  static bool s_bIsTerminated = false;
-  if (!s_bIsTerminated) {
+void Terminate() {
+  std::call_once(terminate_flag,[&](){
     for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
       m_pSystems->at(i).Terminate();
     }
     delete m_pSystems;
-    s_bIsTerminated = true;
-  }
+  });
 }
 
 void Update(double a_dt) {
@@ -72,13 +69,6 @@ void AddSystem(ParticleSystem &&a_rSystem) {
   a_rSystem.Init();
   m_pSystems->push_back(std::move(a_rSystem));
 }
-
-/*void AddComponents(
-  const std::shared_ptr<ParticleSystemComponent> &a_pComponent,
-  const std::shared_ptr<Renderer> &a_pRenderer) {
-  a_pRenderer->Init(a_pComponent->GetParticles().get());
-  m_pSystems->push_back(a_pComponent, a_pRenderer});
-}*/
 
 void RemoveSystem(const std::string& a_szSystemName) {
   /*

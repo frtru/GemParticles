@@ -34,6 +34,7 @@ public:
     std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")));
   ~ParticleSystem();
 
+  // TODO: Remove the PUBLIC init/terminate idiom in classes and put initialization in constructor.
   void Init();
   void Terminate();
 
