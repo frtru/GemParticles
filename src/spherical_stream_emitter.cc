@@ -30,7 +30,7 @@ std::vector<glm::f32vec3> GenerateSphericalBoundCoordinates(
   std::size_t a_unNumberOfCoords) {
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
   std::mt19937 generator(seed);
-  std::uniform_real_distribution<float> uniform01(-a_fRadius, a_fRadius);
+  std::uniform_real_distribution<float> uniform01(0.0f, 1.0f);
 
   std::vector<glm::f32vec3> coords;
   coords.reserve(a_unNumberOfCoords);
@@ -40,9 +40,9 @@ std::vector<glm::f32vec3> GenerateSphericalBoundCoordinates(
     float theta = 2 * PI * uniform01(generator);
     float phi = acos(1 - 2 * uniform01(generator));
     glm::f32vec3 coord;
-    coord[0] = sin(phi) * cos(theta);
-    coord[1] = sin(phi) * sin(theta);
-    coord[2] = cos(phi);
+    coord[0] = a_fRadius * sin(phi) * cos(theta);
+    coord[1] = a_fRadius * sin(phi) * sin(theta);
+    coord[2] = a_fRadius * cos(phi);
     coords.push_back(std::move(coord));
   }
   return coords;
