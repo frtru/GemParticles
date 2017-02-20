@@ -25,7 +25,6 @@ namespace camera {
 namespace {
 std::once_flag  init_flag;
 //std::once_flag terminate_flag;
-// Todo: Change the following matrices for pointers
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;
 /* NOTE : I know the MVP shouldn't be placed here, but since we 
@@ -49,8 +48,6 @@ struct Ortho {
   GLfloat near, far;
 };
 
-// TODO: See if pointers should be used in the union
-// instead of raw structs
 union ProjectionParameters {
   Perspective perspective;
   Ortho       ortho;
@@ -104,11 +101,11 @@ const glm::vec3& GetUpVector() {
   return up_vector;
 }
 
-glm::mat4 GetViewMatrix() {
+const glm::mat4& GetViewMatrix() {
   return view_matrix;
 }
 
-glm::mat4 GetProjectionMatrix() {
+const glm::mat4& GetProjectionMatrix() {
   return projection_matrix;
 }
 
