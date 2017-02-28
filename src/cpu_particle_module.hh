@@ -11,8 +11,8 @@
 * The above copyright notice and this permission notice shall be included in
 * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef PARTICLE_MODULE_HH
-#define PARTICLE_MODULE_HH
+#ifndef CPU_PARTICLE_MODULE_HH
+#define CPU_PARTICLE_MODULE_HH
 
 #include "particle_system.hh"
 
@@ -20,7 +20,7 @@
 
 namespace gem {
 namespace particle {
-namespace particle_module {
+namespace cpu_particle_module {
 void Init();
 void Terminate();
 
@@ -32,7 +32,7 @@ void AddSystem(ParticleSystem &&a_System);
 void RemoveSystem(const std::string& a_szSystemName); 
 void GetSystemByName(const std::string& a_szSystemName);
 
-} /* namespace particle_module */
+} /* namespace cpu_particle_module */
 } /* namespace particle */
 } /* namespace gem */
-#endif /* end of include guard: PARTICLE_MODULE_HH */
+#endif /* end of include guard: CPU_PARTICLE_MODULE_HH */

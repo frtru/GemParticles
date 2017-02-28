@@ -31,9 +31,6 @@
     <ClCompile Include="src\particle_pool.cc">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\particle_system_component.cc">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\app.cc" />
     <ClCompile Include="src\camera.cc" />
     <ClCompile Include="src\graphic_context.cc" />
@@ -41,9 +38,6 @@
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\event_handler.cc" />
     <ClCompile Include="src\particle_system.cc">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\particle_module.cc">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="src\shader.cc">
@@ -73,6 +67,9 @@
     <ClCompile Include="src\simple_opengl_renderer.cc">
       <Filter>Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="src\cpu_particle_module.cc">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -87,9 +84,6 @@
     <ClInclude Include="src\particle_pool.hh">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\particle_system_component.hh">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\app.hh" />
     <ClInclude Include="src\camera.hh" />
     <ClInclude Include="src\graphic_context.hh" />
@@ -100,9 +94,6 @@
     </ClInclude>
     <ClInclude Include="src\macro_definitions.hh">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_module.hh">
-      <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\timer.hh">
       <Filter>Utils</Filter>
@@ -133,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="src\simple_opengl_renderer.hh">
       <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpu_particle_module.hh">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

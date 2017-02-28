@@ -23,7 +23,7 @@
 #include "shader.hh"
 #include "camera.hh"
 #include "event_handler.hh"
-#include "particle_module.hh"
+#include "cpu_particle_module.hh"
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
@@ -70,14 +70,14 @@ void Init() {
   event_handler::Init(graphic_context);
 
   // Particle system initialization
-  particle_module::Init();
+  cpu_particle_module::Init();
   ParticleSystem wParticleSystem(1000000,
 	  std::make_unique<SimpleGLRenderer>(),
 	  "OBVIOUSLY_TEMPORARY"
   );
   wParticleSystem.AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem.AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
-  particle_module::AddSystem(std::move(wParticleSystem));
+  cpu_particle_module::AddSystem(std::move(wParticleSystem));
 }
 
 // TODO: Add that as debugging option in one of the renderers maybe?
@@ -116,7 +116,7 @@ void Run() {
     //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsedInSeconds();
 
-    particle_module::Update(dt);    
+    cpu_particle_module::Update(dt);    
     graphic_context->Update();
     timer::chrono::Update();
   }
@@ -124,7 +124,7 @@ void Run() {
 
 void Terminate() {
   // App destruction
-  particle_module::Terminate();
+  cpu_particle_module::Terminate();
   shader_manager::Terminate();
   graphic_context->Terminate();
 }
