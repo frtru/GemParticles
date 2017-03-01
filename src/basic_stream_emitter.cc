@@ -11,28 +11,33 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "graphic_context.hh"
+#include "basic_stream_emitter.hh"
+
+#include <algorithm>
 
 namespace gem {
 namespace particle {
-bool GraphicContext::m_bInitialized = false;
-bool GraphicContext::m_bTerminated = false;
+BasicStreamEmitter::BasicStreamEmitter()
+  : Emitter() {}
 
-void GraphicContext::Init() {
-  if (!m_bInitialized) {
-    InitImpl();
-    m_bInitialized = true;
+BasicStreamEmitter::BasicStreamEmitter(
+  const glm::f32vec3& a_spawnLocation,
+    const glm::f32vec3& a_spawnVelocity,
+    float a_fLifetime, 
+    double a_dEmissionRate)
+  : Emitter(a_spawnLocation,
+  a_spawnVelocity,
+  a_fLifetime,
+  a_dEmissionRate) {}
+
+void BasicStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+  std::size_t a_unStartID, std::size_t a_unEndID) {
+  for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
+    a_pPool->m_velocity[i]      = m_spawnVelocity;
+    a_pPool->m_position[i]      = m_spawnLocation;
+    a_pPool->m_lifetime[i]      = m_fLifetime; 
+    a_pPool->m_color[i]         = DEFAULT_COLOR;
   }
-  // TODO: Else log error, already initialized or something
 }
-
-void GraphicContext::Terminate() {
-  if (!m_bTerminated) {
-    TerminateImpl();
-    m_bTerminated = true;
-  }
-  // TODO: Else log error, already terminated or something
-}
-
 } /* namespace particle */
 } /* namespace gem */

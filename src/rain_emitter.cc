@@ -11,13 +11,13 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "rain_source.hh"
+#include "rain_emitter.hh"
 
 #include <cstdlib>
 #include <algorithm>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 namespace {
 const float TWO_PI = 6.28319f;
 const glm::f32vec3 RAIN_INITIAL_VELOCITY = { 2.0f, 0.0f, 0.2f };
@@ -37,13 +37,13 @@ const glm::f32vec3 RandomInitialPosition() {
 }
 }
 
-RainSource::RainSource(float a_fLifetime, double a_dEmissionRate)
-  : Source(glm::vec3(),
+RainEmitter::RainEmitter(float a_fLifetime, double a_dEmissionRate)
+  : Emitter(glm::vec3(),
     glm::vec3(),
     a_fLifetime,
     a_dEmissionRate) {}
 
-void RainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+void RainEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     a_pPool->m_velocity[i]      = RAIN_INITIAL_VELOCITY;
@@ -52,5 +52,5 @@ void RainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
     a_pPool->m_color[i]         = RAIN_COLOR; 
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

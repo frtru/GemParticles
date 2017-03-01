@@ -20,9 +20,9 @@
 #include <map>
 #include <string>
 
-namespace Gem {
-namespace Particle {
-namespace ShaderManager {
+namespace gem {
+namespace particle {
+namespace shader_manager {
 void Init();
 void Terminate();
 
@@ -42,7 +42,7 @@ void Bind();
 void Detach();
 void Dispose();
 
-} /* namespace ShaderManager*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace shader_manager*/
+} /* namespace particle */
+} /* namespace gem */
 #endif /* end of include guard: SHADER_HH */

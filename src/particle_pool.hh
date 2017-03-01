@@ -31,10 +31,13 @@
 #include <memory>
 
 #include "particle.hh"
+#include "macro_definitions.hh"
 
-namespace Gem {
-namespace Particle {
-class Pool {
+namespace gem {
+namespace particle {
+class ParticlePool {
+  DECLARE_UNCOPYABLE(ParticlePool)
+  DECLARE_UNMOVABLE(ParticlePool)
 public: 
   /* Pool main principle/property:
   * Active particles are at the front (lower indexes) of the pool,
@@ -53,15 +56,9 @@ public:
   std::unique_ptr<glm::f32vec3[]>	m_position;
   std::unique_ptr<glm::f32vec3[]>	m_velocity;
 public:
-  Pool() = delete;
-  explicit Pool(std::size_t a_unMaxParticleCount);
-
-  Pool(Pool&& other) = delete;
-  Pool(const Pool& other) = delete;
-  Pool& operator=(Pool&& other) = delete;
-  Pool& operator=(const Pool& other) = delete;
-
-  ~Pool() = default;
+  ParticlePool() = delete;
+  explicit ParticlePool(std::size_t a_unMaxParticleCount);
+  ~ParticlePool() = default;
   
   std::size_t GetParticleCount() const {
     return m_unParticleCount;
@@ -80,8 +77,8 @@ private:
 
   std::size_t m_unParticleCount;
   std::size_t m_unActiveParticleCount;
-}; /* class Pool*/
-} /* namespace Particle */
-} /* namespace Gem */
+}; /* class ParticlePool*/
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: PARTICLE_POOL_HH */

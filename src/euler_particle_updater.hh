@@ -11,28 +11,23 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_SOURCE_HH
-#define FOUNTAIN_SOURCE_HH
+#ifndef EULER_PARTICLE_UPDATER
+#define EULER_PARTICLE_UPDATER
 
-#include "source.hh"
+#include "dynamic.hh"
 
-namespace Gem {
-namespace Particle {
-class SphericalStreamSource : public Source {
+namespace gem {
+namespace particle {
+class EulerParticleUpdater : public Dynamic {
 public:
-  SphericalStreamSource() = default; // Can be defaulted to base default constructor
-  SphericalStreamSource(
-    const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity,
-    float a_fLifetime,
-    double a_dEmissionRate);
-	virtual ~SphericalStreamSource() = default;
+  EulerParticleUpdater() = default;
+  ~EulerParticleUpdater() = default;
 
-private:
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-}; /* class RandomFountainSource*/
-} /* namespace Particle */
-} /* namespace Gem */
+	// TODO: Copyable and moveable?<
 
-#endif /* end of include guard: FOUNTAIN_SOURCE_HH */
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) override;
+}; /* class EulerParticleUpdater*/
+} /* namespace particle */
+} /* namespace gem */
+
+#endif /* end of include guard: EULER_PARTICLE_UPDATER */

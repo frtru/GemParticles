@@ -11,13 +11,13 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "random_fountain_source.hh"
+#include "random_fountain_emitter.hh"
 
 #include <cstdlib>
 #include <algorithm>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 namespace {
 const float TWO_PI = 6.28319f;
 const glm::u8vec4 FOUNTAIN_COLOR = { 0u,162u,232u,180u };
@@ -35,16 +35,16 @@ const glm::f32vec3 RandomCircularVelocity() {
 }
 }
 
-RandomFountainSource::RandomFountainSource(const glm::f32vec3& a_spawnLocation,
+RandomFountainEmitter::RandomFountainEmitter(const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime, 
     double a_dEmissionRate)
-  : Source(a_spawnLocation,
+  : Emitter(a_spawnLocation,
   a_spawnVelocity,
   a_fLifetime,
   a_dEmissionRate) {}
 
-void RandomFountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+void RandomFountainEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     a_pPool->m_velocity[i]      = RandomCircularVelocity();
@@ -53,5 +53,5 @@ void RandomFountainSource::Init(double a_dt, const std::unique_ptr<Pool>& a_pPoo
     a_pPool->m_color[i]         = FOUNTAIN_COLOR; 
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

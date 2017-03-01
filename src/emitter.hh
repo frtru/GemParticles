@@ -11,16 +11,22 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SOURCE_HH
-#define SOURCE_HH
+#ifndef EMITTER_HH
+#define EMITTER_HH
 
 #include <glm/glm.hpp>
 
 #include "particle_pool.hh"
+#include "macro_definitions.hh"
 
-namespace Gem {
-namespace Particle {
-class Source {
+namespace gem {
+namespace particle {
+class Emitter {
+  // This would normally be a copyable object, but the
+  // only advantage would be to be able to duplicate emitters...
+  // I prefer avoiding implicit unwanted constructions
+  DECLARE_UNCOPYABLE(Emitter)
+  DECLARE_UNMOVABLE(Emitter)
 private:
   static const glm::f32vec3 ORIGIN;
   static const glm::f32vec3 DEFAULT_SPEED;
@@ -31,13 +37,13 @@ protected:
   static const glm::u8vec4  DEFAULT_COLOR;
 
 public:
-	Source();
-	Source(
+	Emitter();
+	Emitter(
     const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime,
     double a_dEmissionRate);
-	virtual ~Source() = default;
+	virtual ~Emitter() = default;
 
   void SetSpawnLocation(const glm::f32vec3& a_spawnLocation);
   void SetSpawnVelocity(const glm::f32vec3& a_spawnVelocity);
@@ -51,8 +57,7 @@ public:
     m_dEmissionRate = a_dEmissionRate;
   }*/
 
-  // TODO: Copyable and moveable?<
-  void Emit(double a_dt, const std::unique_ptr<Pool>& a_pPool);
+  void Emit(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool);
 
 protected:
   float         m_fLifetime;
@@ -63,10 +68,10 @@ protected:
 private:
   // Private initialization of the particles before emission
   // in the subclasses
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) = 0;
-}; /* class Source*/
-} /* namespace Particle */
-} /* namespace Gem */
+}; /* class Emitter*/
+} /* namespace particle */
+} /* namespace gem */
 
-#endif /* end of include guard: SOURCE_HH */
+#endif /* end of include guard: EMITTER_HH */

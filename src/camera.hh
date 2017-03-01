@@ -18,16 +18,13 @@
 #include <map>
 #include <string>
 
-// TODO: This class is now bound to opengl manipulations,
-// might be interesting to rename so that there's a possibility
-// to add a directx compatible camera
 #include <GL/glew.h>
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-namespace Gem {
-namespace Particle {
-namespace Camera {
+namespace gem {
+namespace particle {
+namespace camera {
 
 void Init();
 void Terminate();
@@ -36,10 +33,8 @@ const glm::vec3& GetEyePosition();
 const glm::vec3& GetTargetPosition();
 const glm::vec3& GetUpVector();
 
-// TODO: See if pointers affect the return type of these functions
-// and if return by value is correct
-glm::mat4 GetViewMatrix();
-glm::mat4 GetProjectionMatrix();
+const glm::mat4& GetViewMatrix();
+const glm::mat4& GetProjectionMatrix();
 
 void SetEyePosition(const glm::vec3& a_vEye);
 void SetTargetPosition(const glm::vec3& a_vTarget);
@@ -60,7 +55,7 @@ void SetOrthoProjection(float a_fLeft, float a_fRight,
   float a_fBottom, float a_fTop,
   float a_fNear, float a_fFar);
 
-} /* namespace Camera*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace camera*/
+} /* namespace particle */
+} /* namespace gem */
 #endif /* end of include guard: CAMERA_HH */

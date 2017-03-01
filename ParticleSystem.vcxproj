@@ -21,47 +21,46 @@
   <ItemGroup>
     <ClCompile Include="src\app.cc" />
     <ClCompile Include="src\camera.cc" />
-    <ClCompile Include="src\default_dynamic.cc" />
-    <ClCompile Include="src\basic_stream_source.cc" />
+    <ClCompile Include="src\euler_particle_updater.cc" />
+    <ClCompile Include="src\basic_stream_emitter.cc" />
     <ClCompile Include="src\event_handler.cc" />
-    <ClCompile Include="src\global_acceleration.cc" />
+    <ClCompile Include="src\gravity_acceleration.cc" />
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\opengl_renderer.cc" />
+    <ClCompile Include="src\cpu_particle_module.cc" />
     <ClCompile Include="src\particle_system.cc" />
-    <ClCompile Include="src\rain_source.cc" />
-    <ClCompile Include="src\random_fountain_source.cc" />
+    <ClCompile Include="src\rain_emitter.cc" />
+    <ClCompile Include="src\random_fountain_emitter.cc" />
     <ClCompile Include="src\shader.cc" />
-    <ClCompile Include="src\source.cc" />
+    <ClCompile Include="src\emitter.cc" />
     <ClCompile Include="src\particle_pool.cc" />
-    <ClCompile Include="src\particle_system_component.cc" />
-    <ClCompile Include="src\spherical_stream_source.cc" />
-    <ClCompile Include="src\stub_renderer.cc" />
+    <ClCompile Include="src\spherical_stream_emitter.cc" />
+    <ClCompile Include="src\simple_opengl_renderer.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.hh" />
     <ClInclude Include="src\camera.hh" />
-    <ClInclude Include="src\default_dynamic.hh" />
-    <ClInclude Include="src\basic_stream_source.hh" />
+    <ClInclude Include="src\euler_particle_updater.hh" />
+    <ClInclude Include="src\basic_stream_emitter.hh" />
     <ClInclude Include="src\dynamic.hh" />
     <ClInclude Include="src\event_handler.hh" />
-    <ClInclude Include="src\global_acceleration.hh" />
+    <ClInclude Include="src\gravity_acceleration.hh" />
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\macro_definitions.hh" />
     <ClInclude Include="src\opengl_context.hh" />
     <ClInclude Include="src\opengl_renderer.hh" />
+    <ClInclude Include="src\cpu_particle_module.hh" />
     <ClInclude Include="src\particle_system.hh" />
-    <ClInclude Include="src\rain_source.hh" />
-    <ClInclude Include="src\random_fountain_source.hh" />
+    <ClInclude Include="src\rain_emitter.hh" />
+    <ClInclude Include="src\random_fountain_emitter.hh" />
     <ClInclude Include="src\renderer.hh" />
     <ClInclude Include="src\shader.hh" />
-    <ClInclude Include="src\source.hh" />
-    <ClInclude Include="src\particle.hh" />
+    <ClInclude Include="src\emitter.hh" />
     <ClInclude Include="src\particle_pool.hh" />
-    <ClInclude Include="src\particle_system_component.hh" />
-    <ClInclude Include="src\spherical_stream_source.hh" />
-    <ClInclude Include="src\stub_renderer.hh" />
+    <ClInclude Include="src\spherical_stream_emitter.hh" />
+    <ClInclude Include="src\simple_opengl_renderer.hh" />
     <ClInclude Include="src\timer.hh" />
   </ItemGroup>
   <ItemGroup>
@@ -112,11 +111,11 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\include\GLFW;C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\lib-vc2015;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(GLFW_HOME)\lib-vc2015;$(GLEW_HOME)\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -127,35 +126,35 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\include\GLFW;C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\lib-vc2015;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(GLFW_HOME)\lib-vc2015;$(GLEW_HOME)\lib\Release\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\include\GLFW;C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <WarningLevel>Level3</WarningLevel>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\lib-vc2015;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(GLFW_HOME)\lib-vc2015;$(GLEW_HOME)\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\include\GLFW;C:\Users\Francois\dev\CommonLibraries\glm-0.9.7.5\glm;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\Francois\dev\CommonLibraries\glfw-3.1.2.bin.WIN64\glfw-3.1.2.bin.WIN64\lib-vc2015;C:\Users\Francois\dev\CommonLibraries\glew-2.0.0-win32\glew-2.0.0\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(GLFW_HOME)\lib-vc2015;$(GLEW_HOME)\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

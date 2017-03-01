@@ -13,30 +13,23 @@
 *************************************************************************/
 #include "particle_system_component.hh"
 
-#include "default_dynamic.hh"
+#include "euler_particle_updater.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 ParticleSystemComponent::ParticleSystemComponent(
-  const std::string& a_sSystemName,
-  std::size_t a_unMaxParticleCount) 
-  : m_pParticlePool(new Pool(a_unMaxParticleCount)),
-    m_sSystemName(a_sSystemName) {
-  m_vDynamics.push_back(std::make_unique<DefaultDynamic>());
-}
-ParticleSystemComponent::ParticleSystemComponent(ParticleSystemComponent&& other)
-  : m_pParticlePool(std::move(other.m_pParticlePool)),
-  m_vDynamics(std::move(other.m_vDynamics)),
-  m_vSources(std::move(other.m_vSources)) {
+  std::size_t a_unMaxParticleCount)
+  : m_pParticlePool(std::make_shared<ParticlePool>(a_unMaxParticleCount)){
+  m_vDynamics.push_back(std::make_unique<EulerParticleUpdater>());
 }
 void ParticleSystemComponent::Update(double a_dt){
-  for (auto& source : m_vSources) {
-    source->Emit(a_dt, m_pParticlePool);
+  for (auto& emmiter : m_vEmitters) {
+    emmiter->Emit(a_dt, m_pParticlePool);
   }
-  for (auto& dynamic : m_vDynamics) {
-    dynamic->Update(a_dt, m_pParticlePool);
+  for (auto& emmiter : m_vDynamics) {
+    emmiter->Update(a_dt, m_pParticlePool);
   }
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 

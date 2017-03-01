@@ -11,23 +11,28 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef DEFAULT_DYNAMIC_HH
-#define DEFAULT_DYNAMIC_HH
+#ifndef FOUNTAIN_EMITTER_HH
+#define FOUNTAIN_EMITTER_HH
 
-#include "dynamic.hh"
+#include "emitter.hh"
 
-namespace Gem {
-namespace Particle {
-class DefaultDynamic : public Dynamic {
+namespace gem {
+namespace particle {
+class SphericalStreamEmitter : public Emitter {
 public:
-  DefaultDynamic() = default;
-  ~DefaultDynamic() = default;
+  SphericalStreamEmitter() = default; // Can be defaulted to base default constructor
+  SphericalStreamEmitter(
+    const glm::f32vec3& a_spawnLocation,
+    const glm::f32vec3& a_spawnVelocity,
+    float a_fLifetime,
+    double a_dEmissionRate);
+	virtual ~SphericalStreamEmitter() = default;
 
-	// TODO: Copyable and moveable?<
+private:
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+    std::size_t a_unStartID, std::size_t a_unEndID) override;
+}; /* class RandomFountainEmitter*/
+} /* namespace particle */
+} /* namespace gem */
 
-  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
-}; /* class DefaultDynamic*/
-} /* namespace Particle */
-} /* namespace Gem */
-
-#endif /* end of include guard: DEFAULT_DYNAMIC_HH */
+#endif /* end of include guard: FOUNTAIN_EMITTER_HH */

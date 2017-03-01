@@ -23,18 +23,18 @@
 #include "shader.hh"
 #include "camera.hh"
 #include "event_handler.hh"
-#include "particle_system.hh"
+#include "cpu_particle_module.hh"
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
 #include "particle_system_component.hh"
-#include "stub_renderer.hh"
-#include "rain_source.hh"
-#include "global_acceleration.hh"
+#include "simple_opengl_renderer.hh"
+#include "rain_emitter.hh"
+#include "gravity_acceleration.hh"
 
-namespace Gem {
-namespace Particle {
-namespace App {
+namespace gem {
+namespace particle {
+namespace app {
 namespace {
 // A pointer to interface, to enable flexibility over
 // window management system or 3D API (GLFW/Windows
@@ -48,43 +48,36 @@ void Init() {
   graphic_context->Init();
 
   // Shaders initialization
-  ShaderManager::Init();
-  ShaderManager::LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
-  ShaderManager::LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
+  shader_manager::Init();
+  shader_manager::LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
+  shader_manager::LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
   
-  ShaderManager::CreateAndLink();
-  ShaderManager::Bind();
+  shader_manager::CreateAndLink();
+  shader_manager::Bind();
 
   // Camera initialization
-  Camera::Init();
-  Camera::LookAt( 
+  camera::Init();
+  camera::LookAt( 
     glm::vec3(0, 0, 5),   // Camera is at (0,0,5), in World Space
     glm::vec3(0, 0, 0),   // and looks at the origin
     glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
-  Camera::SetPerspectiveProjection( 
+  camera::SetPerspectiveProjection( 
     glm::radians(45.0f), 
     4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
     0.1f, 100.0f);
 
   // Event handler initialization
-  EventHandler::Init(graphic_context);
-
-  // TODO:Temporary part, move this into a factory or something
+  event_handler::Init(graphic_context);
 
   // Particle system initialization
-  std::shared_ptr<ParticleSystemComponent> wTempParticleComp = 
-    std::make_shared<ParticleSystemComponent>(
-      "OBVIOUSLY_TEMPORARY",
-      1000000);
-  wTempParticleComp->AddSource(
-    std::make_unique<RainSource>(
-    RainSource(10.0f,100000)));
-  wTempParticleComp->AddDynamic(
-    std::make_unique<GlobalAcceleration>()
-    );
-
-  std::shared_ptr<Renderer> wTempRenderer = std::make_shared<StubRenderer>();
-  ParticleSystem::AddComponents(wTempParticleComp, wTempRenderer);
+  cpu_particle_module::Init();
+  ParticleSystem wParticleSystem(1000000,
+	  std::make_unique<SimpleGLRenderer>(),
+	  "OBVIOUSLY_TEMPORARY"
+  );
+  wParticleSystem.AddDynamic(std::make_unique<GravityAcceleration>());
+  wParticleSystem.AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
+  cpu_particle_module::AddSystem(std::move(wParticleSystem));
 }
 
 // TODO: Add that as debugging option in one of the renderers maybe?
@@ -123,9 +116,7 @@ void Run() {
     //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsedInSeconds();
 
-    ParticleSystem::Update(dt);
-    ParticleSystem::Render();
-    
+    cpu_particle_module::Update(dt);    
     graphic_context->Update();
     timer::chrono::Update();
   }
@@ -133,8 +124,8 @@ void Run() {
 
 void Terminate() {
   // App destruction
-  ParticleSystem::Terminate();
-  ShaderManager::Terminate();
+  cpu_particle_module::Terminate();
+  shader_manager::Terminate();
   graphic_context->Terminate();
 }
 
@@ -145,7 +136,7 @@ void SaveConfig(const std::string& a_sConfigName) {
   //TODO
 }
 
-} /* namespace App */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace app */
+} /* namespace particle */
+} /* namespace gem */
 

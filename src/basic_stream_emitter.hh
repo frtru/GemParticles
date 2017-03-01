@@ -11,26 +11,30 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef RAIN_SOURCE_HH
-#define RAIN_SOURCE_HH
+#ifndef BASIC_STREAM_EMITTER_HH
+#define BASIC_STREAM_EMITTER_HH
 
-#include "source.hh"
+#include "emitter.hh"
 
-namespace Gem {
-namespace Particle {
-class RainSource : public Source {
+namespace gem {
+namespace particle {
+class BasicStreamEmitter : public Emitter {
 public:
-  RainSource() = default; // Can be defaulted to base default constructor
-  RainSource(float a_fLifetime, double a_dEmissionRate);
-	~RainSource() = default;
+  BasicStreamEmitter();
+  BasicStreamEmitter(
+    const glm::f32vec3& a_spawnLocation,
+    const glm::f32vec3& a_spawnVelocity,
+    float a_fLifetime,
+    double a_dEmissionRate);
+	virtual ~BasicStreamEmitter() = default;
 
   // TODO: Copyable and moveable?<
 
 private:
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
-}; /* class RandomFountainSource*/
-} /* namespace Particle */
-} /* namespace Gem */
+}; /* class BasicStreamEmitter*/
+} /* namespace particle */
+} /* namespace gem */
 
-#endif /* end of include guard: RAIN_SOURCE_HH */
+#endif /* end of include guard: BASIC_EMITTER_HH */

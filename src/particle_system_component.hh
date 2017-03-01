@@ -24,57 +24,50 @@
  * and create an array for each
  * 4- See unique_ptr vs vector for pool
  */
-
 #ifndef PARTICLE_SYSTEM_COMPONENT_HH
 #define PARTICLE_SYSTEM_COMPONENT_HH
+
+// TODO: Rename that to remove component from the name...
+// TODO: Move system name into particlesystem...
 
 #include <vector>
 #include <memory>
 
-#include "particle.hh"
 #include "particle_pool.hh"
-#include "source.hh"
+#include "emitter.hh"
 #include "dynamic.hh"
-#include "renderer.hh"
+#include "macro_definitions.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
+  // TODO : If it possible to use template meta-programmed
+  // in particle system, put the type of pool/particledata as template
 class ParticleSystemComponent {
+  DECLARE_UNCOPYABLE(ParticleSystemComponent)
+  DECLARE_UNMOVABLE(ParticleSystemComponent)
 public:
   explicit ParticleSystemComponent(
-    const std::string& a_sSystemName = "DEFAULT_SYS_NAME",
-    std::size_t a_unMaxParticleCount = 10000);
-
-  ParticleSystemComponent(ParticleSystemComponent&& other);
-  ParticleSystemComponent(const ParticleSystemComponent& other) = delete;
-  ParticleSystemComponent& operator=(ParticleSystemComponent&& other) = delete;
-  ParticleSystemComponent& operator=(const ParticleSystemComponent& other) = delete;
-
+    std::size_t a_unMaxParticleCount);
   ~ParticleSystemComponent() = default;
 
   void Update(double a_dt);
-  const std::unique_ptr<Pool>& GetParticles() const {
+  const std::shared_ptr<ParticlePool>& GetParticles() const {
     return m_pParticlePool; 
   }
-  void AddSource(std::unique_ptr<Source> a_pSource) { 
-    m_vSources.push_back(std::move(a_pSource)); 
+  void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) { 
+    m_vEmitters.push_back(std::move(a_pEmitter)); 
   }
   void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) { 
     m_vDynamics.push_back(std::move(a_pDynamic)); 
   }
 
 private:
-  std::string               m_sSystemName;
-  // TODO: See if raw class (Pool) is faster
-  std::unique_ptr<Pool>     m_pParticlePool; 
-  // TODO: See if shared_ptr would be better so that
-  // something else can have a copy of those to change
-  // some parameters more easily
-  std::vector<std::unique_ptr<Source> >  m_vSources;
-  std::vector<std::unique_ptr<Dynamic> > m_vDynamics;
+  std::shared_ptr<ParticlePool>                   m_pParticlePool; 
+  std::vector<std::unique_ptr<Emitter> >  m_vEmitters;
+  std::vector<std::unique_ptr<Dynamic> >  m_vDynamics;
 }; /* class ParticleSystemComponent */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 
 #endif /* end of include guard: PARTICLE_SYSTEM_COMPONENT_HH */
