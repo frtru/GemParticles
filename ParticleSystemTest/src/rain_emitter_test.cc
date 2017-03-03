@@ -15,9 +15,12 @@
 #include "rain_emitter_test.hh"
 
 RainEmitterTest::RainEmitterTest(){
+  m_pGraphicContext = std::make_shared<gem::particle::OpenGLContext>();
+  m_pGraphicContext->Init();
 }
 
 RainEmitterTest::~RainEmitterTest(){
+  m_pGraphicContext->Terminate();
 }
 
 void RainEmitterTest::SetUp() {
@@ -27,7 +30,5 @@ void RainEmitterTest::TearDown() {
 }
 
 TEST_F(RainEmitterTest, RainParticleSystem) {
-
   std::cout << "WELL DONE! THAT WAS SO GOOD I THOUGHT YOU WERE POO" << std::endl;
-
 }

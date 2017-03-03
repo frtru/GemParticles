@@ -31,10 +31,8 @@
     <ClCompile Include="src\particle_pool.cc">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\app.cc" />
     <ClCompile Include="src\camera.cc" />
     <ClCompile Include="src\graphic_context.cc" />
-    <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\event_handler.cc" />
     <ClCompile Include="src\particle_system.cc">
@@ -84,7 +82,6 @@
     <ClInclude Include="src\particle_pool.hh">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\app.hh" />
     <ClInclude Include="src\camera.hh" />
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\opengl_context.hh" />
