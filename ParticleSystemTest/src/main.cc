@@ -11,28 +11,11 @@
 * The above copyright notice and this permission notice shall be included in
 * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-TEST(blahTest, blah1) {
-  EXPECT_EQ(1, 1);
-}
+#include "rain_emitter_test.hh"
 
 int main(int argc, char** argv) {
   ::testing::InitGoogleTest(&argc, argv);
-
-  int returnValue;
-
-  //Do whatever setup here you will need for your tests here
-  //
-  //
-
-  returnValue = RUN_ALL_TESTS();
-
-  std::cout << "WELL DONE! THAT WAS SO GOOD I THOUGHT YOU WERE POO" << std::endl;
-
-  //Do Your teardown here if required
-  //
-  //
-
-  return returnValue;
+  return RUN_ALL_TESTS();
 }
