@@ -30,7 +30,8 @@
 #include <vector>
 #include <memory>
 
-#include "particle.hh"
+#include "glm/glm.hpp"
+
 #include "macro_definitions.hh"
 
 namespace gem {

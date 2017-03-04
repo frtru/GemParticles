@@ -27,7 +27,6 @@
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
-#include "particle_system_component.hh"
 #include "simple_opengl_renderer.hh"
 #include "rain_emitter.hh"
 #include "gravity_acceleration.hh"
