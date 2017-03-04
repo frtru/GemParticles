@@ -23,7 +23,7 @@ if(glfw3_FOUND)
     MESSAGE("GLFW3 found")
 endif()
 
-include_directories(
+include_directories(	
         ${OPENGL_INCLUDE_DIRS}
 		${GLM_INCLUDE_DIRS}
 		${GLEW_INCLUDE_DIRS}
@@ -76,4 +76,4 @@ set(SOURCE_FILES
 add_executable(GemParticles ${SOURCE_FILES})
 
 target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} glfw)
-       
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )       
