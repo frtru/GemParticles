@@ -33,10 +33,16 @@ BasicStreamEmitter::BasicStreamEmitter(
 void BasicStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_velocity[i]      = m_spawnVelocity;
-    a_pPool->m_position[i]      = m_spawnLocation;
-    a_pPool->m_lifetime[i]      = m_fLifetime; 
-    a_pPool->m_color[i]         = DEFAULT_COLOR;
+    a_pPool->m_velocity[i] = m_spawnVelocity;
+  }
+  for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
+    a_pPool->m_position[i] = m_spawnLocation;
+  }
+  for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
+    a_pPool->m_lifetime[i] = m_fLifetime;
+  }
+  for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
+    a_pPool->m_color[i] = DEFAULT_COLOR;
   }
 }
 } /* namespace particle */
