@@ -14,21 +14,103 @@
 
 #include "rain_emitter_test.hh"
 
+#include <iostream>
+
+#include "timer.hh"
+#include "opengl_context.hh"
+#include "shader.hh"
+#include "camera.hh"
+#include "event_handler.hh"
+#include "cpu_particle_module.hh"
+
+#include "particle_system_component.hh"
+#include "simple_opengl_renderer.hh"
+#include "rain_emitter.hh"
+#include "gravity_acceleration.hh"
+
+float const RainEmitterTest::AXIS_DEBUG_POINTS[] = {
+  0.0f,0.0f,0.0f,
+  1.0f,0.0f,0.0f,
+  0.0f,0.0f,0.0f,
+  0.0f,1.0f,0.0f,
+  0.0f,0.0f,0.0f,
+  0.0f,0.0f,1.0f
+};
+
 RainEmitterTest::RainEmitterTest(){
+  // OpenGL setup
   m_pGraphicContext = std::make_shared<gem::particle::OpenGLContext>();
   m_pGraphicContext->Init();
+
+  // Shaders initialization
+  gem::particle::shader_manager::Init();
+  gem::particle::shader_manager::LoadFromFile(GL_VERTEX_SHADER, "../shaders/default.vert");
+  gem::particle::shader_manager::LoadFromFile(GL_FRAGMENT_SHADER, "../shaders/default.frag");
+
+  gem::particle::shader_manager::CreateAndLink();
+  gem::particle::shader_manager::Bind();
+
+  // Camera initialization
+  gem::particle::camera::Init();
+  gem::particle::camera::LookAt(
+    glm::vec3(0, 0, 5),   // Camera is at (0,0,5), in World Space
+    glm::vec3(0, 0, 0),   // and looks at the origin
+    glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
+  gem::particle::camera::SetPerspectiveProjection(
+    glm::radians(45.0f),
+    4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
+    0.1f, 100.0f);
+
+  // Event handler initialization
+  gem::particle::event_handler::Init(m_pGraphicContext);
 }
 
 RainEmitterTest::~RainEmitterTest(){
+  gem::particle::shader_manager::Terminate();
   m_pGraphicContext->Terminate();
 }
 
 void RainEmitterTest::SetUp() {
+  // Particle system initialization
+  gem::particle::cpu_particle_module::Init();
+  gem::particle::ParticleSystem wParticleSystem(1000000,
+    std::make_unique<gem::particle::SimpleGLRenderer>(),
+    "OBVIOUSLY_TEMPORARY"
+  );
+
+  wParticleSystem.AddDynamic(std::make_unique<gem::particle::GravityAcceleration>());
+  wParticleSystem.AddEmitter(std::make_unique<gem::particle::RainEmitter>(10.0f, 100000));
+  gem::particle::cpu_particle_module::AddSystem(std::move(wParticleSystem));
 }
 
 void RainEmitterTest::TearDown() {
+  // App destruction
+  gem::particle::cpu_particle_module::Terminate();
 }
 
 TEST_F(RainEmitterTest, RainParticleSystem) {
-  std::cout << "WELL DONE! THAT WAS SO GOOD I THOUGHT YOU WERE POO" << std::endl;
+  GLuint vao = 0;
+  glGenVertexArrays(1, &vao);
+  glBindVertexArray(vao);
+  glEnableVertexAttribArray(0);
+
+  GLuint vbo = 0;
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(float), AXIS_DEBUG_POINTS, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+  while (!m_pGraphicContext->PollWindowClosedEvent()) {
+    glBindVertexArray(vao);
+    glDrawArrays(GL_LINES, 0, 2);
+    glDrawArrays(GL_LINES, 2, 2);
+    glDrawArrays(GL_LINES, 4, 2);
+    glBindVertexArray(0);
+    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
+    double dt = timer::chrono::GetTimeElapsedInSeconds();
+
+    gem::particle::cpu_particle_module::Update(dt);
+    m_pGraphicContext->Update();
+    timer::chrono::Update();
+  }
 }
