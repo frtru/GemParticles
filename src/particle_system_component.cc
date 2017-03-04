@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -12,8 +12,8 @@
  * all copies or substantial portions of the Software.
 *************************************************************************/
 #include "particle_system_component.hh"
-
 #include "euler_particle_updater.hh"
+#include "default_dynamic.hh"
 
 namespace gem {
 namespace particle {

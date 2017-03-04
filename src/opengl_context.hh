@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -14,8 +14,13 @@
 #ifndef OPENGL_CONTEXT_HH
 #define OPENGL_CONTEXT_HH
 
+#ifndef LINUX
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#else
 #include <gl/glew.h>
 #include <gl/glfw3.h>
+#endif
 
 #include "graphic_context.hh"
 

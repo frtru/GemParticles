@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +74,7 @@ void OpenGLContext::InitImpl() {
     std::cerr << "OpenGLSetup -> glfwInit failed!" << std::endl;
 
   /* Create a windowed mode window and its OpenGL context */
-  m_pWindow = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+  m_pWindow = glfwCreateWindow(640, 480, "GemParticles", NULL, NULL);
   if (!m_pWindow) {
     glfwTerminate();
     std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
@@ -85,7 +85,7 @@ void OpenGLContext::InitImpl() {
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-  glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  //glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   
   //TODO: Insert other glfw parameters here
 
