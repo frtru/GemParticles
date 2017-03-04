@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,8 +49,8 @@ void Init() {
 
   // Shaders initialization
   ShaderManager::Init();
-  ShaderManager::LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
-  ShaderManager::LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
+  ShaderManager::LoadFromFile(GL_VERTEX_SHADER,   "../shaders/default.vert");
+  ShaderManager::LoadFromFile(GL_FRAGMENT_SHADER, "../shaders/default.frag");
   
   ShaderManager::CreateAndLink();
   ShaderManager::Bind();

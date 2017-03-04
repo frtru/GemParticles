@@ -6,14 +6,14 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/bin )
 set(CMAKE_CXX_STANDARD 14)
 
 find_package(OpenGL REQUIRED)
-find_package(GLM REQUIRED)
+find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 
 if(OpenGL_FOUND)
     MESSAGE("OpenGL found")
 endif()
-if(GLM_FOUND)
+if(glm_FOUND)
 	MESSAGE("GLM found")
 endif()
 if(GLEW_FOUND)
@@ -25,7 +25,7 @@ endif()
 
 include_directories(	
         ${OPENGL_INCLUDE_DIRS}
-		${GLM_INCLUDE_DIRS}
+		${glm_INCLUDE_DIRS}
 		${GLEW_INCLUDE_DIRS}
         ${glfw3_INCLUDE_DIRS}
 )
