@@ -14,6 +14,7 @@
 #include "event_handler.hh"
 
 #include <iostream>
+#include <mutex>
 
 #include <gl/glew.h>
 #include <gl/glfw3.h>
@@ -24,10 +25,12 @@
 #include "shader.hh"
 #include "timer.hh"
 
-namespace Gem {
-namespace Particle {
-namespace EventHandler {
+namespace gem {
+namespace particle {
+namespace event_handler {
 namespace {
+std::once_flag init_flag;
+//std::once_flag terminate_flag;
 // TODO: If it's worth it, move these settings someplace else
 // Camera settings
 glm::vec3 camera_direction;
@@ -105,40 +108,40 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
     };
 
     camera_direction = glm::normalize(front);
-    auto  position = Camera::GetEyePosition(),
-          up = Camera::GetUpVector();
-    Camera::LookAt(position, position + camera_direction, up);
+    auto  position = camera::GetEyePosition(),
+          up = camera::GetUpVector();
+    camera::LookAt(position, position + camera_direction, up);
   }
 }
 
 void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nAction, int n_aMods) {
   if (a_nAction == GLFW_PRESS || a_nAction == GLFW_REPEAT) {
-  auto position       = Camera::GetEyePosition();
-  auto targetPosition = Camera::GetTargetPosition();
-  auto up = Camera::GetUpVector();
+  auto position       = camera::GetEyePosition();
+  auto targetPosition = camera::GetTargetPosition();
+  auto up = camera::GetUpVector();
   auto camera_right = glm::normalize(glm::cross(camera_direction, up)) * camera_speed;
     switch(a_nKeyID) {
       // Move forward
       case GLFW_KEY_W:
         position += camera_direction * camera_speed;
-        Camera::SetEyePosition(position);
+        camera::SetEyePosition(position);
         break;
       // Move backward
       case GLFW_KEY_S:
         position -= camera_direction * camera_speed;
-        Camera::SetEyePosition(position);
+        camera::SetEyePosition(position);
         break;
       // Move right
       case GLFW_KEY_D:
         position += camera_right;
         targetPosition += camera_right;
-        Camera::LookAt(position,targetPosition,Camera::GetUpVector());
+        camera::LookAt(position,targetPosition,camera::GetUpVector());
         break;
       // Move left
       case GLFW_KEY_A:
         position -= camera_right;
         targetPosition -= camera_right;
-        Camera::LookAt(position, targetPosition, Camera::GetUpVector());
+        camera::LookAt(position, targetPosition, camera::GetUpVector());
         break;
       default:
         break;
@@ -148,29 +151,31 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
 }
 
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
-  // TODO: If it's worth it, move these hardcoded values someplace else
-  yaw = -90.0f;
-  pitch = 0.0f;
-  last_x = 0.0f;
-  last_y = 0.0f;
+  std::call_once(init_flag, [&]() {
+    // TODO: If it's worth it, move these hardcoded values someplace else
+    yaw = -90.0f;
+    pitch = 0.0f;
+    last_x = 0.0f;
+    last_y = 0.0f;
 
-  camera_speed = 0.05f;
-  camera_direction = Camera::GetTargetPosition() - Camera::GetEyePosition();
-  mouse_sensitivity = 0.005f;
+    camera_speed = 0.05f;
+    camera_direction = camera::GetTargetPosition() - camera::GetEyePosition();
+    mouse_sensitivity = 0.005f;
 
-  context_handle = a_pCtxt;
-  mouse_state = FREE_CURSOR;
-  GLFWwindow* window = static_cast<GLFWwindow*>(context_handle->GetWindowHandle());
+    context_handle = a_pCtxt;
+    mouse_state = FREE_CURSOR;
+    GLFWwindow* window = static_cast<GLFWwindow*>(context_handle->GetWindowHandle());
 
-  // Set callbacks
-  glfwSetMouseButtonCallback(window, MouseButtonCallBack);
-  glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
-  glfwSetKeyCallback(window, KeyCallback);
+    // Set callbacks
+    glfwSetMouseButtonCallback(window, MouseButtonCallBack);
+    glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
+    glfwSetKeyCallback(window, KeyCallback);
+  });
 }
 
 void Terminate() {
 
 }
-} /* namespace EventHandler*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace event_handler*/
+} /* namespace particle */
+} /* namespace gem */

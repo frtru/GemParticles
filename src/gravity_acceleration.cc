@@ -11,35 +11,20 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "default_dynamic.hh"
+#include "gravity_acceleration.hh"
 
-namespace Gem {
-namespace Particle {
-void DefaultDynamic::Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) {
+namespace gem {
+namespace particle {
+const glm::f32vec3 GravityAcceleration::GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
+
+void GravityAcceleration::Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) {
   // TODO: Deal with the delta double precision casted to float later
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
   const float fDt = (float)a_dt;
 
-  // TODO: See if 3 for's are better for branch prediction here
-  // or a merged for with a if else
-  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_lifetime[i] -= fDt;
-    if (a_pPool->m_lifetime[i] <= 0.0f) {
-      a_pPool->Sleep(i);
-    }
+  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+    a_pPool->m_velocity[i] += GRAVITY_ACCEL * fDt;
   }
-
-  // Using the euler model to update the positions and velocities
-
-  // TODO: See if 2 for's is better for data caching, since 
-  // one loop is dedicated to velocities and the other to positions
-  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_position[i] += a_pPool->m_velocity[i] * fDt;
-  }
-/*  for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_velocity[i] += a_pPool->m_acceleration[i] * fDt;
-  }
-  */
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

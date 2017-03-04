@@ -17,22 +17,20 @@
 #include <memory>
 
 #include "particle_pool.hh"
+#include "macro_definitions.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class Dynamic {
+  DECLARE_UNCOPYABLE(Dynamic)
+  DECLARE_UNMOVABLE(Dynamic)
 public:
 	Dynamic() = default;
 	virtual ~Dynamic() = default;
 
-	// TODO: Copyable and moveable?<
-
-  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) = 0;
-
-private:
-
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) = 0;
 }; /* class Dynamic*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: DYNAMIC_HH */

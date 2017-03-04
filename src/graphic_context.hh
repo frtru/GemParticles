@@ -16,9 +16,13 @@
 
 #include <memory>
 
-namespace Gem {
-namespace Particle {
+#include "macro_definitions.hh"
+
+namespace gem {
+namespace particle {
 class GraphicContext {
+  DECLARE_UNCOPYABLE(GraphicContext)
+  DECLARE_UNMOVABLE(GraphicContext)
 public:
   GraphicContext() {}
   virtual ~GraphicContext() {}
@@ -42,7 +46,7 @@ private:
   static bool  m_bInitialized;
   static bool  m_bTerminated;
 }; /* class GraphicContext*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: GRAPHIC_CONTEXT_HH */

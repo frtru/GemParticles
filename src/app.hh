@@ -16,16 +16,16 @@
 
 #include <string>
 
-namespace Gem {
-namespace Particle {
-namespace App {
+namespace gem {
+namespace particle {
+namespace app {
 void Init();
 void Run();
 void Terminate();
 void LoadConfig(const std::string& a_sConfigName);
 void SaveConfig(const std::string& a_sConfigName);
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: APP_HH */

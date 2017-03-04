@@ -16,17 +16,17 @@
 
 #include <memory>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class GraphicContext;
 
-namespace EventHandler {
+namespace event_handler {
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
 void Terminate();
 
-}; /* namespace EventHandler*/
-} /* namespace Particle */
-} /* namespace Gem */
+}; /* namespace event_handler*/
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: EVENT_HANDLER_HH */
 

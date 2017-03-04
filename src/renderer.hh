@@ -17,27 +17,32 @@
 #include <memory>
 
 #include "particle_pool.hh"
-
+#include "macro_definitions.hh"
 // TODO: Find a way like fenbf did for the billboard,
 // glpoint, bool useQuads thingy...
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 class Renderer {
+  DECLARE_UNCOPYABLE(Renderer)
+  DECLARE_UNMOVABLE(Renderer)
 public:
 	Renderer() = default;
 	virtual ~Renderer() = default;
 
-  virtual void Init(Pool* a_pPool) = 0;
+  // TODO: See if init/terminate should be changed for 
+  // something more stable, like object construction/destruction
+  // TODO: Remove the PUBLIC init/terminate idiom in classes and put initialization in constructor.
+
+  virtual void Init(const std::shared_ptr<ParticlePool> & a_pPool) = 0;
   virtual void Terminate() = 0;
   virtual void Update() = 0;
   virtual void Render() = 0;
   
 protected:
-  Pool* m_pParticlePool;
-
+  std::shared_ptr<ParticlePool> m_pParticlePool;
 }; /* class Renderer*/
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */
 
 #endif /* end of include guard: RENDERER_HH */
