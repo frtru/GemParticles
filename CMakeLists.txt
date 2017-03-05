@@ -1,41 +1,82 @@
-cmake_minimum_required (VERSION 3.0)
-project (GemParticles)
+cmake_minimum_required(VERSION 3.6)
+project(GemParticles)
 
-#Version
-set (GemParticles_VERSION_MAJOR 1)
-set (GemParticles_VERSION_MINOR 0)
-
-unset(TMP)
-
-set (CMAKE_BINARY_DIR "bin")
-set (CMAKE_SOURCE_DIR "src")
-
-if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
-    message( FATAL_ERROR "Please select another Build Directory! (and give it a clever name, like bin_Visual2012_64bits/)" )
-endif()
-if( CMAKE_SOURCE_DIR MATCHES " " )
-    message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
-endif()
-if( CMAKE_BINARY_DIR MATCHES " " )
-    message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
-endif()
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
+set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/bin )
+set(CMAKE_CXX_STANDARD 14)
 
 find_package(OpenGL REQUIRED)
+if(WIN32)
+  find_package(GLM REQUIRED)
+  include_directories(${GLM_INCLUDE_DIRS})
+endif()
+if(UNIX AND NOT WIN32)
+  find_package(glm REQUIRED)
+  include_directories(${glm_INCLUDE_DIRS})
+endif()
+find_package(GLEW REQUIRED)
+find_package(glfw3 REQUIRED)
 
-add_subdirectory (external)
-# On Visual 2005 and above, this module can set the debug working directory
-cmake_policy(SET CMP0026 OLD)
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/external/rpavlik-cmake-modules-fe2273")
-include(CreateLaunchers)
-include(MSVCMultipleProcessCompile) # /MP
+if(OpenGL_FOUND)
+    MESSAGE("OpenGL found")
+	include_directories(${OPENGL_INCLUDE_DIRS})
+endif()
+if(glm_FOUND OR GLM_FOUND)
+	MESSAGE("GLM found")
+endif()
+if(GLEW_FOUND)
+    MESSAGE("GLEW found")
+	include_directories(${GLEW_INCLUDE_DIRS})
+endif()
+if(glfw3_FOUND)
+    MESSAGE("GLFW3 found")
+	include_directories(${glfw3_INCLUDE_DIRS})
+endif()
 
-include_directories(
-    external/AntTweakBar-1.16/include/
-    external/glfw-3.1.2/include/
-    external/glm-0.9.7.1/
-    external/glew-1.13.0/include/
-    external/assimp-3.0.1270/include/
-    src/
-)
+set(SOURCE_FILES
+        src/app.cc
+        src/app.hh
+        src/basic_stream_source.cc
+        src/basic_stream_source.hh
+        src/camera.cc
+        src/camera.hh
+        src/default_dynamic.cc
+        src/default_dynamic.hh
+        src/dynamic.hh
+        src/event_handler.cc
+        src/event_handler.hh
+        src/global_acceleration.cc
+        src/global_acceleration.hh
+        src/graphic_context.cc
+        src/graphic_context.hh
+        src/main.cc
+        src/opengl_context.cc
+        src/opengl_context.hh
+        src/opengl_renderer.cc
+        src/opengl_renderer.hh
+        src/particle.hh
+        src/particle_pool.cc
+        src/particle_pool.hh
+        src/particle_system.cc
+        src/particle_system.hh
+        src/particle_system_component.cc
+        src/particle_system_component.hh
+        src/rain_source.cc
+        src/rain_source.hh
+        src/random_fountain_source.cc
+        src/random_fountain_source.hh
+        src/renderer.hh
+        src/shader.cc
+        src/shader.hh
+        src/source.cc
+        src/source.hh
+        src/spherical_stream_source.cc
+        src/spherical_stream_source.hh
+        src/stub_renderer.cc
+        src/stub_renderer.hh
+        src/timer.hh)
 
-add_subdirectory(src)
+add_executable(GemParticles ${SOURCE_FILES})
+
+target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} glfw)
+file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
