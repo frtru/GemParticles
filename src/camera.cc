@@ -13,15 +13,18 @@
 *************************************************************************/
 #include "camera.hh"
 
+#include <mutex>
+
 #include "glm/gtc/matrix_transform.hpp"
 
 #include "shader.hh"
 
-namespace Gem {
-namespace Particle {
-namespace Camera {
+namespace gem {
+namespace particle {
+namespace camera {
 namespace {
-// Todo: Change the following matrices for pointers
+std::once_flag  init_flag;
+//std::once_flag terminate_flag;
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;
 /* NOTE : I know the MVP shouldn't be placed here, but since we 
@@ -45,8 +48,6 @@ struct Ortho {
   GLfloat near, far;
 };
 
-// TODO: See if pointers should be used in the union
-// instead of raw structs
 union ProjectionParameters {
   Perspective perspective;
   Ortho       ortho;
@@ -60,9 +61,9 @@ glm::vec3 up_vector;
 
 // Some helper functions
 void UpdateMVP() {
-  MVP = Camera::GetProjectionMatrix() * Camera::GetViewMatrix();
+  MVP = camera::GetProjectionMatrix() * camera::GetViewMatrix();
   glUniformMatrix4fv(
-    ShaderManager::GetUniformLocation("MVP"),
+    shader_manager::GetUniformLocation("MVP"),
     1, false,
     glm::value_ptr(MVP)
   );
@@ -75,13 +76,14 @@ void UpdateViewMatrixAndMVP() {
 }
 
 void Init() {
-  //glm::mat4() loads a 4x4 identity matrix
-  projection_matrix = glm::mat4();
-  view_matrix       = glm::mat4();
+  std::call_once(init_flag, [&]() {
+    //glm::mat4() loads a 4x4 identity matrix
+    projection_matrix = glm::mat4();
+    view_matrix = glm::mat4();
 
-
-  ShaderManager::RegisterUniform("MVP");
-  UpdateMVP();
+    shader_manager::RegisterUniform("MVP");
+    UpdateMVP();
+  });
 }
 
 void Terminate() {
@@ -99,11 +101,11 @@ const glm::vec3& GetUpVector() {
   return up_vector;
 }
 
-glm::mat4 GetViewMatrix() {
+const glm::mat4& GetViewMatrix() {
   return view_matrix;
 }
 
-glm::mat4 GetProjectionMatrix() {
+const glm::mat4& GetProjectionMatrix() {
   return projection_matrix;
 }
 
@@ -170,6 +172,6 @@ void SetOrthoProjection(float a_fLeft	, float a_fRight,
   UpdateMVP();
 }
 
-} /* namespace Camera */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace camera */
+} /* namespace particle */
+} /* namespace gem */

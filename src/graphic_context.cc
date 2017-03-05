@@ -13,8 +13,8 @@
 *************************************************************************/
 #include "graphic_context.hh"
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 bool GraphicContext::m_bInitialized = false;
 bool GraphicContext::m_bTerminated = false;
 
@@ -34,5 +34,5 @@ void GraphicContext::Terminate() {
   // TODO: Else log error, already terminated or something
 }
 
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

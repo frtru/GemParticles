@@ -15,34 +15,42 @@
 
 #include <iostream>
 #include <fstream>
+#include <mutex>
 
-namespace Gem {
-namespace Particle {
-namespace ShaderManager {
+namespace gem {
+namespace particle {
+namespace shader_manager {
 namespace {
-  GLuint                        program;
-  std::map<GLenum, GLuint>      shaders;
-  std::map<std::string, GLuint> attrib_list;
-  std::map<std::string, GLuint> uniform_location_list;
+GLuint                        program;
+std::map<GLenum, GLuint>      shaders;
+std::map<std::string, GLuint> attrib_list;
+std::map<std::string, GLuint> uniform_location_list;
+
+std::once_flag                init_flag;
+std::once_flag                terminate_flag;
 }
 
 void Init() {
-  program = 0;
-  shaders = {
-    { GL_VERTEX_SHADER, 0 },
-    { GL_FRAGMENT_SHADER, 0 },
-    { GL_GEOMETRY_SHADER, 0 },
-    { GL_TESS_CONTROL_SHADER, 0 },
-    { GL_TESS_EVALUATION_SHADER, 0 },
-    { GL_COMPUTE_SHADER, 0 } };
-  attrib_list.clear();
-  uniform_location_list.clear();
+  std::call_once(init_flag, [&]() {
+    program = 0;
+    shaders = {
+      { GL_VERTEX_SHADER, 0 },
+      { GL_FRAGMENT_SHADER, 0 },
+      { GL_GEOMETRY_SHADER, 0 },
+      { GL_TESS_CONTROL_SHADER, 0 },
+      { GL_TESS_EVALUATION_SHADER, 0 },
+      { GL_COMPUTE_SHADER, 0 } };
+    attrib_list.clear();
+    uniform_location_list.clear();
+  });
 }
 
 void Terminate() {
-  if (program != -1) {
-    Dispose();
-  }
+  std::call_once(terminate_flag, [&]() {
+    if (program != -1) {
+      Dispose();
+    }
+  });
 }
 
 GLuint GetProgramID()                         { return program; }
@@ -58,7 +66,7 @@ void LoadFromFile(GLenum which, const char* fileName) {
     LoadFromText(which, buffer);
   }
   else {
-    std::cerr << "ShaderManager::LoadFromFile -> "
+    std::cerr << "shader_manager::LoadFromFile -> "
       << "Invalid fileName path : "
       << fileName << std::endl;
   }
@@ -68,7 +76,7 @@ void LoadFromText(GLenum type, const std::string& text) {
   //Type must be one of the supported and registered
   //types in the initialization
   if (shaders.count(type) == 0) {
-    std::cerr << "ShaderManager::LoadFromText -> "
+    std::cerr << "shader_manager::LoadFromText -> "
               << "Type received is not recognized/supported" << std::endl;
   }
 
@@ -85,7 +93,7 @@ void LoadFromText(GLenum type, const std::string& text) {
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
     glGetShaderInfoLog(shader, infoLogSize, nullptr, infoLog);
-    std::cerr << "ShaderManager::LoadFromText -> " 
+    std::cerr << "shader_manager::LoadFromText -> " 
               << infoLog << std::endl;
     delete[] infoLog;
     return;
@@ -158,6 +166,6 @@ void Dispose() {
   glDeleteProgram(program);
   program = -1;
 }
-} /* namespace ShaderManager */
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace shader_manager */
+} /* namespace particle */
+} /* namespace gem */

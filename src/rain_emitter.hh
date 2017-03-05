@@ -11,28 +11,26 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLOBAL_ACCELERATION_HH
-#define GLOBAL_ACCELERATION_HH
+#ifndef RAIN_EMITTER_HH
+#define RAIN_EMITTER_HH
 
-#include "dynamic.hh"
+#include "emitter.hh"
 
-/* TODO: Rename this for gravity acceleration
- */
-namespace Gem {
-namespace Particle {
-class GlobalAcceleration : public Dynamic {
-private:
-  const glm::f32vec3 GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
-
+namespace gem {
+namespace particle {
+class RainEmitter : public Emitter {
 public:
-  GlobalAcceleration() = default;
-  ~GlobalAcceleration() = default;
+  RainEmitter() = default; // Can be defaulted to base default constructor
+  RainEmitter(float a_fLifetime, double a_dEmissionRate);
+	~RainEmitter() = default;
 
-	// TODO: Copyable and moveable?<
+  // TODO: Copyable and moveable?<
 
-  virtual void Update(double a_dt, const std::unique_ptr<Pool>& a_pPool) override;
-}; /* class DefaultDynamic*/
-} /* namespace Particle */
-} /* namespace Gem */
+private:
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+    std::size_t a_unStartID, std::size_t a_unEndID) override;
+}; /* class RandomFountainEmitter*/
+} /* namespace particle */
+} /* namespace gem */
 
-#endif /* end of include guard: GLOBAL_ACCELERATION_HH */
+#endif /* end of include guard: RAIN_EMITTER_HH */

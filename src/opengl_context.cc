@@ -15,8 +15,8 @@
 
 #include <iostream>
 
-namespace Gem {
-namespace Particle {
+namespace gem {
+namespace particle {
 OpenGLContext::OpenGLContext() 
   : m_pWindow(nullptr) {}
 
@@ -109,5 +109,5 @@ void OpenGLContext::InitImpl() {
 void OpenGLContext::TerminateImpl() {
   glfwTerminate();
 }
-} /* namespace Particle */
-} /* namespace Gem */
+} /* namespace particle */
+} /* namespace gem */

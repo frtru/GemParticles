@@ -11,30 +11,32 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_SOURCE_HH
-#define FOUNTAIN_SOURCE_HH
+#ifndef SIMPLE_GL_RENDERER_HH
+#define SIMPLE_GL_RENDERER_HH
 
-#include "source.hh"
+#include "opengl_renderer.hh"
 
-namespace Gem {
-namespace Particle {
-class RandomFountainSource : public Source {
+namespace gem {
+namespace particle {
+// TODO: Rename this for something different than stub...
+// something like basic or debug
+class SimpleGLRenderer : public GLRenderer {
 public:
-  RandomFountainSource() = default; // Can be defaulted to base default constructor
-  RandomFountainSource(
-    const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity,
-    float a_fLifetime,
-    double a_dEmissionRate);
-	~RandomFountainSource() = default;
+  SimpleGLRenderer();
+  virtual ~SimpleGLRenderer() = default;
 
-  // TODO: Copyable and moveable?<
+  virtual void Update() override;
+  virtual void Render() override;
 
 private:
-  virtual void Init(double a_dt, const std::unique_ptr<Pool>& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-}; /* class RandomFountainSource*/
-} /* namespace Particle */
-} /* namespace Gem */
+  virtual void InitImpl() override;
+  virtual void TerminateImpl() override;
 
-#endif /* end of include guard: FOUNTAIN_SOURCE_HH */
+  // An extra buffer for color
+  GLuint  m_colorVBOID;
+
+}; /* class SimpleGLRenderer*/
+} /* namespace particle */
+} /* namespace gem */
+
+#endif /* end of include guard: SIMPLE_GL_RENDERER_HH */
