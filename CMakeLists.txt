@@ -59,8 +59,7 @@ set(SOURCE_FILES
         src/particle_pool.hh
         src/particle_system.cc
         src/particle_system.hh
-        src/particle_system_component.cc
-        src/particle_system_component.hh
+        src/particle_system_interface.hh
         src/rain_source.cc
         src/rain_source.hh
         src/random_fountain_source.cc
