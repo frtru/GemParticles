@@ -19,7 +19,7 @@
 
 namespace gem {
 namespace particle {
-class GravityAcceleration : public Dynamic<ParticlePoolCore> {
+class GravityAcceleration : public Dynamic<CoreParticles> {
 private:
   static const glm::f32vec3 GRAVITY_ACCEL;
 public:
@@ -28,7 +28,7 @@ public:
 
 	// TODO: Copyable and moveable?<
 
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool) override;
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 }; /* class EulerParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */

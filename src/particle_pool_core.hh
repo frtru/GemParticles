@@ -27,11 +27,11 @@
 
 namespace gem {
 namespace particle {
-using ParticlePoolCore = ParticlePool<void>;
+using CoreParticles = void;
 template <>
 class ParticlePool<void> {
-  //DECLARE_UNCOPYABLE(ParticlePoolCore)
-  //DECLARE_UNMOVABLE(ParticlePoolCore)
+  DECLARE_UNCOPYABLE(ParticlePool)
+  DECLARE_UNMOVABLE(ParticlePool)
 public: 
   /* Pool main principle/property:
   * Active particles are at the front (lower indexes) of the pool,

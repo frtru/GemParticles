@@ -20,7 +20,7 @@
 
 namespace gem {
 namespace particle {
-GLRenderer::GLRenderer(const std::shared_ptr<ParticlePoolCore> & a_pPool){
+GLRenderer::GLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool){
 	// VAO initialization
 	glGenVertexArrays(1, &m_vertexArrayID);
 	std::cout << "GLRenderer::GLRenderer -> Generated VAO ID = ";

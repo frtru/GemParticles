@@ -57,7 +57,7 @@ public:
     m_dEmissionRate = a_dEmissionRate;
   }*/
 
-  void Emit(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool);
+  void Emit(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool);
 
 protected:
   float         m_fLifetime;
@@ -68,7 +68,7 @@ protected:
 private:
   // Private initialization of the particles before emission
   // in the subclasses
-  virtual void Init(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool,
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) = 0;
 }; /* class Emitter*/
 } /* namespace particle */

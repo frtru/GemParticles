@@ -30,7 +30,7 @@ BasicStreamEmitter::BasicStreamEmitter(
   a_fLifetime,
   a_dEmissionRate) {}
 
-void BasicStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool,
+void BasicStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     a_pPool->pCoreData->m_velocity[i] = m_spawnVelocity;

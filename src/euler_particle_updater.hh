@@ -19,14 +19,14 @@
 
 namespace gem {
 namespace particle {
-class EulerParticleUpdater : public Dynamic<ParticlePoolCore> {
+class EulerParticleUpdater : public Dynamic<CoreParticles> {
 public:
   EulerParticleUpdater() = default;
   ~EulerParticleUpdater() = default;
 
 	// TODO: Copyable and moveable?<
 
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool) override;
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 }; /* class EulerParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */

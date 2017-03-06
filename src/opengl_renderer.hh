@@ -22,11 +22,11 @@ namespace gem {
 namespace particle {
 class GLRenderer : public Renderer {
 public:
-  GLRenderer(const std::shared_ptr<ParticlePoolCore> &a_pPool);
+  GLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
   virtual ~GLRenderer();
 
-  virtual void Update(const std::shared_ptr<ParticlePoolCore> &a_pPool) = 0;
-  virtual void Render(const std::shared_ptr<ParticlePoolCore> &a_pPool) = 0;
+  virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) = 0;
+  virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) = 0;
 
 protected:
   GLuint m_vertexArrayID;   //VAO

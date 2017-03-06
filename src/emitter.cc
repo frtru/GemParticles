@@ -58,7 +58,7 @@ void Emitter::SetEmissionRate(double a_dEmissionRate) {
 }
 
 
-void Emitter::Emit(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool) {
+void Emitter::Emit(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) {
   const std::size_t maxNewParticles = 
     static_cast<std::size_t>(a_dt*m_dEmissionRate);
   const std::size_t firstParticleIndex = 

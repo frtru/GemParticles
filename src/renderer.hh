@@ -31,8 +31,8 @@ public:
 	virtual ~Renderer() = default;
 
 protected:
-  virtual void Update(const std::shared_ptr<ParticlePoolCore> &a_pPool) = 0;
-  virtual void Render(const std::shared_ptr<ParticlePoolCore> &a_pPool) = 0;
+  virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) = 0;
+  virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) = 0;
 }; /* class Renderer*/
 } /* namespace particle */
 } /* namespace gem */
