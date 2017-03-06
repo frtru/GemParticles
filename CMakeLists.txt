@@ -55,6 +55,7 @@ set(SOURCE_FILES
         src/opengl_renderer.cc
         src/opengl_renderer.hh
         src/particle.hh
+        src/particle_core_data.cc
         src/particle_pool.cc
         src/particle_pool.hh
         src/particle_system.cc

@@ -16,12 +16,9 @@
 namespace gem {
 namespace particle {
 ParticlePool::ParticlePool(std::size_t a_unMaxParticleCount)
-  : m_lifetime(new float[a_unMaxParticleCount]),
-    m_color(new glm::u8vec4[a_unMaxParticleCount]),
-  m_position(new glm::f32vec3[a_unMaxParticleCount]),
-  m_velocity(new glm::f32vec3[a_unMaxParticleCount]),
-  m_unParticleCount(a_unMaxParticleCount),
-  m_unActiveParticleCount(0) {}
+  : pCoreData(new ParticleCoreData(a_unMaxParticleCount)),
+    m_unParticleCount(a_unMaxParticleCount),
+    m_unActiveParticleCount(0) {}
 
 void ParticlePool::Sleep(std::size_t a_unParticleID) {
   // NOTE:  Should include the following check since 
@@ -53,14 +50,14 @@ void ParticlePool::SwapPositions(
   // only sleep calls this, a_unFirstposition
   // data needs to be erased by 
   // a_unSecondPosition and that's it
-  std::swap(m_lifetime[a_unFirstPosition], 
-    m_lifetime[a_unSecondPosition]);
-  std::swap(m_color[a_unFirstPosition],
-    m_color[a_unSecondPosition]);
-  std::swap(m_position[a_unFirstPosition],
-    m_position[a_unSecondPosition]);
-  std::swap(m_velocity[a_unFirstPosition],
-    m_velocity[a_unSecondPosition]);
+  std::swap(pCoreData->m_lifetime[a_unFirstPosition], 
+    pCoreData->m_lifetime[a_unSecondPosition]);
+  std::swap(pCoreData->m_color[a_unFirstPosition],
+    pCoreData->m_color[a_unSecondPosition]);
+  std::swap(pCoreData->m_position[a_unFirstPosition],
+    pCoreData->m_position[a_unSecondPosition]);
+  std::swap(pCoreData->m_velocity[a_unFirstPosition],
+    pCoreData->m_velocity[a_unSecondPosition]);
 }
 
 //TODO: (NICE TO HAVE) The property to extend or reduce the capacity of the pool

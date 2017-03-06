@@ -23,7 +23,7 @@ void GravityAcceleration::Update(double a_dt, const std::shared_ptr<ParticlePool
   const float fDt = (float)a_dt;
 
   for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_velocity[i] += GRAVITY_ACCEL * fDt;
+    a_pPool->pCoreData->m_velocity[i] += GRAVITY_ACCEL * fDt;
   }
 }
 } /* namespace particle */

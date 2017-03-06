@@ -33,7 +33,7 @@ SimpleGLRenderer::SimpleGLRenderer(const std::shared_ptr<ParticlePool> & a_pPool
 
   glBufferData(GL_ARRAY_BUFFER,
     sizeof(glm::u8vec4)*wParticleCount,
-    a_pPool->m_color.get(),
+    a_pPool->pCoreData->m_color.get(),
     GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
@@ -73,12 +73,12 @@ void SimpleGLRenderer::Update(const std::shared_ptr<ParticlePool> &a_pPool) {
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 
-      a_pPool->m_position.get());
+      a_pPool->pCoreData->m_position.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
     glBufferSubData(GL_ARRAY_BUFFER, 0,
       sizeof(glm::u8vec4)*wActiveParticleCount,
-      a_pPool->m_color.get());
+      a_pPool->pCoreData->m_color.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }

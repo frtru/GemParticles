@@ -41,7 +41,7 @@ GLRenderer::GLRenderer(const std::shared_ptr<ParticlePool> & a_pPool){
 
 	glBufferData(GL_ARRAY_BUFFER,
 		sizeof(glm::f32vec3)*wParticleCount,
-		a_pPool->m_position.get(),
+		a_pPool->pCoreData->m_position.get(),
 		GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);

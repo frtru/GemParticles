@@ -131,6 +131,9 @@
     <ClInclude Include="src\particle_system_interface.hh">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\particle_core_data.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.comp">

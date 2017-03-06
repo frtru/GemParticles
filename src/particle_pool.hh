@@ -32,6 +32,7 @@
 
 #include "glm/glm.hpp"
 
+#include "particle_core_data.hh"
 #include "macro_definitions.hh"
 
 namespace gem {
@@ -46,16 +47,8 @@ public:
   * This prevents (de)allocation of particles or using a list of some sort
   * as suggested here http://gameprogrammingpatterns.com/object-pool.html.
   */
+  std::unique_ptr<ParticleCoreData> pCoreData;
 
-  // TODO: See if alpha is really required here.
-  // Every particles of the same system is going
-  // to have the same alpha value probably.
-  // It's only 1 byte though and for alignement
-  // it might be useful to keep it.
-  std::unique_ptr<float[]       > m_lifetime;
-  std::unique_ptr<glm::u8vec4[] >	m_color;
-  std::unique_ptr<glm::f32vec3[]>	m_position;
-  std::unique_ptr<glm::f32vec3[]>	m_velocity;
 public:
   ParticlePool() = delete;
   explicit ParticlePool(std::size_t a_unMaxParticleCount);
