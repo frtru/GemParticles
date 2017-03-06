@@ -35,9 +35,6 @@ void Init() {
 
 void Terminate() {
   std::call_once(terminate_flag,[&](){
-    for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
-      m_pSystems->at(i)->Terminate();
-    }
     delete m_pSystems;
   });
 }
@@ -66,7 +63,6 @@ void GetSystemByName(const std::string& a_szSystemName) {
 }
 
 void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem) {
-  a_pSystem->Init();
   m_pSystems->push_back(std::move(a_pSystem));
 }
 

@@ -22,25 +22,15 @@ namespace gem {
 namespace particle {
 class GLRenderer : public Renderer {
 public:
-  GLRenderer();
+  GLRenderer(const std::shared_ptr<ParticlePool> &a_pPool);
   virtual ~GLRenderer();
 
-  virtual void Init(const std::shared_ptr<ParticlePool> & a_pPool) override;
-  virtual void Terminate() override;
-  virtual void Update() = 0;
-  virtual void Render() = 0;
-
-private:
-  virtual void InitImpl();
-  virtual void TerminateImpl();
+  virtual void Update(const std::shared_ptr<ParticlePool> &a_pPool) = 0;
+  virtual void Render(const std::shared_ptr<ParticlePool> &a_pPool) = 0;
 
 protected:
   GLuint m_vertexArrayID;   //VAO
   GLuint m_vertexBufferID;  //VBO
-
-private:
-  bool m_bInitFlag;
-
 }; /* class GLRenderer */
 } /* namespace particle */
 } /* namespace gem */

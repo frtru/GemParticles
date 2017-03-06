@@ -24,8 +24,6 @@ namespace particle {
 class Emitter;
 class Dynamic;
 
-// TODO: Could maybe try to have template metaprogrammed
-// Component and Renderer?
 class IParticleSystem {
   DECLARE_UNCOPYABLE(IParticleSystem)
   DECLARE_MOVABLE(IParticleSystem)
@@ -35,9 +33,6 @@ public:
 
   virtual void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) = 0;
   virtual void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) = 0;
-
-  virtual void Init() = 0;
-  virtual void Terminate() = 0;
 
   virtual void Update(double a_dt) = 0;
   virtual void Render() = 0;

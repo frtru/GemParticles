@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "particle_system.hh"
+/*#include "particle_system.hh"
 
 #include "euler_particle_updater.hh"
 
@@ -62,7 +62,7 @@ void ParticleSystem::Update(double a_dt) {
 }
 void ParticleSystem::Render() {
   m_pRenderer->Render();
-}
-} /* namespace particle */
-} /* namespace gem */
+}*/
+//} /* namespace particle */
+//} /* namespace gem */
 

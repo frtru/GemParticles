@@ -24,6 +24,7 @@
 #include "camera.hh"
 #include "event_handler.hh"
 #include "cpu_particle_module.hh"
+#include "particle_system_interface.hh"
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
@@ -72,10 +73,7 @@ void Init() {
   // Particle system initialization
   cpu_particle_module::Init();
   std::unique_ptr<IParticleSystem> wParticleSystem = 
-    std::make_unique<ParticleSystem>(1000000,
-	  std::make_unique<SimpleGLRenderer>(),
-	  "OBVIOUSLY_TEMPORARY"
-  );
+    std::make_unique<ParticleSystem<SimpleGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
   cpu_particle_module::AddSystem(std::move(wParticleSystem));
