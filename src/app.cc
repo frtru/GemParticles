@@ -27,6 +27,7 @@
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
+#include "particle_system.hh"
 #include "simple_opengl_renderer.hh"
 #include "rain_emitter.hh"
 #include "gravity_acceleration.hh"
@@ -48,8 +49,8 @@ void Init() {
 
   // Shaders initialization
   shader_manager::Init();
-  shader_manager::LoadFromFile(GL_VERTEX_SHADER,   ".shaders/default.vert");
-  shader_manager::LoadFromFile(GL_FRAGMENT_SHADER, ".shaders/default.frag");
+  shader_manager::LoadFromFile(GL_VERTEX_SHADER,   "shaders/default.vert");
+  shader_manager::LoadFromFile(GL_FRAGMENT_SHADER, "shaders/default.frag");
   
   shader_manager::CreateAndLink();
   shader_manager::Bind();
@@ -70,12 +71,13 @@ void Init() {
 
   // Particle system initialization
   cpu_particle_module::Init();
-  ParticleSystem wParticleSystem(1000000,
+  std::unique_ptr<IParticleSystem> wParticleSystem = 
+    std::make_unique<ParticleSystem>(1000000,
 	  std::make_unique<SimpleGLRenderer>(),
 	  "OBVIOUSLY_TEMPORARY"
   );
-  wParticleSystem.AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem.AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
+  wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
+  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
   cpu_particle_module::AddSystem(std::move(wParticleSystem));
 }
 

@@ -24,19 +24,19 @@ namespace cpu_particle_module {
 namespace {
 std::once_flag init_flag;
 std::once_flag terminate_flag;
-std::vector<ParticleSystem> *m_pSystems;
+std::vector<std::unique_ptr<IParticleSystem> > *m_pSystems;
 }
 
 void Init() {
   std::call_once(init_flag,[&](){
-    m_pSystems = new std::vector<ParticleSystem>();
+    m_pSystems = new std::vector<std::unique_ptr<IParticleSystem> >();
   });
 }
 
 void Terminate() {
   std::call_once(terminate_flag,[&](){
     for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
-      m_pSystems->at(i).Terminate();
+      m_pSystems->at(i)->Terminate();
     }
     delete m_pSystems;
   });
@@ -50,8 +50,8 @@ void Update(double a_dt) {
   // alter performance. Should we just use the index
   // based loop?
   for (std::size_t i = 0; i < m_pSystems->size(); ++i) {
-    m_pSystems->at(i).Update(a_dt);
-    m_pSystems->at(i).Render();
+    m_pSystems->at(i)->Update(a_dt);
+    m_pSystems->at(i)->Render();
   }
 }
 
@@ -65,9 +65,9 @@ void GetSystemByName(const std::string& a_szSystemName) {
   */
 }
 
-void AddSystem(ParticleSystem &&a_rSystem) {
-  a_rSystem.Init();
-  m_pSystems->push_back(std::move(a_rSystem));
+void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem) {
+  a_pSystem->Init();
+  m_pSystems->push_back(std::move(a_pSystem));
 }
 
 void RemoveSystem(const std::string& a_szSystemName) {

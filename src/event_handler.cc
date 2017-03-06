@@ -17,7 +17,7 @@
 #include <mutex>
 
 
-#ifndef LINUX
+#ifdef LINUX
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #else

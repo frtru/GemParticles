@@ -17,6 +17,7 @@
 #include <vector>
 #include <memory>
 
+#include "particle_system_interface.hh"
 #include "renderer.hh"
 #include "emitter.hh"
 #include "dynamic.hh"
@@ -26,7 +27,7 @@ namespace gem {
 namespace particle {
 // TODO: Could maybe try to have template metaprogrammed
 // Component and Renderer?
-class ParticleSystem {
+class ParticleSystem : public IParticleSystem{
   DECLARE_UNCOPYABLE(ParticleSystem)
   DECLARE_MOVABLE(ParticleSystem)
 public:
@@ -34,15 +35,12 @@ public:
 	std::size_t a_unMaxParticleCount,
     std::unique_ptr<Renderer> &&a_pRenderer,
     std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")));
-  ~ParticleSystem() = default;
+  virtual ~ParticleSystem() = default;
 
-  const std::shared_ptr<ParticlePool>& GetParticles() const {
-	  return m_pParticlePool;
-  }
-  void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) {
+  inline void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) {
 	  m_vEmitters.push_back(std::move(a_pEmitter));
   }
-  void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) {
+  inline void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) {
 	  m_vDynamics.push_back(std::move(a_pDynamic));
   }
 

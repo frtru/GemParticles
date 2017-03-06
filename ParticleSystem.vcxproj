@@ -53,6 +53,7 @@
     <ClInclude Include="src\opengl_renderer.hh" />
     <ClInclude Include="src\cpu_particle_module.hh" />
     <ClInclude Include="src\particle_system.hh" />
+    <ClInclude Include="src\particle_system_interface.hh" />
     <ClInclude Include="src\rain_emitter.hh" />
     <ClInclude Include="src\random_fountain_emitter.hh" />
     <ClInclude Include="src\renderer.hh" />

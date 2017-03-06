@@ -14,7 +14,7 @@
 #ifndef OPENGL_CONTEXT_HH
 #define OPENGL_CONTEXT_HH
 
-#ifndef LINUX
+#ifdef LINUX
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #else
