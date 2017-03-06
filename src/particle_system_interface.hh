@@ -21,18 +21,12 @@
 
 namespace gem {
 namespace particle {
-class Emitter;
-class Dynamic;
-
 class IParticleSystem {
   DECLARE_UNCOPYABLE(IParticleSystem)
   DECLARE_MOVABLE(IParticleSystem)
 public:
   IParticleSystem() = default;
   virtual ~IParticleSystem() = default;
-
-  virtual void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) = 0;
-  virtual void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) = 0;
 
   virtual void Update(double a_dt) = 0;
   virtual void Render() = 0;

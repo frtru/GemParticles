@@ -60,10 +60,10 @@ public:
     return *this;
   }
 
-  virtual inline void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) {
+  inline void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) {
 	  m_vEmitters.push_back(std::move(a_pEmitter));
   }
-  virtual inline void AddDynamic(std::unique_ptr<Dynamic> a_pDynamic) {
+  inline void AddDynamic(std::unique_ptr<Dynamic<ParticlePoolType> > a_pDynamic) {
 	  m_vDynamics.push_back(std::move(a_pDynamic));
   }
 
@@ -83,11 +83,11 @@ public:
   }
 
 private:
-  std::string                             m_sSystemName;
-  std::shared_ptr<ParticlePoolType>       m_pParticlePool;
-  std::unique_ptr<RendererType>           m_pRenderer;
-  std::vector<std::unique_ptr<Emitter> >	m_vEmitters;
-  std::vector<std::unique_ptr<Dynamic> >	m_vDynamics;
+  std::string                                               m_sSystemName;
+  std::shared_ptr<ParticlePoolType>                         m_pParticlePool;
+  std::unique_ptr<RendererType>                             m_pRenderer;
+  std::vector<std::unique_ptr<Emitter> >	                  m_vEmitters;
+  std::vector<std::unique_ptr<Dynamic<ParticlePoolType> > >	m_vDynamics;
 }; /* class ParticleSystem */
 } /* namespace particle */
 } /* namespace gem */

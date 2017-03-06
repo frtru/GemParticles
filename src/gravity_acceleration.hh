@@ -15,10 +15,11 @@
 #define GLOBAL_ACCELERATION_HH
 
 #include "dynamic.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class GravityAcceleration : public Dynamic {
+class GravityAcceleration : public Dynamic<ParticlePoolCore> {
 private:
   static const glm::f32vec3 GRAVITY_ACCEL;
 public:

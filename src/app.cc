@@ -72,7 +72,7 @@ void Init() {
 
   // Particle system initialization
   cpu_particle_module::Init();
-  std::unique_ptr<IParticleSystem> wParticleSystem = 
+  std::unique_ptr<ParticleSystem<SimpleGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<SimpleGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));

@@ -15,10 +15,11 @@
 #define EULER_PARTICLE_UPDATER
 
 #include "dynamic.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class EulerParticleUpdater : public Dynamic {
+class EulerParticleUpdater : public Dynamic<ParticlePoolCore> {
 public:
   EulerParticleUpdater() = default;
   ~EulerParticleUpdater() = default;

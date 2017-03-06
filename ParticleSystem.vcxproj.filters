@@ -28,18 +28,12 @@
     <ClCompile Include="src\opengl_renderer.cc">
       <Filter>Renderers</Filter>
     </ClCompile>
-    <ClCompile Include="src\particle_pool.cc">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\app.cc" />
     <ClCompile Include="src\camera.cc" />
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\event_handler.cc" />
-    <ClCompile Include="src\particle_system.cc">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\shader.cc">
       <Filter>Utils</Filter>
     </ClCompile>
