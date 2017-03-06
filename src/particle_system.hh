@@ -24,13 +24,14 @@
 
 namespace gem {
 namespace particle {
-template<typename RendererType>
+template< class RendererType,
+          class ParticlePoolType = ParticlePoolCore>
 class ParticleSystem : public IParticleSystem{
 public:
   explicit ParticleSystem(
 	  std::size_t a_unMaxParticleCount,
     std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
-    : m_pParticlePool(std::make_shared<ParticlePool>(a_unMaxParticleCount)),
+    : m_pParticlePool(std::make_shared<ParticlePoolType>(a_unMaxParticleCount)),
       m_pRenderer(std::make_unique<RendererType>(m_pParticlePool)),
       m_sSystemName(std::move(a_sSystemName)) {
     // TODO: Remove the following, because when we'll
@@ -82,9 +83,9 @@ public:
   }
 
 private:
-  std::string                               m_sSystemName;
-  std::shared_ptr<ParticlePool>             m_pParticlePool;
-  std::unique_ptr<RendererType>             m_pRenderer;
+  std::string                             m_sSystemName;
+  std::shared_ptr<ParticlePoolType>       m_pParticlePool;
+  std::unique_ptr<RendererType>           m_pRenderer;
   std::vector<std::unique_ptr<Emitter> >	m_vEmitters;
   std::vector<std::unique_ptr<Dynamic> >	m_vDynamics;
 }; /* class ParticleSystem */

@@ -44,7 +44,7 @@ RandomFountainEmitter::RandomFountainEmitter(const glm::f32vec3& a_spawnLocation
   a_fLifetime,
   a_dEmissionRate) {}
 
-void RandomFountainEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+void RandomFountainEmitter::Init(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     a_pPool->pCoreData->m_velocity[i] = RandomCircularVelocity();

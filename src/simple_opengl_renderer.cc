@@ -19,7 +19,7 @@
 #include <iostream>
 namespace gem {
 namespace particle {
-SimpleGLRenderer::SimpleGLRenderer(const std::shared_ptr<ParticlePool> & a_pPool)
+SimpleGLRenderer::SimpleGLRenderer(const std::shared_ptr<ParticlePoolCore> & a_pPool)
   : GLRenderer(a_pPool){
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
@@ -62,7 +62,7 @@ SimpleGLRenderer::~SimpleGLRenderer() {
   }
 }
 
-void SimpleGLRenderer::Update(const std::shared_ptr<ParticlePool> &a_pPool) {
+void SimpleGLRenderer::Update(const std::shared_ptr<ParticlePoolCore> &a_pPool) {
   const std::size_t wActiveParticleCount =
     a_pPool->GetActiveParticleCount();
 
@@ -83,7 +83,7 @@ void SimpleGLRenderer::Update(const std::shared_ptr<ParticlePool> &a_pPool) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 }
-void SimpleGLRenderer::Render(const std::shared_ptr<ParticlePool> &a_pPool) {
+void SimpleGLRenderer::Render(const std::shared_ptr<ParticlePoolCore> &a_pPool) {
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = a_pPool->GetActiveParticleCount();
   if (count > 0) {

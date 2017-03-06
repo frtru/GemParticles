@@ -16,7 +16,7 @@
 
 #include <glm/glm.hpp>
 
-#include "particle_pool.hh"
+#include "particle_pool_core.hh"
 #include "macro_definitions.hh"
 
 namespace gem {
@@ -57,7 +57,7 @@ public:
     m_dEmissionRate = a_dEmissionRate;
   }*/
 
-  void Emit(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool);
+  void Emit(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool);
 
 protected:
   float         m_fLifetime;
@@ -68,7 +68,7 @@ protected:
 private:
   // Private initialization of the particles before emission
   // in the subclasses
-  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) = 0;
 }; /* class Emitter*/
 } /* namespace particle */

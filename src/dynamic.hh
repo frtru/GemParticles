@@ -16,7 +16,7 @@
 
 #include <memory>
 
-#include "particle_pool.hh"
+#include "particle_pool_core.hh"
 #include "macro_definitions.hh"
 
 namespace gem {
@@ -28,7 +28,7 @@ public:
 	Dynamic() = default;
 	virtual ~Dynamic() = default;
 
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) = 0;
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool) = 0;
 }; /* class Dynamic*/
 } /* namespace particle */
 } /* namespace gem */

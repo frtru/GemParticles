@@ -20,11 +20,11 @@ namespace gem {
 namespace particle {
 class SimpleGLRenderer : public GLRenderer {
 public:
-  SimpleGLRenderer(const std::shared_ptr<ParticlePool> &a_pPool);
+  SimpleGLRenderer(const std::shared_ptr<ParticlePoolCore> &a_pPool);
   virtual ~SimpleGLRenderer();
 
-  virtual void Update(const std::shared_ptr<ParticlePool> &a_pPool) override;
-  virtual void Render(const std::shared_ptr<ParticlePool> &a_pPool) override;
+  virtual void Update(const std::shared_ptr<ParticlePoolCore> &a_pPool) override;
+  virtual void Render(const std::shared_ptr<ParticlePoolCore> &a_pPool) override;
 private:
   // An extra buffer for color
   GLuint  m_colorVBOID;

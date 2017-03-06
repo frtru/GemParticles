@@ -27,7 +27,7 @@ public:
 
 	// TODO: Copyable and moveable?<
 
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) override;
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool) override;
 }; /* class EulerParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */

@@ -54,11 +54,9 @@ set(SOURCE_FILES
         src/opengl_context.hh
         src/opengl_renderer.cc
         src/opengl_renderer.hh
-        src/particle.hh
         src/particle_core_data.cc
-        src/particle_pool.cc
         src/particle_pool.hh
-        src/particle_system.cc
+        src/particle_pool_core.hh
         src/particle_system.hh
         src/particle_system_interface.hh
         src/rain_source.cc

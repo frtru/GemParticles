@@ -16,7 +16,7 @@
 
 #include <memory>
 
-#include "particle_pool.hh"
+#include "particle_pool_core.hh"
 #include "macro_definitions.hh"
 // TODO: Find a way like fenbf did for the billboard,
 // glpoint, bool useQuads thingy...
@@ -31,8 +31,8 @@ public:
 	virtual ~Renderer() = default;
 
 protected:
-  virtual void Update(const std::shared_ptr<ParticlePool> &a_pPool) = 0;
-  virtual void Render(const std::shared_ptr<ParticlePool> &a_pPool) = 0;
+  virtual void Update(const std::shared_ptr<ParticlePoolCore> &a_pPool) = 0;
+  virtual void Render(const std::shared_ptr<ParticlePoolCore> &a_pPool) = 0;
 }; /* class Renderer*/
 } /* namespace particle */
 } /* namespace gem */

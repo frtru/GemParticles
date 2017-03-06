@@ -24,10 +24,8 @@ public:
   RainEmitter(float a_fLifetime, double a_dEmissionRate);
 	~RainEmitter() = default;
 
-  // TODO: Copyable and moveable?<
-
 private:
-  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePoolCore>& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
 }; /* class RandomFountainEmitter*/
 } /* namespace particle */
