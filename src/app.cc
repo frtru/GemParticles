@@ -47,9 +47,9 @@ void Init() {
   graphic_context->Init();
 
   // Shaders initialization
-  ShaderManager::Init();
-  ShaderManager::LoadFromFile(GL_VERTEX_SHADER,   "../shaders/default.vert");
-  ShaderManager::LoadFromFile(GL_FRAGMENT_SHADER, "../shaders/default.frag");
+  shader_manager::Init();
+  shader_manager::LoadFromFile(GL_VERTEX_SHADER,   ".shaders/default.vert");
+  shader_manager::LoadFromFile(GL_FRAGMENT_SHADER, ".shaders/default.frag");
   
   shader_manager::CreateAndLink();
   shader_manager::Bind();
