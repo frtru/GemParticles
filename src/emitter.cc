@@ -14,7 +14,7 @@
 #include "emitter.hh"
 
 #include <algorithm>
-
+/*
 namespace gem {
 namespace particle {
 glm::f32vec3 const Emitter::ORIGIN           = { 0.0f, 0.0f, 0.0f };
@@ -73,5 +73,5 @@ void Emitter::Emit(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles
     a_pPool->Wake(i);
   }
 }
-} /* namespace particle */
-} /* namespace gem */
+//} /* namespace particle */
+//} /* namespace gem */

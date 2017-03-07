@@ -15,10 +15,11 @@
 #define FOUNTAIN_EMITTER_HH
 
 #include "emitter.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class RandomFountainEmitter : public Emitter {
+class RandomFountainEmitter : public Emitter<CoreParticles> {
 public:
   RandomFountainEmitter() = default; // Can be defaulted to base default constructor
   RandomFountainEmitter(

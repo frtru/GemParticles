@@ -15,10 +15,11 @@
 #define BASIC_STREAM_EMITTER_HH
 
 #include "emitter.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class BasicStreamEmitter : public Emitter {
+class BasicStreamEmitter : public Emitter<CoreParticles> {
 public:
   BasicStreamEmitter();
   BasicStreamEmitter(

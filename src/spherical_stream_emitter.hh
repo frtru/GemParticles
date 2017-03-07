@@ -15,10 +15,11 @@
 #define FOUNTAIN_EMITTER_HH
 
 #include "emitter.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class SphericalStreamEmitter : public Emitter {
+class SphericalStreamEmitter : public Emitter<CoreParticles> {
 public:
   SphericalStreamEmitter() = default; // Can be defaulted to base default constructor
   SphericalStreamEmitter(
@@ -31,7 +32,7 @@ public:
 private:
   virtual void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
-}; /* class RandomFountainEmitter*/
+}; /* class SphericalStreamEmitter */
 } /* namespace particle */
 } /* namespace gem */
 

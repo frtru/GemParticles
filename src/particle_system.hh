@@ -61,7 +61,7 @@ public:
     return *this;
   }
 
-  inline void AddEmitter(std::unique_ptr<Emitter> a_pEmitter) {
+  inline void AddEmitter(std::unique_ptr<Emitter<ParticleType> > a_pEmitter) {
 	  m_vEmitters.push_back(std::move(a_pEmitter));
   }
   inline void AddDynamic(std::unique_ptr<Dynamic<ParticleType> > a_pDynamic) {
@@ -86,7 +86,7 @@ public:
 private:
   std::string                                               m_sSystemName;
   std::shared_ptr<ParticlePool<ParticleType> >              m_pParticlePool;
-  std::vector<std::unique_ptr<Emitter> >	                  m_vEmitters;
+  std::vector<std::unique_ptr<Emitter<ParticleType> > >	    m_vEmitters;
   std::vector<std::unique_ptr<Dynamic<ParticleType> > >	    m_vDynamics;
   std::unique_ptr<RendererType>                             m_pRenderer;
 }; /* class ParticleSystem */
