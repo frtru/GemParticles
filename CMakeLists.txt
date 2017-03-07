@@ -34,45 +34,8 @@ if(glfw3_FOUND)
 endif()
 
 set(SOURCE_FILES
-        src/app.cc
-        src/app.hh
-        src/basic_stream_source.cc
-        src/basic_stream_source.hh
-        src/camera.cc
-        src/camera.hh
-        src/default_dynamic.cc
-        src/default_dynamic.hh
-        src/dynamic.hh
-        src/event_handler.cc
-        src/event_handler.hh
-        src/global_acceleration.cc
-        src/global_acceleration.hh
-        src/graphic_context.cc
-        src/graphic_context.hh
-        src/main.cc
-        src/opengl_context.cc
-        src/opengl_context.hh
-        src/opengl_renderer.cc
-        src/opengl_renderer.hh
-        src/particle_core_data.cc
-        src/particle_pool.hh
-        src/particle_pool_core.hh
-        src/particle_system.hh
-        src/particle_system_interface.hh
-        src/rain_source.cc
-        src/rain_source.hh
-        src/random_fountain_source.cc
-        src/random_fountain_source.hh
-        src/renderer.hh
-        src/shader.cc
-        src/shader.hh
-        src/source.cc
-        src/source.hh
-        src/spherical_stream_source.cc
-        src/spherical_stream_source.hh
-        src/stub_renderer.cc
-        src/stub_renderer.hh
-        src/timer.hh)
+        src/*.cc
+        src/*.hh)
 
 add_executable(GemParticles ${SOURCE_FILES})
 
