@@ -17,10 +17,11 @@
 #include <GL/glew.h>
 
 #include "renderer.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class GLRenderer : public Renderer {
+class GLRenderer : public Renderer<CoreParticles> {
 public:
   GLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
   virtual ~GLRenderer();

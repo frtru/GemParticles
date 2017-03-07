@@ -16,13 +16,14 @@
 
 #include <memory>
 
-#include "particle_pool_core.hh"
+#include "particle_pool.hh"
 #include "macro_definitions.hh"
 // TODO: Find a way like fenbf did for the billboard,
 // glpoint, bool useQuads thingy...
 
 namespace gem {
 namespace particle {
+template <class ParticleType>
 class Renderer {
   DECLARE_UNCOPYABLE(Renderer)
   DECLARE_UNMOVABLE(Renderer)
@@ -31,8 +32,8 @@ public:
 	virtual ~Renderer() = default;
 
 protected:
-  virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) = 0;
-  virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) = 0;
+  virtual void Update(const std::shared_ptr<ParticlePool<ParticleType> > &a_pPool) = 0;
+  virtual void Render(const std::shared_ptr<ParticlePool<ParticleType> > &a_pPool) = 0;
 }; /* class Renderer*/
 } /* namespace particle */
 } /* namespace gem */
