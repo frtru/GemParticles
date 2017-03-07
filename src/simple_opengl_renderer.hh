@@ -18,23 +18,16 @@
 
 namespace gem {
 namespace particle {
-// TODO: Rename this for something different than stub...
-// something like basic or debug
 class SimpleGLRenderer : public GLRenderer {
 public:
-  SimpleGLRenderer();
-  virtual ~SimpleGLRenderer() = default;
+  SimpleGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
+  virtual ~SimpleGLRenderer();
 
-  virtual void Update() override;
-  virtual void Render() override;
-
+  virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
+  virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
 private:
-  virtual void InitImpl() override;
-  virtual void TerminateImpl() override;
-
   // An extra buffer for color
   GLuint  m_colorVBOID;
-
 }; /* class SimpleGLRenderer*/
 } /* namespace particle */
 } /* namespace gem */

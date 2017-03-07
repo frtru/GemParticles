@@ -20,83 +20,50 @@
 
 namespace gem {
 namespace particle {
-GLRenderer::GLRenderer()
- : m_bInitFlag(false) {
+GLRenderer::GLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool){
+	// VAO initialization
+	glGenVertexArrays(1, &m_vertexArrayID);
+	std::cout << "GLRenderer::GLRenderer -> Generated VAO ID = ";
+	std::cout << m_vertexArrayID << std::endl;
+	glBindVertexArray(m_vertexArrayID);
+	std::cout << "GLRenderer::GLRenderer -> Allocated array memory for ID = ";
+	std::cout << m_vertexArrayID << std::endl;
+
+	// VBO initialization
+	glGenBuffers(1, &m_vertexBufferID);
+	std::cout << "GLRenderer::GLRenderer -> Generated vertex VBO ID = ";
+	std::cout << m_vertexBufferID << std::endl;
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
+	std::cout << "GLRenderer::GLRenderer -> Allocated buffer memory for ID = ";
+	std::cout << m_vertexBufferID << std::endl;
+
+	const std::size_t wParticleCount = a_pPool->GetParticleCount();
+
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(glm::f32vec3)*wParticleCount,
+		a_pPool->pCoreData->m_position.get(),
+		GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+
+	if (GL_ARB_vertex_attrib_binding) {
+		glBindVertexBuffer(0, m_vertexBufferID, 0, sizeof(glm::f32vec3));
+		glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
+		glVertexAttribBinding(0, 0);
+	}
+	else {
+		glVertexAttribPointer(
+			0, 3,
+			GL_FLOAT, GL_FALSE,
+			sizeof(glm::f32vec3), (void *)0);
+	}
 }
 
 GLRenderer::~GLRenderer() {
-  Terminate();
-}
-
-void GLRenderer::Init(const std::shared_ptr<ParticlePool> & a_pPool) {
-  if (!m_bInitFlag) {
-    // VAO initialization
-    glGenVertexArrays(1, &m_vertexArrayID);
-    std::cout << "GLRenderer::Init -> Generated VAO ID = ";
-    std::cout << m_vertexArrayID << std::endl;
-    glBindVertexArray(m_vertexArrayID);
-    std::cout << "GLRenderer::Init -> Allocated array memory for ID = ";
-    std::cout << m_vertexArrayID << std::endl;
-
-    // VBO initialization
-    glGenBuffers(1, &m_vertexBufferID);
-    std::cout << "GLRenderer::Init -> Generated vertex VBO ID = ";
-    std::cout << m_vertexBufferID << std::endl;
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
-    std::cout << "GLRenderer::Init -> Allocated buffer memory for ID = ";
-    std::cout << m_vertexBufferID << std::endl;
-
-    m_pParticlePool = a_pPool;
-
-    const std::size_t wParticleCount = m_pParticlePool->GetParticleCount();
-
-    glBufferData(GL_ARRAY_BUFFER,
-      sizeof(glm::f32vec3)*wParticleCount,
-      m_pParticlePool->m_position.get(),
-      GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-
-    if (GL_ARB_vertex_attrib_binding) {
-      glBindVertexBuffer(0, m_vertexBufferID, 0, sizeof(glm::f32vec3));
-      glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
-      glVertexAttribBinding(0, 0);
-    }
-    else {
-      glVertexAttribPointer(
-        0, 3, 
-        GL_FLOAT, GL_FALSE, 
-        sizeof(glm::f32vec3), (void *)0);
-    }
-
-    InitImpl();
-
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    m_bInitFlag = true;
-  }
-  else {
-    std::cerr << "WARNING: GLRenderer::Init-> Renderer already initialized with another particle pool." << std::endl;
-  }
-}
-
-void GLRenderer::InitImpl() {
-}
-
-void GLRenderer::TerminateImpl() {
-}
-
-void GLRenderer::Terminate() {
-  if (m_bInitFlag) {
-    if (m_vertexBufferID != 0) {
-      std::cout << "GLRenderer::Terminate -> Deallocating vertex VBO" << std::endl;
-      glDeleteBuffers(1, &m_vertexBufferID);
-      m_vertexBufferID = 0;
-    }
-    TerminateImpl();
-  }
-  else {
-    std::cerr << "ERROR: GLRenderer::Terminate-> Trying to terminate without prior initialization." << std::endl;
+  if (m_vertexBufferID != 0) {
+	  std::cout << "GLRenderer::~GLRenderer -> Deallocating vertex VBO" << std::endl;
+	  glDeleteBuffers(1, &m_vertexBufferID);
+	  m_vertexBufferID = 0;
   }
 }
 } /* namespace particle */

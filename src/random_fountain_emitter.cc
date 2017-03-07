@@ -44,19 +44,19 @@ RandomFountainEmitter::RandomFountainEmitter(const glm::f32vec3& a_spawnLocation
   a_fLifetime,
   a_dEmissionRate) {}
 
-void RandomFountainEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+void RandomFountainEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_velocity[i] = RandomCircularVelocity();
+    a_pPool->pCoreData->m_velocity[i] = RandomCircularVelocity();
   }
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_position[i] = m_spawnLocation;
+    a_pPool->pCoreData->m_position[i] = m_spawnLocation;
   }
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_lifetime[i] = m_fLifetime;
+    a_pPool->pCoreData->m_lifetime[i] = m_fLifetime;
   }
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_color[i] = FOUNTAIN_COLOR;
+    a_pPool->pCoreData->m_color[i] = FOUNTAIN_COLOR;
   }
 }
 } /* namespace particle */

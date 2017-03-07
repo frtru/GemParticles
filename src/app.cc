@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,11 @@
 #include "camera.hh"
 #include "event_handler.hh"
 #include "cpu_particle_module.hh"
+#include "particle_system_interface.hh"
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
+#include "particle_system.hh"
 #include "simple_opengl_renderer.hh"
 #include "rain_emitter.hh"
 #include "gravity_acceleration.hh"
@@ -70,12 +72,10 @@ void Init() {
 
   // Particle system initialization
   cpu_particle_module::Init();
-  ParticleSystem wParticleSystem(1000000,
-	  std::make_unique<SimpleGLRenderer>(),
-	  "OBVIOUSLY_TEMPORARY"
-  );
-  wParticleSystem.AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem.AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
+  std::unique_ptr<ParticleSystem<SimpleGLRenderer> > wParticleSystem =
+    std::make_unique<ParticleSystem<SimpleGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
+  wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
+  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
   cpu_particle_module::AddSystem(std::move(wParticleSystem));
 }
 

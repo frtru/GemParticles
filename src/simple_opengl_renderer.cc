@@ -19,24 +19,21 @@
 #include <iostream>
 namespace gem {
 namespace particle {
-SimpleGLRenderer::SimpleGLRenderer(){
-  // TODO: Wtf?
-  Renderer::m_pParticlePool = nullptr;
-}
-void SimpleGLRenderer::InitImpl() {
+SimpleGLRenderer::SimpleGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool)
+  : GLRenderer(a_pPool){
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
-  std::cout << "SimpleOpenGLRenderer::InitImpl -> Generated color VBO ID = ";
+  std::cout << "SimpleOpenGLRenderer::SimpleGLRenderer -> Generated color VBO ID = ";
   std::cout << m_colorVBOID << std::endl;
   glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
-  std::cout << "SimpleOpenGLRenderer::InitImpl -> Allocated buffer memory for ID = ";
+  std::cout << "SimpleOpenGLRenderer::SimpleGLRenderer -> Allocated buffer memory for ID = ";
   std::cout << m_colorVBOID << std::endl;
 
-  const std::size_t wParticleCount = m_pParticlePool->GetParticleCount();
+  const std::size_t wParticleCount = a_pPool->GetParticleCount();
 
   glBufferData(GL_ARRAY_BUFFER,
     sizeof(glm::u8vec4)*wParticleCount,
-    m_pParticlePool->m_color.get(),
+    a_pPool->pCoreData->m_color.get(),
     GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
@@ -52,19 +49,22 @@ void SimpleGLRenderer::InitImpl() {
       GL_UNSIGNED_BYTE, GL_FALSE,
       sizeof(glm::u8vec4), (void *)0);
   }
-
+  // TODO: See if following is really necessary
+  glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
-void SimpleGLRenderer::TerminateImpl() {
+
+SimpleGLRenderer::~SimpleGLRenderer() {
   if (m_colorVBOID != 0) {
-    std::cout << "SimpleOpenGLRenderer::TerminateImpl -> Deallocating color VBO" << std::endl;
+    std::cout << "SimpleOpenGLRenderer::~SimpleOpenGLRenderer -> Deallocating color VBO" << std::endl;
     glDeleteBuffers(1, &m_colorVBOID);
     m_colorVBOID = 0;
   }
 }
-void SimpleGLRenderer::Update() {
+
+void SimpleGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
   const std::size_t wActiveParticleCount =
-    m_pParticlePool->GetActiveParticleCount();
+    a_pPool->GetActiveParticleCount();
 
   // TODO: See if the "if" branching is even necessary here
   // (test performance)
@@ -73,19 +73,19 @@ void SimpleGLRenderer::Update() {
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 
-      m_pParticlePool->m_position.get());
+      a_pPool->pCoreData->m_position.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
     glBufferSubData(GL_ARRAY_BUFFER, 0,
       sizeof(glm::u8vec4)*wActiveParticleCount,
-      m_pParticlePool->m_color.get());
+      a_pPool->pCoreData->m_color.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 }
-void SimpleGLRenderer::Render() {
+void SimpleGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
   glBindVertexArray(m_vertexArrayID);
-  const std::size_t count = m_pParticlePool->GetActiveParticleCount();
+  const std::size_t count = a_pPool->GetActiveParticleCount();
   if (count > 0) {
     glDrawArrays(GL_POINTS, 0, (GLsizei)count); // TODO: Put something to change the points for quads as desired
   }

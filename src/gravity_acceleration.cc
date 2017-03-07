@@ -17,13 +17,13 @@ namespace gem {
 namespace particle {
 const glm::f32vec3 GravityAcceleration::GRAVITY_ACCEL = { 0.0f,-9.80665f,0.0f };
 
-void GravityAcceleration::Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) {
+void GravityAcceleration::Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) {
   // TODO: Deal with the delta double precision casted to float later
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
   const float fDt = (float)a_dt;
 
   for (int i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->m_velocity[i] += GRAVITY_ACCEL * fDt;
+    a_pPool->pCoreData->m_velocity[i] += GRAVITY_ACCEL * fDt;
   }
 }
 } /* namespace particle */

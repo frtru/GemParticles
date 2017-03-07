@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 FranÃ§ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,26 +11,27 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLOBAL_ACCELERATION_HH
-#define GLOBAL_ACCELERATION_HH
+#ifndef PARTICLE_SYSTEM_INTERFACE_HH
+#define PARTICLE_SYSTEM_INTERFACE_HH
 
-#include "dynamic.hh"
-#include "particle_pool_core.hh"
+#include <memory>
+#include <string>
+
+#include "macro_definitions.hh"
 
 namespace gem {
 namespace particle {
-class GravityAcceleration : public Dynamic<CoreParticles> {
-private:
-  static const glm::f32vec3 GRAVITY_ACCEL;
+class IParticleSystem {
+  DECLARE_UNCOPYABLE(IParticleSystem)
+  DECLARE_MOVABLE(IParticleSystem)
 public:
-  GravityAcceleration() = default;
-  ~GravityAcceleration() = default;
+  IParticleSystem() = default;
+  virtual ~IParticleSystem() = default;
 
-	// TODO: Copyable and moveable?<
-
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
-}; /* class EulerParticleUpdater*/
+  virtual void Update(double a_dt) = 0;
+  virtual void Render() = 0;
+}; /* class IParticleSystem */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: GLOBAL_ACCELERATION_HH */
+#endif /* end of include guard: PARTICLE_SYSTEM_INTERFACE_HH */
