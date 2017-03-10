@@ -14,14 +14,9 @@
 #ifndef OPENGL_CONTEXT_HH
 #define OPENGL_CONTEXT_HH
 
-#ifndef LINUX
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#else
-#include <gl/glew.h>
-#include <gl/glfw3.h>
-#endif
-
 #include "graphic_context.hh"
 
 // TODO: Should the shadermanager initialization be 
