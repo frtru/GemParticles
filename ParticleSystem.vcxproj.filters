@@ -58,6 +58,7 @@
     <ClCompile Include="src\core_opengl_renderer.cc">
       <Filter>Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="src\scene.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -122,6 +123,7 @@
     <ClInclude Include="src\core_opengl_renderer.hh">
       <Filter>Renderers</Filter>
     </ClInclude>
+    <ClInclude Include="src\scene.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.comp">
@@ -140,6 +142,9 @@
       <Filter>Resource files\Shaders</Filter>
     </None>
     <None Include="shaders\default.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\debug_axes.vert">
       <Filter>Resource files\Shaders</Filter>
     </None>
   </ItemGroup>

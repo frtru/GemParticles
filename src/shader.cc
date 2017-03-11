@@ -27,16 +27,16 @@ namespace {
 // For each program ID, we have a list of
 // compiled/link shader sources
 GLuint                                              current_program;
-std::map<GLuint, std::vector< GLuint > >            shader_programs;     
-std::map<GLuint, std::string>                       compiled_shaders;
+std::map<GLuint, std::vector<std::string> >         shader_programs;
 std::vector<GLuint>                                 compilation_cache;
+std::vector<std::string>                            compilation_sources;
 
 std::map<GLuint, std::map<std::string, GLuint> >    attrib_list;
 std::map<GLuint, std::map<std::string, GLuint> >    uniform_location_list;
 std::map<GLuint, GLuint >                           uniform_block_list;
 
-std::once_flag                    init_flag;
-std::once_flag                    terminate_flag;
+std::once_flag init_flag;
+std::once_flag terminate_flag;
 }
 
 void Init() {
@@ -55,28 +55,6 @@ void Terminate() {
       glDeleteBuffers(1, &uniformBlocks.second);
     }
   });
-}
-
-bool AddShader(std::string a_sFileName, GLenum a_eShaderType) {
-  for (auto shader : compiled_shaders) {
-    // If shader file was already compiled
-    if (shader.second == a_sFileName) {
-      // If the compiled shader ID is not already
-      // in compilation cache
-      if (std::count(compilation_cache.begin(),
-        compilation_cache.end(), shader.first) == 0) {
-        compilation_cache.push_back(shader.first);
-        return true;
-      }
-      else {
-        std::cerr << "shader_manager::AddShaderToCompile -> Trying to add multiple times " << std::endl
-          << "compiled shader " << a_sFileName << " into compilation cache. Will ignore instruction..." << std::endl;
-        return false;
-      }
-    }
-  }
-  // First encounter of file a_sFileName, compile it
-  return CompileShaderFile(a_sFileName, a_eShaderType);
 }
 
 bool CompileShaderFile(std::string a_sFileName, GLenum a_eShaderType) {
@@ -117,32 +95,40 @@ bool CompileShaderText(const std::string& a_rShaderText,
     delete[] infoLog;
     return false;
   }
+  compilation_sources.push_back(a_sFileName);
   compilation_cache.push_back(shader);
-  compiled_shaders[shader] = a_sFileName;
   return true;
 }
 
 GLuint CreateProgram() {
   // Check if compilation_cache is not empty before processing
-  if (!compilation_cache.size()) {
+  if (compilation_cache.size() == 0) {
     std::cerr << "shader_manager::CreateProgram -> Trying to create a program from an empty " << std::endl
       << "compilation cache. Returning 0xFFFFFFFF..." << std::endl;
     return 0xFFFFFFFF;
   }
-  // By sorting the compilation cache, we
-  // make sure that every list in shader_programs
-  // is already sorted.
-  std::sort(compilation_cache.begin(), compilation_cache.end());
-  for (auto shader : shader_programs) {
-    // Before creating a new program, we check if cache's
-    // content is already in the shader_programs list
-    if (shader.second == compilation_cache) {
+
+  // Check if compilation_cache and compilation sources
+  // are in sync
+  if (compilation_cache.size() != compilation_sources.size()) {
+    std::cerr << "shader_manager::CreateProgram -> Incompatible sources<->cache sizes." << std::endl
+      << "Returning 0xFFFFFFFF..." << std::endl;
+    return 0xFFFFFFFF;
+  }
+
+  // Check if all compilation_sources are 
+  // already somewhere in a program in shader_programs
+  std::sort(compilation_sources.begin(), compilation_sources.end());
+  for (auto program : shader_programs) {
+    // If sources that are about to be bound to a program
+    // already have one, clear cache/sources and return it
+    if (program.second == compilation_sources) {
       compilation_cache.clear();
-      return shader.first;
+      compilation_sources.clear();
+      return program.first;
     }
   }
-  // At this point, we are facing a new
-  // program cache, create a new program
+
   GLuint programID = glCreateProgram();
   for (GLuint shaderID : compilation_cache) {
     glAttachShader(programID, shaderID);
@@ -168,7 +154,8 @@ GLuint CreateProgram() {
     glDeleteShader(shaderID);
   }
 
-  shader_programs[programID] = compilation_cache;
+  shader_programs[programID] = compilation_sources;
+  compilation_sources.clear();
   compilation_cache.clear();
   return programID;
 }
