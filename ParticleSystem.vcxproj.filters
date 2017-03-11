@@ -25,9 +25,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\opengl_renderer.cc">
-      <Filter>Renderers</Filter>
-    </ClCompile>
     <ClCompile Include="src\app.cc" />
     <ClCompile Include="src\camera.cc" />
     <ClCompile Include="src\graphic_context.cc" />
@@ -36,9 +33,6 @@
     <ClCompile Include="src\event_handler.cc" />
     <ClCompile Include="src\shader.cc">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\emitter.cc">
-      <Filter>Emitters</Filter>
     </ClCompile>
     <ClCompile Include="src\random_fountain_emitter.cc">
       <Filter>Emitters</Filter>
@@ -58,11 +52,11 @@
     <ClCompile Include="src\euler_particle_updater.cc">
       <Filter>Dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="src\simple_opengl_renderer.cc">
-      <Filter>Renderers</Filter>
-    </ClCompile>
     <ClCompile Include="src\cpu_particle_module.cc">
       <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core_opengl_renderer.cc">
+      <Filter>Renderers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -70,9 +64,6 @@
       <Filter>Dynamics</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer.hh">
-      <Filter>Renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\opengl_renderer.hh">
       <Filter>Renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\particle_pool.hh">
@@ -116,9 +107,6 @@
     <ClInclude Include="src\euler_particle_updater.hh">
       <Filter>Dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\simple_opengl_renderer.hh">
-      <Filter>Renderers</Filter>
-    </ClInclude>
     <ClInclude Include="src\cpu_particle_module.hh">
       <Filter>Core</Filter>
     </ClInclude>
@@ -130,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="src\particle_pool_core.hh">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core_opengl_renderer.hh">
+      <Filter>Renderers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

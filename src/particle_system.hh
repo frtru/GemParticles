@@ -61,6 +61,10 @@ public:
     return *this;
   }
 
+  virtual inline std::size_t GetProgramID() const {
+    return m_pRenderer->GetProgramID();
+  }
+
   inline void AddEmitter(std::unique_ptr<Emitter<ParticleType> > a_pEmitter) {
 	  m_vEmitters.push_back(std::move(a_pEmitter));
   }
