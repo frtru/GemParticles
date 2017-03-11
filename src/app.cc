@@ -50,9 +50,6 @@ void Init() {
 
   // Shaders initialization
   shader_manager::Init();
-  shader_manager::AddShader("shaders/default.vert", GL_VERTEX_SHADER);
-  shader_manager::AddShader("shaders/default.frag", GL_FRAGMENT_SHADER);
-  shader_manager::Use(shader_manager::CreateProgram());
 
   // Camera initialization
   camera::Init();

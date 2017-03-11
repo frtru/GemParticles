@@ -13,6 +13,8 @@
 *************************************************************************/
 #include "simple_opengl_renderer.hh"
 
+#include "shader.hh"
+
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
@@ -21,6 +23,10 @@ namespace gem {
 namespace particle {
 SimpleGLRenderer::SimpleGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool)
   : GLRenderer(a_pPool){
+  shader_manager::AddShader("shaders/default.vert", GL_VERTEX_SHADER);
+  shader_manager::AddShader("shaders/default.frag", GL_FRAGMENT_SHADER);
+  m_shaderProgram = shader_manager::CreateProgram();
+
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
   std::cout << "SimpleOpenGLRenderer::SimpleGLRenderer -> Generated color VBO ID = ";
@@ -63,6 +69,7 @@ SimpleGLRenderer::~SimpleGLRenderer() {
 }
 
 void SimpleGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
+  shader_manager::Use(m_shaderProgram);
   const std::size_t wActiveParticleCount =
     a_pPool->GetActiveParticleCount();
 
@@ -84,6 +91,7 @@ void SimpleGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> 
   }
 }
 void SimpleGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
+  shader_manager::Use(m_shaderProgram);
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = a_pPool->GetActiveParticleCount();
   if (count > 0) {

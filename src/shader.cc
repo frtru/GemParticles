@@ -284,8 +284,10 @@ void SetUniformBlockValue(GLuint a_unBindingPoint,
 }
 
 void Use(GLuint a_unProgramID)   { 
-  current_program = a_unProgramID;
-  glUseProgram(current_program);
+  if (a_unProgramID != current_program) {
+    current_program = a_unProgramID;
+    glUseProgram(current_program);
+  }
 }
 
 void Detach() { 

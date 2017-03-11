@@ -28,6 +28,7 @@ public:
 private:
   // An extra buffer for color
   GLuint  m_colorVBOID;
+  GLuint  m_shaderProgram;
 }; /* class SimpleGLRenderer*/
 } /* namespace particle */
 } /* namespace gem */
