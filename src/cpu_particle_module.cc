@@ -13,6 +13,7 @@
 *************************************************************************/
 #include "cpu_particle_module.hh"
 
+#include <algorithm>
 #include <vector>
 #include <map>
 #include <string>
@@ -64,6 +65,11 @@ void GetSystemByName(const std::string& a_szSystemName) {
 
 void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem) {
   m_pSystems->push_back(std::move(a_pSystem));
+  std::sort(m_pSystems->begin(), m_pSystems->end(), [](
+    const std::unique_ptr<IParticleSystem> &l, 
+    const std::unique_ptr<IParticleSystem> &r) {
+      return l->GetProgramID() < r->GetProgramID();
+  });
 }
 
 void RemoveSystem(const std::string& a_szSystemName) {

@@ -26,6 +26,10 @@ public:
   CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
   virtual ~CoreGLRenderer();
 
+  virtual std::size_t GetProgramID() const {
+    return m_shaderProgram;
+  }
+
   virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
   virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
 private:
