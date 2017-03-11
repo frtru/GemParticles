@@ -22,8 +22,8 @@
 namespace gem {
 namespace particle {
 CoreGLRenderer::CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
-  shader_manager::AddShader("shaders/default.vert", GL_VERTEX_SHADER);
-  shader_manager::AddShader("shaders/default.frag", GL_FRAGMENT_SHADER);
+  shader_manager::CompileShaderFile("shaders/default.vert", GL_VERTEX_SHADER);
+  shader_manager::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader_manager::CreateProgram();
 
   // VAO initialization

@@ -25,6 +25,7 @@
 #include "event_handler.hh"
 #include "cpu_particle_module.hh"
 #include "particle_system_interface.hh"
+#include "scene.hh"
 
 // TODO: Temporary includes since test suite
 // or factory/builder are not built yet...
@@ -41,6 +42,7 @@ namespace {
 // window management system or 3D API (GLFW/Windows
 // & OpenGL/Direct3D)
 std::shared_ptr<GraphicContext> graphic_context;
+std::shared_ptr<Scene>          scene;
 }
 
 void Init() {
@@ -65,6 +67,10 @@ void Init() {
   // Event handler initialization
   event_handler::Init(graphic_context);
 
+  // Scene initialization
+  scene = std::make_shared<Scene>();
+  scene->SetDebugOption(true);
+
   // Particle system initialization
   cpu_particle_module::Init();
   std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
@@ -74,43 +80,14 @@ void Init() {
   cpu_particle_module::AddSystem(std::move(wParticleSystem));
 }
 
-// TODO: Add that as debugging option in one of the renderers maybe?
-// Definitely not in the renderers, since it would be duplicated
-// in every renderers
-float points[] = {
-  0.0f,0.0f,0.0f,
-  1.0f,0.0f,0.0f,
-  0.0f,0.0f,0.0f,
-  0.0f,1.0f,0.0f,
-  0.0f,0.0f,0.0f,
-  0.0f,0.0f,1.0f
-};
-
 void Run() {
-  GLuint vao = 0;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-  glEnableVertexAttribArray(0);
-
-  GLuint vbo = 0;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(float), points, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
-
-
   while (!graphic_context->PollWindowClosedEvent()) {
-    glBindVertexArray(vao);
-    glDrawArrays(GL_LINES, 0, 2);
-    glDrawArrays(GL_LINES, 2, 2);
-    glDrawArrays(GL_LINES, 4, 2);
-    glBindVertexArray(0);
     std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
-    //TODO: See how UI with anttweakbar goes, but
-    //events subscription should go here if there's any
     double dt = timer::chrono::GetTimeElapsedInSeconds();
-
+    
+    scene->Render();
     cpu_particle_module::Update(dt);    
+    
     graphic_context->Update();
     timer::chrono::Update();
   }

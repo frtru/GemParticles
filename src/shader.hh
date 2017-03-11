@@ -23,7 +23,6 @@ namespace shader_manager {
 void Init();
 void Terminate();
 
-bool AddShader(std::string a_sFileName, GLenum a_eShaderType);
 bool CompileShaderFile(std::string a_sFileName, GLenum a_eShaderType);
 bool CompileShaderText(const std::string& a_rShaderText, 
   GLenum a_eShaderType, 
