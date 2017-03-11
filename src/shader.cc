@@ -46,8 +46,13 @@ void Init() {
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
+    std::cout << "shader_manager::Terminate -> Deleting shader programs." << std::endl;
     for (auto shader : shader_programs) {
       glDeleteProgram(shader.first);
+    }
+    std::cout << "shader_manager::Terminate -> Deleting UBOs." << std::endl;
+    for (auto uniformBlocks : uniform_block_list) {
+      glDeleteBuffers(1, &uniformBlocks.second);
     }
   });
 }
@@ -210,7 +215,10 @@ void RegisterUniform(std::string a_sUniform, GLuint a_unProgramID) {
 }
 
 // Before OpenGL 4.2 compatible version
-void RegisterGlobalUniformBlock(GLuint a_unBindingPoint, GLuint a_unUBOSize, GLuint a_unProgramID, std::string a_sUniformBlock) {
+void RegisterGlobalUniformBlock(GLuint a_unBindingPoint, 
+  GLuint a_unUBOSize, 
+  GLuint a_unProgramID, 
+  std::string a_sUniformBlock) {
   if (uniform_block_list.count(a_unBindingPoint) == 0) {
 
     GLuint unUniformBlockIndex = glGetUniformBlockIndex(a_unProgramID, a_sUniformBlock.c_str());
@@ -235,7 +243,8 @@ void RegisterGlobalUniformBlock(GLuint a_unBindingPoint, GLuint a_unUBOSize, GLu
 
 // OpenGL 4.2 lets us avoid calling 
 // glGetUniformBlockIndex and glUniformBlockBinding.
-void RegisterGlobalUniformBlock(GLuint a_unBindingPoint, GLuint a_unUBOSize) {
+void RegisterGlobalUniformBlock(GLuint a_unBindingPoint, 
+  GLuint a_unUBOSize) {
   if (uniform_block_list.count(a_unBindingPoint) == 0) {
     GLuint unUBOID;
     glGenBuffers(1, &unUBOID);
