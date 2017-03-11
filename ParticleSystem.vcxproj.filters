@@ -37,9 +37,6 @@
     <ClCompile Include="src\shader.cc">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\emitter.cc">
-      <Filter>Emitters</Filter>
-    </ClCompile>
     <ClCompile Include="src\random_fountain_emitter.cc">
       <Filter>Emitters</Filter>
     </ClCompile>

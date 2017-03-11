@@ -24,7 +24,7 @@ namespace particle {
 namespace camera {
 namespace {
 std::once_flag  init_flag;
-//std::once_flag terminate_flag;
+std::once_flag terminate_flag;
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;
 /* NOTE : I know the MVP shouldn't be placed here, but since we 
@@ -35,6 +35,7 @@ glm::mat4 view_matrix;
  * to shaders at initialization and sent back as local variables
  * for each model's class if the model matrix is bound to each class
  */
+constexpr GLuint GlobalMatricesBindingPoint = 0;
 glm::mat4 MVP;
 
 // Perspective projection parameters
@@ -62,9 +63,10 @@ glm::vec3 up_vector;
 // Some helper functions
 void UpdateMVP() {
   MVP = camera::GetProjectionMatrix() * camera::GetViewMatrix();
-  glUniformMatrix4fv(
-    shader_manager::GetUniformLocation("MVP"),
-    1, false,
+  shader_manager::SetUniformBlockValue(
+    GlobalMatricesBindingPoint,
+    0, 
+    sizeof(MVP),
     glm::value_ptr(MVP)
   );
 }
@@ -81,12 +83,17 @@ void Init() {
     projection_matrix = glm::mat4();
     view_matrix = glm::mat4();
 
-    shader_manager::RegisterUniform("MVP");
+    shader_manager::RegisterGlobalUniformBlock(
+      GlobalMatricesBindingPoint,
+      sizeof(MVP));
+
     UpdateMVP();
   });
 }
 
 void Terminate() {
+  std::call_once(terminate_flag, [&]() {
+  });
 }
 
 const glm::vec3& GetEyePosition() {
