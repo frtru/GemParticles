@@ -59,6 +59,7 @@
     <ClInclude Include="src\shader.hh" />
     <ClInclude Include="src\emitter.hh" />
     <ClInclude Include="src\particle_pool.hh" />
+    <ClInclude Include="src\singleton.hh" />
     <ClInclude Include="src\spherical_stream_emitter.hh" />
     <ClInclude Include="src\core_opengl_renderer.hh" />
     <ClInclude Include="src\timer.hh" />

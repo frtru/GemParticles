@@ -124,6 +124,9 @@
       <Filter>Renderers</Filter>
     </ClInclude>
     <ClInclude Include="src\scene.hh" />
+    <ClInclude Include="src\singleton.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.comp">

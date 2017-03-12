@@ -42,7 +42,6 @@ namespace {
 // window management system or 3D API (GLFW/Windows
 // & OpenGL/Direct3D)
 std::shared_ptr<GraphicContext> graphic_context;
-std::shared_ptr<Scene>          scene;
 }
 
 void Init() {
@@ -68,8 +67,7 @@ void Init() {
   event_handler::Init(graphic_context);
 
   // Scene initialization
-  scene = std::make_shared<Scene>();
-  scene->SetDebugOption(true);
+  Scene::GetInstance().SetDebugOption(true);
 
   // Particle system initialization
   cpu_particle_module::Init();
@@ -85,7 +83,7 @@ void Run() {
     std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     double dt = timer::chrono::GetTimeElapsedInSeconds();
     
-    scene->Render();
+    Scene::GetInstance().Render();
     cpu_particle_module::Update(dt);    
     
     graphic_context->Update();

@@ -11,42 +11,22 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SCENE_HH
-#define SCENE_HH
+#ifndef SINGLETON_HH
+#define SINGLETON_HH
 
-// TODO: Add lights by registering their positions
-// as an UBO in the shaders maybe?
-
-#include <GL/glew.h>
-
-#include "singleton.hh"
-
-namespace gem {
-namespace particle {
-class Scene : public Singleton<Scene>{
-private:
-  static const GLfloat AXES_POINTS[];
+// Simple CRTP C++11 thread-safe singleton
+template <class T>
+class Singleton
+{
 public:
-  Scene(bool a_isDebug = false);
-  ~Scene();
+  Singleton() = default;
+  virtual ~Singleton() = default;
 
-  inline const bool IsDebug() const { return m_bIsDebug; }
-
-  inline void SetDebugOption(bool a_isDebug) {
-    m_bIsDebug = a_isDebug;
+  static T& GetInstance() {
+    static T instance;
+    return instance;
   }
+};
 
-  void Render();
-private:
-  void DrawAxes();
-
-  bool    m_bIsDebug;
-  GLuint  m_vertexArrayID;
-  GLuint  m_vertexBufferID;
-  GLuint  m_unProgramID;
-}; /* class Scene*/
-} /* namespace particle */
-} /* namespace gem */
-
-#endif /* end of include guard: SCENE_HH */
+#endif /* end of include guard: SINGLETON_HH */
 

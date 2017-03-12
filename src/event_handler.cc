@@ -27,6 +27,7 @@
 
 #include "graphic_context.hh"
 #include "particle_system.hh"
+#include "scene.hh"
 #include "camera.hh"
 #include "shader.hh"
 #include "timer.hh"
@@ -148,6 +149,11 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         position -= camera_right;
         targetPosition -= camera_right;
         camera::LookAt(position, targetPosition, camera::GetUpVector());
+        break;
+        // Disable debug option
+      case GLFW_KEY_B:
+        Scene::GetInstance().SetDebugOption(
+          !Scene::GetInstance().IsDebug());
         break;
       default:
         break;
