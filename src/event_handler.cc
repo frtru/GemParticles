@@ -150,7 +150,7 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         targetPosition -= camera_right;
         camera::LookAt(position, targetPosition, camera::GetUpVector());
         break;
-        // Disable debug option
+        // Toggle debug option
       case GLFW_KEY_B:
         Scene::GetInstance().SetDebugOption(
           !Scene::GetInstance().IsDebug());
