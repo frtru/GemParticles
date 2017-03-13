@@ -13,20 +13,13 @@
 *************************************************************************/
 #include "event_handler.hh"
 
-#include <iostream>
-#include <mutex>
-
-
-#ifndef LINUX
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#else
-#include <gl/glew.h>
-#include <gl/glfw3.h>
-#endif
-
+#include <iostream>
+#include <mutex>
 #include "graphic_context.hh"
 #include "particle_system.hh"
+#include "scene.hh"
 #include "camera.hh"
 #include "shader.hh"
 #include "timer.hh"
@@ -148,6 +141,11 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         position -= camera_right;
         targetPosition -= camera_right;
         camera::LookAt(position, targetPosition, camera::GetUpVector());
+        break;
+        // Toggle debug option
+      case GLFW_KEY_B:
+        Scene::GetInstance().SetDebugOption(
+          !Scene::GetInstance().IsDebug());
         break;
       default:
         break;

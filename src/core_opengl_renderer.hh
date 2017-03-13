@@ -11,32 +11,34 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SIMPLE_GL_RENDERER_HH
-#define SIMPLE_GL_RENDERER_HH
+#ifndef CORE_GL_RENDERER_HH
+#define CORE_GL_RENDERER_HH
 
-#include "opengl_renderer.hh"
+#include <GL/glew.h>
+
+#include "renderer.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-// TODO: Rename this for something different than stub...
-// something like basic or debug
-class SimpleGLRenderer : public GLRenderer {
+class CoreGLRenderer : public Renderer<CoreParticles> {
 public:
-  SimpleGLRenderer();
-  virtual ~SimpleGLRenderer() = default;
+  CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
+  virtual ~CoreGLRenderer();
 
-  virtual void Update() override;
-  virtual void Render() override;
+  virtual std::size_t GetProgramID() const {
+    return m_shaderProgram;
+  }
 
+  virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
+  virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
 private:
-  virtual void InitImpl() override;
-  virtual void TerminateImpl() override;
-
-  // An extra buffer for color
+  GLuint  m_vertexArrayID;
+  GLuint  m_vertexBufferID;
   GLuint  m_colorVBOID;
-
-}; /* class SimpleGLRenderer*/
+  GLuint  m_shaderProgram;
+}; /* class CoreGLRenderer*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: SIMPLE_GL_RENDERER_HH */
+#endif /* end of include guard: CORE_GL_RENDERER_HH */

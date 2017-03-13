@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,26 +11,42 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLOBAL_ACCELERATION_HH
-#define GLOBAL_ACCELERATION_HH
+#ifndef SCENE_HH
+#define SCENE_HH
 
-#include "dynamic.hh"
-#include "particle_pool_core.hh"
+// TODO: Add lights by registering their positions
+// as an UBO in the shaders maybe?
+
+#include <GL/glew.h>
+
+#include "singleton.hh"
 
 namespace gem {
 namespace particle {
-class GravityAcceleration : public Dynamic<CoreParticles> {
+class Scene : public Singleton<Scene>{
 private:
-  static const glm::f32vec3 GRAVITY_ACCEL;
+  static const GLfloat AXES_POINTS[];
 public:
-  GravityAcceleration() = default;
-  ~GravityAcceleration() = default;
+  Scene(bool a_isDebug = false);
+  ~Scene();
 
-	// TODO: Copyable and moveable?<
+  inline const bool IsDebug() const { return m_bIsDebug; }
 
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
-}; /* class EulerParticleUpdater*/
+  inline void SetDebugOption(bool a_isDebug) {
+    m_bIsDebug = a_isDebug;
+  }
+
+  void Render();
+private:
+  void DrawAxes();
+
+  bool    m_bIsDebug;
+  GLuint  m_vertexArrayID;
+  GLuint  m_vertexBufferID;
+  GLuint  m_unProgramID;
+}; /* class Scene*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: GLOBAL_ACCELERATION_HH */
+#endif /* end of include guard: SCENE_HH */
+

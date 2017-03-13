@@ -12,7 +12,6 @@
  * all copies or substantial portions of the Software.
 *************************************************************************/
 #include "particle_system.hh"
-
 #include "euler_particle_updater.hh"
 
 namespace gem {

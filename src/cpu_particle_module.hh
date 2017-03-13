@@ -14,7 +14,7 @@
 #ifndef CPU_PARTICLE_MODULE_HH
 #define CPU_PARTICLE_MODULE_HH
 
-#include "particle_system.hh"
+#include "particle_system_interface.hh"
 
 #include <memory>
 
@@ -26,7 +26,7 @@ void Terminate();
 
 void Update(double a_dt);
 
-void AddSystem(ParticleSystem &&a_System);
+void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem);
 
 // TODOs : See .CC file for todo
 void RemoveSystem(const std::string& a_szSystemName); 

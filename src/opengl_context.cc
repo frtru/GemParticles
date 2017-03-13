@@ -107,6 +107,7 @@ void OpenGLContext::InitImpl() {
 }
 
 void OpenGLContext::TerminateImpl() {
+  std::cout << "OpenGLContext::TerminateImpl -> Deleting glfw context." << std::endl;
   glfwTerminate();
 }
 } /* namespace particle */

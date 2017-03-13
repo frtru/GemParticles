@@ -21,6 +21,7 @@
 
 namespace gem {
 namespace particle {
+template <class ParticleType>
 class Dynamic {
   DECLARE_UNCOPYABLE(Dynamic)
   DECLARE_UNMOVABLE(Dynamic)
@@ -28,7 +29,7 @@ public:
 	Dynamic() = default;
 	virtual ~Dynamic() = default;
 
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) = 0;
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<ParticleType> >& a_pPool) = 0;
 }; /* class Dynamic*/
 } /* namespace particle */
 } /* namespace gem */

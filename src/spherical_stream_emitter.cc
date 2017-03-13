@@ -58,7 +58,7 @@ SphericalStreamEmitter::SphericalStreamEmitter(
   a_fLifetime,
   a_dEmissionRate) {}
 
-void SphericalStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+void SphericalStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   const std::size_t N = a_unEndID - a_unStartID;
   auto coords = GenerateSphericalBoundCoordinates(
@@ -66,16 +66,16 @@ void SphericalStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePoo
     0.2f, N);
 
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_velocity[i] = m_spawnVelocity;
+    a_pPool->pCoreData->m_velocity[i] = m_spawnVelocity;
   }
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_position[i] = coords[i - a_unStartID];
+    a_pPool->pCoreData->m_position[i] = coords[i - a_unStartID];
   }
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_lifetime[i] = m_fLifetime;
+    a_pPool->pCoreData->m_lifetime[i] = m_fLifetime;
   }
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
-    a_pPool->m_color[i] = DEFAULT_COLOR;
+    a_pPool->pCoreData->m_color[i] = DEFAULT_COLOR;
   }
 }
 } /* namespace particle */

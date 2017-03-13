@@ -15,19 +15,18 @@
 #define RAIN_EMITTER_HH
 
 #include "emitter.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class RainEmitter : public Emitter {
+class RainEmitter : public Emitter<CoreParticles> {
 public:
   RainEmitter() = default; // Can be defaulted to base default constructor
   RainEmitter(float a_fLifetime, double a_dEmissionRate);
 	~RainEmitter() = default;
 
-  // TODO: Copyable and moveable?<
-
 private:
-  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool,
+  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
 }; /* class RandomFountainEmitter*/
 } /* namespace particle */

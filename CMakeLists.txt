@@ -45,10 +45,11 @@ set(SOURCE_FILES
 	src/basic_stream_emitter.hh
 	src/camera.cc
 	src/camera.hh
+	src/core_opengl_renderer.cc
+	src/core_opengl_renderer.hh
     src/cpu_particle_module.cc
     src/cpu_particle_module.hh
 	src/dynamic.hh
-	src/emitter.cc
 	src/emitter.hh
 	src/euler_particle_updater.cc
 	src/euler_particle_updater.hh
@@ -62,24 +63,25 @@ set(SOURCE_FILES
 	src/main.cc
 	src/opengl_context.cc
 	src/opengl_context.hh
-	src/opengl_renderer.cc
-	src/opengl_renderer.hh
-	src/particle_pool.cc
+	src/particle_core_data.hh
 	src/particle_pool.hh
-	src/particle_system.cc
+	src/particle_pool_core.hh
 	src/particle_system.hh
+	src/particle_system_interface.hh
 	src/rain_emitter.cc
 	src/rain_emitter.hh
 	src/random_fountain_emitter.cc
 	src/random_fountain_emitter.hh
 	src/renderer.hh
+	src/scene.cc
+	src/scene.hh
 	src/shader.cc
 	src/shader.hh
-	src/simple_opengl_renderer.cc
-	src/simple_opengl_renderer.hh
+	src/singleton.hh
 	src/spherical_stream_emitter.cc
 	src/spherical_stream_emitter.hh
-	src/timer.hh)
+	src/timer.hh
+)
 
 add_executable(GemParticles ${SOURCE_FILES})
 

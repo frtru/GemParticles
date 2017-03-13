@@ -23,6 +23,7 @@
 
 namespace gem {
 namespace particle {
+template <class ParticleType>
 class Renderer {
   DECLARE_UNCOPYABLE(Renderer)
   DECLARE_UNMOVABLE(Renderer)
@@ -30,17 +31,10 @@ public:
 	Renderer() = default;
 	virtual ~Renderer() = default;
 
-  // TODO: See if init/terminate should be changed for 
-  // something more stable, like object construction/destruction
-  // TODO: Remove the PUBLIC init/terminate idiom in classes and put initialization in constructor.
+  virtual std::size_t GetProgramID() const = 0;
+  virtual void Update(const std::shared_ptr<ParticlePool<ParticleType> > &a_pPool) = 0;
+  virtual void Render(const std::shared_ptr<ParticlePool<ParticleType> > &a_pPool) = 0;
 
-  virtual void Init(const std::shared_ptr<ParticlePool> & a_pPool) = 0;
-  virtual void Terminate() = 0;
-  virtual void Update() = 0;
-  virtual void Render() = 0;
-  
-protected:
-  std::shared_ptr<ParticlePool> m_pParticlePool;
 }; /* class Renderer*/
 } /* namespace particle */
 } /* namespace gem */

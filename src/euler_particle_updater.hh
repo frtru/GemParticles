@@ -15,17 +15,18 @@
 #define EULER_PARTICLE_UPDATER
 
 #include "dynamic.hh"
+#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class EulerParticleUpdater : public Dynamic {
+class EulerParticleUpdater : public Dynamic<CoreParticles> {
 public:
   EulerParticleUpdater() = default;
   ~EulerParticleUpdater() = default;
 
 	// TODO: Copyable and moveable?<
 
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool>& a_pPool) override;
+  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 }; /* class EulerParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,38 +11,22 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef OPENGL_RENDERER_HH
-#define OPENGL_RENDERER_HH
+#ifndef SINGLETON_HH
+#define SINGLETON_HH
 
-#include <GL/glew.h>
-
-#include "renderer.hh"
-
-namespace gem {
-namespace particle {
-class GLRenderer : public Renderer {
+// Simple CRTP C++11 thread-safe singleton
+template <class T>
+class Singleton
+{
 public:
-  GLRenderer();
-  virtual ~GLRenderer();
+  Singleton() = default;
+  virtual ~Singleton() = default;
 
-  virtual void Init(const std::shared_ptr<ParticlePool> & a_pPool) override;
-  virtual void Terminate() override;
-  virtual void Update() = 0;
-  virtual void Render() = 0;
+  static T& GetInstance() {
+    static T instance;
+    return instance;
+  }
+};
 
-private:
-  virtual void InitImpl();
-  virtual void TerminateImpl();
+#endif /* end of include guard: SINGLETON_HH */
 
-protected:
-  GLuint m_vertexArrayID;   //VAO
-  GLuint m_vertexBufferID;  //VBO
-
-private:
-  bool m_bInitFlag;
-
-}; /* class GLRenderer */
-} /* namespace particle */
-} /* namespace gem */
-
-#endif /* end of include guard: OPENGL_RENDERER_HH */

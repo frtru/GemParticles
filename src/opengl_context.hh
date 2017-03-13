@@ -14,7 +14,6 @@
 #ifndef OPENGL_CONTEXT_HH
 #define OPENGL_CONTEXT_HH
 
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "graphic_context.hh"
