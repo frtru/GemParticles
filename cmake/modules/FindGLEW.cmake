@@ -12,3 +12,5 @@ find_library(GLEW_LIBRARIES
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(GLEW DEFAULT_MSG
                                   GLEW_LIBRARIES GLEW_INCLUDE_DIRS)
+
+mark_as_advanced(GLEW_LIBRARIES GLEW_INCLUDE_DIRS)

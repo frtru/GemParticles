@@ -4,6 +4,7 @@ project(GemParticles)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/bin )
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake/modules)
+
 set(CMAKE_CXX_STANDARD 14)
 
 find_package(OpenGL REQUIRED)
@@ -12,7 +13,6 @@ find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(AntTweakBar REQUIRED)
 
-include_directories(${GLM_INCLUDE_DIRS})
 if(OpenGL_FOUND)
     MESSAGE("OpenGL found")
 	include_directories(${OPENGL_INCLUDE_DIRSS})
@@ -85,3 +85,10 @@ add_executable(GemParticles ${SOURCE_FILES})
 
 target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW3_LIBRARIES} ${ANTWEAKBAR_LIBRARIES})
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
+
+#if(WINDOWS OR WIN32)
+#add_custom_command(TARGET GemParticles POST_BUILD
+#	 COMMAND ${CMAKE_COMMAND} -E copy_if_different $ENV{GLFW_HOME}/built/lib/glfw3.dll $<CONFIG:RelWithDebInfo> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO}			
+#	 COMMAND ${CMAKE_COMMAND} -E copy_if_different $ENV{GLEW_HOME}/bin/Release/Win32/glew32.dll $<CONFIG:RelWithDebInfo> ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO}		
+#)
+#endif()
