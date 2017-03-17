@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Renderers">
+      <UniqueIdentifier>{16c3c585-98a1-414f-b2de-f346312dfab5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dynamics">
+      <UniqueIdentifier>{d6d97415-d2b5-427f-afa1-cc7feec5e86b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{d012dbe7-62f2-46c8-b163-ce9c7bbc8813}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource files\Shaders">
+      <UniqueIdentifier>{329cd6e0-1842-41e9-a28a-28e9b3323b37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{8d5d5c06-cb9b-4f02-ba89-efe8f96169e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Emitters">
+      <UniqueIdentifier>{a657774c-5b58-44fa-beb8-492de8522ded}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\app.cc" />
+    <ClCompile Include="src\camera.cc" />
+    <ClCompile Include="src\graphic_context.cc" />
+    <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\opengl_context.cc" />
+    <ClCompile Include="src\event_handler.cc" />
+    <ClCompile Include="src\shader.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\random_fountain_emitter.cc">
+      <Filter>Emitters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rain_emitter.cc">
+      <Filter>Emitters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\basic_stream_emitter.cc">
+      <Filter>Emitters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\spherical_stream_emitter.cc">
+      <Filter>Emitters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gravity_acceleration.cc">
+      <Filter>Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\euler_particle_updater.cc">
+      <Filter>Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cpu_particle_module.cc">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core_opengl_renderer.cc">
+      <Filter>Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scene.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\dynamic.hh">
+      <Filter>Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderer.hh">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_pool.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app.hh" />
+    <ClInclude Include="src\camera.hh" />
+    <ClInclude Include="src\graphic_context.hh" />
+    <ClInclude Include="src\opengl_context.hh" />
+    <ClInclude Include="src\event_handler.hh" />
+    <ClInclude Include="src\particle_system.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\macro_definitions.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\timer.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\emitter.hh">
+      <Filter>Emitters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\random_fountain_emitter.hh">
+      <Filter>Emitters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rain_emitter.hh">
+      <Filter>Emitters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\basic_stream_emitter.hh">
+      <Filter>Emitters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\spherical_stream_emitter.hh">
+      <Filter>Emitters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gravity_acceleration.hh">
+      <Filter>Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\euler_particle_updater.hh">
+      <Filter>Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cpu_particle_module.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_system_interface.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_core_data.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_pool_core.hh">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core_opengl_renderer.hh">
+      <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scene.hh" />
+    <ClInclude Include="src\singleton.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\default.comp">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.frag">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.geom">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.tesc">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.tese">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\debug_axes.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
