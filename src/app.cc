@@ -49,9 +49,7 @@ void Init() {
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
 
-  // Shaders initialization
   shader_manager::Init();
-
   // Camera initialization
   camera::Init();
   camera::LookAt( 
