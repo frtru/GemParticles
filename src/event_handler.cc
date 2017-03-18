@@ -37,7 +37,7 @@ namespace particle {
 namespace event_handler {
 namespace {
 std::once_flag init_flag;
-//std::once_flag terminate_flag;
+std::once_flag terminate_flag;
 // TODO: If it's worth it, move these settings someplace else
 // Camera settings
 glm::vec3 camera_direction;
@@ -152,8 +152,7 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         break;
         // Toggle debug option
       case GLFW_KEY_B:
-        Scene::GetInstance().SetDebugOption(
-          !Scene::GetInstance().IsDebug());
+        scene::SetDebugOption(!scene::IsDebug());
         break;
       default:
         break;
@@ -186,7 +185,7 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
 }
 
 void Terminate() {
-
+  std::call_once(terminate_flag, [&]() {});
 }
 } /* namespace event_handler*/
 } /* namespace particle */

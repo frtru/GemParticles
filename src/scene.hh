@@ -14,37 +14,16 @@
 #ifndef SCENE_HH
 #define SCENE_HH
 
-// TODO: Add lights by registering their positions
-// as an UBO in the shaders maybe?
-
-#include <GL/glew.h>
-
-#include "singleton.hh"
-
 namespace gem {
 namespace particle {
-class Scene : public Singleton<Scene>{
-private:
-  static const GLfloat AXES_POINTS[];
-public:
-  Scene(bool a_isDebug = false);
-  ~Scene();
+namespace scene {
+void Init(bool a_isDebug = false);
+void Terminate();
 
-  inline const bool IsDebug() const { return m_bIsDebug; }
-
-  inline void SetDebugOption(bool a_isDebug) {
-    m_bIsDebug = a_isDebug;
-  }
-
-  void Render();
-private:
-  void DrawAxes();
-
-  bool    m_bIsDebug;
-  GLuint  m_vertexArrayID;
-  GLuint  m_vertexBufferID;
-  GLuint  m_unProgramID;
-}; /* class Scene*/
+bool IsDebug();
+void SetDebugOption(bool a_isDebug);
+void Render();
+} /* namespace scene */
 } /* namespace particle */
 } /* namespace gem */
 

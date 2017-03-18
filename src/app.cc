@@ -67,7 +67,8 @@ void Init() {
   event_handler::Init(graphic_context);
 
   // Scene initialization
-  Scene::GetInstance().SetDebugOption(true);
+  scene::Init();
+  scene::SetDebugOption(true);
 
   // Particle system initialization
   cpu_particle_module::Init();
@@ -83,7 +84,7 @@ void Run() {
     std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     double dt = timer::chrono::GetTimeElapsedInSeconds();
     
-    Scene::GetInstance().Render();
+    scene::Render();
     cpu_particle_module::Update(dt);    
     
     graphic_context->Update();
@@ -94,6 +95,8 @@ void Run() {
 void Terminate() {
   // App destruction
   cpu_particle_module::Terminate();
+  scene::Terminate();
+  event_handler::Terminate();
   shader_manager::Terminate();
   graphic_context->Terminate();
 }
