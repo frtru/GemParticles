@@ -13,18 +13,10 @@
 *************************************************************************/
 #include "event_handler.hh"
 
-#include <iostream>
-#include <mutex>
-
-
-#ifdef LINUX
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#else
-#include <gl/glew.h>
-#include <gl/glfw3.h>
-#endif
-
+#include <iostream>
+#include <mutex>
 #include "graphic_context.hh"
 #include "particle_system.hh"
 #include "scene.hh"
