@@ -11,7 +11,7 @@
 * The above copyright notice and this permission notice shall be included in
 * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "cpu_particle_module.hh"
+#include "particle_module.hh"
 
 #include <algorithm>
 #include <vector>
@@ -21,7 +21,7 @@
 
 namespace gem {
 namespace particle {
-namespace cpu_particle_module {
+namespace particle_module {
 namespace {
 std::once_flag init_flag;
 std::once_flag terminate_flag;
@@ -79,6 +79,6 @@ void RemoveSystem(const std::string& a_szSystemName) {
     RemoveByName maybe
   */
 }
-} /* namespace cpu_particle_module */
+} /* namespace particle_module */
 } /* namespace particle */
 } /* namespace gem */

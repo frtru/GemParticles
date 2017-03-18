@@ -52,13 +52,13 @@
     <ClCompile Include="src\euler_particle_updater.cc">
       <Filter>Dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpu_particle_module.cc">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\core_opengl_renderer.cc">
       <Filter>Renderers</Filter>
     </ClCompile>
     <ClCompile Include="src\scene.cc" />
+    <ClCompile Include="src\particle_module.cc">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -108,9 +108,6 @@
     <ClInclude Include="src\euler_particle_updater.hh">
       <Filter>Dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\cpu_particle_module.hh">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="src\particle_system_interface.hh">
       <Filter>Core</Filter>
     </ClInclude>
@@ -126,6 +123,9 @@
     <ClInclude Include="src\scene.hh" />
     <ClInclude Include="src\singleton.hh">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_module.hh">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

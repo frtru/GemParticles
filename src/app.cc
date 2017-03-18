@@ -23,7 +23,7 @@
 #include "shader.hh"
 #include "camera.hh"
 #include "event_handler.hh"
-#include "cpu_particle_module.hh"
+#include "particle_module.hh"
 #include "particle_system_interface.hh"
 #include "scene.hh"
 
@@ -53,7 +53,7 @@ void Init() {
   // Camera initialization
   camera::Init();
   camera::LookAt( 
-    glm::vec3(0, 0, 5),   // Camera is at (0,0,5), in World Space
+    glm::vec3(4, 4, 4),   // Camera is at (0,0,4), in World Space
     glm::vec3(0, 0, 0),   // and looks at the origin
     glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
   camera::SetPerspectiveProjection( 
@@ -69,12 +69,12 @@ void Init() {
   scene::SetDebugOption(true);
 
   // Particle system initialization
-  cpu_particle_module::Init();
+  particle_module::Init();
   std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
-  cpu_particle_module::AddSystem(std::move(wParticleSystem));
+  particle_module::AddSystem(std::move(wParticleSystem));
 }
 
 void Run() {
@@ -83,7 +83,7 @@ void Run() {
     double dt = timer::chrono::GetTimeElapsedInSeconds();
     
     scene::Render();
-    cpu_particle_module::Update(dt);    
+    particle_module::Update(dt);    
     
     graphic_context->Update();
     timer::chrono::Update();
@@ -92,7 +92,7 @@ void Run() {
 
 void Terminate() {
   // App destruction
-  cpu_particle_module::Terminate();
+  particle_module::Terminate();
   scene::Terminate();
   event_handler::Terminate();
   shader_manager::Terminate();
