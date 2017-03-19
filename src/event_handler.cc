@@ -23,7 +23,6 @@
 #include "particle_system.hh"
 #include "scene.hh"
 #include "camera.hh"
-#include "shader.hh"
 #include "timer.hh"
 
 namespace gem {

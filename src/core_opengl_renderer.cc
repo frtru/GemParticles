@@ -13,7 +13,9 @@
 *************************************************************************/
 #include "core_opengl_renderer.hh"
 
-#include "shader.hh"
+// shader utilities
+#include "shader_factory.hh"
+#include "shader_module.hh"
 
 #include <glm/glm.hpp>
 #include <GL/glew.h>
@@ -22,9 +24,9 @@
 namespace gem {
 namespace particle {
 CoreGLRenderer::CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
-  shader_manager::CompileShaderFile("shaders/default.vert", GL_VERTEX_SHADER);
-  shader_manager::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
-  m_shaderProgram = shader_manager::CreateProgram();
+  shader::factory::CompileShaderFile("shaders/default.vert", GL_VERTEX_SHADER);
+  shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
+  m_shaderProgram = shader::factory::CreateProgram();
 
   // VAO initialization
   glGenVertexArrays(1, &m_vertexArrayID);
@@ -108,7 +110,7 @@ CoreGLRenderer::~CoreGLRenderer() {
 }
 
 void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
-  shader_manager::Use(m_shaderProgram);
+  shader::module::Use(m_shaderProgram);
   const std::size_t wActiveParticleCount =
     a_pPool->GetActiveParticleCount();
 
@@ -130,7 +132,7 @@ void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > 
   }
 }
 void CoreGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
-  shader_manager::Use(m_shaderProgram);
+  shader::module::Use(m_shaderProgram);
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = a_pPool->GetActiveParticleCount();
   if (count > 0) {

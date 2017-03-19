@@ -20,7 +20,7 @@
 //Your project's .h files
 #include "timer.hh"
 #include "opengl_context.hh"
-#include "shader.hh"
+#include "shader_module.hh"
 #include "camera.hh"
 #include "event_handler.hh"
 #include "particle_module.hh"
@@ -49,7 +49,7 @@ void Init() {
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
 
-  shader_manager::Init();
+  shader::module::Init();
   // Camera initialization
   camera::Init();
   camera::LookAt( 
@@ -95,7 +95,7 @@ void Terminate() {
   particle_module::Terminate();
   scene::Terminate();
   event_handler::Terminate();
-  shader_manager::Terminate();
+  shader::module::Terminate();
   graphic_context->Terminate();
 }
 

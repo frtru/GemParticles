@@ -17,7 +17,7 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
-#include "shader.hh"
+#include "shader_module.hh"
 
 namespace gem {
 namespace particle {
@@ -63,7 +63,7 @@ glm::vec3 up_vector;
 // Some helper functions
 void UpdateMVP() {
   MVP = camera::GetProjectionMatrix() * camera::GetViewMatrix();
-  shader_manager::SetUniformBlockValue(
+  shader::module::SetUniformBlockValue(
     GlobalMatricesBindingPoint,
     0, 
     sizeof(MVP),
@@ -83,7 +83,7 @@ void Init() {
     projection_matrix = glm::mat4();
     view_matrix = glm::mat4();
 
-    shader_manager::RegisterGlobalUniformBlock(
+    shader::module::RegisterGlobalUniformBlock(
       GlobalMatricesBindingPoint,
       sizeof(MVP));
 

@@ -31,9 +31,6 @@
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\event_handler.cc" />
-    <ClCompile Include="src\shader.cc">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\random_fountain_emitter.cc">
       <Filter>Emitters</Filter>
     </ClCompile>
@@ -59,6 +56,12 @@
     <ClCompile Include="src\particle_module.cc">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\shader_factory.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader_module.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -82,9 +85,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\timer.hh">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shader.hh">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\emitter.hh">
@@ -126,6 +126,12 @@
     </ClInclude>
     <ClInclude Include="src\particle_module.hh">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader_factory.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader_module.hh">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

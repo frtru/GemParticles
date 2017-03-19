@@ -18,7 +18,9 @@
 
 #include <GL/glew.h>
 
-#include "shader.hh"
+// shader utilities
+#include "shader_factory.hh"
+#include "shader_module.hh"
 
 // TODO: Add lights by registering their positions
 // as an UBO in the shaders maybe?
@@ -45,7 +47,7 @@ std::once_flag init_flag;
 std::once_flag terminate_flag;
 
 void DrawAxes() {
-  shader_manager::Use(shader_program_ID);
+  shader::module::Use(shader_program_ID);
   glBindVertexArray(vertex_array_ID);
   glDrawArrays(GL_LINES, 0, 2);
   glDrawArrays(GL_LINES, 2, 2);
@@ -58,9 +60,9 @@ void Init(bool a_isDebug) {
   std::call_once(init_flag, [&]() {
     debug_mode = a_isDebug;
 
-    shader_manager::CompileShaderFile("shaders/debug_axes.vert", GL_VERTEX_SHADER);
-    shader_manager::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
-    shader_program_ID = shader_manager::CreateProgram();
+    shader::factory::CompileShaderFile("shaders/debug_axes.vert", GL_VERTEX_SHADER);
+    shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
+    shader_program_ID = shader::factory::CreateProgram();
 
     glGenVertexArrays(1, &vertex_array_ID);
     std::cout << "Scene::Init -> Generated VAO ID = ";
