@@ -22,7 +22,7 @@
 
 namespace shader {
 namespace factory {
-namespace {
+//namespace {
 // For each program ID, we have a list of
 // compiled/link shader sources
 std::map<GLuint, std::vector<std::string> >         shader_programs;
@@ -31,7 +31,7 @@ std::vector<std::string>                            compilation_sources;
 
 std::once_flag init_flag;
 std::once_flag terminate_flag;
-}
+//}
 void Init() {
   std::call_once(init_flag, [&]() {
   });
@@ -46,7 +46,7 @@ void Terminate() {
   });
 }
 
-bool CompileShaderFile(std::string a_sFileName, GLenum a_eShaderType) {
+bool CompileShaderFile(const std::string& a_sFileName, GLenum a_eShaderType) {
   std::ifstream fparser;
   fparser.open(a_sFileName, std::ios_base::in);
   if (fparser) {

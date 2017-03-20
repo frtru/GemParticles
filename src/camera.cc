@@ -19,8 +19,6 @@
 
 #include "shader_module.hh"
 
-namespace gem {
-namespace particle {
 namespace camera {
 namespace {
 std::once_flag  init_flag;
@@ -35,7 +33,7 @@ glm::mat4 view_matrix;
  * to shaders at initialization and sent back as local variables
  * for each model's class if the model matrix is bound to each class
  */
-constexpr GLuint GlobalMatricesBindingPoint = 0;
+constexpr GLuint CameraInfoBindingPoint = 0;
 glm::mat4 MVP;
 
 // Perspective projection parameters
@@ -64,10 +62,16 @@ glm::vec3 up_vector;
 void UpdateMVP() {
   MVP = camera::GetProjectionMatrix() * camera::GetViewMatrix();
   shader::module::SetUniformBlockValue(
-    GlobalMatricesBindingPoint,
+    CameraInfoBindingPoint,
     0, 
     sizeof(MVP),
     glm::value_ptr(MVP)
+  );
+  shader::module::SetUniformBlockValue(
+    CameraInfoBindingPoint,
+    sizeof(MVP),
+    sizeof(eye_position),
+    glm::value_ptr(eye_position)
   );
 }
 
@@ -84,8 +88,8 @@ void Init() {
     view_matrix = glm::mat4();
 
     shader::module::RegisterGlobalUniformBlock(
-      GlobalMatricesBindingPoint,
-      sizeof(MVP));
+      CameraInfoBindingPoint,
+      sizeof(MVP) + sizeof(eye_position));
 
     UpdateMVP();
   });
@@ -178,7 +182,4 @@ void SetOrthoProjection(float a_fLeft	, float a_fRight,
 		a_fBottom, a_fTop, a_fNear, a_fFar);
   UpdateMVP();
 }
-
 } /* namespace camera */
-} /* namespace particle */
-} /* namespace gem */

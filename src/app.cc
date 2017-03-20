@@ -73,7 +73,7 @@ void Init() {
   std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
+  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 1000));
   particle_module::AddSystem(std::move(wParticleSystem));
 }
 

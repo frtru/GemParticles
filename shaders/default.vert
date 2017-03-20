@@ -2,8 +2,9 @@
 
 #version 430
 
-layout (std140, binding = 0) uniform GlobalMatrices {
-  mat4 MVP; 
+layout (std140, binding = 0) uniform CameraInfo {
+  mat4	MVP; 
+  vec3	eye;
 };
 
 layout(location = 0) in vec3 vertexPosition_modelspace;

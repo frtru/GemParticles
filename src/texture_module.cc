@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 FranÃ§ois Trudel
+ * Copyright (c) 2016 François Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,27 +11,31 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SHADER_FACTORY_HH
-#define SHADER_FACTORY_HH
+#include "texture_module.hh"
 
-#include <GL/glew.h>
-#include <string>
+#include <algorithm>
+#include <vector>
+#include <map>
+#include <iostream>
+#include <fstream>
+#include <mutex>
 
-namespace shader {
-namespace factory {
-void Init();
-void Terminate();
+#include "texture_factory.hh"
 
-bool CompileShaderFile(const std::string& a_sFileName, 
-  GLenum a_eShaderType);
-bool CompileShaderText(const std::string& a_rShaderText,
-  GLenum a_eShaderType,
-  std::string a_sFileName = "text");
+namespace texture {
+namespace module {
+namespace {
+std::once_flag init_flag;
+std::once_flag terminate_flag;
+}
+void Init() {
+  std::call_once(init_flag, [&]() {
+  });
+}
 
-void LoadFromPreCompiledText(GLenum type, const std::string& src);
-void LoadFromPreCompiledFile(GLenum type, const char* fileName);
-
-GLuint CreateProgram();
-} /* namespace factory */
-} /* namespace shader */
-#endif /* end of include guard: SHADER_FACTORY_HH */
+void Terminate() {
+  std::call_once(terminate_flag, [&]() {
+  });
+}
+} /* namespace module */
+} /* namespace texture */

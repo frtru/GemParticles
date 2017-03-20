@@ -11,27 +11,16 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SHADER_FACTORY_HH
-#define SHADER_FACTORY_HH
+#ifndef TEXTURE_MODULE_HH
+#define TEXTURE_MODULE_HH
 
-#include <GL/glew.h>
 #include <string>
+#include <GL/glew.h>
 
-namespace shader {
-namespace factory {
+namespace texture {
+namespace module {
 void Init();
 void Terminate();
-
-bool CompileShaderFile(const std::string& a_sFileName, 
-  GLenum a_eShaderType);
-bool CompileShaderText(const std::string& a_rShaderText,
-  GLenum a_eShaderType,
-  std::string a_sFileName = "text");
-
-void LoadFromPreCompiledText(GLenum type, const std::string& src);
-void LoadFromPreCompiledFile(GLenum type, const char* fileName);
-
-GLuint CreateProgram();
-} /* namespace factory */
-} /* namespace shader */
-#endif /* end of include guard: SHADER_FACTORY_HH */
+} /* namespace module */
+} /* namespace texture */
+#endif /* end of include guard: TEXTURE_MODULE_HH */

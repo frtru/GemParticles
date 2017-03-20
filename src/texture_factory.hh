@@ -11,27 +11,20 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SHADER_FACTORY_HH
-#define SHADER_FACTORY_HH
+#ifndef TEXTURE_FACTORY_HH
+#define TEXTURE_FACTORY_HH
 
 #include <GL/glew.h>
 #include <string>
 
-namespace shader {
+namespace texture {
 namespace factory {
 void Init();
 void Terminate();
 
-bool CompileShaderFile(const std::string& a_sFileName, 
-  GLenum a_eShaderType);
-bool CompileShaderText(const std::string& a_rShaderText,
-  GLenum a_eShaderType,
-  std::string a_sFileName = "text");
-
-void LoadFromPreCompiledText(GLenum type, const std::string& src);
-void LoadFromPreCompiledFile(GLenum type, const char* fileName);
-
-GLuint CreateProgram();
+// TODO: Pass some of the parameters of glTexImage2D
+// from here
+bool Create2DTexture(const std::string& a_sFileName);
 } /* namespace factory */
-} /* namespace shader */
-#endif /* end of include guard: SHADER_FACTORY_HH */
+} /* namespace texture */
+#endif /* end of include guard: TEXTURE_FACTORY_HH */
