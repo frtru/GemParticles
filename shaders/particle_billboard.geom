@@ -12,7 +12,7 @@ layout (std140, binding = 0) uniform CameraInfo {
   vec3	eye;	// camera position
 };
 
-in	vec4 ex_Color;
+in	vec4 ex_Color[];
 out vec2 TexCoord;
 out	vec4 FragColor;
 
@@ -30,7 +30,7 @@ void main(void) {
   vec3 wUp = vec3(0.0, 1.0, 0.0); 
   vec3 wRight = cross(wPosToCamera, wUp);
 
-  FragColor = ex_Color;
+  FragColor = ex_Color[0]; // Points only have one vertex
 
   // Lower left corner
   wPos -= (wRight * 0.5);

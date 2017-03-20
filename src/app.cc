@@ -31,7 +31,7 @@
 // or factory/builder are not built yet...
 #include "particle_system.hh"
 #include "core_opengl_renderer.hh"
-#include "rain_emitter.hh"
+#include "random_fountain_emitter.hh"
 #include "gravity_acceleration.hh"
 
 namespace gem {
@@ -72,8 +72,8 @@ void Init() {
   particle_module::Init();
   std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
-  wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 1000));
+  //wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
+  wParticleSystem->AddEmitter(std::make_unique<RandomFountainEmitter>());
   particle_module::AddSystem(std::move(wParticleSystem));
 }
 

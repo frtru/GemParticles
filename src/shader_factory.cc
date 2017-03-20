@@ -22,7 +22,7 @@
 
 namespace shader {
 namespace factory {
-//namespace {
+namespace {
 // For each program ID, we have a list of
 // compiled/link shader sources
 std::map<GLuint, std::vector<std::string> >         shader_programs;
@@ -31,7 +31,7 @@ std::vector<std::string>                            compilation_sources;
 
 std::once_flag init_flag;
 std::once_flag terminate_flag;
-//}
+}
 void Init() {
   std::call_once(init_flag, [&]() {
   });
@@ -74,7 +74,7 @@ bool CompileShaderText(const std::string& a_rShaderText,
   GLint status;
   glCompileShader(shader);
   glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-  if (status == GL_FALSE) {
+  if (status != GL_TRUE) {
     GLint infoLogSize;
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
@@ -127,12 +127,12 @@ GLuint CreateProgram() {
   GLint status;
   glLinkProgram(programID);
   glGetProgramiv(programID, GL_LINK_STATUS, &status);
-  if (status == GL_FALSE) {
+  if (status != GL_TRUE) {
     GLint infoLogSize;
     glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
     glGetProgramInfoLog(programID, infoLogSize, nullptr, infoLog);
-    std::cerr << "shader_factory::CreateProgram() -> "
+    std::cerr << "shader_factory::CreateProgram() -> \n"
       << infoLog << std::endl;
     delete[] infoLog;
     return 0xFFFFFFFF;

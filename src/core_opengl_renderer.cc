@@ -25,9 +25,8 @@ namespace gem {
 namespace particle {
 CoreGLRenderer::CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
   shader::factory::CompileShaderFile("shaders/default.vert", GL_VERTEX_SHADER);
-//  shader::factory::CompileShaderFile("shaders/particle_billboard.geom", GL_GEOMETRY_SHADER);
-//  shader::factory::CompileShaderFile("shaders/default_texture.frag", GL_FRAGMENT_SHADER);
-  shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
+  shader::factory::CompileShaderFile("shaders/particle_billboard.geom", GL_GEOMETRY_SHADER);
+  shader::factory::CompileShaderFile("shaders/default_texture.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader::factory::CreateProgram();
 
   // VAO initialization
