@@ -29,7 +29,8 @@ public:
   virtual ~IParticleSystem() = default;
   
   virtual inline std::size_t GetProgramID() const = 0;
-  
+  virtual inline std::size_t GetActiveParticlesCount() const = 0;
+
   virtual void Update(double a_dt) = 0;
   virtual void Render() = 0;
 }; /* class IParticleSystem */

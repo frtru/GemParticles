@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+#include "timer.hh"
+
 namespace gem {
 namespace particle {
 OpenGLContext::OpenGLContext() 

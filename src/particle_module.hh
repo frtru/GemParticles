@@ -24,6 +24,8 @@ namespace particle_module {
 void Init();
 void Terminate();
 
+std::size_t GetActiveParticlesCount();
+
 void Update(double a_dt);
 
 void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem);

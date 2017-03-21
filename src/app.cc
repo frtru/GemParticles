@@ -16,6 +16,7 @@
 //C++ system files
 #include <memory>
 #include <iostream>
+#include <sstream>
 //Other libraries' .h files
 //Your project's .h files
 #include "timer.hh"
@@ -31,7 +32,7 @@
 // or factory/builder are not built yet...
 #include "particle_system.hh"
 #include "core_opengl_renderer.hh"
-#include "random_fountain_emitter.hh"
+#include "rain_emitter.hh"
 #include "gravity_acceleration.hh"
 
 namespace gem {
@@ -72,15 +73,21 @@ void Init() {
   particle_module::Init();
   std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
-  //wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RandomFountainEmitter>());
+  wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
+  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10,100000));
   particle_module::AddSystem(std::move(wParticleSystem));
+  
 }
 
 void Run() {
+
   while (!graphic_context->PollWindowClosedEvent()) {
-    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     double dt = timer::chrono::GetTimeElapsedInSeconds();
+    std::stringstream ss; 
+    ss << "GemParticles, FPS: "  << timer::chrono::GetFPS()
+      << " | Active Particles: " << particle_module::GetActiveParticlesCount();
+    glfwSetWindowTitle(static_cast<GLFWwindow*>(
+      graphic_context->GetWindowHandle()), ss.str().c_str());
     
     scene::Render();
     particle_module::Update(dt);    
