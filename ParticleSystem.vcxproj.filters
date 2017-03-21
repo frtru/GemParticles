@@ -163,16 +163,16 @@
     <None Include="shaders\default.tese">
       <Filter>Resource files\Shaders</Filter>
     </None>
-    <None Include="shaders\default.vert">
-      <Filter>Resource files\Shaders</Filter>
-    </None>
     <None Include="shaders\debug_axes.vert">
       <Filter>Resource files\Shaders</Filter>
     </None>
     <None Include="shaders\particle_billboard.geom">
       <Filter>Resource files\Shaders</Filter>
     </None>
-    <None Include="shaders\default_texture.frag">
+    <None Include="shaders\particle_billboard.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\simple_texture.frag">
       <Filter>Resource files\Shaders</Filter>
     </None>
   </ItemGroup>

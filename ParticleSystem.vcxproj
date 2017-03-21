@@ -74,11 +74,11 @@
     <None Include="shaders\debug_axes.vert" />
     <None Include="shaders\default.comp" />
     <None Include="shaders\default.frag" />
-    <None Include="shaders\default_texture.frag" />
+    <None Include="shaders\simple_texture.frag" />
     <None Include="shaders\particle_billboard.geom" />
     <None Include="shaders\default.tesc" />
     <None Include="shaders\default.tese" />
-    <None Include="shaders\default.vert" />
+    <None Include="shaders\particle_billboard.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7F3CDCAC-4D79-4270-825F-7E58D01BC885}</ProjectGuid>

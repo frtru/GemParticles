@@ -13,7 +13,6 @@ layout(location = 1) in vec4 vertexColor;
 out vec4 ex_Color;
 
 void main(void) {
-  vec4 vertex = vec4(vertexPosition_modelspace,1.0);
-  gl_Position = MVP*vertex;
+  gl_Position = vec4(vertexPosition_modelspace,1.0);
   ex_Color = vertexColor;
 }
