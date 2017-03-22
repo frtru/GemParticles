@@ -33,6 +33,10 @@ public:
   virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
   virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
 private:
+  void ParticlePositionsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
+  void ParticleColorsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
+  void ParticleTexturesInit();
+
   GLuint  m_vertexArrayID;
   GLuint  m_vertexBufferID;
   GLuint  m_colorVBOID;

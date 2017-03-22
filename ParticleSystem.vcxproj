@@ -28,13 +28,16 @@
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
-    <ClCompile Include="src\cpu_particle_module.cc" />
+    <ClCompile Include="src\particle_module.cc" />
     <ClCompile Include="src\rain_emitter.cc" />
     <ClCompile Include="src\random_fountain_emitter.cc" />
     <ClCompile Include="src\scene.cc" />
-    <ClCompile Include="src\shader.cc" />
+    <ClCompile Include="src\shader_factory.cc" />
+    <ClCompile Include="src\shader_module.cc" />
     <ClCompile Include="src\spherical_stream_emitter.cc" />
     <ClCompile Include="src\core_opengl_renderer.cc" />
+    <ClCompile Include="src\texture_factory.cc" />
+    <ClCompile Include="src\texture_module.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.hh" />
@@ -47,7 +50,7 @@
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\macro_definitions.hh" />
     <ClInclude Include="src\opengl_context.hh" />
-    <ClInclude Include="src\cpu_particle_module.hh" />
+    <ClInclude Include="src\particle_module.hh" />
     <ClInclude Include="src\particle_core_data.hh" />
     <ClInclude Include="src\particle_pool_core.hh" />
     <ClInclude Include="src\particle_system.hh" />
@@ -56,21 +59,26 @@
     <ClInclude Include="src\random_fountain_emitter.hh" />
     <ClInclude Include="src\renderer.hh" />
     <ClInclude Include="src\scene.hh" />
-    <ClInclude Include="src\shader.hh" />
+    <ClInclude Include="src\shader_factory.hh" />
     <ClInclude Include="src\emitter.hh" />
     <ClInclude Include="src\particle_pool.hh" />
+    <ClInclude Include="src\shader_module.hh" />
+    <ClInclude Include="src\singleton.hh" />
     <ClInclude Include="src\spherical_stream_emitter.hh" />
     <ClInclude Include="src\core_opengl_renderer.hh" />
+    <ClInclude Include="src\texture_factory.hh" />
+    <ClInclude Include="src\texture_module.hh" />
     <ClInclude Include="src\timer.hh" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\debug_axes.vert" />
     <None Include="shaders\default.comp" />
     <None Include="shaders\default.frag" />
-    <None Include="shaders\default.geom" />
+    <None Include="shaders\simple_texture.frag" />
+    <None Include="shaders\particle_billboard.geom" />
     <None Include="shaders\default.tesc" />
     <None Include="shaders\default.tese" />
-    <None Include="shaders\default.vert" />
+    <None Include="shaders\particle_billboard.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7F3CDCAC-4D79-4270-825F-7E58D01BC885}</ProjectGuid>
@@ -112,7 +120,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include;$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,7 +135,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include;$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -139,7 +147,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include;$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <WarningLevel>Level3</WarningLevel>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -152,7 +160,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GLFW_HOME)\include;$(GLFW_HOME)\include\GLFW;$(GLM_HOME);$(GLEW_HOME)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(GLFW_HOME)\lib-vc2015;$(GLEW_HOME)\lib\Release\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

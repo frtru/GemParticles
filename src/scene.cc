@@ -14,12 +14,22 @@
 #include "scene.hh"
 
 #include <iostream>
+#include <mutex>
 
-#include "shader.hh"
+#include <GL/glew.h>
+
+// shader utilities
+#include "shader_factory.hh"
+#include "shader_module.hh"
+
+// TODO: Add lights by registering their positions
+// as an UBO in the shaders maybe?
 
 namespace gem {
 namespace particle {
-const GLfloat Scene::AXES_POINTS[] = {
+namespace scene {
+namespace {
+const GLfloat AXES_POINTS[] = {
   0.0f,0.0f,0.0f,
   1.0f,0.0f,0.0f,
   0.0f,0.0f,0.0f,
@@ -28,43 +38,69 @@ const GLfloat Scene::AXES_POINTS[] = {
   0.0f,0.0f,1.0f
 };
 
-Scene::Scene(bool a_isDebug)
-  : m_bIsDebug(a_isDebug) {
-  shader_manager::CompileShaderFile("shaders/debug_axes.vert", GL_VERTEX_SHADER);
-  shader_manager::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
-  m_unProgramID = shader_manager::CreateProgram();
+bool    debug_mode;
+GLuint  vertex_array_ID;
+GLuint  vertex_buffer_ID;
+GLuint  shader_program_ID;
 
-  glGenVertexArrays(1, &m_vertexArrayID);
-  glBindVertexArray(m_vertexArrayID);
-  glEnableVertexAttribArray(0);
+std::once_flag init_flag;
+std::once_flag terminate_flag;
 
-  glGenBuffers(1, &m_vertexBufferID);
-  glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
-  glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), AXES_POINTS, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-}
-
-Scene::~Scene() {
-  if (m_vertexBufferID != 0) {
-    std::cout << "Scene::~Scene -> Deallocating vertex VBO" << std::endl;
-    glDeleteBuffers(1, &m_vertexBufferID);
-    m_vertexBufferID = 0;
-  }
-}
-
-void Scene::Render() {
-  if (m_bIsDebug) {
-    DrawAxes();
-  }
-}
-
-void Scene::DrawAxes() {
-  shader_manager::Use(m_unProgramID);
-  glBindVertexArray(m_vertexArrayID);
+void DrawAxes() {
+  shader::module::Use(shader_program_ID);
+  glBindVertexArray(vertex_array_ID);
   glDrawArrays(GL_LINES, 0, 2);
   glDrawArrays(GL_LINES, 2, 2);
   glDrawArrays(GL_LINES, 4, 2);
   glBindVertexArray(0);
 }
+}
+
+void Init(bool a_isDebug) {
+  std::call_once(init_flag, [&]() {
+    debug_mode = a_isDebug;
+
+    shader::factory::CompileShaderFile("shaders/debug_axes.vert", GL_VERTEX_SHADER);
+    shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
+    shader_program_ID = shader::factory::CreateProgram();
+
+    glGenVertexArrays(1, &vertex_array_ID);
+    std::cout << "Scene::Init -> Generated VAO ID = ";
+    std::cout << vertex_array_ID << std::endl;
+    glBindVertexArray(vertex_array_ID);
+    std::cout << "Scene::Init -> Allocated array memory for ID = ";
+    std::cout << vertex_array_ID << std::endl;
+    glEnableVertexAttribArray(0);
+
+    glGenBuffers(1, &vertex_buffer_ID);
+    std::cout << "Scene::Init -> Generated color VBO ID = ";
+    std::cout << vertex_buffer_ID << std::endl;
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
+    std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
+    std::cout << vertex_buffer_ID << std::endl;
+    glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), AXES_POINTS, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+  });
+}
+
+void Terminate() {
+  std::call_once(terminate_flag, [&]() {
+    if (vertex_buffer_ID != 0) {
+      std::cout << "scene::Terminate -> Deallocating vertex VBO" << std::endl;
+      glDeleteBuffers(1, &vertex_buffer_ID);
+      vertex_buffer_ID = 0;
+    }
+  });
+}
+
+bool IsDebug() { return debug_mode; }
+void SetDebugOption(bool a_isDebug) { debug_mode = a_isDebug; }
+
+void Render() {
+  if (debug_mode) {
+    DrawAxes();
+  }
+}
+} /* namespace scene */
 } /* namespace particle */
 } /* namespace gem */

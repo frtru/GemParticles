@@ -16,14 +16,15 @@
 //C++ system files
 #include <memory>
 #include <iostream>
+#include <sstream>
 //Other libraries' .h files
 //Your project's .h files
 #include "timer.hh"
 #include "opengl_context.hh"
-#include "shader.hh"
+#include "shader_module.hh"
 #include "camera.hh"
 #include "event_handler.hh"
-#include "cpu_particle_module.hh"
+#include "particle_module.hh"
 #include "particle_system_interface.hh"
 #include "scene.hh"
 
@@ -42,7 +43,6 @@ namespace {
 // window management system or 3D API (GLFW/Windows
 // & OpenGL/Direct3D)
 std::shared_ptr<GraphicContext> graphic_context;
-std::shared_ptr<Scene>          scene;
 }
 
 void Init() {
@@ -50,13 +50,11 @@ void Init() {
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
 
-  // Shaders initialization
-  shader_manager::Init();
-
+  shader::module::Init();
   // Camera initialization
   camera::Init();
   camera::LookAt( 
-    glm::vec3(0, 0, 5),   // Camera is at (0,0,5), in World Space
+    glm::vec3(4, 4, 4),   // Camera is at (0,0,4), in World Space
     glm::vec3(0, 0, 0),   // and looks at the origin
     glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
   camera::SetPerspectiveProjection( 
@@ -68,25 +66,31 @@ void Init() {
   event_handler::Init(graphic_context);
 
   // Scene initialization
-  scene = std::make_shared<Scene>();
-  scene->SetDebugOption(true);
+  scene::Init();
+  scene::SetDebugOption(true);
 
   // Particle system initialization
-  cpu_particle_module::Init();
+  particle_module::Init();
   std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000));
-  cpu_particle_module::AddSystem(std::move(wParticleSystem));
+  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10,100000));
+  particle_module::AddSystem(std::move(wParticleSystem));
+  
 }
 
 void Run() {
+
   while (!graphic_context->PollWindowClosedEvent()) {
-    std::cout << "FPS: " << timer::chrono::GetFPS() << std::endl;
     double dt = timer::chrono::GetTimeElapsedInSeconds();
+    std::stringstream ss; 
+    ss << "GemParticles, FPS: "  << timer::chrono::GetFPS()
+      << " | Active Particles: " << particle_module::GetActiveParticlesCount();
+    glfwSetWindowTitle(static_cast<GLFWwindow*>(
+      graphic_context->GetWindowHandle()), ss.str().c_str());
     
-    scene->Render();
-    cpu_particle_module::Update(dt);    
+    scene::Render();
+    particle_module::Update(dt);    
     
     graphic_context->Update();
     timer::chrono::Update();
@@ -95,8 +99,10 @@ void Run() {
 
 void Terminate() {
   // App destruction
-  cpu_particle_module::Terminate();
-  shader_manager::Terminate();
+  particle_module::Terminate();
+  scene::Terminate();
+  event_handler::Terminate();
+  shader::module::Terminate();
   graphic_context->Terminate();
 }
 

@@ -16,19 +16,13 @@
 #include <iostream>
 #include <mutex>
 
-
-#ifdef LINUX
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#else
-#include <gl/glew.h>
-#include <gl/glfw3.h>
-#endif
 
 #include "graphic_context.hh"
 #include "particle_system.hh"
+#include "scene.hh"
 #include "camera.hh"
-#include "shader.hh"
 #include "timer.hh"
 
 namespace gem {
@@ -36,7 +30,7 @@ namespace particle {
 namespace event_handler {
 namespace {
 std::once_flag init_flag;
-//std::once_flag terminate_flag;
+std::once_flag terminate_flag;
 // TODO: If it's worth it, move these settings someplace else
 // Camera settings
 glm::vec3 camera_direction;
@@ -126,16 +120,19 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
   auto targetPosition = camera::GetTargetPosition();
   auto up = camera::GetUpVector();
   auto camera_right = glm::normalize(glm::cross(camera_direction, up)) * camera_speed;
+  auto camera_forward = camera_direction * camera_speed;
     switch(a_nKeyID) {
       // Move forward
       case GLFW_KEY_W:
-        position += camera_direction * camera_speed;
-        camera::SetEyePosition(position);
+        position += camera_forward;
+        targetPosition += camera_forward;
+        camera::LookAt(position, targetPosition, camera::GetUpVector());
         break;
       // Move backward
       case GLFW_KEY_S:
-        position -= camera_direction * camera_speed;
-        camera::SetEyePosition(position);
+        position -= camera_forward;
+        targetPosition -= camera_forward;
+        camera::LookAt(position, targetPosition, camera::GetUpVector());
         break;
       // Move right
       case GLFW_KEY_D:
@@ -148,6 +145,10 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         position -= camera_right;
         targetPosition -= camera_right;
         camera::LookAt(position, targetPosition, camera::GetUpVector());
+        break;
+        // Toggle debug option
+      case GLFW_KEY_B:
+        scene::SetDebugOption(!scene::IsDebug());
         break;
       default:
         break;
@@ -180,7 +181,7 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
 }
 
 void Terminate() {
-
+  std::call_once(terminate_flag, [&]() {});
 }
 } /* namespace event_handler*/
 } /* namespace particle */

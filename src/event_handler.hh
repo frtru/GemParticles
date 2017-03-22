@@ -23,7 +23,6 @@ class GraphicContext;
 namespace event_handler {
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
 void Terminate();
-
 }; /* namespace event_handler*/
 } /* namespace particle */
 } /* namespace gem */

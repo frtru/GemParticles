@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "shader.hh"
+#include "shader_module.hh"
 
 #include <algorithm>
 #include <vector>
@@ -20,17 +20,12 @@
 #include <fstream>
 #include <mutex>
 
-namespace gem {
-namespace particle {
-namespace shader_manager {
-namespace {
-// For each program ID, we have a list of
-// compiled/link shader sources
-GLuint                                              current_program;
-std::map<GLuint, std::vector<std::string> >         shader_programs;
-std::vector<GLuint>                                 compilation_cache;
-std::vector<std::string>                            compilation_sources;
+#include "shader_factory.hh"
 
+namespace shader {
+namespace module {
+namespace {
+GLuint                                              current_program;
 std::map<GLuint, std::map<std::string, GLuint> >    attrib_list;
 std::map<GLuint, std::map<std::string, GLuint> >    uniform_location_list;
 std::map<GLuint, GLuint >                           uniform_block_list;
@@ -41,123 +36,18 @@ std::once_flag terminate_flag;
 
 void Init() {
   std::call_once(init_flag, [&]() {
+    shader::factory::Init();
   });
 }
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
-    std::cout << "shader_manager::Terminate -> Deleting shader programs." << std::endl;
-    for (auto shader : shader_programs) {
-      glDeleteProgram(shader.first);
-    }
-    std::cout << "shader_manager::Terminate -> Deleting UBOs." << std::endl;
+    shader::factory::Terminate();
+    std::cout << "shader_module::Terminate -> Deleting UBOs." << std::endl;
     for (auto uniformBlocks : uniform_block_list) {
       glDeleteBuffers(1, &uniformBlocks.second);
     }
   });
-}
-
-bool CompileShaderFile(std::string a_sFileName, GLenum a_eShaderType) {
-  std::ifstream fparser;
-  fparser.open(a_sFileName, std::ios_base::in);
-  if (fparser) {
-    ///read + load
-    std::string buffer(
-      std::istreambuf_iterator<char>(fparser), 
-      (std::istreambuf_iterator<char>())
-    );
-    return CompileShaderText(buffer, a_eShaderType, a_sFileName);
-  }
-  std::cerr << "shader_manager::CompileShaderFile -> "
-    << "Invalid fileName path : "
-    << a_sFileName << std::endl;
-  return false;
-}
-
-bool CompileShaderText(const std::string& a_rShaderText, 
-  GLenum a_eShaderType, 
-  std::string a_sFileName) {
-  GLuint shader = glCreateShader(a_eShaderType);
-  const char* cstr = a_rShaderText.c_str();
-  glShaderSource(shader, 1, &cstr, nullptr);
-
-  ///compile + check shader load status
-  GLint status;
-  glCompileShader(shader);
-  glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-  if (status == GL_FALSE) {
-    GLint infoLogSize;
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogSize);
-    GLchar *infoLog = new GLchar[infoLogSize];
-    glGetShaderInfoLog(shader, infoLogSize, nullptr, infoLog);
-    std::cerr << "shader_manager::CompileShaderText -> "
-      << infoLog << std::endl;
-    delete[] infoLog;
-    return false;
-  }
-  compilation_sources.push_back(a_sFileName);
-  compilation_cache.push_back(shader);
-  return true;
-}
-
-GLuint CreateProgram() {
-  // Check if compilation_cache is not empty before processing
-  if (compilation_cache.size() == 0) {
-    std::cerr << "shader_manager::CreateProgram -> Trying to create a program from an empty " << std::endl
-      << "compilation cache. Returning 0xFFFFFFFF..." << std::endl;
-    return 0xFFFFFFFF;
-  }
-
-  // Check if compilation_cache and compilation sources
-  // are in sync
-  if (compilation_cache.size() != compilation_sources.size()) {
-    std::cerr << "shader_manager::CreateProgram -> Incompatible sources<->cache sizes." << std::endl
-      << "Returning 0xFFFFFFFF..." << std::endl;
-    return 0xFFFFFFFF;
-  }
-
-  // Check if all compilation_sources are 
-  // already somewhere in a program in shader_programs
-  std::sort(compilation_sources.begin(), compilation_sources.end());
-  for (auto program : shader_programs) {
-    // If sources that are about to be bound to a program
-    // already have one, clear cache/sources and return it
-    if (program.second == compilation_sources) {
-      compilation_cache.clear();
-      compilation_sources.clear();
-      return program.first;
-    }
-  }
-
-  GLuint programID = glCreateProgram();
-  for (GLuint shaderID : compilation_cache) {
-    glAttachShader(programID, shaderID);
-  }
-
-  ///link + check
-  GLint status;
-  glLinkProgram(programID);
-  glGetProgramiv(programID, GL_LINK_STATUS, &status);
-  if (status == GL_FALSE) {
-    GLint infoLogSize;
-    glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogSize);
-    GLchar *infoLog = new GLchar[infoLogSize];
-    glGetProgramInfoLog(programID, infoLogSize, nullptr, infoLog);
-    std::cerr << "shader_manager::CreateProgram() -> "
-      << infoLog << std::endl;
-    delete[] infoLog;
-    return 0xFFFFFFFF;
-  }
-  // Detach + delete shaders
-  for (GLuint shaderID : compilation_cache) {
-    glDetachShader(programID, shaderID);
-    glDeleteShader(shaderID);
-  }
-
-  shader_programs[programID] = compilation_sources;
-  compilation_sources.clear();
-  compilation_cache.clear();
-  return programID;
 }
 
 GLuint GetProgramID() { 
@@ -185,7 +75,7 @@ void RegisterAttribute(std::string a_sAttrib, GLuint a_unProgramID) {
       glGetAttribLocation(a_unProgramID, a_sAttrib.c_str());
   }
   else {
-    std::cerr << "shader_manager::RegisterUniform -> Trying to register uniform that already" << std::endl
+    std::cerr << "shader_module::RegisterUniform -> Trying to register uniform that already" << std::endl
       << "exists for program " << a_unProgramID << ". Will ignore instruction..." << std::endl;
   }
 }
@@ -196,7 +86,7 @@ void RegisterUniform(std::string a_sUniform, GLuint a_unProgramID) {
       glGetUniformLocation(a_unProgramID, a_sUniform.c_str());
   }
   else {
-    std::cerr << "shader_manager::RegisterUniform -> Trying to register uniform that already" << std::endl
+    std::cerr << "shader_module::RegisterUniform -> Trying to register uniform that already" << std::endl
       << "exists for program " << a_unProgramID << ". Will ignore instruction..." << std::endl;
   }
 }
@@ -223,7 +113,7 @@ void RegisterGlobalUniformBlock(GLuint a_unBindingPoint,
     uniform_block_list[a_unBindingPoint] = unUBOID;
   }
   else {
-    std::cerr << "shader_manager::RegisterGlobalUniform -> Trying to register binding point " << a_unBindingPoint << std::endl
+    std::cerr << "shader_module::RegisterGlobalUniform -> Trying to register binding point " << a_unBindingPoint << std::endl
       << "which is already registered. Will ignore instruction..." << std::endl;
   }
 }
@@ -245,7 +135,7 @@ void RegisterGlobalUniformBlock(GLuint a_unBindingPoint,
     uniform_block_list[a_unBindingPoint] = unUBOID;
   }
   else {
-    std::cerr << "shader_manager::RegisterGlobalUniform -> Trying to register binding point " << a_unBindingPoint << std::endl
+    std::cerr << "shader_module::RegisterGlobalUniform -> Trying to register binding point " << a_unBindingPoint << std::endl
       << "which is already registered. Will ignore instruction..." << std::endl;
   }
 }
@@ -265,7 +155,7 @@ void SetUniformBlockValue(GLuint a_unBindingPoint,
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
   }
   else {
-    std::cerr << "shader_manager::SetUniformBlockValue -> Trying to set value to binding point " << a_unBindingPoint << std::endl
+    std::cerr << "shader_module::SetUniformBlockValue -> Trying to set value to binding point " << a_unBindingPoint << std::endl
       << "without registering an UBO. Will ignore instruction..." << std::endl;
   }
 }
@@ -281,6 +171,5 @@ void Detach() {
   current_program = 0;
   glUseProgram(0); 
 }
-} /* namespace shader_manager */
-} /* namespace particle */
-} /* namespace gem */
+} /* namespace module */
+} /* namespace shader */

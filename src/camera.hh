@@ -22,10 +22,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-namespace gem {
-namespace particle {
 namespace camera {
-
 void Init();
 void Terminate();
 
@@ -56,6 +53,4 @@ void SetOrthoProjection(float a_fLeft, float a_fRight,
   float a_fNear, float a_fFar);
 
 } /* namespace camera*/
-} /* namespace particle */
-} /* namespace gem */
 #endif /* end of include guard: CAMERA_HH */
