@@ -101,7 +101,7 @@ const glm::f32vec3 Emitter<ParticleType>::DEFAULT_SPEED = { 0.5f, 2.0f, 0.0f };
 template <class ParticleType>
 const float Emitter<ParticleType>::DEFAULT_LIFETIME = 1.0f;
 template <class ParticleType>
-const double Emitter<ParticleType>::DEFAULT_EMISSION_RATE = 100000.0;
+const double Emitter<ParticleType>::DEFAULT_EMISSION_RATE = 1000.0;
 // Default redish transparent color 
 // overwritten by updaters start/end color
 template <class ParticleType>

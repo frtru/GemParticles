@@ -11,30 +11,27 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef PARTICLE_SYSTEM_INTERFACE_HH
-#define PARTICLE_SYSTEM_INTERFACE_HH
+#ifndef SHADER_FACTORY_HH
+#define SHADER_FACTORY_HH
 
-#include <memory>
+#include <GL/glew.h>
 #include <string>
 
-#include "macro_definitions.hh"
+namespace shader {
+namespace factory {
+void Init();
+void Terminate();
 
-namespace gem {
-namespace particle {
-class IParticleSystem {
-  DECLARE_UNCOPYABLE(IParticleSystem)
-  DECLARE_MOVABLE(IParticleSystem)
-public:
-  IParticleSystem() = default;
-  virtual ~IParticleSystem() = default;
-  
-  virtual inline std::size_t GetProgramID() const = 0;
-  virtual inline std::size_t GetActiveParticlesCount() const = 0;
+bool CompileShaderFile(const std::string& a_sFileName, 
+  GLenum a_eShaderType);
+bool CompileShaderText(const std::string& a_rShaderText,
+  GLenum a_eShaderType,
+  std::string a_sFileName = "text");
 
-  virtual void Update(double a_dt) = 0;
-  virtual void Render() = 0;
-}; /* class IParticleSystem */
-} /* namespace particle */
-} /* namespace gem */
+void LoadFromPreCompiledText(GLenum type, const std::string& src);
+void LoadFromPreCompiledFile(GLenum type, const char* fileName);
 
-#endif /* end of include guard: PARTICLE_SYSTEM_INTERFACE_HH */
+GLuint CreateProgram();
+} /* namespace factory */
+} /* namespace shader */
+#endif /* end of include guard: SHADER_FACTORY_HH */

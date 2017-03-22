@@ -26,14 +26,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app.cc" />
-    <ClCompile Include="src\camera.cc" />
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\event_handler.cc" />
-    <ClCompile Include="src\shader.cc">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\random_fountain_emitter.cc">
       <Filter>Emitters</Filter>
     </ClCompile>
@@ -59,6 +55,21 @@
     <ClCompile Include="src\particle_module.cc">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\shader_factory.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shader_module.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture_factory.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\texture_module.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\camera.cc">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -71,7 +82,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="src\app.hh" />
-    <ClInclude Include="src\camera.hh" />
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\opengl_context.hh" />
     <ClInclude Include="src\event_handler.hh" />
@@ -82,9 +92,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\timer.hh">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shader.hh">
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\emitter.hh">
@@ -127,6 +134,21 @@
     <ClInclude Include="src\particle_module.hh">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\shader_factory.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shader_module.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture_factory.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\texture_module.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera.hh">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.comp">
@@ -135,19 +157,22 @@
     <None Include="shaders\default.frag">
       <Filter>Resource files\Shaders</Filter>
     </None>
-    <None Include="shaders\default.geom">
-      <Filter>Resource files\Shaders</Filter>
-    </None>
     <None Include="shaders\default.tesc">
       <Filter>Resource files\Shaders</Filter>
     </None>
     <None Include="shaders\default.tese">
       <Filter>Resource files\Shaders</Filter>
     </None>
-    <None Include="shaders\default.vert">
+    <None Include="shaders\debug_axes.vert">
       <Filter>Resource files\Shaders</Filter>
     </None>
-    <None Include="shaders\debug_axes.vert">
+    <None Include="shaders\particle_billboard.geom">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\particle_billboard.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\simple_texture.frag">
       <Filter>Resource files\Shaders</Filter>
     </None>
   </ItemGroup>

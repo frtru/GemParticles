@@ -15,6 +15,8 @@
 
 #include <iostream>
 
+#include "timer.hh"
+
 namespace gem {
 namespace particle {
 OpenGLContext::OpenGLContext() 
@@ -85,7 +87,7 @@ void OpenGLContext::InitImpl() {
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-  //glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   
   //TODO: Insert other glfw parameters here
 
@@ -99,11 +101,11 @@ void OpenGLContext::InitImpl() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0, 640, 480);
 
-  glEnable(GL_POINT_SMOOTH);
+  //glEnable(GL_POINT_SMOOTH);
   glEnable(GL_CULL_FACE);
   // TODO: Might have to send the size depending on the 
   // type of particles sent...
-  glPointSize(0.1f);
+  //glPointSize(0.1f);
 }
 
 void OpenGLContext::TerminateImpl() {

@@ -11,24 +11,16 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef SHADER_HH
-#define SHADER_HH
+#ifndef SHADER_MODULE_HH
+#define SHADER_MODULE_HH
 
-#include <GL/glew.h>
 #include <string>
+#include <GL/glew.h>
 
-namespace gem {
-namespace particle {
-namespace shader_manager {
+namespace shader {
+namespace module {
 void Init();
 void Terminate();
-
-bool CompileShaderFile(std::string a_sFileName, GLenum a_eShaderType);
-bool CompileShaderText(const std::string& a_rShaderText, 
-  GLenum a_eShaderType, 
-  std::string a_sFileName = "text");
-void LoadFromPreCompiledText(GLenum type, const std::string& src);
-void LoadFromPreCompiledFile(GLenum type, const char* fileName);
 
 GLuint GetAttribLocation(const std::string& a_rAttrib, GLuint a_unProgramID);
 GLuint GetUniformLocation(const std::string& a_rUniform, GLuint a_unProgramID);
@@ -48,10 +40,8 @@ void SetUniformBlockValue(GLuint a_unBindingPoint,
   GLuint a_unUBOSize,
   void* a_pValue);
 
-GLuint CreateProgram();
 void Use(GLuint a_unProgramID);
 void Detach();
-} /* namespace shader_manager*/
-} /* namespace particle */
-} /* namespace gem */
-#endif /* end of include guard: SHADER_HH */
+} /* namespace module */
+} /* namespace shader */
+#endif /* end of include guard: SHADER_MODULE_HH */

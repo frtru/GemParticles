@@ -23,7 +23,6 @@
 #include "particle_system.hh"
 #include "scene.hh"
 #include "camera.hh"
-#include "shader.hh"
 #include "timer.hh"
 
 namespace gem {
@@ -121,16 +120,19 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
   auto targetPosition = camera::GetTargetPosition();
   auto up = camera::GetUpVector();
   auto camera_right = glm::normalize(glm::cross(camera_direction, up)) * camera_speed;
+  auto camera_forward = camera_direction * camera_speed;
     switch(a_nKeyID) {
       // Move forward
       case GLFW_KEY_W:
-        position += camera_direction * camera_speed;
-        camera::SetEyePosition(position);
+        position += camera_forward;
+        targetPosition += camera_forward;
+        camera::LookAt(position, targetPosition, camera::GetUpVector());
         break;
       // Move backward
       case GLFW_KEY_S:
-        position -= camera_direction * camera_speed;
-        camera::SetEyePosition(position);
+        position -= camera_forward;
+        targetPosition -= camera_forward;
+        camera::LookAt(position, targetPosition, camera::GetUpVector());
         break;
       // Move right
       case GLFW_KEY_D:

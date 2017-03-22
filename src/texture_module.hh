@@ -11,30 +11,16 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef PARTICLE_SYSTEM_INTERFACE_HH
-#define PARTICLE_SYSTEM_INTERFACE_HH
+#ifndef TEXTURE_MODULE_HH
+#define TEXTURE_MODULE_HH
 
-#include <memory>
 #include <string>
+#include <GL/glew.h>
 
-#include "macro_definitions.hh"
-
-namespace gem {
-namespace particle {
-class IParticleSystem {
-  DECLARE_UNCOPYABLE(IParticleSystem)
-  DECLARE_MOVABLE(IParticleSystem)
-public:
-  IParticleSystem() = default;
-  virtual ~IParticleSystem() = default;
-  
-  virtual inline std::size_t GetProgramID() const = 0;
-  virtual inline std::size_t GetActiveParticlesCount() const = 0;
-
-  virtual void Update(double a_dt) = 0;
-  virtual void Render() = 0;
-}; /* class IParticleSystem */
-} /* namespace particle */
-} /* namespace gem */
-
-#endif /* end of include guard: PARTICLE_SYSTEM_INTERFACE_HH */
+namespace texture {
+namespace module {
+void Init();
+void Terminate();
+} /* namespace module */
+} /* namespace texture */
+#endif /* end of include guard: TEXTURE_MODULE_HH */

@@ -65,6 +65,10 @@ public:
     return m_pRenderer->GetProgramID();
   }
 
+  virtual inline std::size_t GetActiveParticlesCount() const {
+    return m_pParticlePool->GetActiveParticleCount();
+  }
+
   inline void AddEmitter(std::unique_ptr<Emitter<ParticleType> > a_pEmitter) {
 	  m_vEmitters.push_back(std::move(a_pEmitter));
   }
