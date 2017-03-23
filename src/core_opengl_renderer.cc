@@ -17,6 +17,10 @@
 #include "shader_factory.hh"
 #include "shader_module.hh"
 
+// texture utilities
+#include "texture_factory.hh"
+#include "texture_module.hh"
+
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
@@ -28,6 +32,8 @@ CoreGLRenderer::CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles>
   shader::factory::CompileShaderFile("shaders/particle_billboard.geom", GL_GEOMETRY_SHADER);
   shader::factory::CompileShaderFile("shaders/simple_texture.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader::factory::CreateProgram();
+
+  texture::factory::Create2DTexture("textures/dickbutt.png");
 
   // VAO initialization
   glGenVertexArrays(1, &m_vertexArrayID);

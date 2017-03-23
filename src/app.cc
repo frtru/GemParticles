@@ -22,6 +22,7 @@
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader_module.hh"
+#include "texture_module.hh"
 #include "camera.hh"
 #include "event_handler.hh"
 #include "particle_module.hh"
@@ -51,6 +52,8 @@ void Init() {
   graphic_context->Init();
 
   shader::module::Init();
+  texture::module::Init();
+
   // Camera initialization
   camera::Init();
   camera::LookAt( 
@@ -102,6 +105,7 @@ void Terminate() {
   particle_module::Terminate();
   scene::Terminate();
   event_handler::Terminate();
+  texture::module::Terminate();
   shader::module::Terminate();
   graphic_context->Terminate();
 }

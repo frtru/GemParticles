@@ -13,7 +13,10 @@
 *************************************************************************/
 #include "texture_factory.hh"
 
+#include <iostream>
 #include <mutex>
+
+#include "FreeImage.h"
 
 namespace texture {
 namespace factory {
@@ -21,24 +24,77 @@ namespace {
 std::once_flag init_flag;
 std::once_flag terminate_flag;
 
-unsigned char *LoadImage(const std::string& a_sFileName,
-  std::size_t& a_rWidth, std::size_t& a_rHeight) {
-  // TODO:
-  return NULL;
+// TODO: I don't really like the bitmaphandle
+// in order to free it passed as parameter...
+bool LoadImage(const std::string& a_sFileName,
+  unsigned char *a_pImage,
+  std::size_t& a_rWidth, 
+  std::size_t& a_rHeight,
+  void *a_pBitmapHandle) {
+  const char *wFilename = a_sFileName.c_str();
+  //image format
+  FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+  //pointer to the image, once loaded
+  FIBITMAP *dib(0);
+  //pointer to the image data
+  BYTE* bits(0);
+  //image width and height
+  unsigned int width(0), height(0);
+  //OpenGL's image ID to map to
+  GLuint gl_texID;
+
+  //check the file signature and deduce its format
+  fif = FreeImage_GetFileType(wFilename, 0);
+  //if still unknown, try to guess the file format from the file extension
+  if (fif == FIF_UNKNOWN)
+    fif = FreeImage_GetFIFFromFilename(wFilename);
+  //if still unkown, return failure
+  if (fif == FIF_UNKNOWN)
+    return false;
+
+  //check that the plugin has reading capabilities and load the file
+  if (FreeImage_FIFSupportsReading(fif))
+    dib = FreeImage_Load(fif, wFilename);
+  //if the image failed to load, return failure
+  if (!dib)
+    return false;
+
+  //retrieve the image data
+  bits = FreeImage_GetBits(dib);
+  //get the image width and height
+  width = FreeImage_GetWidth(dib);
+  height = FreeImage_GetHeight(dib);
+  //if this somehow one of these failed (they shouldn't), return failure
+  if ((bits == 0) || (width == 0) || (height == 0))
+    return false;
+  
+  a_pImage = bits;
+  a_rWidth = width;
+  a_rHeight = height;
+  a_pBitmapHandle = dib;
+
+  return true;
 }
 
-void FreeImage(unsigned char *a_pImage) {
-
+bool FreeImage(void *a_pBitmapHandle) {
+  FreeImage_Unload(static_cast<FIBITMAP *>(a_pBitmapHandle));
+  return true;
 }
 }
 
 void Init() {
   std::call_once(init_flag, [&]() {
+#ifdef FREEIMAGE_LIB
+    FreeImage_Initialise();
+#endif
   });
 }
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
+#ifdef FREEIMAGE_LIB
+    FreeImage_DeInitialise();
+#endif
   });
 }
 
@@ -47,8 +103,11 @@ void Terminate() {
 bool Create2DTexture(const std::string& a_sFileName) {
   // Load Image
   std::size_t wWidth, wHeight;
-  unsigned char *wImage =
-    LoadImage(a_sFileName,wWidth, wHeight);
+  unsigned char *wImage = nullptr;
+  void *wBitMapHandle = nullptr;
+  if (!LoadImage(a_sFileName, wImage, wWidth, wHeight, wBitMapHandle)) {
+    return false;
+  }
   
   // Generate texture
   GLuint wTexture;
@@ -68,7 +127,7 @@ bool Create2DTexture(const std::string& a_sFileName) {
   glGenerateMipmap(GL_TEXTURE_2D);
 
   // Free image
-  FreeImage(wImage);
+  FreeImage(wBitMapHandle);
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return true;
