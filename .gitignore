@@ -346,5 +346,8 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+#CLion File
+*.cbp
+
 # Cmake build directory
 build/*

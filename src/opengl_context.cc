@@ -47,7 +47,7 @@ std::size_t OpenGLContext::GetWindowHeight() const {
 }
 
 void OpenGLContext::Update() {
-  //glClearColor(m_BackgroundColor[0], m_BackgroundColor[1], m_BackgroundColor[2], 1);
+  glClearColor(m_BackgroundColor[0], m_BackgroundColor[1], m_BackgroundColor[2], 1);
   TwDraw();
 
   /* Poll for and process events */
@@ -93,7 +93,7 @@ void OpenGLContext::InitImpl() {
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-  glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  //glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   
   //TODO: Insert other glfw parameters here
 
@@ -128,7 +128,7 @@ void OpenGLContext::InitImpl() {
   glfwSetKeyCallback(m_pWindow, (GLFWkeyfun)TwEventKeyGLFW);
 
   // Add 'bgColor' to 'bar': it is a modifable variable of type TW_TYPE_COLOR3F (3 floats color)
-  TwAddVarRW(m_TweakBar, "BG_COLOR", TW_TYPE_COLOR3F, &m_BackgroundColor, " label='Background color for the window' ");
+  TwAddVarRW(m_TweakBar, "m_BackgroundColor", TW_TYPE_COLOR3F, &m_BackgroundColor, " label='Background color for the window' ");
 }
 
 void OpenGLContext::TerminateImpl() {

@@ -81,19 +81,21 @@ void Init() {
 
 void Run() {
 
+  double dt;
+  std::stringstream ss;
+
   while (!graphic_context->PollWindowClosedEvent()) {
-    double dt = timer::chrono::GetTimeElapsedInSeconds();
-    std::stringstream ss; 
+    dt = timer::chrono::GetTimeElapsedInSeconds();
     ss << "GemParticles, FPS: "  << timer::chrono::GetFPS()
-      << " | Active Particles: " << particle_module::GetActiveParticlesCount();
+       << " | Active Particles: " << particle_module::GetActiveParticlesCount();
     glfwSetWindowTitle(static_cast<GLFWwindow*>(
-      graphic_context->GetWindowHandle()), ss.str().c_str());
-    
+                           graphic_context->GetWindowHandle()), ss.str().c_str());
     scene::Render();
     particle_module::Update(dt);    
     
     graphic_context->Update();
     timer::chrono::Update();
+    ss.str("");
   }
 }
 
