@@ -47,13 +47,12 @@ std::size_t OpenGLContext::GetWindowHeight() const {
 }
 
 void OpenGLContext::Update() {
-  glClearColor(m_BackgroundColor[0], m_BackgroundColor[1], m_BackgroundColor[2], 1);
-  TwDraw();
-
   /* Poll for and process events */
   glfwPollEvents();
 
   /* Swap front and back buffers */
+  glClearColor(m_BackgroundColor[0], m_BackgroundColor[1], m_BackgroundColor[2], 1);
+  TwDraw();
   glfwSwapBuffers(m_pWindow);
 
   /* Once the buffers are swapped, lets clear the canvas*/
@@ -93,8 +92,7 @@ void OpenGLContext::InitImpl() {
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
-  //glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-  
+  glfwSetInputMode(m_pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   //TODO: Insert other glfw parameters here
 
   // GLEW initialization
@@ -119,16 +117,19 @@ void OpenGLContext::InitImpl() {
 
   /* Initialize the library */
   TwInit(TW_OPENGL, NULL);
-  m_TweakBar = TwNewBar("GemParticles - TweakBar");
+  m_TweakBar = TwNewBar("GemParticlesTweakBar");
+  TwDefine(" GemParticlesTweakBar label='Main TweakBar' refresh=0.5 position='16 16' size='200 200' alpha=0");
+
   TwWindowSize(640, 480);
 
   // - Directly redirect GLFW mouse button events to AntTweakBar
   glfwSetMouseButtonCallback(m_pWindow, (GLFWmousebuttonfun)TwEventMouseButtonGLFW);
   // - Directly redirect GLFW key events to AntTweakBar
   glfwSetKeyCallback(m_pWindow, (GLFWkeyfun)TwEventKeyGLFW);
-
-  // Add 'bgColor' to 'bar': it is a modifable variable of type TW_TYPE_COLOR3F (3 floats color)
-  TwAddVarRW(m_TweakBar, "m_BackgroundColor", TW_TYPE_COLOR3F, &m_BackgroundColor, " label='Background color for the window' ");
+  // - Directly redirect GLFW char events to AntTweakBar
+  glfwSetCharCallback(m_pWindow, (GLFWcharfun)TwEventCharGLFW);
+  // Add 'm_BackgroundColor' to 'm_TweakBar': it is a modifiable variable of type TW_TYPE_COLOR3F (3 floats color)
+  TwAddVarRW(m_TweakBar, "BG_COLOR", TW_TYPE_COLOR3F, &m_BackgroundColor, " label='Background color for the window' ");
 }
 
 void OpenGLContext::TerminateImpl() {
