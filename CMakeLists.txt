@@ -47,8 +47,6 @@ set(SOURCE_FILES
 	src/camera.hh
 	src/core_opengl_renderer.cc
 	src/core_opengl_renderer.hh
-    src/cpu_particle_module.cc
-    src/cpu_particle_module.hh
 	src/dynamic.hh
 	src/emitter.hh
 	src/euler_particle_updater.cc
@@ -66,6 +64,8 @@ set(SOURCE_FILES
 	src/particle_core_data.hh
 	src/particle_pool.hh
 	src/particle_pool_core.hh
+    src/particle_module.cc
+    src/particle_module.hh
 	src/particle_system.hh
 	src/particle_system_interface.hh
 	src/rain_emitter.cc
@@ -75,21 +75,22 @@ set(SOURCE_FILES
 	src/renderer.hh
 	src/scene.cc
 	src/scene.hh
-	src/shader.cc
-	src/shader.hh
+    src/shader_factory.cc
+    src/shader_factory.hh
+	src/shader_module.cc
+	src/shader_module.hh
 	src/singleton.hh
 	src/spherical_stream_emitter.cc
 	src/spherical_stream_emitter.hh
+    src/texture_factory.cc
+    src/texture_factory.hh
+    src/texture_module.cc
+    src/texture_module.hh
 	src/timer.hh
 )
 
 add_executable(GemParticles ${SOURCE_FILES})
-
-if(WIN32 OR WINDOWS)
-	target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW3_LIBRARIES} ${ANTWEAKBAR_LIBRARIES})
-elseif(UNIX)
-	target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW3_LIBRARIES} ${ANTWEAKBAR_LIBRARIES})
-endif()
+target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW3_LIBRARIES} ${ANTWEAKBAR_LIBRARIES})
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
 #if(WINDOWS OR WIN32)
