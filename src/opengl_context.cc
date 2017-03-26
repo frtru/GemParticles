@@ -12,20 +12,22 @@
  * all copies or substantial portions of the Software.
 *************************************************************************/
 #include "opengl_context.hh"
-
 #include <iostream>
-
 #include "timer.hh"
 
 namespace gem {
 namespace particle {
-OpenGLContext::OpenGLContext() 
-  : m_pWindow(nullptr) {}
+OpenGLContext::OpenGLContext() :
+    m_pWindow(nullptr),
+    m_TweakBar(nullptr),
+    m_BackgroundColor{ 0.1f, 0.2f, 0.4f }
+{
+}
 
 OpenGLContext::~OpenGLContext() {
   // TODO: When closing window first instead of console
   // it tries to delete the GLFWwindow* which is already
-  // deleted, maybe the shaded_ptr isnt a good idea
+  // deleted, maybe the shared_ptr isnt a good idea
 }
 
 void* OpenGLContext::GetWindowHandle() const {
@@ -45,6 +47,9 @@ std::size_t OpenGLContext::GetWindowHeight() const {
 }
 
 void OpenGLContext::Update() {
+  //glClearColor(m_BackgroundColor[0], m_BackgroundColor[1], m_BackgroundColor[2], 1);
+  TwDraw();
+
   /* Poll for and process events */
   glfwPollEvents();
 
@@ -71,13 +76,14 @@ void OpenGLContext::InitImpl() {
   // Provide a way to set windowed mode or not, size and other useful parameters
 
   // GLFW initialization
-  /* Initialize the library */
+
   if (!glfwInit())
     std::cerr << "OpenGLSetup -> glfwInit failed!" << std::endl;
 
   /* Create a windowed mode window and its OpenGL context */
   m_pWindow = glfwCreateWindow(640, 480, "GemParticles", NULL, NULL);
   if (!m_pWindow) {
+    TwTerminate();
     glfwTerminate();
     std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
   }
@@ -106,10 +112,28 @@ void OpenGLContext::InitImpl() {
   // TODO: Might have to send the size depending on the 
   // type of particles sent...
   //glPointSize(0.1f);
+
+  /*  AntTweakBar initialization and init
+   *  based off: https://sourceforge.net/p/anttweakbar/code/ci/master/tree/examples/TwSimpleGLFW.c
+   */
+
+  /* Initialize the library */
+  TwInit(TW_OPENGL, NULL);
+  m_TweakBar = TwNewBar("GemParticles - TweakBar");
+  TwWindowSize(640, 480);
+
+  // - Directly redirect GLFW mouse button events to AntTweakBar
+  glfwSetMouseButtonCallback(m_pWindow, (GLFWmousebuttonfun)TwEventMouseButtonGLFW);
+  // - Directly redirect GLFW key events to AntTweakBar
+  glfwSetKeyCallback(m_pWindow, (GLFWkeyfun)TwEventKeyGLFW);
+
+  // Add 'bgColor' to 'bar': it is a modifable variable of type TW_TYPE_COLOR3F (3 floats color)
+  TwAddVarRW(m_TweakBar, "BG_COLOR", TW_TYPE_COLOR3F, &m_BackgroundColor, " label='Background color for the window' ");
 }
 
 void OpenGLContext::TerminateImpl() {
   std::cout << "OpenGLContext::TerminateImpl -> Deleting glfw context." << std::endl;
+  TwTerminate();
   glfwTerminate();
 }
 } /* namespace particle */

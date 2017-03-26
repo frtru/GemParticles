@@ -17,6 +17,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "graphic_context.hh"
+#include "AntTweakBar.h"
 
 // TODO: Should the shadermanager initialization be 
 // done by this class?
@@ -41,7 +42,8 @@ private:
   virtual void TerminateImpl() override;
 
   GLFWwindow* m_pWindow;
-
+  TwBar* m_TweakBar;
+  float m_BackgroundColor[3];
 }; /* class OpenGLContext*/
 } /* namespace particle */
 } /* namespace gem */

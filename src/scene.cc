@@ -60,8 +60,8 @@ void Init(bool a_isDebug) {
   std::call_once(init_flag, [&]() {
     debug_mode = a_isDebug;
 
-    shader::factory::CompileShaderFile("shaders/debug_axes.vert", GL_VERTEX_SHADER);
-    shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
+    shader::factory::CompileShaderFile("../shaders/debug_axes.vert", GL_VERTEX_SHADER);
+    shader::factory::CompileShaderFile("../shaders/default.frag", GL_FRAGMENT_SHADER);
     shader_program_ID = shader::factory::CreateProgram();
 
     glGenVertexArrays(1, &vertex_array_ID);
