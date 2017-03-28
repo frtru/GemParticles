@@ -100,13 +100,15 @@ void Terminate() {
 
 // TODO: Pass some of the parameters of glTexImage2D
 // from here
-bool Create2DTexture(const std::string& a_sFileName) {
+GLuint Create2DTexture(const std::string& a_sFileName) {
   // Load Image
   std::size_t wWidth, wHeight;
   unsigned char *wImage = nullptr;
   void *wBitMapHandle = nullptr;
   if (!LoadImage(a_sFileName, wImage, wWidth, wHeight, wBitMapHandle)) {
-    return false;
+    std::cerr << "texture_factory::Create2DTexture -> Loading image failed. " << std::endl
+      << "Returning 0xFFFFFFFF..." << std::endl;
+    return 0xFFFFFFFF;
   }
   
   // Generate texture
@@ -130,7 +132,7 @@ bool Create2DTexture(const std::string& a_sFileName) {
   FreeImage(wBitMapHandle);
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  return true;
+  return wTexture;
 }
 } /* namespace factory */
 } /* namespace texture */

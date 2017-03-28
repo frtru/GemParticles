@@ -24,7 +24,7 @@ void Terminate();
 
 // TODO: Pass some of the parameters of glTexImage2D
 // from here
-bool Create2DTexture(const std::string& a_sFileName);
+GLuint Create2DTexture(const std::string& a_sFileName);
 } /* namespace factory */
 } /* namespace texture */
 #endif /* end of include guard: TEXTURE_FACTORY_HH */
