@@ -7,7 +7,12 @@ find_path(GLEW_INCLUDE_DIRS "GL/glew.h"
 
 find_library(GLEW_LIBRARIES 
 	NAMES glew32 libglew32
-	PATHS $ENV{GLEW_HOME}/built/lib
+	PATHS 
+	$ENV{GLEW_HOME}/built/lib
+	$ENV{GLEW_HOME}/built/lib/Release/Win32
+	$ENV{GLEW_HOME}/built/lib/Release/x64
+	$ENV{GLEW_HOME}/Release/Win32
+	$ENV{GLEW_HOME}/Release/x64
 	"/usr/lib"
 	"/usr/local/lib")
 endif()
