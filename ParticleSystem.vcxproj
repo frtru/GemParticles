@@ -79,6 +79,8 @@
     <None Include="shaders\default.tesc" />
     <None Include="shaders\default.tese" />
     <None Include="shaders\particle_billboard.vert" />
+    <None Include="shaders\test.frag" />
+    <None Include="shaders\test.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7F3CDCAC-4D79-4270-825F-7E58D01BC885}</ProjectGuid>

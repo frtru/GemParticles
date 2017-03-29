@@ -175,5 +175,11 @@
     <None Include="shaders\simple_texture.frag">
       <Filter>Resource files\Shaders</Filter>
     </None>
+    <None Include="shaders\test.frag">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\test.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
