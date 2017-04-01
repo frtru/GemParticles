@@ -28,8 +28,8 @@ std::once_flag terminate_flag;
 // in order to free it passed as parameter...
 bool LoadImage(const std::string& a_sFileName,
   unsigned char *a_pImage,
-  std::size_t& a_rWidth, 
-  std::size_t& a_rHeight,
+  GLsizei& a_rWidth,
+  GLsizei& a_rHeight,
   void *a_pBitmapHandle) {
   const char *wFilename = a_sFileName.c_str();
   //image format
@@ -100,21 +100,28 @@ void Terminate() {
 // from here
 GLuint Create2DTexture(const std::string& a_sFileName) {
   // Load Image
-  std::size_t wWidth, wHeight;
+  GLsizei wWidth, wHeight;
   unsigned char *wImage = nullptr;
   void *wBitMapHandle = nullptr;
-  if (!LoadImage(a_sFileName, wImage, wWidth, wHeight, wBitMapHandle)) {
-    std::cerr << "texture_factory::Create2DTexture -> Loading image failed. " << std::endl
-      << "Returning 0xFFFFFFFF..." << std::endl;
-    return 0xFFFFFFFF;
-  }
-  
+
   // Generate texture
   GLuint wTexture;
   glGenTextures(1, &wTexture);
 
   // Create texture
   glBindTexture(GL_TEXTURE_2D, wTexture);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  if (!LoadImage(a_sFileName, wImage, wWidth, wHeight, wBitMapHandle)) {
+    std::cerr << "texture_factory::Create2DTexture -> Loading image failed. " << std::endl
+      << "Returning 0xFFFFFFFF..." << std::endl;
+    return 0xFFFFFFFF;
+  }
+
   glTexImage2D(
     GL_TEXTURE_2D,    // 2D texture target
     0,                // Base mipmap level

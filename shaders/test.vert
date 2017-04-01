@@ -1,16 +1,18 @@
-#version 330 core
+#version 430
 layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 color;
-layout (location = 2) in vec2 texCoord;
+layout (location = 1) in vec2 texcoord;
 
-out vec3 ourColor;
-out vec2 TexCoord;
+layout (std140, binding = 0) uniform CameraInfo {
+  mat4	MVP; 
+  vec3	eye;
+};
+
+out vec2 tex_coord;
 
 void main()
 {
-	gl_Position = vec4(position, 1.0f);
-	ourColor = color;
-	// We swap the y-axis by substracing our coordinates from 1. This is done because most images have the top y-axis inversed with OpenGL's top y-axis.
-	// TexCoord = texCoord;
-	TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
+  vec4 vertex = vec4(position,1.0);
+  gl_Position = MVP*vertex;
+  //tex_coord = vec2(texcoord.x, 1.0 - texcoord.y);
+  tex_coord = texcoord;
 }

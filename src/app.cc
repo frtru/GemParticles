@@ -89,62 +89,54 @@ void Run() {
   shader::factory::CompileShaderFile("shaders/test.frag", GL_FRAGMENT_SHADER);
   GLuint m_shaderProgram = shader::factory::CreateProgram();
 
-
-
-
   // Set up vertex data (and buffer(s)) and attribute pointers
   GLfloat vertices[] = {
-    // Positions          // Colors           // Texture Coords
-    0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // Top Right
-    0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // Bottom Right
-    -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // Bottom Left
-    -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f  // Top Left 
+    -0.5f, -0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    0.5f,  0.5f, 0.0f,
+    -0.5f, 0.5f, 0.0f
   };
-  GLuint indices[] = {  // Note that we start from 0!
-    0, 1, 3, // First Triangle
-    1, 2, 3  // Second Triangle
-  };
-  GLuint VBO, VAO, EBO;
-  glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
-  glGenBuffers(1, &EBO);
 
+  GLfloat texcoords[] = {
+    0.0f, 0.0f,
+    1.0f, 0.0f,
+    1.0f, 1.0f,
+    0.0f, 1.0f
+  };
+
+  GLuint VBO, VAO;
+  glGenVertexArrays(1, &VAO);
   glBindVertexArray(VAO);
 
+  glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
   // Position attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
   glEnableVertexAttribArray(0);
-  // Color attribute
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+  glBindVertexBuffer(0, VBO, 0, 3*sizeof(GL_FLOAT));
+  glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
+  glVertexAttribBinding(0, 0);
+
+  GLuint texVBO;
+  glGenBuffers(1, &texVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, texVBO);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
+
   glEnableVertexAttribArray(1);
-  // TexCoord attribute
-  glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-  glEnableVertexAttribArray(2);
+  glBindVertexBuffer(1, texVBO, 0, 2 * sizeof(GL_FLOAT));
+  glVertexAttribFormat(1, 2, GL_FLOAT, GL_FALSE, 0);
+  glVertexAttribBinding(1, 1);
 
-  glBindVertexArray(0); // Unbind VAO
+  glBindVertexArray(0);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
-
-  // Load and create a texture 
-  GLuint texture1;
   // ====================
   // Texture 1
   // ====================
-  texture1 = texture::factory::Create2DTexture("textures/dickbutt.png");
-  glBindTexture(GL_TEXTURE_2D, texture1);
+  GLuint m_textureID = texture::factory::Create2DTexture("textures/dickbutt.png");
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  glBindTexture(GL_TEXTURE_2D, 0);
+  shader::module::RegisterUniform("mytexture", m_shaderProgram);
 
   while (!graphic_context->PollWindowClosedEvent()) {
     double dt = timer::chrono::GetTimeElapsedInSeconds();
@@ -156,17 +148,13 @@ void Run() {
     
     shader::module::Use(m_shaderProgram);
 
-    // Bind Textures using texture units
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture1);
-    glUniform1i(glGetUniformLocation(m_shaderProgram, "ourTexture1"), 0);
-    
+    glBindTexture(GL_TEXTURE_2D, m_textureID);
 
     // Draw container
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawArrays(GL_QUADS, 0, 4);
     glBindVertexArray(0);
-
 
     scene::Render();
     //particle_module::Update(dt);    

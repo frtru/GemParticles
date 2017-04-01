@@ -1,14 +1,14 @@
-#version 330 core
-in vec3 ourColor;
-in vec2 TexCoord;
+#version 430
 
 out vec4 color;
 
+in vec2 tex_coord;
+
 // Texture samplers
-uniform sampler2D ourTexture1;
+uniform sampler2D mytexture;
 
 void main()
 {
-	// Linearly interpolate between both textures (second texture is only slightly combined)
-	color = vec4(1.0,0.0,0.0,0.0);//texture(ourTexture1, TexCoord);
+	//color = vec4(tex_coord.x,tex_coord.y,0.0f,1.0f);
+	color = texture2D(mytexture, tex_coord);
 }
