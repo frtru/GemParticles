@@ -70,17 +70,23 @@ void LoadFromPreCompiledFile(GLenum type, const char* fileName) {
 }
 
 void RegisterAttribute(std::string a_sAttrib, GLuint a_unProgramID) {
+  if (attrib_list.count(a_unProgramID) == 0) {
+    attrib_list[a_unProgramID] = {};
+  }
   if (attrib_list.at(a_unProgramID).count(a_sAttrib) == 0) {
     attrib_list[a_unProgramID][a_sAttrib] =
       glGetAttribLocation(a_unProgramID, a_sAttrib.c_str());
   }
   else {
-    std::cerr << "shader_module::RegisterUniform -> Trying to register uniform that already" << std::endl
+    std::cerr << "shader_module::RegisterAttribute -> Trying to register uniform that already" << std::endl
       << "exists for program " << a_unProgramID << ". Will ignore instruction..." << std::endl;
   }
 }
 
 void RegisterUniform(std::string a_sUniform, GLuint a_unProgramID) {
+  if (uniform_location_list.count(a_unProgramID) == 0) {
+    uniform_location_list[a_unProgramID] = {};
+  }
   if (uniform_location_list.at(a_unProgramID).count(a_sUniform) == 0) {
     uniform_location_list[a_unProgramID][a_sUniform] =
       glGetUniformLocation(a_unProgramID, a_sUniform.c_str());
