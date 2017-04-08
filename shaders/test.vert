@@ -13,6 +13,6 @@ void main()
 {
   vec4 vertex = vec4(position,1.0);
   gl_Position = MVP*vertex;
-  //tex_coord = vec2(texcoord.x, 1.0 - texcoord.y);
-  tex_coord = texcoord;
+  tex_coord = vec2(texcoord.x, 1.0 - texcoord.y);
+  //tex_coord = texcoord;
 }

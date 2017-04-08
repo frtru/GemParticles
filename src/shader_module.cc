@@ -27,7 +27,7 @@ namespace module {
 namespace {
 GLuint                                              current_program;
 std::map<GLuint, std::map<std::string, GLuint> >    attrib_list;
-std::map<GLuint, std::map<std::string, GLuint> >    uniform_location_list;
+std::map<GLuint, std::map<std::string, GLint> >    uniform_location_list;
 std::map<GLuint, GLuint >                           uniform_block_list;
 
 std::once_flag init_flag;
@@ -58,7 +58,7 @@ GLuint GetAttribLocation(const std::string& a_rAttrib, GLuint a_unProgramID) {
   return attrib_list[a_unProgramID][a_rAttrib]; 
 }
 
-GLuint GetUniformLocation(const std::string& a_rUniform, GLuint a_unProgramID) { 
+GLint GetUniformLocation(const std::string& a_rUniform, GLuint a_unProgramID) { 
   return uniform_location_list[a_unProgramID][a_rUniform]; 
 }
 

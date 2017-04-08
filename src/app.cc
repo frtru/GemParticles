@@ -148,8 +148,9 @@ void Run() {
     
     shader::module::Use(m_shaderProgram);
 
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0 + m_textureID);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
+    glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), m_textureID);
 
     // Draw container
     glBindVertexArray(VAO);

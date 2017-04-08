@@ -23,7 +23,7 @@ void Init();
 void Terminate();
 
 GLuint GetAttribLocation(const std::string& a_rAttrib, GLuint a_unProgramID);
-GLuint GetUniformLocation(const std::string& a_rUniform, GLuint a_unProgramID);
+GLint GetUniformLocation(const std::string& a_rUniform, GLuint a_unProgramID);
 
 void RegisterAttribute(std::string a_sAttrib, GLuint a_unProgramID);
 void RegisterUniform(std::string a_sUniform, GLuint a_unProgramID);
