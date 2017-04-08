@@ -3,7 +3,7 @@
 #version 430
 
 layout (std140, binding = 0) uniform CameraInfo {
-  mat4	MVP; 
+  mat4	ProjectionView; 
   vec3	eye;
 };
 

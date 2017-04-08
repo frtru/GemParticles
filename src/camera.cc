@@ -25,16 +25,8 @@ std::once_flag  init_flag;
 std::once_flag terminate_flag;
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;
-/* NOTE : I know the MVP shouldn't be placed here, but since we 
- * are only drawing particles into this application there won't
- * be any transformations made to the model matrix. Hence it'll 
- * always be an identity matrix. If this camera code is reused,
- * the MVP matrix should be moved somewhere else or registered
- * to shaders at initialization and sent back as local variables
- * for each model's class if the model matrix is bound to each class
- */
+glm::mat4 ProjectionView;
 constexpr GLuint CameraInfoBindingPoint = 0;
-glm::mat4 MVP;
 
 // Perspective projection parameters
 struct Perspective {
@@ -59,24 +51,24 @@ glm::vec3 target_position;
 glm::vec3 up_vector;
 
 // Some helper functions
-void UpdateMVP() {
-  MVP = camera::GetProjectionMatrix() * camera::GetViewMatrix();
+void UpdateProjectionView() {
+  ProjectionView = camera::GetProjectionMatrix() * camera::GetViewMatrix();
   shader::module::SetUniformBlockValue(
     CameraInfoBindingPoint,
     0, 
-    sizeof(MVP),
-    glm::value_ptr(MVP)
+    sizeof(ProjectionView),
+    glm::value_ptr(ProjectionView)
   );
   shader::module::SetUniformBlockValue(
     CameraInfoBindingPoint,
-    sizeof(MVP),
+    sizeof(ProjectionView),
     sizeof(eye_position),
     glm::value_ptr(eye_position)
   );
 }
 
-void UpdateViewMatrixAndMVP() {
-  // UpdateMVP is called in LookAt
+void UpdateViewMatrixAndProjectionView() {
+  // UpdateProjectionView is called in LookAt
   LookAt(eye_position, target_position, up_vector);
 }
 }
@@ -89,9 +81,9 @@ void Init() {
 
     shader::module::RegisterGlobalUniformBlock(
       CameraInfoBindingPoint,
-      sizeof(MVP) + sizeof(eye_position));
+      sizeof(ProjectionView) + sizeof(eye_position));
 
-    UpdateMVP();
+    UpdateProjectionView();
   });
 }
 
@@ -124,22 +116,22 @@ const glm::mat4& GetProjectionMatrix() {
 // since it's not something clients may want to keep
 void SetEyePosition(const glm::vec3& a_vEye) {
   eye_position = a_vEye;
-  UpdateViewMatrixAndMVP();
+  UpdateViewMatrixAndProjectionView();
 }
 
 void SetTargetPosition(const glm::vec3& a_vTarget) {
   target_position = a_vTarget;
-  UpdateViewMatrixAndMVP();
+  UpdateViewMatrixAndProjectionView();
 }
 
 void SetUpVector(const glm::vec3& a_vUp) {
   up_vector = a_vUp;
-  UpdateViewMatrixAndMVP();
+  UpdateViewMatrixAndProjectionView();
 }
 
 void SetViewMatrix(const glm::mat4& a_ViewMatrix) {
 	view_matrix = a_ViewMatrix;
-  UpdateMVP();
+  UpdateProjectionView();
 }
 
 void LookAt(const glm::vec3& a_Eye, 
@@ -149,12 +141,12 @@ void LookAt(const glm::vec3& a_Eye,
   target_position = a_Target;
   up_vector = a_Up;
   view_matrix = glm::lookAt(a_Eye, a_Target, a_Up);
-  UpdateMVP();
+  UpdateProjectionView();
 }
 
 void SetProjectionMatrix(const glm::mat4& a_ProjectionMatrix) {
 	projection_matrix = a_ProjectionMatrix;
-  UpdateMVP();
+  UpdateProjectionView();
 }
 
 void SetPerspectiveProjection(float a_fFOV, float a_fWidth, 
@@ -166,7 +158,7 @@ void SetPerspectiveProjection(float a_fFOV, float a_fWidth,
   proj_params.perspective.far     = a_fFar;
   projection_matrix = glm::perspective(a_fFOV, a_fWidth/a_fHeight,
 										 a_fNear, a_fFar);
-  UpdateMVP();
+  UpdateProjectionView();
 }
 
 void SetOrthoProjection(float a_fLeft	, float a_fRight, 
@@ -180,6 +172,6 @@ void SetOrthoProjection(float a_fLeft	, float a_fRight,
   proj_params.ortho.far     = a_fFar;
   projection_matrix = glm::ortho(	a_fLeft, a_fRight,
 		a_fBottom, a_fTop, a_fNear, a_fFar);
-  UpdateMVP();
+  UpdateProjectionView();
 }
 } /* namespace camera */
