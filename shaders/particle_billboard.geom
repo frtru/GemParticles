@@ -8,7 +8,7 @@ layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
 layout (std140, binding = 0) uniform CameraInfo {
-  mat4	MVP;	// In this application MVP = View/Projection
+  mat4	ProjectionView;	// Projection * View
   vec3	eye;	// camera position
 };
 
@@ -34,26 +34,26 @@ void main(void) {
 
   // Lower left corner
   wPos -= (wRight * 0.5);
-  gl_Position = MVP * vec4(wPos, 1.0);
+  gl_Position = ProjectionView * vec4(wPos, 1.0);
   TexCoord = vec2(0.0, 0.0);
   EmitVertex();
 
   // Upper left corner
   wPos.y += 1.0;
-  gl_Position = MVP * vec4(wPos, 1.0);
+  gl_Position = ProjectionView * vec4(wPos, 1.0);
   TexCoord = vec2(0.0, 1.0);
   EmitVertex();
 
   // lower right corner
   wPos.y -= 1.0;
   wPos += wRight;
-  gl_Position = MVP * vec4(wPos, 1.0);
+  gl_Position = ProjectionView * vec4(wPos, 1.0);
   TexCoord = vec2(1.0, 0.0);
   EmitVertex();
 
   // Upper right corner
   wPos.y += 1.0;
-  gl_Position = MVP * vec4(wPos, 1.0);
+  gl_Position = ProjectionView * vec4(wPos, 1.0);
   TexCoord = vec2(1.0, 1.0);
   EmitVertex();
 

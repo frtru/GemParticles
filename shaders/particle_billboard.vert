@@ -1,9 +1,9 @@
-//A minimal implementation of a vertex shader 
+//A vertex shader meant to be used in pair with a geometry shader
 
 #version 430
 
 layout (std140, binding = 0) uniform CameraInfo {
-  mat4	MVP; 
+  mat4	ProjectionView; 
   vec3	eye;
 };
 

@@ -22,6 +22,7 @@
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader_module.hh"
+#include "texture_module.hh"
 #include "camera.hh"
 #include "event_handler.hh"
 #include "particle_module.hh"
@@ -34,6 +35,7 @@
 #include "core_opengl_renderer.hh"
 #include "rain_emitter.hh"
 #include "gravity_acceleration.hh"
+#include "euler_particle_updater.hh"
 
 namespace gem {
 namespace particle {
@@ -51,6 +53,8 @@ void Init() {
   graphic_context->Init();
 
   shader::module::Init();
+  texture::module::Init();
+
   // Camera initialization
   camera::Init();
   camera::LookAt( 
@@ -73,8 +77,9 @@ void Init() {
   particle_module::Init();
   std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
+  wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10,100000));
+  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f,100000.0));
   particle_module::AddSystem(std::move(wParticleSystem));
   
 }
@@ -102,17 +107,10 @@ void Terminate() {
   particle_module::Terminate();
   scene::Terminate();
   event_handler::Terminate();
+  texture::module::Terminate();
   shader::module::Terminate();
   graphic_context->Terminate();
 }
-
-void LoadConfig(const std::string& a_sConfigName) {
-  //TODO
-}
-void SaveConfig(const std::string& a_sConfigName) {
-  //TODO
-}
-
 } /* namespace app */
 } /* namespace particle */
 } /* namespace gem */
