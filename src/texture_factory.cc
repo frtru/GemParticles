@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2017 François Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,11 @@ namespace {
 std::once_flag init_flag;
 std::once_flag terminate_flag;
 
-// TODO: I don't really like the bitmaphandle
-// in order to free it passed as parameter...
+/*  
+ * LoadFunction taken from documentation/examples provided by
+ * FreeImage. Fixed some issues like 32 bits conversion and
+ * image handles not being properly shipped out of the function.
+ */
 bool LoadImage(const std::string& a_sFileName,
   unsigned char **a_pImage,
   GLsizei& a_rWidth,
@@ -59,17 +62,16 @@ bool LoadImage(const std::string& a_sFileName,
 
   //retrieve the image data
   bits = FreeImage_GetBits(dib);
-  //get the image width and height
   width = FreeImage_GetWidth(dib);
   height = FreeImage_GetHeight(dib);
-  //if this somehow one of these failed (they shouldn't), return failure
+  //if this somehow failed (it shouldn't), return failure
   if ((bits == 0) || (width == 0) || (height == 0))
     return false;
   
   *a_pImage = bits;
+  *a_pBitmapHandle = dib;
   a_rWidth = width;
   a_rHeight = height;
-  *a_pBitmapHandle = dib;
 
   return true;
 }
@@ -96,10 +98,10 @@ void Terminate() {
   });
 }
 
-// TODO: Pass some of the parameters of glTexImage2D
-// from here
-GLuint Create2DTexture(const std::string& a_sFileName) {
-  // Load Image
+GLuint Create2DTexture(const std::string& a_sFileName,
+  GLint a_nMagFilterParam, GLint a_nMinFilterParm,
+  GLint a_nTexHorizontalWrapParam, GLint a_nTexVerticalWrapParam,
+  GLint a_nInternalFormat, GLint a_nImageFormat) {
   GLsizei wWidth, wHeight;
   unsigned char *wImage = nullptr;
   void *wBitMapHandle = nullptr;
@@ -110,29 +112,26 @@ GLuint Create2DTexture(const std::string& a_sFileName) {
     return 0xFFFFFFFF;
   }
 
-  // Generate texture
   GLuint wTexture;
   glGenTextures(1, &wTexture);
-  // Create texture
   glBindTexture(GL_TEXTURE_2D, wTexture);
 
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, a_nMinFilterParm);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, a_nMagFilterParam);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, a_nTexHorizontalWrapParam);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, a_nTexVerticalWrapParam);
 
   glTexImage2D(
-    GL_TEXTURE_2D,    // 2D texture target
-    0,                // Base mipmap level
-    GL_RGBA8,           // RGB color components
-    wWidth, wHeight,  // Dimensions
-    0,                // Must be 0...
-    GL_BGRA,           // Pixel data format
-    GL_UNSIGNED_BYTE, // Depends on what the LoadImage function return type
-    wImage);          // Loaded image
+    GL_TEXTURE_2D,      // 2D texture target
+    0,                  // Base mipmap level
+    a_nInternalFormat,  // RGB color components
+    wWidth, wHeight,    // Dimensions
+    0,                  // Must be 0...
+    a_nImageFormat,     // Pixel data format
+    GL_UNSIGNED_BYTE,   // Depends on what the LoadImage function return type
+    wImage);            // Loaded image
     glGenerateMipmap(GL_TEXTURE_2D);
 
-  // Free image
   FreeImage(wBitMapHandle);
   glBindTexture(GL_TEXTURE_2D, 0);
 

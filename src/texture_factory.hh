@@ -22,9 +22,13 @@ namespace factory {
 void Init();
 void Terminate();
 
-// TODO: Pass some of the parameters of glTexImage2D
-// from here
-GLuint Create2DTexture(const std::string& a_sFileName);
+GLuint Create2DTexture(const std::string& a_sFileName,
+  GLint a_nMagFilterParam = GL_LINEAR, 
+  GLint a_nMinFilterParm = GL_LINEAR,
+  GLint a_nTexHorizontalWrapParam = GL_REPEAT, 
+  GLint a_nTexVerticalWrapParam = GL_REPEAT,
+  GLint a_nInternalFormat = GL_RGBA8, 
+  GLint a_nImageFormat = GL_BGRA);
 } /* namespace factory */
 } /* namespace texture */
 #endif /* end of include guard: TEXTURE_FACTORY_HH */
