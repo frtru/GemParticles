@@ -40,7 +40,9 @@ private:
   GLuint  m_vertexArrayID;
   GLuint  m_vertexBufferID;
   GLuint  m_colorVBOID;
+
   GLuint  m_shaderProgram;
+  GLuint  m_textureID;
 }; /* class CoreGLRenderer*/
 } /* namespace particle */
 } /* namespace gem */

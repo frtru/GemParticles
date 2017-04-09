@@ -5,7 +5,7 @@
 #version 430
 
 layout (std140, binding = 0) uniform CameraInfo {
-  mat4	MVP; 
+  mat4	ProjectionView; 
   vec3	eye;
 };
 
@@ -15,7 +15,7 @@ out vec4 ex_Color;
 
 void main(void) {
   vec4 vertex = vec4(vertexPosition_modelspace,1.0);
-  gl_Position = MVP*vertex;
+  gl_Position = ProjectionView*vertex;
 
   if (vertex.x >= 0.05)
     ex_Color = vec4(1.0,0.0,0.0,0.0);

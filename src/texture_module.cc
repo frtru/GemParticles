@@ -30,11 +30,13 @@ std::once_flag terminate_flag;
 }
 void Init() {
   std::call_once(init_flag, [&]() {
+    texture::factory::Init();
   });
 }
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
+    texture::factory::Terminate();
   });
 }
 } /* namespace module */

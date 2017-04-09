@@ -17,13 +17,18 @@
 #include "shader_factory.hh"
 #include "shader_module.hh"
 
+// texture utilities
+#include "texture_factory.hh"
+#include "texture_module.hh"
+
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
 #include <iostream>
 namespace gem {
 namespace particle {
-CoreGLRenderer::CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
+CoreGLRenderer::CoreGLRenderer(
+  const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
   shader::factory::CompileShaderFile("shaders/particle_billboard.vert", GL_VERTEX_SHADER);
   shader::factory::CompileShaderFile("shaders/particle_billboard.geom", GL_GEOMETRY_SHADER);
   shader::factory::CompileShaderFile("shaders/simple_texture.frag", GL_FRAGMENT_SHADER);
@@ -123,7 +128,8 @@ void CoreGLRenderer::ParticleColorsInit(
 }
 
 void CoreGLRenderer::ParticleTexturesInit() {
-
+  m_textureID = texture::factory::Create2DTexture("textures/dickbutt.png");
+  shader::module::RegisterUniform("mytexture", m_shaderProgram);
 }
 
 void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
@@ -149,12 +155,18 @@ void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > 
 }
 void CoreGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
   shader::module::Use(m_shaderProgram);
+
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, m_textureID);
+  glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), 0);
+
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = a_pPool->GetActiveParticleCount();
   if (count > 0) {
-    glDrawArrays(GL_POINTS, 0, (GLsizei)count); // TODO: Put something to change the points for quads as desired
+    glDrawArrays(GL_POINTS, 0, (GLsizei)count);
   }
   glBindVertexArray(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 } /* namespace particle */
 } /* namespace gem */
