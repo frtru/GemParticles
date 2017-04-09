@@ -27,10 +27,10 @@ std::once_flag terminate_flag;
 // TODO: I don't really like the bitmaphandle
 // in order to free it passed as parameter...
 bool LoadImage(const std::string& a_sFileName,
-  unsigned char *a_pImage,
+  unsigned char **a_pImage,
   GLsizei& a_rWidth,
   GLsizei& a_rHeight,
-  void *a_pBitmapHandle) {
+  void **a_pBitmapHandle) {
   const char *wFilename = a_sFileName.c_str();
   //image format
   FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
@@ -52,7 +52,7 @@ bool LoadImage(const std::string& a_sFileName,
 
   //check that the plugin has reading capabilities and load the file
   if (FreeImage_FIFSupportsReading(fif))
-    dib = FreeImage_Load(fif, wFilename);
+    dib = FreeImage_ConvertTo32Bits(FreeImage_Load(fif, wFilename));
   //if the image failed to load, return failure
   if (!dib)
     return false;
@@ -66,10 +66,10 @@ bool LoadImage(const std::string& a_sFileName,
   if ((bits == 0) || (width == 0) || (height == 0))
     return false;
   
-  a_pImage = bits;
+  *a_pImage = bits;
   a_rWidth = width;
   a_rHeight = height;
-  a_pBitmapHandle = dib;
+  *a_pBitmapHandle = dib;
 
   return true;
 }
@@ -103,35 +103,34 @@ GLuint Create2DTexture(const std::string& a_sFileName) {
   GLsizei wWidth, wHeight;
   unsigned char *wImage = nullptr;
   void *wBitMapHandle = nullptr;
-
-  // Generate texture
-  GLuint wTexture;
-  glGenTextures(1, &wTexture);
-
-  // Create texture
-  glBindTexture(GL_TEXTURE_2D, wTexture);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  if (!LoadImage(a_sFileName, wImage, wWidth, wHeight, wBitMapHandle)) {
+  
+  if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight, &wBitMapHandle)) {
     std::cerr << "texture_factory::Create2DTexture -> Loading image failed. " << std::endl
       << "Returning 0xFFFFFFFF..." << std::endl;
     return 0xFFFFFFFF;
   }
 
+  // Generate texture
+  GLuint wTexture;
+  glGenTextures(1, &wTexture);
+  // Create texture
+  glBindTexture(GL_TEXTURE_2D, wTexture);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
   glTexImage2D(
     GL_TEXTURE_2D,    // 2D texture target
     0,                // Base mipmap level
-    GL_RGB,           // RGB color components
+    GL_RGBA8,           // RGB color components
     wWidth, wHeight,  // Dimensions
     0,                // Must be 0...
-    GL_RGB,           // Pixel data format
+    GL_BGRA,           // Pixel data format
     GL_UNSIGNED_BYTE, // Depends on what the LoadImage function return type
     wImage);          // Loaded image
-  glGenerateMipmap(GL_TEXTURE_2D);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
   // Free image
   FreeImage(wBitMapHandle);

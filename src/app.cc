@@ -145,12 +145,11 @@ void Run() {
       << " | Active Particles: " << particle_module::GetActiveParticlesCount();
     glfwSetWindowTitle(static_cast<GLFWwindow*>(
       graphic_context->GetWindowHandle()), ss.str().c_str());
-    
-    shader::module::Use(m_shaderProgram);
 
-    glActiveTexture(GL_TEXTURE0 + m_textureID);
+    glActiveTexture(GL_TEXTURE0);
+    shader::module::Use(m_shaderProgram);
+    glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), 0);
     glBindTexture(GL_TEXTURE_2D, m_textureID);
-    glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), m_textureID);
 
     // Draw container
     glBindVertexArray(VAO);
