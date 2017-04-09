@@ -24,6 +24,7 @@ namespace {
 std::once_flag init_flag;
 std::once_flag terminate_flag;
 
+FIBITMAP       *bitmap_handle; //pointer to the image, once loaded
 /*  
  * LoadFunction taken from documentation/examples provided by
  * FreeImage. Fixed some issues like 32 bits conversion and
@@ -32,13 +33,12 @@ std::once_flag terminate_flag;
 bool LoadImage(const std::string& a_sFileName,
   unsigned char **a_pImage,
   GLsizei& a_rWidth,
-  GLsizei& a_rHeight,
-  void **a_pBitmapHandle) {
+  GLsizei& a_rHeight) {
   const char *wFilename = a_sFileName.c_str();
+  bitmap_handle = nullptr;
   //image format
   FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-  //pointer to the image, once loaded
-  FIBITMAP *dib(0);
+
   //pointer to the image data
   BYTE* bits(0);
   //image width and height
@@ -55,29 +55,29 @@ bool LoadImage(const std::string& a_sFileName,
 
   //check that the plugin has reading capabilities and load the file
   if (FreeImage_FIFSupportsReading(fif))
-    dib = FreeImage_ConvertTo32Bits(FreeImage_Load(fif, wFilename));
+    bitmap_handle = FreeImage_ConvertTo32Bits(FreeImage_Load(fif, wFilename));
   //if the image failed to load, return failure
-  if (!dib)
+  if (!bitmap_handle)
     return false;
 
   //retrieve the image data
-  bits = FreeImage_GetBits(dib);
-  width = FreeImage_GetWidth(dib);
-  height = FreeImage_GetHeight(dib);
+  bits = FreeImage_GetBits(bitmap_handle);
+  width = FreeImage_GetWidth(bitmap_handle);
+  height = FreeImage_GetHeight(bitmap_handle);
   //if this somehow failed (it shouldn't), return failure
   if ((bits == 0) || (width == 0) || (height == 0))
     return false;
   
   *a_pImage = bits;
-  *a_pBitmapHandle = dib;
   a_rWidth = width;
   a_rHeight = height;
 
   return true;
 }
 
-bool FreeImage(void *a_pBitmapHandle) {
-  FreeImage_Unload(static_cast<FIBITMAP *>(a_pBitmapHandle));
+bool FreeImage() {
+  FreeImage_Unload(bitmap_handle);
+  bitmap_handle = nullptr;
   return true;
 }
 }
@@ -104,9 +104,8 @@ GLuint Create2DTexture(const std::string& a_sFileName,
   GLint a_nInternalFormat, GLint a_nImageFormat) {
   GLsizei wWidth, wHeight;
   unsigned char *wImage = nullptr;
-  void *wBitMapHandle = nullptr;
   
-  if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight, &wBitMapHandle)) {
+  if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight)) {
     std::cerr << "texture_factory::Create2DTexture -> Loading image failed. " << std::endl
       << "Returning 0xFFFFFFFF..." << std::endl;
     return 0xFFFFFFFF;
@@ -130,9 +129,9 @@ GLuint Create2DTexture(const std::string& a_sFileName,
     a_nImageFormat,     // Pixel data format
     GL_UNSIGNED_BYTE,   // Depends on what the LoadImage function return type
     wImage);            // Loaded image
-    glGenerateMipmap(GL_TEXTURE_2D);
+  glGenerateMipmap(GL_TEXTURE_2D);
 
-  FreeImage(wBitMapHandle);
+  FreeImage();
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return wTexture;
