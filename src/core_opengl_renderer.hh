@@ -26,7 +26,7 @@ public:
   CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
   virtual ~CoreGLRenderer();
 
-  virtual std::size_t GetProgramID() const {
+  inline std::size_t GetProgramID() const {
     return m_shaderProgram;
   }
 
