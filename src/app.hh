@@ -22,8 +22,6 @@ namespace app {
 void Init();
 void Run();
 void Terminate();
-void LoadConfig(const std::string& a_sConfigName);
-void SaveConfig(const std::string& a_sConfigName);
 }
 } /* namespace particle */
 } /* namespace gem */

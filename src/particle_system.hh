@@ -21,7 +21,6 @@
 #include "emitter.hh"
 #include "dynamic.hh"
 #include "particle_pool_core.hh"
-#include "euler_particle_updater.hh"
 
 namespace gem {
 namespace particle {
@@ -34,14 +33,8 @@ public:
     std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
     : m_pParticlePool(std::make_shared<ParticlePool<ParticleType> >(a_unMaxParticleCount)),
       m_pRenderer(std::make_unique<RendererType>(m_pParticlePool)),
-      m_sSystemName(std::move(a_sSystemName)) {
-    // TODO: Remove the following, because when we'll
-    // add an updater for the positions, you don't want to
-    // update them twice without knowing it
+      m_sSystemName(std::move(a_sSystemName)) {}
 
-    // Adding an updater following the euler scheme
-    m_vDynamics.push_back(std::make_unique<EulerParticleUpdater>());
-  }
   virtual ~ParticleSystem() = default;
 
   ParticleSystem(ParticleSystem<RendererType>&& other)
