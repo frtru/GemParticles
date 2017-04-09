@@ -129,14 +129,7 @@ void CoreGLRenderer::ParticleColorsInit(
 
 void CoreGLRenderer::ParticleTexturesInit() {
   m_textureID = texture::factory::Create2DTexture("textures/dickbutt.png");
-  glBindTexture(GL_TEXTURE_2D, m_textureID);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  glBindTexture(GL_TEXTURE_2D, 0);
+  shader::module::RegisterUniform("mytexture", m_shaderProgram);
 }
 
 void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
@@ -165,12 +158,12 @@ void CoreGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > 
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, m_textureID);
-  glUniform1i(glGetUniformLocation(m_shaderProgram, "texture"), 0);
+  glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), 0);
 
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = a_pPool->GetActiveParticleCount();
   if (count > 0) {
-    glDrawArrays(GL_POINTS, 0, (GLsizei)count); // TODO: Put something to change the points for quads as desired
+    glDrawArrays(GL_POINTS, 0, (GLsizei)count);
   }
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);

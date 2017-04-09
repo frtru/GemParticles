@@ -22,9 +22,7 @@
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader_module.hh"
-#include "shader_factory.hh"
 #include "texture_module.hh"
-#include "texture_factory.hh"
 #include "camera.hh"
 #include "event_handler.hh"
 #include "particle_module.hh"
@@ -76,67 +74,15 @@ void Init() {
 
   // Particle system initialization
   particle_module::Init();
-/*  std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
+  std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
     std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10,100000));
   particle_module::AddSystem(std::move(wParticleSystem));
- */ 
+  
 }
 
 void Run() {
-  shader::factory::CompileShaderFile("shaders/test.vert", GL_VERTEX_SHADER);
-  shader::factory::CompileShaderFile("shaders/test.frag", GL_FRAGMENT_SHADER);
-  GLuint m_shaderProgram = shader::factory::CreateProgram();
-
-  // Set up vertex data (and buffer(s)) and attribute pointers
-  GLfloat vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.5f,  0.5f, 0.0f,
-    -0.5f, 0.5f, 0.0f
-  };
-
-  GLfloat texcoords[] = {
-    0.0f, 0.0f,
-    1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f
-  };
-
-  GLuint VBO, VAO;
-  glGenVertexArrays(1, &VAO);
-  glBindVertexArray(VAO);
-
-  glGenBuffers(1, &VBO);
-  glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-  // Position attribute
-  glEnableVertexAttribArray(0);
-  glBindVertexBuffer(0, VBO, 0, 3*sizeof(GL_FLOAT));
-  glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
-  glVertexAttribBinding(0, 0);
-
-  GLuint texVBO;
-  glGenBuffers(1, &texVBO);
-  glBindBuffer(GL_ARRAY_BUFFER, texVBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(texcoords), texcoords, GL_STATIC_DRAW);
-
-  glEnableVertexAttribArray(1);
-  glBindVertexBuffer(1, texVBO, 0, 2 * sizeof(GL_FLOAT));
-  glVertexAttribFormat(1, 2, GL_FLOAT, GL_FALSE, 0);
-  glVertexAttribBinding(1, 1);
-
-  glBindVertexArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-  // ====================
-  // Texture 1
-  // ====================
-  GLuint m_textureID = texture::factory::Create2DTexture("textures/dickbutt.png");
-
-  shader::module::RegisterUniform("mytexture", m_shaderProgram);
 
   while (!graphic_context->PollWindowClosedEvent()) {
     double dt = timer::chrono::GetTimeElapsedInSeconds();
@@ -145,19 +91,9 @@ void Run() {
       << " | Active Particles: " << particle_module::GetActiveParticlesCount();
     glfwSetWindowTitle(static_cast<GLFWwindow*>(
       graphic_context->GetWindowHandle()), ss.str().c_str());
-
-    glActiveTexture(GL_TEXTURE0);
-    shader::module::Use(m_shaderProgram);
-    glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), 0);
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
-
-    // Draw container
-    glBindVertexArray(VAO);
-    glDrawArrays(GL_QUADS, 0, 4);
-    glBindVertexArray(0);
-
+    
     scene::Render();
-    //particle_module::Update(dt);    
+    particle_module::Update(dt);    
     
     graphic_context->Update();
     timer::chrono::Update();

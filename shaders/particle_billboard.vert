@@ -1,4 +1,4 @@
-//A minimal implementation of a vertex shader 
+//A vertex shader meant to be used in pair with a geometry shader
 
 #version 430
 
