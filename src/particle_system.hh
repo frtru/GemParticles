@@ -29,7 +29,7 @@ struct LifeDeathCycle {
   struct Enabled {};
 };
 
-template< typename T, class RendererType,
+template< class RendererType, typename T = LifeDeathCycle::Enabled,
           typename ParticleType = CoreParticles>
 class ParticleSystem : public IParticleSystem{
 public:
@@ -106,7 +106,7 @@ public:
 private:
   template <typename U = T, typename std::enable_if<
     std::is_same<U, LifeDeathCycle::Disabled>::value, int>::type = 0>
-    inline void Spawn(double a_dt) {}
+  inline void Spawn(double a_dt) {}
   template <typename U = T, typename std::enable_if<
     std::is_same<U, LifeDeathCycle::Enabled>::value, int>::type = 0>
   inline void Spawn(double a_dt) {
