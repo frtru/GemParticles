@@ -57,15 +57,15 @@ public:
 
   virtual ~ParticleSystem() = default;
 
-  ParticleSystem(ParticleSystem<T, RendererType>&& other)
+  ParticleSystem(ParticleSystem<RendererType, T>&& other)
     : m_pParticlePool(std::move(other.m_pParticlePool)),
       m_pRenderer(std::move(other.m_pRenderer)),
       m_vEmitters(std::move(other.m_vEmitters)),
       m_vDynamics(std::move(other.m_vDynamics)),
       m_sSystemName(std::move(other.m_sSystemName)) {}
 
-  ParticleSystem<T, RendererType>& 
-    operator=(ParticleSystem<T, RendererType>&& other) {
+  ParticleSystem<RendererType, T>& 
+    operator=(ParticleSystem<RendererType, T>&& other) {
     m_pParticlePool = std::move(other.m_pParticlePool);
     m_pRenderer = std::move(other.m_pRenderer);
     m_vEmitters = std::move(other.m_vEmitters);
