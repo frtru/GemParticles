@@ -70,6 +70,9 @@
     <ClCompile Include="src\camera.cc">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\texture_core_gl_renderer.cc">
+      <Filter>Renderers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -149,6 +152,9 @@
     <ClInclude Include="src\camera.hh">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\texture_core_gl_renderer.hh">
+      <Filter>Renderers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.comp">
@@ -179,6 +185,9 @@
       <Filter>Resource files\Shaders</Filter>
     </None>
     <None Include="shaders\test.vert">
+      <Filter>Resource files\Shaders</Filter>
+    </None>
+    <None Include="shaders\default.vert">
       <Filter>Resource files\Shaders</Filter>
     </None>
   </ItemGroup>

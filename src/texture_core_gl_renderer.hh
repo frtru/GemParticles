@@ -11,8 +11,8 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef CORE_GL_RENDERER_HH
-#define CORE_GL_RENDERER_HH
+#ifndef TEXTURE_CORE_GL_RENDERER_HH
+#define TEXTURE_CORE_GL_RENDERER_HH
 
 #include <GL/glew.h>
 
@@ -21,10 +21,11 @@
 
 namespace gem {
 namespace particle {
-class CoreGLRenderer : public Renderer<CoreParticles> {
+// TODO: Should add texture(s) name/filepaths as a parameter in the constructor
+class TextureCoreGLRenderer : public Renderer<CoreParticles> {
 public:
-  CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
-  virtual ~CoreGLRenderer();
+  TextureCoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
+  virtual ~TextureCoreGLRenderer();
 
   inline std::size_t GetProgramID() const {
     return m_shaderProgram;
@@ -35,14 +36,16 @@ public:
 private:
   void ParticlePositionsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
   void ParticleColorsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
+  void ParticleTexturesInit();
 
   GLuint  m_vertexArrayID;
   GLuint  m_vertexBufferID;
   GLuint  m_colorVBOID;
 
   GLuint  m_shaderProgram;
-}; /* class CoreGLRenderer*/
+  GLuint  m_textureID;
+}; /* class TextureCoreGLRenderer*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: CORE_GL_RENDERER_HH */
+#endif /* end of include guard: TEXTURE_CORE_GL_RENDERER_HH */

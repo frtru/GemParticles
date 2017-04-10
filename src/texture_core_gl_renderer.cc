@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "core_opengl_renderer.hh"
+#include "texture_core_gl_renderer.hh"
 
 // shader utilities
 #include "shader_factory.hh"
@@ -27,48 +27,50 @@
 #include <iostream>
 namespace gem {
 namespace particle {
-CoreGLRenderer::CoreGLRenderer(
+TextureCoreGLRenderer::TextureCoreGLRenderer(
   const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
-  shader::factory::CompileShaderFile("shaders/default.vert", GL_VERTEX_SHADER);
-  shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
+  shader::factory::CompileShaderFile("shaders/particle_billboard.vert", GL_VERTEX_SHADER);
+  shader::factory::CompileShaderFile("shaders/particle_billboard.geom", GL_GEOMETRY_SHADER);
+  shader::factory::CompileShaderFile("shaders/simple_texture.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader::factory::CreateProgram();
 
   // VAO initialization
   glGenVertexArrays(1, &m_vertexArrayID);
-  std::cout << "CoreGLRenderer::CoreGLRenderer -> Generated VAO ID = ";
+  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Generated VAO ID = ";
   std::cout << m_vertexArrayID << std::endl;
   glBindVertexArray(m_vertexArrayID);
-  std::cout << "CoreGLRenderer::CoreGLRenderer -> Allocated array memory for ID = ";
+  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated array memory for ID = ";
   std::cout << m_vertexArrayID << std::endl;
 
   ParticlePositionsInit(a_pPool);
   ParticleColorsInit(a_pPool);
+  ParticleTexturesInit();
 
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-CoreGLRenderer::~CoreGLRenderer() {
+TextureCoreGLRenderer::~TextureCoreGLRenderer() {
   if (m_colorVBOID != 0) {
-    std::cout << "CoreGLRenderer::~CoreGLRenderer -> Deallocating color VBO" << std::endl;
+    std::cout << "TextureCoreGLRenderer::~TextureCoreGLRenderer -> Deallocating color VBO" << std::endl;
     glDeleteBuffers(1, &m_colorVBOID);
     m_colorVBOID = 0;
   }
   if (m_vertexBufferID != 0) {
-    std::cout << "CoreGLRenderer::~CoreGLRenderer -> Deallocating vertex VBO" << std::endl;
+    std::cout << "TextureCoreGLRenderer::~TextureCoreGLRenderer -> Deallocating vertex VBO" << std::endl;
     glDeleteBuffers(1, &m_vertexBufferID);
     m_vertexBufferID = 0;
   }
 }
 
-void CoreGLRenderer::ParticlePositionsInit(
+void TextureCoreGLRenderer::ParticlePositionsInit(
   const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
   // Positions VBO initialization
   glGenBuffers(1, &m_vertexBufferID);
-  std::cout << "CoreGLRenderer::CoreGLRenderer -> Generated vertex VBO ID = ";
+  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Generated vertex VBO ID = ";
   std::cout << m_vertexBufferID << std::endl;
   glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
-  std::cout << "CoreGLRenderer::CoreGLRenderer -> Allocated buffer memory for ID = ";
+  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated buffer memory for ID = ";
   std::cout << m_vertexBufferID << std::endl;
 
   const std::size_t wParticleCount = a_pPool->GetParticleCount();
@@ -93,14 +95,14 @@ void CoreGLRenderer::ParticlePositionsInit(
   }
 }
 
-void CoreGLRenderer::ParticleColorsInit(
+void TextureCoreGLRenderer::ParticleColorsInit(
   const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
-  std::cout << "CoreGLRenderer::CoreGLRenderer -> Generated color VBO ID = ";
+  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Generated color VBO ID = ";
   std::cout << m_colorVBOID << std::endl;
   glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
-  std::cout << "CoreGLRenderer::CoreGLRenderer -> Allocated buffer memory for ID = ";
+  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated buffer memory for ID = ";
   std::cout << m_colorVBOID << std::endl;
 
   const std::size_t wParticleCount = a_pPool->GetParticleCount();
@@ -125,7 +127,12 @@ void CoreGLRenderer::ParticleColorsInit(
   }
 }
 
-void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
+void TextureCoreGLRenderer::ParticleTexturesInit() {
+  m_textureID = texture::factory::Create2DTexture("textures/dickbutt.png");
+  shader::module::RegisterUniform("mytexture", m_shaderProgram);
+}
+
+void TextureCoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
   shader::module::Use(m_shaderProgram);
   const std::size_t wActiveParticleCount =
     a_pPool->GetActiveParticleCount();
@@ -146,8 +153,12 @@ void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 }
-void CoreGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
+void TextureCoreGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
   shader::module::Use(m_shaderProgram);
+
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, m_textureID);
+  glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), 0);
 
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = a_pPool->GetActiveParticleCount();
@@ -155,6 +166,7 @@ void CoreGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > 
     glDrawArrays(GL_POINTS, 0, (GLsizei)count);
   }
   glBindVertexArray(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 } /* namespace particle */
 } /* namespace gem */

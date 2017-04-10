@@ -24,28 +24,48 @@
 
 namespace gem {
 namespace particle {
-template< class RendererType,
+struct LifeDeathCycle {
+  struct Disabled {};
+  struct Enabled {};
+};
+
+template< class RendererType, typename T = LifeDeathCycle::Enabled,
           typename ParticleType = CoreParticles>
 class ParticleSystem : public IParticleSystem{
 public:
+  template <typename U = T, typename std::enable_if<
+    std::is_same<U, LifeDeathCycle::Disabled>::value, int>::type = 0>
   explicit ParticleSystem(
 	  std::size_t a_unMaxParticleCount,
     std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
     : m_pParticlePool(std::make_shared<ParticlePool<ParticleType> >(a_unMaxParticleCount)),
       m_pRenderer(std::make_unique<RendererType>(m_pParticlePool)),
-      m_sSystemName(std::move(a_sSystemName)) {}
+      m_sSystemName(std::move(a_sSystemName)) {
+    for (std::size_t i = 0; i < m_pParticlePool->GetParticleCount(); ++i) {
+      m_pParticlePool->Wake(i);
+    }
+  }
+
+  template <typename U = T, typename std::enable_if<
+    std::is_same<U, LifeDeathCycle::Enabled>::value, int>::type = 0>
+  explicit ParticleSystem(
+    std::size_t a_unMaxParticleCount,
+    std::string &&a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
+    : m_pParticlePool(std::make_shared<ParticlePool<ParticleType> >(a_unMaxParticleCount)),
+    m_pRenderer(std::make_unique<RendererType>(m_pParticlePool)),
+    m_sSystemName(std::move(a_sSystemName)) {}
 
   virtual ~ParticleSystem() = default;
 
-  ParticleSystem(ParticleSystem<RendererType>&& other)
+  ParticleSystem(ParticleSystem<RendererType, T>&& other)
     : m_pParticlePool(std::move(other.m_pParticlePool)),
       m_pRenderer(std::move(other.m_pRenderer)),
       m_vEmitters(std::move(other.m_vEmitters)),
       m_vDynamics(std::move(other.m_vDynamics)),
       m_sSystemName(std::move(other.m_sSystemName)) {}
 
-  ParticleSystem<RendererType>& 
-    operator=(ParticleSystem<RendererType>&& other) {
+  ParticleSystem<RendererType, T>& 
+    operator=(ParticleSystem<RendererType, T>&& other) {
     m_pParticlePool = std::move(other.m_pParticlePool);
     m_pRenderer = std::move(other.m_pRenderer);
     m_vEmitters = std::move(other.m_vEmitters);
@@ -70,10 +90,9 @@ public:
   }
 
   virtual inline void Update(double a_dt) {
-    // Particles components update (dynamics, emission/destruction, etc.)
-    for (auto& emmiter : m_vEmitters) {
-      emmiter->Emit(a_dt, m_pParticlePool);
-    }
+    // Particle initializations/creation
+    Spawn(a_dt);
+    // Dynamics/runtime behavior update
     for (auto& dynamic : m_vDynamics) {
       dynamic->Update(a_dt, m_pParticlePool);
     }
@@ -85,6 +104,17 @@ public:
   }
 
 private:
+  template <typename U = T, typename std::enable_if<
+    std::is_same<U, LifeDeathCycle::Disabled>::value, int>::type = 0>
+  inline void Spawn(double a_dt) {}
+  template <typename U = T, typename std::enable_if<
+    std::is_same<U, LifeDeathCycle::Enabled>::value, int>::type = 0>
+  inline void Spawn(double a_dt) {
+    for (auto& emmiter : m_vEmitters) {
+      emmiter->Emit(a_dt, m_pParticlePool);
+    }
+  }
+
   std::string                                               m_sSystemName;
   std::shared_ptr<ParticlePool<ParticleType> >              m_pParticlePool;
   std::vector<std::unique_ptr<Emitter<ParticleType> > >	    m_vEmitters;

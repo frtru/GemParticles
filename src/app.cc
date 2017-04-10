@@ -81,7 +81,6 @@ void Init() {
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f,100000.0));
   particle_module::AddSystem(std::move(wParticleSystem));
-  
 }
 
 void Run() {

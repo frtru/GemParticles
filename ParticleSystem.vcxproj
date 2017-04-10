@@ -36,6 +36,7 @@
     <ClCompile Include="src\shader_module.cc" />
     <ClCompile Include="src\spherical_stream_emitter.cc" />
     <ClCompile Include="src\core_opengl_renderer.cc" />
+    <ClCompile Include="src\texture_core_gl_renderer.cc" />
     <ClCompile Include="src\texture_factory.cc" />
     <ClCompile Include="src\texture_module.cc" />
   </ItemGroup>
@@ -66,6 +67,7 @@
     <ClInclude Include="src\singleton.hh" />
     <ClInclude Include="src\spherical_stream_emitter.hh" />
     <ClInclude Include="src\core_opengl_renderer.hh" />
+    <ClInclude Include="src\texture_core_gl_renderer.hh" />
     <ClInclude Include="src\texture_factory.hh" />
     <ClInclude Include="src\texture_module.hh" />
     <ClInclude Include="src\timer.hh" />
@@ -74,6 +76,7 @@
     <None Include="shaders\debug_axes.vert" />
     <None Include="shaders\default.comp" />
     <None Include="shaders\default.frag" />
+    <None Include="shaders\default.vert" />
     <None Include="shaders\simple_texture.frag" />
     <None Include="shaders\particle_billboard.geom" />
     <None Include="shaders\default.tesc" />
