@@ -57,4 +57,13 @@
   ClassName(ClassName&& other) = delete;  \
   ClassName& operator=(ClassName&& other) = delete;
 
+// Alignment cross-compiler compatible (useful for SIMD instructions) 
+#if defined(_MSC_VER)
+#define ALIGNED_(x) __declspec(align(x))
+#else
+#if defined(__GNUC__)
+#define ALIGNED_(x) __attribute__ ((aligned(x)))
+#endif
+#endif
+
 #endif /* MACROS_HH */
