@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app.cc" />
+    <ClCompile Include="src\avx_particle_attractor.cc" />
     <ClCompile Include="src\camera.cc" />
     <ClCompile Include="src\euler_particle_updater.cc" />
     <ClCompile Include="src\basic_stream_emitter.cc" />
@@ -44,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.hh" />
+    <ClInclude Include="src\avx_particle_attractor.hh" />
     <ClInclude Include="src\camera.hh" />
     <ClInclude Include="src\euler_particle_updater.hh" />
     <ClInclude Include="src\basic_stream_emitter.hh" />

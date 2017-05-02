@@ -79,6 +79,9 @@
     <ClCompile Include="src\proximity_color_updater.cc">
       <Filter>Dynamics</Filter>
     </ClCompile>
+    <ClCompile Include="src\avx_particle_attractor.cc">
+      <Filter>Dynamics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -165,6 +168,9 @@
       <Filter>Dynamics</Filter>
     </ClInclude>
     <ClInclude Include="src\proximity_color_updater.hh">
+      <Filter>Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\avx_particle_attractor.hh">
       <Filter>Dynamics</Filter>
     </ClInclude>
   </ItemGroup>
