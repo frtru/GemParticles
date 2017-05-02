@@ -20,15 +20,9 @@ namespace particle {
 BasicStreamEmitter::BasicStreamEmitter()
   : Emitter() {}
 
-BasicStreamEmitter::BasicStreamEmitter(
-  const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity,
-    float a_fLifetime, 
-    double a_dEmissionRate)
-  : Emitter(a_spawnLocation,
-  a_spawnVelocity,
-  a_fLifetime,
-  a_dEmissionRate) {}
+BasicStreamEmitter::BasicStreamEmitter(const glm::f32vec3& a_spawnLocation,
+    const glm::f32vec3& a_spawnVelocity, float a_fLifetime, double a_dEmissionRate)
+  : Emitter(a_spawnLocation, a_spawnVelocity, a_fLifetime, a_dEmissionRate) { }
 
 void BasicStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {

@@ -26,10 +26,8 @@ public:
   GravityAcceleration() = default;
   ~GravityAcceleration() = default;
 
-	// TODO: Copyable and moveable?<
-
-  virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
-}; /* class EulerParticleUpdater*/
+  void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
+}; /* class GravityAcceleration*/
 } /* namespace particle */
 } /* namespace gem */
 

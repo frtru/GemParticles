@@ -27,9 +27,9 @@ float RandomFloat(float a_fMin, float a_fMax) {
 }
 
 //TODO: If this gonna be reused, change the following so that
-// it can be paramterized, random should be seeded, see if it can be
+// it can be parametrized, random should be seeded, see if it can be
 // optimized/changed for something cleaner/more C++11
-const glm::f32vec3 RandomInitialPosition() {
+glm::f32vec3 RandomInitialPosition() {
   // TODO: This could clearly be passed as a parameter at construction
   // but this is only a proof of concept, so not necessary to spend too
   // much time on this.
@@ -38,10 +38,7 @@ const glm::f32vec3 RandomInitialPosition() {
 }
 
 RainEmitter::RainEmitter(float a_fLifetime, double a_dEmissionRate)
-  : Emitter(glm::vec3(),
-    glm::vec3(),
-    a_fLifetime,
-    a_dEmissionRate) {}
+  : Emitter(glm::vec3(), glm::vec3(), a_fLifetime, a_dEmissionRate) {}
 
 void RainEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {

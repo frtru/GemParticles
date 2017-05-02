@@ -29,10 +29,8 @@ public:
     double a_dEmissionRate);
 	virtual ~BasicStreamEmitter() = default;
 
-  // TODO: Copyable and moveable?<
-
 private:
-  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
+  void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
 }; /* class BasicStreamEmitter*/
 } /* namespace particle */

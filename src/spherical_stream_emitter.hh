@@ -30,7 +30,7 @@ public:
 	virtual ~SphericalStreamEmitter() = default;
 
 private:
-  virtual void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
+  void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
 }; /* class SphericalStreamEmitter */
 } /* namespace particle */
