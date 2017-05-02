@@ -26,16 +26,15 @@
 #include "camera.hh"
 #include "event_handler.hh"
 #include "particle_module.hh"
-#include "particle_system_interface.hh"
 #include "scene.hh"
 
-// TODO: Temporary includes since test suite
-// or factory/builder are not built yet...
+// TODO: Temporary includes since factories/builders are not built yet...
 #include "particle_system.hh"
 #include "core_opengl_renderer.hh"
 #include "rain_emitter.hh"
 #include "gravity_acceleration.hh"
 #include "euler_particle_updater.hh"
+#include "texture_core_gl_renderer.hh"
 
 namespace gem {
 namespace particle {
@@ -76,7 +75,7 @@ void Init() {
   // Particle system initialization
   const std::size_t unParticleCount = 1000000u;
   particle_module::Init();
-  auto wParticleSystem = std::make_unique<ParticleSystem<CoreGLRenderer, LifeDeathCycle::Disabled> >(unParticleCount);
+  auto wParticleSystem = std::make_unique<ParticleSystem<TextureCoreGLRenderer, LifeDeathCycle::Enabled> >(unParticleCount);
   wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f,100000.0));
