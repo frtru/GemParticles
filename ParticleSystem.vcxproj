@@ -28,7 +28,9 @@
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
     <ClCompile Include="src\opengl_context.cc" />
+    <ClCompile Include="src\particle_attractor.cc" />
     <ClCompile Include="src\particle_module.cc" />
+    <ClCompile Include="src\proximity_color_updater.cc" />
     <ClCompile Include="src\rain_emitter.cc" />
     <ClCompile Include="src\random_fountain_emitter.cc" />
     <ClCompile Include="src\scene.cc" />
@@ -51,11 +53,13 @@
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\macro_definitions.hh" />
     <ClInclude Include="src\opengl_context.hh" />
+    <ClInclude Include="src\particle_attractor.hh" />
     <ClInclude Include="src\particle_module.hh" />
     <ClInclude Include="src\particle_core_data.hh" />
     <ClInclude Include="src\particle_pool_core.hh" />
     <ClInclude Include="src\particle_system.hh" />
     <ClInclude Include="src\particle_system_interface.hh" />
+    <ClInclude Include="src\proximity_color_updater.hh" />
     <ClInclude Include="src\rain_emitter.hh" />
     <ClInclude Include="src\random_fountain_emitter.hh" />
     <ClInclude Include="src\renderer.hh" />

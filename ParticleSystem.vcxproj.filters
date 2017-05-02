@@ -73,6 +73,12 @@
     <ClCompile Include="src\texture_core_gl_renderer.cc">
       <Filter>Renderers</Filter>
     </ClCompile>
+    <ClCompile Include="src\particle_attractor.cc">
+      <Filter>Dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\proximity_color_updater.cc">
+      <Filter>Dynamics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -154,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="src\texture_core_gl_renderer.hh">
       <Filter>Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particle_attractor.hh">
+      <Filter>Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\proximity_color_updater.hh">
+      <Filter>Dynamics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
