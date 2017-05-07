@@ -11,27 +11,27 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef PARTICLE_ATTRACTOR
-#define PARTICLE_ATTRACTOR
+#ifndef AVX_PARTICLE_ATTRACTOR
+#define AVX_PARTICLE_ATTRACTOR
 
 #include "dynamic.hh"
 #include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class ParticleAttractor : public Dynamic<CoreParticles> {
+class AVXParticleAttractor : public Dynamic<CoreParticles> {
 public:
-  explicit ParticleAttractor(
+  explicit AVXParticleAttractor(
     const glm::f32vec3 &a_fvAttractionPosition,
     float a_accelerationRate);
-  ~ParticleAttractor() = default;
+  ~AVXParticleAttractor() = default;
   
   void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 private:
 	glm::f32vec3	m_fvAttractionPosition;
   float         m_fAccelerationRate;
-}; /* class ParticleAttractor*/
+}; /* class AVXParticleAttractor */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: PARTICLE_ATTRACTOR */
+#endif /* end of include guard: AVX_PARTICLE_ATTRACTOR */

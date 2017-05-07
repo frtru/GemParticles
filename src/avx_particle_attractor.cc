@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "particle_attractor.hh"
+#include "avx_particle_attractor.hh"
 
 #include <immintrin.h>
 #include "macro_definitions.hh"
@@ -24,13 +24,13 @@ namespace avx_details{
   const long long   mask_off = 0x0000000000000000;
   const std::size_t particles_per_iteration = sizeof(__m256) / sizeof(glm::f32vec3);
 }
-ParticleAttractor::ParticleAttractor(
+AVXParticleAttractor::AVXParticleAttractor(
   const glm::f32vec3 &a_fvAttractionPosition,
   float a_accelerationRate)
   : m_fvAttractionPosition(a_fvAttractionPosition),
     m_fAccelerationRate(a_accelerationRate) {}
 
-void ParticleAttractor::Update(double a_dt, 
+void AVXParticleAttractor::Update(double a_dt,
   const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) {
   const float       fDt = (float)a_dt;
   const float       fIterationAccel = fDt * m_fAccelerationRate;
