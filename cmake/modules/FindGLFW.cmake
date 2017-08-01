@@ -10,10 +10,12 @@ if(WIN32 OR WINDOWS)
 FIND_LIBRARY(GLFW3_GLFW3_LIBRARY NAMES glfw3dll
   PATHS 
   $ENV{GLFW_HOME}/built/lib/
+  $ENV{GLFW_HOME}/lib
   $ENV{GLFW_HOME}/lib-mingw-w64
   $ENV{GLFW_HOME}/lib-vc2012
   $ENV{GLFW_HOME}/lib-vc2013
   $ENV{GLFW_HOME}/lib-vc2015
+  ${GLFW_HOME}/lib
   ${GLFW_HOME}/lib-vc2012
   ${GLFW_HOME}/lib-vc2013
   ${GLFW_HOME}/lib-vc2015
