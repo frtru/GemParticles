@@ -25,6 +25,7 @@ public:
   ~EulerParticleUpdater() = default;
 
   void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
+  bool AltersParticleLifeCycle() const override { return true; }
 }; /* class EulerParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */

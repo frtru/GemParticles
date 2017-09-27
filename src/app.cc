@@ -75,7 +75,7 @@ void Init() {
   // Particle system initialization
   const std::size_t unParticleCount = 1000000u;
   particle_module::Init();
-  auto wParticleSystem = std::make_unique<ParticleSystem<TextureCoreGLRenderer, LifeDeathCycle::Enabled> >(unParticleCount);
+  auto wParticleSystem = std::make_unique<ParticleSystem<CoreGLRenderer, LifeDeathCycle::Disabled> >(unParticleCount);
   wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f,100000.0));
@@ -94,7 +94,7 @@ void Run() {
     
     scene::Render();
     particle_module::Update(dt);    
-    
+
     graphic_context->Update();
     timer::chrono::Update();
   }

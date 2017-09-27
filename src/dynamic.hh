@@ -30,6 +30,8 @@ public:
 	virtual ~Dynamic() = default;
 
   virtual void Update(double a_dt, const std::shared_ptr<ParticlePool<ParticleType> >& a_pPool) = 0;
+  
+  virtual bool AltersParticleLifeCycle() const { return false; }
 }; /* class Dynamic*/
 } /* namespace particle */
 } /* namespace gem */

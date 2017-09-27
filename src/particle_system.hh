@@ -156,6 +156,12 @@ template< class RendererType, typename ParticleType>
       m_vEmitters.push_back(std::move(a_pEmitter));
     }
     void AddDynamic(std::unique_ptr<Dynamic<ParticleType>> a_pDynamic) {
+      if (a_pDynamic->AltersParticleLifeCycle()) {
+        std::cout << "ERROR: ParticleSystem::AddDynamic -> Tried to add a ";
+        std::cout << "dynamic which alters the Life-Death cycle when it is disabled. ";
+        std::cout << "Dynamic will not be added to the system." << std::endl;
+        return;
+      }
       m_vDynamics.push_back(std::move(a_pDynamic));
     }
 
