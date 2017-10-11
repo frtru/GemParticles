@@ -35,6 +35,7 @@
     <ClCompile Include="src\project_dictionary.cc" />
     <ClCompile Include="src\proximity_color_updater.cc" />
     <ClCompile Include="src\rain_emitter.cc" />
+    <ClCompile Include="src\rain_particles_blueprint.cc" />
     <ClCompile Include="src\random_fountain_emitter.cc" />
     <ClCompile Include="src\scene.cc" />
     <ClCompile Include="src\shader_factory.cc" />
@@ -67,6 +68,7 @@
     <ClInclude Include="src\particle_system_interface.hh" />
     <ClInclude Include="src\proximity_color_updater.hh" />
     <ClInclude Include="src\rain_emitter.hh" />
+    <ClInclude Include="src\rain_particles_blueprint.hh" />
     <ClInclude Include="src\random_fountain_emitter.hh" />
     <ClInclude Include="src\renderer.hh" />
     <ClInclude Include="src\scene.hh" />

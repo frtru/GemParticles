@@ -115,6 +115,9 @@
     <ClCompile Include="src\meme.cc">
       <Filter>projects\meme</Filter>
     </ClCompile>
+    <ClCompile Include="src\rain_particles_blueprint.cc">
+      <Filter>blueprints</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\dynamic.hh">
@@ -221,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="src\meme.hh">
       <Filter>projects\meme</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rain_particles_blueprint.hh">
+      <Filter>blueprints</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

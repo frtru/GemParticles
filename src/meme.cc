@@ -28,11 +28,9 @@
 #include "event_handler.hh"
 #include "particle_module.hh"
 #include "scene.hh"
-#include "particle_system.hh"
-#include "rain_emitter.hh"
-#include "gravity_acceleration.hh"
-#include "euler_particle_updater.hh"
-#include "texture_core_gl_renderer.hh"
+
+// Specific project particle blueprints
+#include "rain_particles_blueprint.hh"
 
 namespace gem {
 namespace particle {
@@ -77,13 +75,8 @@ void Init() {
   scene::SetDebugOption(true);
 
   // Particle system initialization
-  const std::size_t unParticleCount = 1000000u;
   particle_module::Init();
-  auto wParticleSystem = std::make_unique<ParticleSystem<TextureCoreGLRenderer> >(unParticleCount);
-  wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
-  wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f,100000.0));
-  particle_module::AddSystem(std::move(wParticleSystem));
+  blueprint::rain_particles_builder::Create();
 }
 
 void Run() {
