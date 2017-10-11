@@ -14,17 +14,30 @@
 #include "project_dictionary.hh"
 
 #include <map>
-#include "app.hh"
+#include <mutex>
+
+// TODO: See issue #63 on github
+#include "meme.hh"
+//#include "fast_particles_with_attractors.hh"
+//#include "glass_particles.hh"
 
 namespace gem {
 namespace particle {
 namespace project_dict {
 namespace {
+std::once_flag init_flag;
 // For readability, we define the dictionary as collection of entries
 // mapping strings with pipelines
 using ProjectDictionary = std::map<std::string, ProjectPipeline>;
 ProjectDictionary _Dict;
 }/* unnamed namespace */
+
+// TODO: See issue #63 on github
+void Init() {
+  std::call_once(init_flag, [&]() {
+    meme::RegisterProject();
+  });
+}
 
 ProjectPipeline* LookUp(const std::string& a_sProjectName) {
   for (auto& entry : _Dict) {
@@ -54,6 +67,6 @@ void SetPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_fP
   _Dict[a_sProjectName].clear();
   _Dict[a_sProjectName] = std::move(a_fProjectPipeline);
 }
-} /* namespace app */
+} /* namespace project_dict */
 } /* namespace particle */
 } /* namespace gem */

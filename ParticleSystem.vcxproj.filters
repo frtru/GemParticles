@@ -35,6 +35,9 @@
     <Filter Include="main">
       <UniqueIdentifier>{38f8c360-e7cc-499d-bc53-8ec79fa61ba1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="projects\meme">
+      <UniqueIdentifier>{f9e4dd6a-ab0c-450e-b918-80d60f6805e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\random_fountain_emitter.cc">
@@ -106,11 +109,11 @@
     <ClCompile Include="src\scene.cc">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\meme.cc">
-      <Filter>projects</Filter>
-    </ClCompile>
     <ClCompile Include="src\project_dictionary.cc">
       <Filter>main</Filter>
+    </ClCompile>
+    <ClCompile Include="src\meme.cc">
+      <Filter>projects\meme</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -213,11 +216,11 @@
     <ClInclude Include="src\scene.hh">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\meme.hh">
-      <Filter>projects</Filter>
-    </ClInclude>
     <ClInclude Include="src\project_dictionary.hh">
       <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="src\meme.hh">
+      <Filter>projects\meme</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

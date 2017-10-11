@@ -11,19 +11,18 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef APP_HH
-#define APP_HH
-
-#include <string>
+#ifndef MEME_HH
+#define MEME_HH
 
 namespace gem {
 namespace particle {
-namespace app {
+namespace meme {
+void RegisterProject();
 void Init();
 void Run();
 void Terminate();
-}
+} /* namespace meme */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: APP_HH */
+#endif /* end of include guard: MEME_HH */

@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "app.hh"
+#include "meme.hh"
 //C system files
 //C++ system files
 #include <memory>
@@ -19,6 +19,7 @@
 #include <sstream>
 //Other libraries' .h files
 //Your project's .h files
+#include "project_dictionary.hh"
 #include "timer.hh"
 #include "opengl_context.hh"
 #include "shader_module.hh"
@@ -27,10 +28,7 @@
 #include "event_handler.hh"
 #include "particle_module.hh"
 #include "scene.hh"
-
-// TODO: Temporary includes since factories/builders are not built yet...
 #include "particle_system.hh"
-#include "core_opengl_renderer.hh"
 #include "rain_emitter.hh"
 #include "gravity_acceleration.hh"
 #include "euler_particle_updater.hh"
@@ -38,12 +36,18 @@
 
 namespace gem {
 namespace particle {
-namespace app {
+namespace meme {
 namespace {
 // A pointer to interface, to enable flexibility over
 // window management system or 3D API (GLFW/Windows
 // & OpenGL/Direct3D)
 std::shared_ptr<GraphicContext> graphic_context;
+}
+
+void RegisterProject() {
+  project_dict::AddStage("meme", std::bind(&Init));
+  project_dict::AddStage("meme", std::bind(&Run));
+  project_dict::AddStage("meme", std::bind(&Terminate));
 }
 
 void Init() {
@@ -75,7 +79,7 @@ void Init() {
   // Particle system initialization
   const std::size_t unParticleCount = 1000000u;
   particle_module::Init();
-  auto wParticleSystem = std::make_unique<ParticleSystem<CoreGLRenderer, LifeDeathCycle::Disabled> >(unParticleCount);
+  auto wParticleSystem = std::make_unique<ParticleSystem<TextureCoreGLRenderer> >(unParticleCount);
   wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f,100000.0));
@@ -109,7 +113,7 @@ void Terminate() {
   shader::module::Terminate();
   graphic_context->Terminate();
 }
-} /* namespace app */
+} /* namespace meme */
 } /* namespace particle */
 } /* namespace gem */
 
