@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 FranÃ§ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,17 +11,19 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef APP_HH
+#define APP_HH
 
-using namespace gem::particle;
+#include <string>
 
-int main(int argc, const char *argv[]) {
-  app::Launch(argv[0]);
-  // TODO: If desired, one could do more extensive
-  // error handling, but this'll be enough for now
-  return app::GetAppStatusError();
+namespace gem {
+namespace particle {
+namespace app {
+void Init();
+void Run();
+void Terminate();
 }
+} /* namespace particle */
+} /* namespace gem */
+
+#endif /* end of include guard: APP_HH */

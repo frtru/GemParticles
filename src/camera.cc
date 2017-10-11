@@ -21,7 +21,7 @@
 
 namespace camera {
 namespace {
-std::once_flag  init_flag;
+std::once_flag init_flag;
 std::once_flag terminate_flag;
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;

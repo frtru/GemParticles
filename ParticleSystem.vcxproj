@@ -28,9 +28,11 @@
     <ClCompile Include="src\gravity_acceleration.cc" />
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\meme.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\particle_attractor.cc" />
     <ClCompile Include="src\particle_module.cc" />
+    <ClCompile Include="src\project_dictionary.cc" />
     <ClCompile Include="src\proximity_color_updater.cc" />
     <ClCompile Include="src\rain_emitter.cc" />
     <ClCompile Include="src\random_fountain_emitter.cc" />
@@ -45,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\app.hh" />
+    <ClInclude Include="src\project_dictionary.hh" />
     <ClInclude Include="src\avx_particle_attractor.hh" />
     <ClInclude Include="src\camera.hh" />
     <ClInclude Include="src\euler_particle_updater.hh" />
@@ -54,6 +57,7 @@
     <ClInclude Include="src\gravity_acceleration.hh" />
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\macro_definitions.hh" />
+    <ClInclude Include="src\meme.hh" />
     <ClInclude Include="src\opengl_context.hh" />
     <ClInclude Include="src\particle_attractor.hh" />
     <ClInclude Include="src\particle_module.hh" />
