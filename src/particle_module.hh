@@ -31,8 +31,8 @@ void Update(double a_dt);
 void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem);
 
 // TODOs : See .CC file for todo
-void RemoveSystem(const std::string& a_szSystemName); 
-void GetSystemByName(const std::string& a_szSystemName);
+void RemoveSystem(const std::string& a_sSystemName); 
+void GetSystemByName(const std::string& a_sSystemName);
 
 } /* namespace particle_module */
 } /* namespace particle */

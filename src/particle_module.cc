@@ -53,7 +53,7 @@ void Update(double a_dt) {
   }
 }
 
-void GetSystemByName(const std::string& a_szSystemName) {
+void GetSystemByName(const std::string& a_sSystemName) {
   /*
    TODO:
    Add accessors in the particlesystemcompoenent for the name
@@ -72,7 +72,7 @@ void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem) {
   });
 }
 
-void RemoveSystem(const std::string& a_szSystemName) {
+void RemoveSystem(const std::string& a_sSystemName) {
   /*
   TODO:
     This could be necessary, i can see a use case, but this is not priority
