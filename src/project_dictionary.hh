@@ -27,6 +27,13 @@ namespace particle {
 using ProjectStage    = std::function<void()>;
 using ProjectPipeline = std::vector<ProjectStage>;
 
+#define REGISTRATION_PROC(proc_name, ...) \
+  int proc_name() {                       \
+  __VA_ARGS__                             \
+    return 0;                             \
+  }                                       \
+  static int VAR = proc_name();
+
 namespace project_dict {
 // Retrieves the correct pipeline related to the given name.
 // Returns nullptr when reaching the end of the dictionary
