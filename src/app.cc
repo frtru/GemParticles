@@ -23,10 +23,21 @@ namespace gem {
 namespace particle {
 namespace app {
 namespace {
-Status _AppStatus;
+bool    _ProjectsLoaded = false;
+Status  _AppStatus;
+}
+
+void LoadProjects() {
+  if (!_ProjectsLoaded) {
+    project_dict::Init();
+    _ProjectsLoaded = true;
+  }
 }
 
 ErrCode Launch(const std::string& a_sProjectName) {
+  // Load the projects beforehand, in case the user forgot to
+  LoadProjects();
+
   // Check if the project in input is recognized in the dictionary
   ProjectPipeline *wPipeline = project_dict::LookUp(a_sProjectName);
   if (wPipeline == nullptr) {

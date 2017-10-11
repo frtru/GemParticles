@@ -27,22 +27,23 @@ namespace particle {
 using ProjectStage    = std::function<void()>;
 using ProjectPipeline = std::vector<ProjectStage>;
 
-#define REGISTRATION_PROC(proc_name, ...) \
-  int proc_name() {                       \
-  __VA_ARGS__                             \
-    return 0;                             \
-  }                                       \
-  static int VAR = proc_name();
-
 namespace project_dict {
+
+// TODO: If desired this could be replaced by another setup:
+// Each project has its own dll/.so, the engine is a .lib/.a
+// and the executable only runs the dll/.so loading (through .ini/xml files maybe?)
+// and launching the said dynamic library. But this is good enough for now for decoupling.
+// An issue will be created for this. Ref issue #63
+
+// Explicitely loads and registers all the recognized
+void Init();
 // Retrieves the correct pipeline related to the given name.
 // Returns nullptr when reaching the end of the dictionary
 ProjectPipeline* LookUp(const std::string& a_sProjectName);
-
 void AddStage(const std::string& a_sProjectName, const ProjectStage&& a_fProjectStage);
 void AddPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline);
 void SetPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_fProjectPipeline);
-} /* namespace app */
+} /* namespace project_dict */
 } /* namespace particle */
 } /* namespace gem */
 

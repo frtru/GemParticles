@@ -16,11 +16,12 @@
 
 namespace gem {
 namespace particle {
-namespace app {
+namespace meme {
+void RegisterProject();
 void Init();
 void Run();
 void Terminate();
-}
+} /* namespace meme */
 } /* namespace particle */
 } /* namespace gem */
 
