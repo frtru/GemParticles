@@ -76,6 +76,9 @@ void Init() {
 
   // Particle system initialization
   particle_module::Init();
+  blueprint::rain_particles_builder::SetParticleSystemName("Amazing dickbutt particle system");
+  blueprint::rain_particles_builder::SetTexture("textures/dickbutt.png");
+  blueprint::rain_particles_builder::SetEmissionRate(100000.0);
   blueprint::rain_particles_builder::Create();
 }
 

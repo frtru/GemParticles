@@ -27,8 +27,7 @@
 #include <iostream>
 namespace gem {
 namespace particle {
-CoreGLRenderer::CoreGLRenderer(
-  const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
+CoreGLRenderer::CoreGLRenderer() {
   shader::factory::CompileShaderFile("shaders/default.vert", GL_VERTEX_SHADER);
   shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader::factory::CreateProgram();
@@ -40,9 +39,6 @@ CoreGLRenderer::CoreGLRenderer(
   glBindVertexArray(m_vertexArrayID);
   std::cout << "CoreGLRenderer::CoreGLRenderer -> Allocated array memory for ID = ";
   std::cout << m_vertexArrayID << std::endl;
-
-  ParticlePositionsInit(a_pPool);
-  ParticleColorsInit(a_pPool);
 
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -59,6 +55,14 @@ CoreGLRenderer::~CoreGLRenderer() {
     glDeleteBuffers(1, &m_vertexBufferID);
     m_vertexBufferID = 0;
   }
+}
+
+void CoreGLRenderer::Bind(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
+  Renderer<CoreParticles>::Bind(a_pPool);
+  glBindVertexArray(m_vertexArrayID);
+  ParticlePositionsInit(m_pPool);
+  ParticleColorsInit(m_pPool);
+  glBindVertexArray(0);
 }
 
 void CoreGLRenderer::ParticlePositionsInit(
@@ -125,10 +129,10 @@ void CoreGLRenderer::ParticleColorsInit(
   }
 }
 
-void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
+void CoreGLRenderer::Update() {
   shader::module::Use(m_shaderProgram);
   const std::size_t wActiveParticleCount =
-    a_pPool->GetActiveParticleCount();
+    m_pPool->GetActiveParticleCount();
 
   // TODO: See if the "if" branching is even necessary here
   // (test performance)
@@ -136,21 +140,21 @@ void CoreGLRenderer::Update(const std::shared_ptr<ParticlePool<CoreParticles> > 
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
       sizeof(glm::f32vec3)*wActiveParticleCount, 
-      a_pPool->pCoreData->m_position.get());
+      m_pPool->pCoreData->m_position.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
     glBufferSubData(GL_ARRAY_BUFFER, 0,
       sizeof(glm::u8vec4)*wActiveParticleCount,
-      a_pPool->pCoreData->m_color.get());
+      m_pPool->pCoreData->m_color.get());
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 }
-void CoreGLRenderer::Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
+void CoreGLRenderer::Render() {
   shader::module::Use(m_shaderProgram);
 
   glBindVertexArray(m_vertexArrayID);
-  const std::size_t count = a_pPool->GetActiveParticleCount();
+  const std::size_t count = m_pPool->GetActiveParticleCount();
   if (count > 0) {
     glDrawArrays(GL_POINTS, 0, (GLsizei)count);
   }

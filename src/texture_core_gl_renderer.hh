@@ -24,19 +24,20 @@ namespace particle {
 // TODO: Should add texture(s) name/filepaths as a parameter in the constructor
 class TextureCoreGLRenderer : public Renderer<CoreParticles> {
 public:
-  TextureCoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
+  TextureCoreGLRenderer(const std::string& a_sTexturePath);
   virtual ~TextureCoreGLRenderer();
 
-  inline std::size_t GetProgramID() const {
+  inline std::size_t GetProgramID() const override {
     return m_shaderProgram;
   }
-
-  virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
-  virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
+  
+  virtual void Bind(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
+  virtual void Update() override;
+  virtual void Render() override;
 private:
   void ParticlePositionsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
   void ParticleColorsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
-  void ParticleTexturesInit();
+  void ParticleTexturesInit(const std::string& a_sTexturePath);
 
   GLuint  m_vertexArrayID;
   GLuint  m_vertexBufferID;

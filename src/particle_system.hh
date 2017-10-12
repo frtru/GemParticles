@@ -20,6 +20,7 @@
 #include "particle_system_interface.hh"
 #include "emitter.hh"
 #include "dynamic.hh"
+#include "renderer.hh"
 #include "particle_pool_core.hh"
 
 namespace gem {
@@ -29,30 +30,28 @@ struct LifeDeathCycle {
   struct Enabled {};
 };
 
-
 // Default implementation of the particle system with life-death cycle enabled
-template< class RendererType, typename T = LifeDeathCycle::Enabled,
+template< typename T = LifeDeathCycle::Enabled,
           typename ParticleType = CoreParticles>
 class ParticleSystem : public IParticleSystem {
 public:
 
   explicit ParticleSystem(std::size_t a_unMaxParticleCount,
-    std::string&& a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
-	  : m_sSystemName(std::move(a_sSystemName)),
-		m_pParticlePool(std::make_shared<ParticlePool<ParticleType>>(a_unMaxParticleCount)),
-		m_pRenderer(std::make_unique<RendererType>(m_pParticlePool)) { }
+    const std::string& a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
+	  : m_sSystemName(std::move(a_sSystemName)), m_pRenderer(nullptr),
+		  m_pParticlePool(std::make_shared<ParticlePool<ParticleType>>(a_unMaxParticleCount)) { }
 
   virtual ~ParticleSystem() = default;
 
-  ParticleSystem(ParticleSystem<RendererType, T>&& other)
+  ParticleSystem(ParticleSystem<T>&& other) noexcept
   : m_sSystemName(std::move(other.m_sSystemName)),
     m_pParticlePool(std::move(other.m_pParticlePool)),
     m_vEmitters(std::move(other.m_vEmitters)),
     m_vDynamics(std::move(other.m_vDynamics)),
     m_pRenderer(std::move(other.m_pRenderer)) { }
   
-  ParticleSystem<RendererType, T>&  operator=(
-    ParticleSystem<RendererType, T>&& other) {
+  ParticleSystem<T>&  operator=(
+    ParticleSystem<T>&& other) noexcept {
     m_pParticlePool = std::move(other.m_pParticlePool);
     m_pRenderer = std::move(other.m_pRenderer);
     m_vEmitters = std::move(other.m_vEmitters);
@@ -68,11 +67,15 @@ public:
     return m_pParticlePool->GetActiveParticleCount();
   }
 
-  void AddEmitter(std::unique_ptr<Emitter<ParticleType>> a_pEmitter) {
+  void AddEmitter(std::unique_ptr<Emitter<ParticleType> > a_pEmitter) {
     m_vEmitters.push_back(std::move(a_pEmitter));
   }
-  void AddDynamic(std::unique_ptr<Dynamic<ParticleType>> a_pDynamic) {
+  void AddDynamic(std::unique_ptr<Dynamic<ParticleType> > a_pDynamic) {
     m_vDynamics.push_back(std::move(a_pDynamic));
+  }
+  void BindRenderer(std::unique_ptr<Renderer<ParticleType> > a_pRenderer) {
+    m_pRenderer = std::move(a_pRenderer);
+    m_pRenderer->Bind(m_pParticlePool);
   }
 
   void Update(double a_dt) override {
@@ -83,10 +86,10 @@ public:
       dynamic->Update(a_dt, m_pParticlePool);
     }
     // Rendering buffers update
-    m_pRenderer->Update(m_pParticlePool);
+    m_pRenderer->Update();
   }
   void Render() override {
-    m_pRenderer->Render(m_pParticlePool);
+    m_pRenderer->Render();
   }
 
 private:
@@ -100,7 +103,7 @@ private:
   std::shared_ptr<ParticlePool<ParticleType> >              m_pParticlePool;
   std::vector<std::unique_ptr<Emitter<ParticleType> > >	    m_vEmitters;
   std::vector<std::unique_ptr<Dynamic<ParticleType> > >	    m_vDynamics;
-  std::unique_ptr<RendererType>                             m_pRenderer;
+  std::unique_ptr<Renderer<ParticleType> >                  m_pRenderer;
 }; /* class ParticleSystem */
 
   
@@ -112,31 +115,30 @@ private:
 // We also redefine the spawn method so that it is empty and 
 // make sure there's no 
 //
-template< class RendererType, typename ParticleType>
-  class ParticleSystem<RendererType, LifeDeathCycle::Disabled, ParticleType> : public IParticleSystem {
+template<typename ParticleType>
+  class ParticleSystem<LifeDeathCycle::Disabled, ParticleType> : public IParticleSystem {
+  
   public:
-
     explicit ParticleSystem(std::size_t a_unMaxParticleCount,
-      std::string&& a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
-      : m_sSystemName(std::move(a_sSystemName)),
-      m_pParticlePool(std::make_shared<ParticlePool<ParticleType>>(a_unMaxParticleCount)),
-      m_pRenderer(std::make_unique<RendererType>(m_pParticlePool)) {
+      const std::string& a_sSystemName = std::move(std::string("DEFAULT_SYS_NAME")))
+      : m_sSystemName(std::move(a_sSystemName)), m_pRenderer(nullptr),
+      m_pParticlePool(std::make_shared<ParticlePool<ParticleType>>(a_unMaxParticleCount)) {
         for (std::size_t i = 0; i < m_pParticlePool->GetParticleCount(); ++i) {
           m_pParticlePool->Wake(i);
         }
-    }
+      }
 
     virtual ~ParticleSystem() = default;
 
-    ParticleSystem(ParticleSystem<RendererType, LifeDeathCycle::Disabled>&& other)
+    ParticleSystem(ParticleSystem<LifeDeathCycle::Disabled, ParticleType>&& other) noexcept
       : m_sSystemName(std::move(other.m_sSystemName)),
       m_pParticlePool(std::move(other.m_pParticlePool)),
       m_vEmitters(std::move(other.m_vEmitters)),
       m_vDynamics(std::move(other.m_vDynamics)),
       m_pRenderer(std::move(other.m_pRenderer)) { }
 
-    ParticleSystem<RendererType, LifeDeathCycle::Disabled>&  operator=(
-      ParticleSystem<RendererType, LifeDeathCycle::Disabled>&& other) {
+    ParticleSystem<LifeDeathCycle::Disabled, ParticleType>&  operator=(
+      ParticleSystem<LifeDeathCycle::Disabled, ParticleType>&& other) noexcept {
       m_pParticlePool = std::move(other.m_pParticlePool);
       m_pRenderer = std::move(other.m_pRenderer);
       m_vEmitters = std::move(other.m_vEmitters);
@@ -164,6 +166,10 @@ template< class RendererType, typename ParticleType>
       }
       m_vDynamics.push_back(std::move(a_pDynamic));
     }
+    void BindRenderer(std::unique_ptr<Renderer<ParticleType> > a_pRenderer) {
+      m_pRenderer = std::move(a_pRenderer);
+      m_pRenderer->Bind(m_pParticlePool);
+    }
 
     void Update(double a_dt) override {
       // Particle initializations/creation
@@ -173,10 +179,10 @@ template< class RendererType, typename ParticleType>
         dynamic->Update(a_dt, m_pParticlePool);
       }
       // Rendering buffers update
-      m_pRenderer->Update(m_pParticlePool);
+      m_pRenderer->Update();
     }
     void Render() override {
-      m_pRenderer->Render(m_pParticlePool);
+      m_pRenderer->Render();
     }
 
   private:
@@ -186,9 +192,8 @@ template< class RendererType, typename ParticleType>
     std::shared_ptr<ParticlePool<ParticleType> >              m_pParticlePool;
     std::vector<std::unique_ptr<Emitter<ParticleType> > >	    m_vEmitters;
     std::vector<std::unique_ptr<Dynamic<ParticleType> > >	    m_vDynamics;
-    std::unique_ptr<RendererType>                             m_pRenderer;
-}; /* class ParticleSystem<RendererType, LifeDeathCycle::Disabled, ParticleType> */
-
+    std::unique_ptr<Renderer<ParticleType> >                  m_pRenderer;
+}; /* class ParticleSystem<LifeDeathCycle::Disabled, ParticleType> */
 } /* namespace particle */
 } /* namespace gem */
 

@@ -31,8 +31,16 @@ public:
 	Renderer() = default;
 	virtual ~Renderer() = default;
 
-  virtual void Update(const std::shared_ptr<ParticlePool<ParticleType> > &a_pPool) = 0;
-  virtual void Render(const std::shared_ptr<ParticlePool<ParticleType> > &a_pPool) = 0;
+  virtual std::size_t GetProgramID() const = 0;
+  virtual void Bind(const std::shared_ptr<ParticlePool<ParticleType> > &a_pPool) {
+    m_pPool = a_pPool;
+  }
+
+  virtual void Update() = 0;
+  virtual void Render() = 0;
+
+protected:
+  std::shared_ptr<ParticlePool<ParticleType> > m_pPool;
 
 }; /* class Renderer*/
 } /* namespace particle */
