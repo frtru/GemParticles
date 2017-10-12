@@ -10,5 +10,5 @@ uniform sampler2D mytexture;
 
 void main(void)
 {
-	out_Color = mix(texture2D(mytexture, TexCoord), FragColor, 0.2);
+	out_Color = texture2D(mytexture, TexCoord) * FragColor;
 }

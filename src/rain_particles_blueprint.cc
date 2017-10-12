@@ -20,6 +20,7 @@
 #include "particle_module.hh"
 #include "particle_system.hh"
 #include "rain_emitter.hh"
+//#include "basic_stream_emitter.hh" // For debugging
 #include "gravity_acceleration.hh"
 #include "euler_particle_updater.hh"
 #include "texture_core_gl_renderer.hh"
@@ -39,6 +40,7 @@ void Create() {
   wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
   wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, _EmissionRate));
+  //wParticleSystem->AddEmitter(std::make_unique<BasicStreamEmitter>(glm::f32vec3(0.0f,0.0f,0.0f), glm::f32vec3(0.0f,0.0f,0.0f), 10000000.0,2.0)); // For debugging
   particle_module::AddSystem(std::move(wParticleSystem));
 }
 

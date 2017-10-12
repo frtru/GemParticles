@@ -160,6 +160,8 @@ void TextureCoreGLRenderer::Update() {
 }
 void TextureCoreGLRenderer::Render() {
   shader::module::Use(m_shaderProgram);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_COLOR, GL_ONE);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, m_textureID);
@@ -172,6 +174,7 @@ void TextureCoreGLRenderer::Render() {
   }
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);
+  glDisable(GL_BLEND);
 }
 } /* namespace particle */
 } /* namespace gem */
