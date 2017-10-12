@@ -14,5 +14,5 @@ out vec4 ex_Color;
 
 void main(void) {
   gl_Position = vec4(vertexPosition_modelspace,1.0);
-  ex_Color = vertexColor;
+  ex_Color = normalize(vertexColor);
 }
