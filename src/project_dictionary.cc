@@ -17,7 +17,7 @@
 #include <mutex>
 
 // TODO: See issue #63 on github
-#include "meme.hh"
+#include "rain_project.hh"
 //#include "fast_particles_with_attractors.hh"
 //#include "glass_particles.hh"
 
@@ -35,7 +35,7 @@ ProjectDictionary _Dict;
 // TODO: See issue #63 on github
 void Init() {
   std::call_once(init_flag, [&]() {
-    meme::RegisterProject();
+    rain_project::RegisterProject();
   });
 }
 

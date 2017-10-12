@@ -11,18 +11,18 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef MEME_HH
-#define MEME_HH
+#ifndef RAIN_PROJECT_HH
+#define RAIN_PROJECT_HH
 
 namespace gem {
 namespace particle {
-namespace meme {
+namespace rain_project {
 void RegisterProject();
 void Init();
 void Run();
 void Terminate();
-} /* namespace meme */
+} /* namespace rain_project */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: MEME_HH */
+#endif /* end of include guard: RAIN_PROJECT_HH */
