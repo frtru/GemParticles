@@ -160,6 +160,9 @@ void TextureCoreGLRenderer::Update() {
 }
 void TextureCoreGLRenderer::Render() {
   shader::module::Use(m_shaderProgram);
+  glEnable(GL_BLEND);
+  //glBlendFunc(GL_SRC_COLOR, GL_ONE); // Useful for White on Black textures
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, m_textureID);
@@ -172,6 +175,7 @@ void TextureCoreGLRenderer::Render() {
   }
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);
+  glDisable(GL_BLEND);
 }
 } /* namespace particle */
 } /* namespace gem */

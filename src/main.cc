@@ -20,7 +20,7 @@
 using namespace gem::particle;
 
 int main(int argc, const char *argv[]) {
-  app::Launch("meme");
+  app::Launch("rain");
   // TODO: If desired, one could do more extensive
   // error handling, but this'll be enough for now
   return app::GetAppStatusError();

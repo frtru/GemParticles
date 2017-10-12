@@ -28,7 +28,7 @@
     <ClCompile Include="src\gravity_acceleration.cc" />
     <ClCompile Include="src\graphic_context.cc" />
     <ClCompile Include="src\main.cc" />
-    <ClCompile Include="src\meme.cc" />
+    <ClCompile Include="src\rain_project.cc" />
     <ClCompile Include="src\opengl_context.cc" />
     <ClCompile Include="src\particle_attractor.cc" />
     <ClCompile Include="src\particle_module.cc" />
@@ -58,7 +58,7 @@
     <ClInclude Include="src\gravity_acceleration.hh" />
     <ClInclude Include="src\graphic_context.hh" />
     <ClInclude Include="src\macro_definitions.hh" />
-    <ClInclude Include="src\meme.hh" />
+    <ClInclude Include="src\rain_project.hh" />
     <ClInclude Include="src\opengl_context.hh" />
     <ClInclude Include="src\particle_attractor.hh" />
     <ClInclude Include="src\particle_module.hh" />

@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "meme.hh"
+#include "rain_project.hh"
 //C system files
 //C++ system files
 #include <memory>
@@ -34,7 +34,7 @@
 
 namespace gem {
 namespace particle {
-namespace meme {
+namespace rain_project {
 namespace {
 // A pointer to interface, to enable flexibility over
 // window management system or 3D API (GLFW/Windows
@@ -43,9 +43,9 @@ std::shared_ptr<GraphicContext> graphic_context;
 }
 
 void RegisterProject() {
-  project_dict::AddStage("meme", std::bind(&Init));
-  project_dict::AddStage("meme", std::bind(&Run));
-  project_dict::AddStage("meme", std::bind(&Terminate));
+  project_dict::AddStage("rain", std::bind(&Init));
+  project_dict::AddStage("rain", std::bind(&Run));
+  project_dict::AddStage("rain", std::bind(&Terminate));
 }
 
 void Init() {
@@ -76,8 +76,8 @@ void Init() {
 
   // Particle system initialization
   particle_module::Init();
-  blueprint::rain_particles_builder::SetParticleSystemName("Amazing dickbutt particle system");
-  blueprint::rain_particles_builder::SetTexture("textures/dickbutt.png");
+  blueprint::rain_particles_builder::SetParticleSystemName("Amazing rain system");
+  blueprint::rain_particles_builder::SetTexture("textures/raindrop.png");
   blueprint::rain_particles_builder::SetEmissionRate(100000.0);
   blueprint::rain_particles_builder::Create();
 }
@@ -109,7 +109,7 @@ void Terminate() {
   shader::module::Terminate();
   graphic_context->Terminate();
 }
-} /* namespace meme */
+} /* namespace rain_project */
 } /* namespace particle */
 } /* namespace gem */
 
