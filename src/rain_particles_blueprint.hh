@@ -14,11 +14,18 @@
 #ifndef RAIN_PARTICLES_BLUEPRINT_HH
 #define RAIN_PARTICLES_BLUEPRINT_HH
 
+#include <string>
+
 namespace gem { namespace particle {
 namespace blueprint {
 namespace rain_particles_builder {
 // This creates the said blueprint and adds it to the ParticleModule
 void Create();
+
+// Some parameters setter for this particuler blueprint builder
+void SetTexture(const std::string& a_sTexturePath);
+void SetParticleSystemName(const std::string& a_sSystemName);
+void SetEmissionRate(double a_dEmissionRate);
 } /* namespace rain_particles_builder */
 } /* namespace blueprint */
 } /* namespace particle */

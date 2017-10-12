@@ -23,15 +23,16 @@ namespace gem {
 namespace particle {
 class CoreGLRenderer : public Renderer<CoreParticles> {
 public:
-  CoreGLRenderer(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool);
+  CoreGLRenderer();
   virtual ~CoreGLRenderer();
 
-  inline std::size_t GetProgramID() const {
+  std::size_t GetProgramID() const override {
     return m_shaderProgram;
   }
 
-  virtual void Update(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
-  virtual void Render(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
+  void Bind(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
+  void Update() override;
+  void Render() override;
 private:
   void ParticlePositionsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
   void ParticleColorsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);

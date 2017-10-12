@@ -27,14 +27,24 @@
 namespace gem { namespace particle {
 namespace blueprint {
 namespace rain_particles_builder {
+namespace {
+  std::string _TexturePath;
+  std::string _ParticleSystemName;
+  double      _EmissionRate;
+}
 void Create() {
   const std::size_t unParticleCount = 1000000u;
-  auto wParticleSystem = std::make_unique<ParticleSystem<TextureCoreGLRenderer> >(unParticleCount);
+  auto wParticleSystem = std::make_unique<ParticleSystem<> >(unParticleCount, _ParticleSystemName);
+  wParticleSystem->BindRenderer(std::make_unique<TextureCoreGLRenderer>(_TexturePath));
   wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, 100000.0));
+  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f, _EmissionRate));
   particle_module::AddSystem(std::move(wParticleSystem));
 }
+
+void SetTexture(const std::string& a_sTexturePath) { _TexturePath = a_sTexturePath; }
+void SetParticleSystemName(const std::string& a_sSystemName) { _ParticleSystemName = a_sSystemName; }
+void SetEmissionRate(double a_dEmissionRate) { _EmissionRate = a_dEmissionRate; }
 } /* namespace rain_particles_builder */
 } /* namespace blueprint */
 } /* namespace particle */
