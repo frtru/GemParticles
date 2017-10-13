@@ -26,6 +26,7 @@ void Create();
 void SetTexture(const std::string& a_sTexturePath);
 void SetParticleSystemName(const std::string& a_sSystemName);
 void SetEmissionRate(double a_dEmissionRate);
+void SetParticleCount(std::size_t a_unParticleCount);
 } /* namespace rain_particles_builder */
 } /* namespace blueprint */
 } /* namespace particle */

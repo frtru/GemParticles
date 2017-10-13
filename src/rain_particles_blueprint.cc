@@ -31,11 +31,11 @@ namespace rain_particles_builder {
 namespace {
   std::string _TexturePath;
   std::string _ParticleSystemName;
-  double      _EmissionRate;
+  double      _EmissionRate = 100000.0;
+  std::size_t _ParticleCount = 1000000u;
 }
 void Create() {
-  const std::size_t unParticleCount = 1000000u;
-  auto wParticleSystem = std::make_unique<ParticleSystem<> >(unParticleCount, _ParticleSystemName);
+  auto wParticleSystem = std::make_unique<ParticleSystem<> >(_ParticleCount, _ParticleSystemName);
   wParticleSystem->BindRenderer(std::make_unique<TextureCoreGLRenderer>(_TexturePath));
   wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
@@ -47,6 +47,7 @@ void Create() {
 void SetTexture(const std::string& a_sTexturePath) { _TexturePath = a_sTexturePath; }
 void SetParticleSystemName(const std::string& a_sSystemName) { _ParticleSystemName = a_sSystemName; }
 void SetEmissionRate(double a_dEmissionRate) { _EmissionRate = a_dEmissionRate; }
+void SetParticleCount(std::size_t a_unParticleCount) { _ParticleCount = a_unParticleCount; }
 } /* namespace rain_particles_builder */
 } /* namespace blueprint */
 } /* namespace particle */
