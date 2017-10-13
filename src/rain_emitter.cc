@@ -21,7 +21,7 @@ namespace particle {
 namespace {
 const float TWO_PI = 6.28319f;
 const glm::f32vec3 RAIN_INITIAL_VELOCITY = { 2.0f, 0.0f, 0.2f };
-const glm::u8vec4 RAIN_COLOR = { 0u,162u,232u,180u };
+const glm::u8vec4 RAIN_COLOR = { 235u,235u,235u,180u };
 float RandomFloat(float a_fMin, float a_fMax) {
   return a_fMin + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (a_fMax - a_fMin)));
 }

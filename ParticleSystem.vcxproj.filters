@@ -35,10 +35,10 @@
     <Filter Include="main">
       <UniqueIdentifier>{38f8c360-e7cc-499d-bc53-8ec79fa61ba1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="projects\meme">
+    <Filter Include="projects\rain">
       <UniqueIdentifier>{f9e4dd6a-ab0c-450e-b918-80d60f6805e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="projects\meme\shaders">
+    <Filter Include="projects\rain\shaders">
       <UniqueIdentifier>{3848367a-3443-4f6e-bded-6c26c30d7bc9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -119,7 +119,7 @@
       <Filter>blueprints</Filter>
     </ClCompile>
     <ClCompile Include="src\rain_project.cc">
-      <Filter>projects\meme</Filter>
+      <Filter>projects\rain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -229,7 +229,7 @@
       <Filter>blueprints</Filter>
     </ClInclude>
     <ClInclude Include="src\rain_project.hh">
-      <Filter>projects\meme</Filter>
+      <Filter>projects\rain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

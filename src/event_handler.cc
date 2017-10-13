@@ -155,6 +155,14 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
     }
   }
 }
+
+void FramebuggerSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight) {
+  glViewport(0, 0, a_nWidth, a_nHeight);
+  camera::SetPerspectiveProjection(
+    glm::radians(45.0f),
+    a_nWidth, a_nHeight,
+    0.1f, 100.0f);
+}
 }
 
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
@@ -177,6 +185,7 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
     glfwSetMouseButtonCallback(window, MouseButtonCallBack);
     glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
     glfwSetKeyCallback(window, KeyCallback);
+    glfwSetFramebufferSizeCallback(window, FramebuggerSizeCallback);
   });
 }
 
