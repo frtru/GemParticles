@@ -77,17 +77,17 @@ void Init() {
   particle_module::Init();
   blueprint::rain_particles_builder::SetParticleSystemName("Amazing rain system");
   blueprint::rain_particles_builder::SetTexture("textures/raindrop.png");
-  blueprint::rain_particles_builder::SetEmissionRate(5000.0);
-  blueprint::rain_particles_builder::SetParticleCount(10000u);
+  blueprint::rain_particles_builder::SetEmissionRate(100000.0);
+  blueprint::rain_particles_builder::SetParticleCount(1000000u);
   blueprint::rain_particles_builder::Create();
 }
 
 void Run() {
 
   while (!graphic_context->PollWindowClosedEvent()) {
-    double dt = timer::chrono::GetTimeElapsedInSeconds();
+    double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
     std::stringstream ss; 
-    ss << "GemParticles, FPS: "  << timer::chrono::GetFPS()
+    ss << "GemParticles, FPS: "  << timer::Chrono::GetInstance().GetFPS()
       << " | Active Particles: " << particle_module::GetActiveParticlesCount();
     glfwSetWindowTitle(static_cast<GLFWwindow*>(
       graphic_context->GetWindowHandle()), ss.str().c_str());
@@ -96,7 +96,7 @@ void Run() {
     particle_module::Update(dt);    
 
     graphic_context->Update();
-    timer::chrono::Update();
+    timer::Chrono::GetInstance().Update();
   }
 }
 
