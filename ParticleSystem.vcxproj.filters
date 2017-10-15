@@ -38,13 +38,16 @@
     <Filter Include="projects\rain\shaders">
       <UniqueIdentifier>{3848367a-3443-4f6e-bded-6c26c30d7bc9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="projects\attractors">
+      <UniqueIdentifier>{4f22ed93-b4ab-41b5-b526-b66f03df2cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="projects\attractors\shaders">
+      <UniqueIdentifier>{c48000f6-7386-4f71-946b-f7dff01df797}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\particle_module.cc">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="src\dynamics\avx_particle_attractor.cc">
-      <Filter>dynamics</Filter>
     </ClCompile>
     <ClCompile Include="src\dynamics\euler_particle_updater.cc">
       <Filter>dynamics</Filter>
@@ -53,9 +56,6 @@
       <Filter>dynamics</Filter>
     </ClCompile>
     <ClCompile Include="src\dynamics\particle_attractor.cc">
-      <Filter>dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\dynamics\proximity_color_updater.cc">
       <Filter>dynamics</Filter>
     </ClCompile>
     <ClCompile Include="src\emitters\basic_stream_emitter.cc">
@@ -115,8 +115,20 @@
     <ClCompile Include="src\utils\basic_event_handler.cc">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\projects\rain\rain_event_handler.cc">
-      <Filter>projects\rain</Filter>
+    <ClCompile Include="src\projects\attractors\attractor_project.cc">
+      <Filter>projects\attractors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\attractors\attractor_system_blueprint.cc">
+      <Filter>projects\attractors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\attractors\avx_particle_attractor.cc">
+      <Filter>projects\attractors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\attractors\proximity_color_updater.cc">
+      <Filter>projects\attractors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\attractors\attractor_event_handler.cc">
+      <Filter>projects\attractors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,9 +150,6 @@
     <ClInclude Include="src\core\particle_system_interface.hh">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="src\dynamics\avx_particle_attractor.hh">
-      <Filter>dynamics</Filter>
-    </ClInclude>
     <ClInclude Include="src\dynamics\dynamic.hh">
       <Filter>dynamics</Filter>
     </ClInclude>
@@ -151,9 +160,6 @@
       <Filter>dynamics</Filter>
     </ClInclude>
     <ClInclude Include="src\dynamics\particle_attractor.hh">
-      <Filter>dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\dynamics\proximity_color_updater.hh">
       <Filter>dynamics</Filter>
     </ClInclude>
     <ClInclude Include="src\emitters\basic_stream_emitter.hh">
@@ -227,8 +233,20 @@
     <ClInclude Include="src\utils\basic_event_handler.hh">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\projects\rain\rain_event_handler.hh">
-      <Filter>projects\rain</Filter>
+    <ClInclude Include="src\projects\attractors\attractor_project.hh">
+      <Filter>projects\attractors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\attractors\attractor_system_blueprint.hh">
+      <Filter>projects\attractors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\attractors\avx_particle_attractor.hh">
+      <Filter>projects\attractors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\attractors\proximity_color_updater.hh">
+      <Filter>projects\attractors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\attractors\attractor_event_handler.hh">
+      <Filter>projects\attractors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@
 
 // TODO: See issue #63 on github
 #include "projects/rain/rain_project.hh"
+#include "projects/attractors/attractor_project.hh"
 //#include "projects/fast_particles_with_attractors/fast_particles_with_attractors_project.hh"
 //#include "projects/glass_particles/glass_particles_project.hh"
 
@@ -36,6 +37,7 @@ ProjectDictionary _Dict;
 void Init() {
   std::call_once(init_flag, [&]() {
     rain_project::RegisterProject();
+    attractor_project::RegisterProject();
   });
 }
 

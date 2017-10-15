@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/rain/rain_event_handler.hh"
+#include "projects/attractors/attractor_event_handler.hh"
 
 #include <iostream>
 #include <mutex>
@@ -23,10 +23,9 @@
 #include "core/particle_system.hh"
 #include "utils/scene.hh"
 #include "utils/camera.hh"
-#include "utils/timer.hh"
 
 namespace gem { namespace particle {
-namespace rain_project {
+namespace attractor_project {
 namespace event_handler {
 namespace {
 std::once_flag init_flag;
@@ -193,6 +192,6 @@ void Terminate() {
   std::call_once(terminate_flag, [&]() {});
 }
 } /* namespace event_handler*/
-} /* namespace rain_project */
+} /* namespace attractor_project */
 } /* namespace particle */
 } /* namespace gem */

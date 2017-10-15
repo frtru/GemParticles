@@ -11,14 +11,14 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "dynamics/avx_particle_attractor.hh"
+#include "projects/attractors//avx_particle_attractor.hh"
 
 #include <immintrin.h>
 #include "utils/macro_definitions.hh"
 #include "glm/gtx/simd_vec4.hpp"
 
-namespace gem {
-namespace particle {
+namespace gem { namespace particle {
+namespace attractor_project {
 namespace avx_details{
   const long long   mask_on  = 0xFFFFFFFFFFFFFFFF;
   const long long   mask_off = 0x0000000000000000;
@@ -101,5 +101,6 @@ void AVXParticleAttractor::Update(double a_dt,
     a_pPool->pCoreData->m_position[i] += a_pPool->pCoreData->m_velocity[i] * fDt;
   }
 }
+} /* namespace attractor_project */
 } /* namespace particle */
 } /* namespace gem */
