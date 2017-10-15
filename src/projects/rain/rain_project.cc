@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "rain_project.hh"
+#include "projects/rain/rain_project.hh"
 //C system files
 //C++ system files
 #include <memory>
@@ -25,11 +25,11 @@
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
 #include "utils/scene.hh"
+#include "utils/basic_event_handler.hh"
 #include "graphic_contexts/opengl_context.hh"
-#include "projects/rain/rain_event_handler.hh"
 #include "core/particle_module.hh"
 
-// Specific project particle blueprints
+// Project specific modules
 #include "projects/rain/rain_particles_blueprint.hh"
 
 namespace gem { namespace particle {

@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <memory>
+#include <iostream>
 
 #include "core/particle_system_interface.hh"
 #include "emitters/emitter.hh"
