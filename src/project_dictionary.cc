@@ -17,9 +17,9 @@
 #include <mutex>
 
 // TODO: See issue #63 on github
-#include "rain_project.hh"
-//#include "fast_particles_with_attractors.hh"
-//#include "glass_particles.hh"
+#include "projects/rain/rain_project.hh"
+//#include "projects/fast_particles_with_attractors/fast_particles_with_attractors_project.hh"
+//#include "projects/glass_particles/glass_particles_project.hh"
 
 namespace gem {
 namespace particle {
