@@ -32,9 +32,6 @@
     <Filter Include="resources files\shaders">
       <UniqueIdentifier>{329cd6e0-1842-41e9-a28a-28e9b3323b37}</UniqueIdentifier>
     </Filter>
-    <Filter Include="main">
-      <UniqueIdentifier>{38f8c360-e7cc-499d-bc53-8ec79fa61ba1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="projects\rain">
       <UniqueIdentifier>{f9e4dd6a-ab0c-450e-b918-80d60f6805e6}</UniqueIdentifier>
     </Filter>
@@ -43,196 +40,216 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\random_fountain_emitter.cc">
-      <Filter>emitters</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rain_emitter.cc">
-      <Filter>emitters</Filter>
-    </ClCompile>
-    <ClCompile Include="src\basic_stream_emitter.cc">
-      <Filter>emitters</Filter>
-    </ClCompile>
-    <ClCompile Include="src\spherical_stream_emitter.cc">
-      <Filter>emitters</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gravity_acceleration.cc">
-      <Filter>dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\euler_particle_updater.cc">
-      <Filter>dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core_opengl_renderer.cc">
-      <Filter>renderers</Filter>
-    </ClCompile>
-    <ClCompile Include="src\particle_module.cc">
+    <ClCompile Include="src\core\particle_module.cc">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="src\shader_factory.cc">
-      <Filter>utils</Filter>
+    <ClCompile Include="src\dynamics\avx_particle_attractor.cc">
+      <Filter>dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="src\shader_module.cc">
-      <Filter>utils</Filter>
+    <ClCompile Include="src\dynamics\euler_particle_updater.cc">
+      <Filter>dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="src\texture_factory.cc">
-      <Filter>utils</Filter>
+    <ClCompile Include="src\dynamics\gravity_acceleration.cc">
+      <Filter>dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="src\texture_module.cc">
-      <Filter>utils</Filter>
+    <ClCompile Include="src\dynamics\particle_attractor.cc">
+      <Filter>dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="src\camera.cc">
-      <Filter>utils</Filter>
+    <ClCompile Include="src\dynamics\proximity_color_updater.cc">
+      <Filter>dynamics</Filter>
     </ClCompile>
-    <ClCompile Include="src\texture_core_gl_renderer.cc">
+    <ClCompile Include="src\emitters\basic_stream_emitter.cc">
+      <Filter>emitters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\emitters\random_fountain_emitter.cc">
+      <Filter>emitters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\emitters\spherical_stream_emitter.cc">
+      <Filter>emitters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphic_contexts\graphic_context.cc">
+      <Filter>graphic_contexts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphic_contexts\opengl_context.cc">
+      <Filter>graphic_contexts</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\rain\rain_emitter.cc">
+      <Filter>projects\rain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\rain\rain_project.cc">
+      <Filter>projects\rain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\renderers\core_opengl_renderer.cc">
       <Filter>renderers</Filter>
     </ClCompile>
-    <ClCompile Include="src\particle_attractor.cc">
-      <Filter>dynamics</Filter>
+    <ClCompile Include="src\renderers\texture_core_gl_renderer.cc">
+      <Filter>renderers</Filter>
     </ClCompile>
-    <ClCompile Include="src\proximity_color_updater.cc">
-      <Filter>dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\avx_particle_attractor.cc">
-      <Filter>dynamics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\event_handler.cc">
+    <ClCompile Include="src\utils\camera.cc">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cc">
-      <Filter>main</Filter>
-    </ClCompile>
-    <ClCompile Include="src\app.cc">
-      <Filter>main</Filter>
-    </ClCompile>
-    <ClCompile Include="src\graphic_context.cc">
-      <Filter>graphic_contexts</Filter>
-    </ClCompile>
-    <ClCompile Include="src\opengl_context.cc">
-      <Filter>graphic_contexts</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene.cc">
+    <ClCompile Include="src\utils\scene.cc">
       <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\project_dictionary.cc">
-      <Filter>main</Filter>
+    <ClCompile Include="src\utils\shader_factory.cc">
+      <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\rain_particles_blueprint.cc">
-      <Filter>blueprints</Filter>
+    <ClCompile Include="src\utils\shader_module.cc">
+      <Filter>utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\rain_project.cc">
+    <ClCompile Include="src\utils\texture_factory.cc">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\texture_module.cc">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app.cc" />
+    <ClCompile Include="src\main.cc" />
+    <ClCompile Include="src\project_dictionary.cc" />
+    <ClCompile Include="src\projects\rain\rain_particles_blueprint.cc">
+      <Filter>projects\rain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\rain\rain_texture_renderer.cc">
+      <Filter>projects\rain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\basic_event_handler.cc">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\rain\rain_event_handler.cc">
       <Filter>projects\rain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\dynamic.hh">
+    <ClInclude Include="src\core\particle_core_data.hh">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\particle_module.hh">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\particle_pool.hh">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\particle_pool_core.hh">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\particle_system.hh">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\particle_system_interface.hh">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dynamics\avx_particle_attractor.hh">
       <Filter>dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\renderer.hh">
-      <Filter>renderers</Filter>
+    <ClInclude Include="src\dynamics\dynamic.hh">
+      <Filter>dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\particle_pool.hh">
-      <Filter>core</Filter>
+    <ClInclude Include="src\dynamics\euler_particle_updater.hh">
+      <Filter>dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\particle_system.hh">
-      <Filter>core</Filter>
+    <ClInclude Include="src\dynamics\gravity_acceleration.hh">
+      <Filter>dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\macro_definitions.hh">
-      <Filter>utils</Filter>
+    <ClInclude Include="src\dynamics\particle_attractor.hh">
+      <Filter>dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\timer.hh">
-      <Filter>utils</Filter>
+    <ClInclude Include="src\dynamics\proximity_color_updater.hh">
+      <Filter>dynamics</Filter>
     </ClInclude>
-    <ClInclude Include="src\emitter.hh">
+    <ClInclude Include="src\emitters\basic_stream_emitter.hh">
       <Filter>emitters</Filter>
     </ClInclude>
-    <ClInclude Include="src\random_fountain_emitter.hh">
+    <ClInclude Include="src\emitters\emitter.hh">
       <Filter>emitters</Filter>
     </ClInclude>
-    <ClInclude Include="src\rain_emitter.hh">
+    <ClInclude Include="src\emitters\random_fountain_emitter.hh">
       <Filter>emitters</Filter>
     </ClInclude>
-    <ClInclude Include="src\basic_stream_emitter.hh">
+    <ClInclude Include="src\emitters\spherical_stream_emitter.hh">
       <Filter>emitters</Filter>
     </ClInclude>
-    <ClInclude Include="src\spherical_stream_emitter.hh">
-      <Filter>emitters</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gravity_acceleration.hh">
-      <Filter>dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\euler_particle_updater.hh">
-      <Filter>dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_system_interface.hh">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_core_data.hh">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_pool_core.hh">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core_opengl_renderer.hh">
-      <Filter>renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\singleton.hh">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_module.hh">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shader_factory.hh">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shader_module.hh">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texture_factory.hh">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texture_module.hh">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\camera.hh">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texture_core_gl_renderer.hh">
-      <Filter>renderers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle_attractor.hh">
-      <Filter>dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\proximity_color_updater.hh">
-      <Filter>dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\avx_particle_attractor.hh">
-      <Filter>dynamics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event_handler.hh">
-      <Filter>utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app.hh">
-      <Filter>main</Filter>
-    </ClInclude>
-    <ClInclude Include="src\opengl_context.hh">
+    <ClInclude Include="src\graphic_contexts\graphic_context.hh">
       <Filter>graphic_contexts</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphic_context.hh">
+    <ClInclude Include="src\graphic_contexts\opengl_context.hh">
       <Filter>graphic_contexts</Filter>
     </ClInclude>
-    <ClInclude Include="src\scene.hh">
+    <ClInclude Include="src\projects\rain\rain_emitter.hh">
+      <Filter>projects\rain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\rain\rain_project.hh">
+      <Filter>projects\rain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderers\core_opengl_renderer.hh">
+      <Filter>renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderers\renderer.hh">
+      <Filter>renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\renderers\texture_core_gl_renderer.hh">
+      <Filter>renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\camera.hh">
       <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\project_dictionary.hh">
-      <Filter>main</Filter>
+    <ClInclude Include="src\utils\macro_definitions.hh">
+      <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\rain_particles_blueprint.hh">
-      <Filter>blueprints</Filter>
+    <ClInclude Include="src\utils\scene.hh">
+      <Filter>utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\rain_project.hh">
+    <ClInclude Include="src\utils\shader_factory.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\shader_module.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\singleton.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\texture_factory.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\texture_module.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\timer.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\app.hh" />
+    <ClInclude Include="src\project_dictionary.hh" />
+    <ClInclude Include="src\projects\rain\rain_particles_blueprint.hh">
+      <Filter>projects\rain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\rain\rain_texture_renderer.hh">
+      <Filter>projects\rain</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\basic_event_handler.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\rain\rain_event_handler.hh">
       <Filter>projects\rain</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\projects\rain\shaders\debug_axes.vert">
+      <Filter>projects\rain\shaders</Filter>
+    </None>
+    <None Include="src\projects\rain\shaders\default.frag">
+      <Filter>projects\rain\shaders</Filter>
+    </None>
+    <None Include="src\projects\rain\shaders\particle_billboard.geom">
+      <Filter>projects\rain\shaders</Filter>
+    </None>
+    <None Include="src\projects\rain\shaders\particle_billboard.vert">
+      <Filter>projects\rain\shaders</Filter>
+    </None>
+    <None Include="src\projects\rain\shaders\simple_texture.frag">
+      <Filter>projects\rain\shaders</Filter>
+    </None>
+    <None Include="shaders\debug_axes.vert">
+      <Filter>resources files\shaders</Filter>
+    </None>
     <None Include="shaders\default.comp">
       <Filter>resources files\shaders</Filter>
     </None>
@@ -245,7 +262,7 @@
     <None Include="shaders\default.tese">
       <Filter>resources files\shaders</Filter>
     </None>
-    <None Include="shaders\debug_axes.vert">
+    <None Include="shaders\default.vert">
       <Filter>resources files\shaders</Filter>
     </None>
     <None Include="shaders\particle_billboard.geom">
@@ -261,9 +278,6 @@
       <Filter>resources files\shaders</Filter>
     </None>
     <None Include="shaders\test.vert">
-      <Filter>resources files\shaders</Filter>
-    </None>
-    <None Include="shaders\default.vert">
       <Filter>resources files\shaders</Filter>
     </None>
   </ItemGroup>
