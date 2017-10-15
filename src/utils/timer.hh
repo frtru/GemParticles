@@ -15,14 +15,21 @@
 #define TIMER_HH_
 
 #include <chrono>
+#include "utils/singleton.hh"
 
 namespace timer {
+// Utility definitions, since there's an issue
+// with the one defined by the STL with the calls
+// made in this file
 constexpr double NANO_PER_SEC   = 1.0e09;
 constexpr double MICRO_PER_SEC  = 1.0e06;
 constexpr double MILLI_PER_SEC  = 1.0e03;
 
+// Standalone version, without the chrono. 
+// The "state" is contained in the static
+// local variable.
 template <typename DurationType>
-unsigned long long UpdateAndGetTimeElapsed() {
+inline unsigned long long UpdateAndGetTimeElapsed() {
   static std::chrono::time_point<std::chrono::steady_clock> previous =
     std::chrono::steady_clock::now();
   auto current = std::chrono::steady_clock::now();
@@ -30,49 +37,42 @@ unsigned long long UpdateAndGetTimeElapsed() {
   previous = current;
   return elapsedTime.count();
 }
-
 inline double UpdateAndGetFPS() {
   return NANO_PER_SEC/UpdateAndGetTimeElapsed<std::chrono::nanoseconds>();
 }
 
 // Chrono version to prevent changing the current time at every
 // calls to GetTimeElapsed.
-namespace chrono {
-namespace {
-struct Clock 
-{
-  static std::chrono::steady_clock::time_point current_time;
-  static std::chrono::steady_clock::time_point previous_time;
-};
+class Chrono : public Singleton<Chrono> {
+public:
+  Chrono() : _CurrentTime(std::chrono::steady_clock::now()),
+    _PreviousTime(std::chrono::steady_clock::now()) {}
 
-std::chrono::steady_clock::time_point Clock::current_time =
-    std::chrono::steady_clock::now();
-std::chrono::steady_clock::time_point Clock::previous_time =
-    std::chrono::steady_clock::now();
-} /* namespace impl */
+  ~Chrono() = default;
 
-// TODO: There's a compilation error if another file than app.cc include
-// timer.hh and if the following functions are not inline
+  template <typename DurationType>
+  inline unsigned long long GetTimeElapsed() const {
+    return std::chrono::duration_cast<DurationType>(
+      _CurrentTime -_PreviousTime).count();
+  }
 
-template <typename DurationType>
-inline unsigned long long GetTimeElapsed() {
-  return std::chrono::duration_cast<DurationType>(
-    Clock::current_time -
-    Clock::previous_time).count();
-}
+  double GetTimeElapsedInSeconds() const {
+    return GetTimeElapsed<std::chrono::nanoseconds>() / NANO_PER_SEC;
+  }
 
-inline double GetTimeElapsedInSeconds() {
-  return GetTimeElapsed<std::chrono::nanoseconds>() / NANO_PER_SEC;
-}
+  inline void Update() {
+    _PreviousTime = _CurrentTime;
+    _CurrentTime = std::chrono::steady_clock::now();
+  }
 
-inline void Update() {
-  Clock::previous_time = Clock::current_time;
-  Clock::current_time = std::chrono::steady_clock::now();
-}
+  inline double GetFPS() const {
+    return NANO_PER_SEC / GetTimeElapsed<std::chrono::nanoseconds>();
+  }
 
-inline double GetFPS() {
-  return NANO_PER_SEC/GetTimeElapsed<std::chrono::nanoseconds>();
-}
-} /* namespace chrono */
+private:
+  std::chrono::steady_clock::time_point _CurrentTime;
+  std::chrono::steady_clock::time_point _PreviousTime;
+}; /* class Chrono */
 } /* namespace timer */
+
 #endif /* end of include guard: TIMER_HH_ */

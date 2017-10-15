@@ -20,10 +20,8 @@
 #include <GLFW/glfw3.h>
 
 #include "graphic_contexts/graphic_context.hh"
-#include "core/particle_system.hh"
 #include "utils/scene.hh"
 #include "utils/camera.hh"
-#include "utils/timer.hh"
 
 namespace gem {
 namespace particle {

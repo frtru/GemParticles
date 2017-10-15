@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/rain/rain_project.hh"
+#include "projects/attractors/attractor_project.hh"
 //C system files
 //C++ system files
 #include <memory>
@@ -25,15 +25,15 @@
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
 #include "utils/scene.hh"
-#include "utils/basic_event_handler.hh"
 #include "graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
 
-// Project specific modules
-#include "projects/rain/rain_particles_blueprint.hh"
+// Specific project particle blueprints
+#include "projects/attractors/attractor_event_handler.hh"
+#include "projects/attractors/attractor_system_blueprint.hh"
 
 namespace gem { namespace particle {
-namespace rain_project {
+namespace attractor_project {
 namespace {
 // A pointer to interface, to enable flexibility over
 // window management system or 3D API (GLFW/Windows
@@ -42,9 +42,9 @@ std::shared_ptr<GraphicContext> graphic_context;
 }
 
 void RegisterProject() {
-  project_dict::AddStage("rain", std::bind(&Init));
-  project_dict::AddStage("rain", std::bind(&Run));
-  project_dict::AddStage("rain", std::bind(&Terminate));
+  project_dict::AddStage("attractor", std::bind(&Init));
+  project_dict::AddStage("attractor", std::bind(&Run));
+  project_dict::AddStage("attractor", std::bind(&Terminate));
 }
 
 void Init() {
@@ -75,11 +75,9 @@ void Init() {
 
   // Particle system initialization
   particle_module::Init();
-  blueprint::rain_particles_builder::SetParticleSystemName("Amazing rain system");
-  blueprint::rain_particles_builder::SetTexture("textures/raindrop.png");
-  blueprint::rain_particles_builder::SetEmissionRate(100000.0);
-  blueprint::rain_particles_builder::SetParticleCount(1000000u);
-  blueprint::rain_particles_builder::Create();
+  blueprint::attractor_system_builder::_ParticleSystemName = "Amazing attractor system";
+  blueprint::attractor_system_builder::_ParticleCount = 100000u;
+  blueprint::attractor_system_builder::Create();
 }
 
 void Run() {

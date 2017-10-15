@@ -29,7 +29,7 @@ namespace gem {
 namespace particle {
 using CoreParticles = void;
 template <>
-class ParticlePool<void> {
+class ParticlePool<CoreParticles> {
   DECLARE_UNCOPYABLE(ParticlePool)
   DECLARE_UNMOVABLE(ParticlePool)
 public: 

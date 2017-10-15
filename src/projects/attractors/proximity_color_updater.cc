@@ -11,14 +11,14 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "dynamics/proximity_color_updater.hh"
+#include "projects/attractors/proximity_color_updater.hh"
 
 #include <algorithm>
 #include <immintrin.h>
 #include "glm/glm.hpp"
 
-namespace gem {
-namespace particle {
+namespace gem { namespace particle {
+namespace attractor_project {
 namespace {
 // Helper function for u8vec4 and float multiplication
 glm::u8vec4 multiply(float f, glm::u8vec4 v) {
@@ -52,5 +52,6 @@ void ProximityColorUpdater::Update(double a_dt,
     a_pPool->pCoreData->m_color[i] = m_vColorGradient[static_cast<std::size_t>(fDistance)];
   }
 }
+} /* namespace attractor_project */
 } /* namespace particle */
 } /* namespace gem */

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 FranÃ§ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,21 +11,17 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef RAIN_EVENT_HANDLER_HH
-#define RAIN_EVENT_HANDLER_HH
-
-#include <memory>
-#include "graphic_contexts/graphic_context.hh"
+#ifndef ATTRACTOR_PROJECT_HH
+#define ATTRACTOR_PROJECT_HH
 
 namespace gem { namespace particle {
-namespace rain_project {
-namespace event_handler {
-void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
+namespace attractor_project {
+void RegisterProject();
+void Init();
+void Run();
 void Terminate();
-}; /* namespace event_handler*/
 } /* namespace rain_project */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: RAIN_EVENT_HANDLER_HH */
-
+#endif /* end of include guard: ATTRACTOR_PROJECT_HH */
