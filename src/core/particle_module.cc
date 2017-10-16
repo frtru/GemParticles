@@ -46,10 +46,11 @@ void Update(double a_dt) {
 }
 
 IParticleSystem* GetSystemByName(const std::string& a_sSystemName) {
-  return std::find_if(m_pSystems.begin(), m_pSystems.end(), 
+  auto it = std::find_if(m_pSystems.begin(), m_pSystems.end(), 
     [&](const std::unique_ptr<IParticleSystem>& system) {
       return system->GetSystemName() == a_sSystemName;
-  })->get();
+  });
+  return (it != m_pSystems.end()) ? it->get() : nullptr;
 }
 
 void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem) {
