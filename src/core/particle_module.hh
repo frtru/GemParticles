@@ -25,14 +25,11 @@ void Init();
 void Terminate();
 
 std::size_t GetActiveParticlesCount();
+IParticleSystem* GetSystemByName(const std::string& a_sSystemName);
 
 void Update(double a_dt);
-
 void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem);
-
-// TODOs : See .CC file for todo
 void RemoveSystem(const std::string& a_sSystemName); 
-void GetSystemByName(const std::string& a_sSystemName);
 
 } /* namespace particle_module */
 } /* namespace particle */

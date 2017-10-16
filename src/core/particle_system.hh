@@ -67,6 +67,9 @@ public:
   std::size_t GetActiveParticlesCount() const override {
     return m_pParticlePool->GetActiveParticleCount();
   }
+  const std::string& GetSystemName() const override {
+    return m_sSystemName;
+  }
 
   void AddEmitter(std::unique_ptr<Emitter<ParticleType> > a_pEmitter) {
     m_vEmitters.push_back(std::move(a_pEmitter));
@@ -153,6 +156,9 @@ template<typename ParticleType>
     }
     std::size_t GetActiveParticlesCount() const override {
       return m_pParticlePool->GetActiveParticleCount();
+    }
+    const std::string& GetSystemName() const override {
+      return m_sSystemName;
     }
 
     void AddEmitter(std::unique_ptr<Emitter<ParticleType>> a_pEmitter) {

@@ -18,6 +18,7 @@
 #include <map>
 #include <string>
 #include <mutex>
+#include <numeric>
 
 namespace gem {
 namespace particle {
@@ -28,17 +29,8 @@ std::once_flag terminate_flag;
 std::vector<std::unique_ptr<IParticleSystem> > m_pSystems;
 }
 
-void Init() {
-  std::call_once(init_flag,[&](){
-    //m_pSystems = new std::vector<std::unique_ptr<IParticleSystem> >();
-  });
-}
-
-void Terminate() {
-  std::call_once(terminate_flag,[&](){
-    //delete m_pSystems;
-  });
-}
+void Init() { std::call_once(init_flag,[&](){}); }
+void Terminate() { std::call_once(terminate_flag,[&](){ }); }
 
 void Update(double a_dt) {
   // TODO: This update could very well be 
@@ -53,14 +45,11 @@ void Update(double a_dt) {
   }
 }
 
-void GetSystemByName(const std::string& a_sSystemName) {
-  /*
-   TODO:
-   Add accessors in the particlesystemcompoenent for the name
-   change the parameeters of this function
-   Do two function GetParticleComponentByName and GetRenderingComponentByName
-      and adjust the return type with the corresponding funtion name
-  */
+IParticleSystem* GetSystemByName(const std::string& a_sSystemName) {
+  return std::find_if(m_pSystems.begin(), m_pSystems.end(), 
+    [&](const std::unique_ptr<IParticleSystem>& system) {
+      return system->GetSystemName() == a_sSystemName;
+  })->get();
 }
 
 void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem) {
@@ -73,19 +62,19 @@ void AddSystem(std::unique_ptr<IParticleSystem> a_pSystem) {
 }
 
 void RemoveSystem(const std::string& a_sSystemName) {
-  /*
-  TODO:
-    This could be necessary, i can see a use case, but this is not priority
-    RemoveByName maybe
-  */
+  m_pSystems.erase(
+    std::remove_if(m_pSystems.begin(), m_pSystems.end(), 
+      [&](const std::unique_ptr<IParticleSystem>& system) {
+      return system->GetSystemName() == a_sSystemName;
+    }), 
+    m_pSystems.end());
 }
 
 std::size_t GetActiveParticlesCount() {
-  std::size_t wReturn = 0U;
-  for (std::size_t i = 0; i < m_pSystems.size(); ++i) {
-    wReturn += m_pSystems[i]->GetActiveParticlesCount();
-  }
-  return wReturn;
+  return std::accumulate(m_pSystems.begin(), m_pSystems.end(), static_cast<std::size_t>(0U), 
+    [&](std::size_t result, const std::unique_ptr<IParticleSystem>& system) {
+      return result + system->GetActiveParticlesCount();
+  });
 }
 } /* namespace particle_module */
 } /* namespace particle */

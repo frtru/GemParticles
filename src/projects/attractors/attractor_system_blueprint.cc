@@ -48,9 +48,9 @@ std::string   _ParticleSystemName;
 void Create() {
   auto wEmitter = std::make_shared<SphericalStreamEmitter>(_POI, _ZeroVector, _InitialRadius, 0.0f, std::numeric_limits<double>::max());
   auto wParticleSystem = std::make_unique<ParticleSystem<LifeDeathCycle::Disabled> >(_ParticleCount, _ParticleSystemName, wEmitter);
-  wParticleSystem->BindRenderer(std::make_unique<CoreGLRenderer>());
-  wParticleSystem->AddDynamic(std::make_unique<ParticleAttractor>(_POI, _AccelerationRate));
-  wParticleSystem->AddDynamic(std::make_unique<ProximityColorUpdater>(_POI, _HotColor, _ColdColor, _MaxDistance));
+  wParticleSystem->BindRenderer(std::make_shared<CoreGLRenderer>());
+  wParticleSystem->AddDynamic(std::make_shared<ParticleAttractor>(_POI, _AccelerationRate));
+  wParticleSystem->AddDynamic(std::make_shared<ProximityColorUpdater>(_POI, _HotColor, _ColdColor, _MaxDistance));
   particle_module::AddSystem(std::move(wParticleSystem));
 }
 

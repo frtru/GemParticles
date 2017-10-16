@@ -52,18 +52,19 @@ public:
 
   std::size_t GetProgramID() const override { return m_pRenderer->GetProgramID(); }
   std::size_t GetActiveParticlesCount() const override { return m_pParticlePool->GetActiveParticleCount(); }
+  const std::string& GetSystemName() const override { return m_sSystemName; }
 
-  void AddDynamic(std::unique_ptr<Dynamic<ParticleType>> a_pDynamic) {
+  void AddDynamic(std::shared_ptr<Dynamic<ParticleType>> a_pDynamic) {
     if (a_pDynamic->AltersParticleLifeCycle()) {
       std::cout << "ERROR: ParticleSystem::AddDynamic -> Tried to add a ";
       std::cout << "dynamic which alters the Life-Death cycle when it is disabled. ";
       std::cout << "Dynamic will not be added to the system." << std::endl;
       return;
     }
-    m_vDynamics.push_back(std::move(a_pDynamic));
+    m_vDynamics.push_back(a_pDynamic);
   }
-  void BindRenderer(std::unique_ptr<Renderer<ParticleType> > a_pRenderer) {
-    m_pRenderer = std::move(a_pRenderer);
+  void BindRenderer(std::shared_ptr<Renderer<ParticleType> > a_pRenderer) {
+    m_pRenderer = a_pRenderer;
     m_pRenderer->Bind(m_pParticlePool);
   }
 
@@ -82,8 +83,8 @@ public:
 private:
   std::string                                               m_sSystemName;
   std::shared_ptr<ParticlePool<ParticleType> >              m_pParticlePool;
-  std::vector<std::unique_ptr<Dynamic<ParticleType> > >	    m_vDynamics;
-  std::unique_ptr<Renderer<ParticleType> >                  m_pRenderer;
+  std::vector<std::shared_ptr<Dynamic<ParticleType> > >	    m_vDynamics;
+  std::shared_ptr<Renderer<ParticleType> >                  m_pRenderer;
 }; /* class ParticleSystem<LifeDeathCycle::Disabled, ParticleType> */
 } /* attractor_project */
 } /* namespace particle */
