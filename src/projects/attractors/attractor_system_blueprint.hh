@@ -24,22 +24,18 @@
 namespace gem { namespace particle {
 namespace attractor_project {
 namespace blueprint { namespace attractor_system_builder {
-namespace {
-const glm::f32vec3 _ZeroVector = glm::f32vec3(0.0f, 0.0f, 0.0f);
-// Instead of using setters for every attribute, might as well put them public.
-// These parameters will be used during the Create() function to properly build the particle system
-glm::u8vec4   _HotColor         = { 255u, 255u, 128u, 255u };
-glm::u8vec4   _ColdColor        = { 255u, 0u, 0u, 255u };
-glm::f32vec3  _POI              = { 1.0f, 1.0f, 1.0f };
-float         _InitialRadius    = 0.5f;
-float         _AccelerationRate = 0.5f;
-float         _MaxDistance      = 10.0f;
-std::size_t   _ParticleCount    = 1000000u;
-std::string   _ParticleSystemName;
-}
-
 // This creates the said blueprint and adds it to the ParticleModule
 void Create();
+
+// Some setters for the parameters used for the creation of the system
+void SetHotColor(const glm::u8vec4 &color);
+void SetColdColor(const glm::u8vec4 &color);
+void SetPOI(const glm::f32vec3 &pos);
+void SetInitialRadius(float radius);
+void SetAccelerationRate(float rate);
+void SetMaxDistance(float distance);
+void SetParticleCount(std::size_t count);
+void SetParticleSystemName(const std::string &name);
 } /* namespace attractor_system_builder */
 } /* namespace blueprint */
 } /* namespace attractor_project */

@@ -31,6 +31,20 @@
 namespace gem { namespace particle {
 namespace attractor_project {
 namespace blueprint { namespace attractor_system_builder {
+namespace {
+const glm::f32vec3 _ZeroVector = glm::f32vec3(0.0f, 0.0f, 0.0f);
+// Instead of using setters for every attribute, might as well put them public.
+// These parameters will be used during the Create() function to properly build the particle system
+glm::u8vec4   _HotColor         = { 255u, 255u, 128u, 255u };
+glm::u8vec4   _ColdColor        = { 255u, 0u, 0u, 255u };
+glm::f32vec3  _POI              = { 1.0f, 1.0f, 1.0f };
+float         _InitialRadius    = 0.5f;
+float         _AccelerationRate = 0.5f;
+float         _MaxDistance      = 10.0f;
+std::size_t   _ParticleCount    = 1000000u;
+std::string   _ParticleSystemName;
+}
+
 void Create() {
   auto wEmitter = std::make_shared<SphericalStreamEmitter>(_POI, _ZeroVector, _InitialRadius, 0.0f, std::numeric_limits<double>::max());
   auto wParticleSystem = std::make_unique<ParticleSystem<LifeDeathCycle::Disabled> >(_ParticleCount, _ParticleSystemName, wEmitter);
@@ -39,6 +53,15 @@ void Create() {
   wParticleSystem->AddDynamic(std::make_unique<ProximityColorUpdater>(_POI, _HotColor, _ColdColor, _MaxDistance));
   particle_module::AddSystem(std::move(wParticleSystem));
 }
+
+void SetHotColor(const glm::u8vec4 &color)          { _HotColor = color;          }
+void SetColdColor(const glm::u8vec4 &color)         { _ColdColor = color;         }
+void SetPOI(const glm::f32vec3 &pos)                { _POI = pos;                 }
+void SetInitialRadius(float radius)                 { _InitialRadius = radius;    }
+void SetAccelerationRate(float rate)                { _AccelerationRate = rate;   }
+void SetMaxDistance(float distance)                 { _MaxDistance = distance;    }
+void SetParticleCount(std::size_t count)            { _ParticleCount = count;     }
+void SetParticleSystemName(const std::string &name) { _ParticleSystemName = name; }
 } /* namespace attractor_system_builder */
 } /* namespace blueprint */
 } /* namespace attractor_project */
