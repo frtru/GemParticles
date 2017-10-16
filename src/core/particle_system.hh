@@ -19,10 +19,10 @@
 #include <iostream>
 
 #include "core/particle_system_interface.hh"
+#include "core/particle_pool_core.hh"
 #include "emitters/emitter.hh"
 #include "dynamics/dynamic.hh"
 #include "renderers/renderer.hh"
-#include "particle_pool_core.hh"
 
 namespace gem {
 namespace particle {

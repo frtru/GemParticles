@@ -248,6 +248,9 @@
     <ClInclude Include="src\projects\attractors\attractor_event_handler.hh">
       <Filter>projects\attractors</Filter>
     </ClInclude>
+    <ClInclude Include="src\projects\attractors\attractor_particle_system.hh">
+      <Filter>projects\attractors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\projects\rain\shaders\debug_axes.vert">

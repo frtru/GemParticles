@@ -69,6 +69,7 @@
     <ClInclude Include="src\graphic_contexts\graphic_context.hh" />
     <ClInclude Include="src\graphic_contexts\opengl_context.hh" />
     <ClInclude Include="src\projects\attractors\attractor_event_handler.hh" />
+    <ClInclude Include="src\projects\attractors\attractor_particle_system.hh" />
     <ClInclude Include="src\projects\attractors\attractor_project.hh" />
     <ClInclude Include="src\projects\attractors\attractor_system_blueprint.hh" />
     <ClInclude Include="src\projects\attractors\avx_particle_attractor.hh" />

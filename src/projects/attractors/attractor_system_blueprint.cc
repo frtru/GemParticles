@@ -15,14 +15,16 @@
 //C system files
 //C++ system files
 #include <memory>
+#include <limits>
 //Other libraries' .h files
 //Your project's .h files
 #include "core/particle_module.hh"
-#include "core/particle_system.hh"
+#include "emitters/spherical_stream_emitter.hh"
 #include "renderers/core_opengl_renderer.hh"
 #include "dynamics/particle_attractor.hh"
 
 //Project specific components
+#include "projects/attractors/attractor_particle_system.hh"
 #include "projects/attractors/avx_particle_attractor.hh"
 #include "projects/attractors/proximity_color_updater.hh"
 
@@ -30,7 +32,8 @@ namespace gem { namespace particle {
 namespace attractor_project {
 namespace blueprint { namespace attractor_system_builder {
 void Create() {
-  auto wParticleSystem = std::make_unique<ParticleSystem<LifeDeathCycle::Disabled> >(_ParticleCount, _ParticleSystemName);
+  auto wEmitter = std::make_shared<SphericalStreamEmitter>(_POI, _ZeroVector, _InitialRadius, 0.0f, std::numeric_limits<double>::max());
+  auto wParticleSystem = std::make_unique<ParticleSystem<LifeDeathCycle::Disabled> >(_ParticleCount, _ParticleSystemName, wEmitter);
   wParticleSystem->BindRenderer(std::make_unique<CoreGLRenderer>());
   wParticleSystem->AddDynamic(std::make_unique<ParticleAttractor>(_POI, _AccelerationRate));
   wParticleSystem->AddDynamic(std::make_unique<ProximityColorUpdater>(_POI, _HotColor, _ColdColor, _MaxDistance));

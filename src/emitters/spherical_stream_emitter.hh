@@ -25,6 +25,7 @@ public:
   SphericalStreamEmitter(
     const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
+    float a_fRadius,
     float a_fLifetime,
     double a_dEmissionRate);
 	virtual ~SphericalStreamEmitter() = default;
@@ -32,6 +33,8 @@ public:
 private:
   void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
+
+  float m_fRadius;
 }; /* class SphericalStreamEmitter */
 } /* namespace particle */
 } /* namespace gem */

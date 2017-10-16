@@ -47,16 +47,16 @@ std::vector<glm::f32vec3> GenerateSphericalBoundCoordinates(
 }
 }
 
-SphericalStreamEmitter::SphericalStreamEmitter( const glm::f32vec3& a_spawnLocation,
-    const glm::f32vec3& a_spawnVelocity, float a_fLifetime, double a_dEmissionRate)
-  : Emitter(a_spawnLocation, a_spawnVelocity, a_fLifetime, a_dEmissionRate) { }
+SphericalStreamEmitter::SphericalStreamEmitter( const glm::f32vec3& a_spawnLocation, 
+    const glm::f32vec3& a_spawnVelocity, float a_fRadius, float a_fLifetime, double a_dEmissionRate)
+  : Emitter(a_spawnLocation, a_spawnVelocity, a_fLifetime, a_dEmissionRate), m_fRadius(a_fRadius) { }
 
 void SphericalStreamEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
   const std::size_t N = a_unEndID - a_unStartID;
   auto coords = GenerateSphericalBoundCoordinates(
     m_spawnLocation,
-    0.2f, N);
+    m_fRadius, N);
 
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     a_pPool->pCoreData->m_velocity[i] = m_spawnVelocity;
