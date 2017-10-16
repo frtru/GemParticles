@@ -46,6 +46,7 @@ enum MouseState {
 }; 
 MouseState                      mouse_state;
 std::shared_ptr<GraphicContext> context_handle;
+bool firstMouse = true;
 
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
   // TODO: Handle all necessary cases
@@ -53,22 +54,21 @@ void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, 
     case GLFW_MOUSE_BUTTON_LEFT:
       break;
     case GLFW_MOUSE_BUTTON_MIDDLE:
+      break;
+    case GLFW_MOUSE_BUTTON_RIGHT:
       if (a_nAction == GLFW_PRESS) {
         mouse_state = CAMERA_MOVING;
-        // Reset mouse to center of screen
-        glfwSetCursorPos(a_pWindow, last_x, last_y);
       }
       else {
         mouse_state = FREE_CURSOR;
+        firstMouse = true;
       }
-      break;
-    case GLFW_MOUSE_BUTTON_RIGHT:
       break;
     default:
       break;
   }
 }
-bool firstMouse = true;
+
 void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a_dYPos) {
   if (mouse_state == CAMERA_MOVING) {
     /*
@@ -79,6 +79,7 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
       last_x = a_dXPos;
       last_y = a_dYPos;
       firstMouse = false;
+      return;
     }
 
     double xoffset = a_dXPos - last_x;
@@ -86,7 +87,7 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
     last_x = a_dXPos;
     last_y = a_dYPos;
 
-    double sensitivity = 0.05;	// Change this value to your liking
+    double sensitivity = 0.10;	// Change this value to your liking
     xoffset *= sensitivity;
     yoffset *= sensitivity;
 
