@@ -21,12 +21,10 @@
 #include "core/particle_module.hh"
 #include "emitters/spherical_stream_emitter.hh"
 #include "renderers/core_opengl_renderer.hh"
-#include "dynamics/particle_attractor.hh"
 
 //Project specific components
 #include "projects/attractors/attractor_particle_system.hh"
 #include "projects/attractors/avx_particle_attractor.hh"
-#include "projects/attractors/proximity_color_updater.hh"
 
 namespace gem { namespace particle {
 namespace attractor_project {
@@ -39,20 +37,33 @@ glm::u8vec4   _HotColor         = { 255u, 255u, 128u, 255u };
 glm::u8vec4   _ColdColor        = { 255u, 0u, 0u, 255u };
 glm::f32vec3  _POI              = { 1.0f, 1.0f, 1.0f };
 float         _InitialRadius    = 0.5f;
-float         _AccelerationRate = 0.5f;
-float         _MaxDistance      = 10.0f;
+float         _AccelerationRate = 7.0f;
+float         _MaxDistance      = 7.0f;
 std::size_t   _ParticleCount    = 1000000u;
 std::string   _ParticleSystemName;
+
+// Handles on the dynamics to hand them over to the event handler
+// There are only used during the construction of the particle system
+std::shared_ptr< ParticleAttractor >      _AttractorDynamicHandle;
+std::shared_ptr< ProximityColorUpdater >  _ProximityColorUpdaterHandle;
 }
 
 void Create() {
+  _AttractorDynamicHandle = std::make_shared<ParticleAttractor>(_POI, _AccelerationRate);
+  _ProximityColorUpdaterHandle = std::make_shared<ProximityColorUpdater>(_POI, _HotColor, _ColdColor, _MaxDistance);
+
   auto wEmitter = std::make_shared<SphericalStreamEmitter>(_POI, _ZeroVector, _InitialRadius, 0.0f, std::numeric_limits<double>::max());
   auto wParticleSystem = std::make_unique<ParticleSystem<LifeDeathCycle::Disabled> >(_ParticleCount, _ParticleSystemName, wEmitter);
+
   wParticleSystem->BindRenderer(std::make_shared<CoreGLRenderer>());
-  wParticleSystem->AddDynamic(std::make_shared<ParticleAttractor>(_POI, _AccelerationRate));
-  wParticleSystem->AddDynamic(std::make_shared<ProximityColorUpdater>(_POI, _HotColor, _ColdColor, _MaxDistance));
+  wParticleSystem->AddDynamic(_AttractorDynamicHandle);
+  wParticleSystem->AddDynamic(_ProximityColorUpdaterHandle);
+
   particle_module::AddSystem(std::move(wParticleSystem));
 }
+
+std::shared_ptr< ParticleAttractor >      GetAttractorHandle() { return _AttractorDynamicHandle; }
+std::shared_ptr< ProximityColorUpdater >  GetProximityColorUpdaterHandle() { return _ProximityColorUpdaterHandle; }
 
 void SetHotColor(const glm::u8vec4 &color)          { _HotColor = color;          }
 void SetColdColor(const glm::u8vec4 &color)         { _ColdColor = color;         }

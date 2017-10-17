@@ -27,6 +27,8 @@ public:
     const glm::u8vec4 &a_fvColdColor,
     float a_fMaxDistance = 100.0f);
   ~ProximityColorUpdater() = default;
+
+  void SetPOI(const glm::f32vec3& a_vPOI) { m_fvPositionOfInterest = a_vPOI; }
   
   void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 private:

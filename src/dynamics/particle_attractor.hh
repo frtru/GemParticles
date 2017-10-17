@@ -25,6 +25,8 @@ public:
     const glm::f32vec3 &a_fvAttractionPosition,
     float a_accelerationRate);
   ~ParticleAttractor() = default;
+
+  void SetAttractorPosition(const glm::f32vec3& a_vPos) { m_fvAttractionPosition = a_vPos; }
   
   void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 private:

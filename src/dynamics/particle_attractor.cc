@@ -24,7 +24,8 @@ void ParticleAttractor::Update(double a_dt,
   const float   fIterationAccel = fDt * m_fAccelerationRate;
   glm::f32vec3  fvAccelDir;
   for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    fvAccelDir = m_fvAttractionPosition - a_pPool->pCoreData->m_position[i];
+    //fvAccelDir = m_fvAttractionPosition - a_pPool->pCoreData->m_position[i]; // Makes all the particles move together because the acceleration vector is bigger for farther particles
+    fvAccelDir = glm::normalize(m_fvAttractionPosition - a_pPool->pCoreData->m_position[i]);
     a_pPool->pCoreData->m_velocity[i] += fvAccelDir * fIterationAccel;
   }
   

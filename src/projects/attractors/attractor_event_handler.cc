@@ -20,17 +20,24 @@
 #include <GLFW/glfw3.h>
 
 #include "graphic_contexts/graphic_context.hh"
-#include "core/particle_system.hh"
+#include "core/particle_module.hh"
 #include "utils/scene.hh"
 #include "utils/camera.hh"
+#include <glm/gtc/matrix_transform.inl>
 
 namespace gem { namespace particle {
 namespace attractor_project {
 namespace event_handler {
 namespace {
+
 std::once_flag init_flag;
 std::once_flag terminate_flag;
+
 // TODO: If it's worth it, move these settings someplace else
+// Window dimension
+int _WindowWidth  = 640;
+int _WindowHeight = 480;
+
 // Camera settings
 glm::vec3 camera_direction;
 float camera_speed;
@@ -41,18 +48,30 @@ double last_x;
 double last_y;
 
 enum MouseState {
+  POI_MOVING,
   CAMERA_MOVING,
   FREE_CURSOR
 }; 
 MouseState                      mouse_state;
-std::shared_ptr<GraphicContext> context_handle;
 bool firstMouse = true;
+
+// Handles
+std::shared_ptr<GraphicContext>         context_handle;
+std::shared_ptr<ParticleAttractor>      _AttractorHandle;
+std::shared_ptr<ProximityColorUpdater>  _ColorUpdaterHandle;
 
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
   // TODO: Handle all necessary cases
   switch (a_nButtonID) {
     case GLFW_MOUSE_BUTTON_LEFT:
-      break;
+      if (a_nAction == GLFW_PRESS) {
+        mouse_state = POI_MOVING;
+      }
+      else {
+        mouse_state = FREE_CURSOR;
+        firstMouse = true;
+      }
+    break;
     case GLFW_MOUSE_BUTTON_MIDDLE:
       break;
     case GLFW_MOUSE_BUTTON_RIGHT:
@@ -70,6 +89,7 @@ void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, 
 }
 
 void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a_dYPos) {
+
   if (mouse_state == CAMERA_MOVING) {
     /*
      * Reference: https://learnopengl.com/index.php#!Getting-started/Camera
@@ -111,6 +131,24 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
     auto  position = camera::GetEyePosition(),
           up = camera::GetUpVector();
     camera::LookAt(position, position + camera_direction, up);
+  }
+  else if(mouse_state == POI_MOVING) {
+    glm::mat4 P = camera::GetProjectionMatrix();
+    glm::mat4 V = camera::GetViewMatrix();
+
+    glm::vec3 from = glm::unProject(
+      glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
+      glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+    glm::vec3 to = glm::unProject(
+      glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
+      glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+
+    glm::f32vec3 wNewPos = from + glm::normalize((to - from)) * 3.5f;
+    _AttractorHandle->SetAttractorPosition(wNewPos);
+    _ColorUpdaterHandle->SetPOI(wNewPos);
+  }
+  else {
+    // DO NOTHING
   }
 }
 
@@ -157,6 +195,8 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
 }
 
 void FramebuggerSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight) {
+  _WindowWidth = a_nWidth;
+  _WindowHeight = a_nHeight;
   glViewport(0, 0, a_nWidth, a_nHeight);
   camera::SetPerspectiveProjection(
     glm::radians(45.0f),
@@ -165,8 +205,14 @@ void FramebuggerSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight)
 }
 }
 
-void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
+void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
+  const std::shared_ptr<ParticleAttractor>& a_pAttractorHandle,
+  const std::shared_ptr<ProximityColorUpdater>& a_pColorUpdater) {
   std::call_once(init_flag, [&]() {
+    // Get a reference on the dynamics of this project
+    _AttractorHandle = a_pAttractorHandle;
+    _ColorUpdaterHandle = a_pColorUpdater;
+
     // TODO: If it's worth it, move these hardcoded values someplace else
     yaw = -90.0f;
     pitch = 0.0f;

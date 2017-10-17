@@ -16,11 +16,15 @@
 
 #include <memory>
 #include "graphic_contexts/graphic_context.hh"
+#include "projects/attractors/proximity_color_updater.hh"
+#include "dynamics/particle_attractor.hh"
 
 namespace gem { namespace particle {
 namespace attractor_project {
 namespace event_handler {
-void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
+void Init(const std::shared_ptr<GraphicContext>& a_pCtxt, 
+  const std::shared_ptr<ParticleAttractor>& a_pAttractorHandle,
+  const std::shared_ptr<ProximityColorUpdater>& a_pColorUpdater);
 void Terminate();
 } /* namespace event_handler*/
 } /* namespace attractor_project */

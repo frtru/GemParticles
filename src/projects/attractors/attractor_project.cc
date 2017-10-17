@@ -65,10 +65,7 @@ void Init() {
     glm::radians(45.0f), 
     4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
     0.1f, 100.0f);
-
-  // Event handler initialization
-  event_handler::Init(graphic_context);
-
+  
   // Scene initialization
   scene::Init();
   scene::SetDebugOption(true);
@@ -76,8 +73,13 @@ void Init() {
   // Particle system initialization
   particle_module::Init();
   blueprint::attractor_system_builder::SetParticleSystemName("Amazing attractor system");
-  blueprint::attractor_system_builder::SetParticleCount(1000u);
+  blueprint::attractor_system_builder::SetParticleCount(1000000u);
   blueprint::attractor_system_builder::Create();
+
+  // Event handler initialization
+  event_handler::Init(graphic_context, 
+    blueprint::attractor_system_builder::GetAttractorHandle(),
+    blueprint::attractor_system_builder::GetProximityColorUpdaterHandle());
 }
 
 void Run() {
