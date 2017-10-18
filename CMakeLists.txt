@@ -12,6 +12,7 @@ find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(GLFW REQUIRED)
 find_package(AntTweakBar REQUIRED)
+find_package(FreeImage REQUIRED)
 
 if(OpenGL_FOUND)
     MESSAGE("OpenGL found")
@@ -36,6 +37,11 @@ if(ANTTWEAKBAR_FOUND)
 	MESSAGE("Antweakbar found")
 	include_directories(${ANTTWEAKBAR_INCLUDE_DIRS})
 	MESSAGE(STATUS ${ANTTWEAKBAR_INCLUDE_DIRS})
+endif()
+if(FREEIMAGE_FOUND)
+	MESSAGE("FreeImage found")
+	include_directories(${FREEIMAGE_INCLUDE_DIRS})
+	MESSAGE(STATUS ${FREEIMAGE_INCLUDE_DIRS})
 endif()
 
 set(SOURCE_FILES
@@ -90,7 +96,7 @@ set(SOURCE_FILES
 )
 
 add_executable(GemParticles ${SOURCE_FILES})
-target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW3_LIBRARIES} ${ANTWEAKBAR_LIBRARIES})
+target_link_libraries(GemParticles ${OPENGL_LIBRARIES} ${GLU_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW3_LIBRARIES} ${ANTWEAKBAR_LIBRARIES} ${FREEIMAGE_LIBRARIES})
 file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR} )
 
 #if(WINDOWS OR WIN32)
