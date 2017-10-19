@@ -60,6 +60,8 @@ bool firstMouse = true;
 struct TweakBarGUIProperties {
   std::size_t _ActiveParticleCount;
   std::size_t _FPS;
+  glm::u8vec4 _ColdColor; glm::u8vec4 _PrevColdColor;
+  glm::u8vec4 _HotColor; glm::u8vec4 _PrevHotColor;
 } _TweakBarProperties;
 
 // Handles
@@ -224,11 +226,20 @@ void BuildAntTweakBarGUI() {
   TwAddVarRO(_TweakBarGUI, "Active particles", TW_TYPE_UINT32, &_TweakBarProperties._ActiveParticleCount, nullptr);
 
   // Add variables to AntTweakBar with properties
+  // Particle Attractor
   TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
   TwAddVarRW(_TweakBarGUI, "Attractor Position Y", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->y, " min=-100 max=100 step=0.2 ");
   TwAddVarRW(_TweakBarGUI, "Attractor Position Z", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->z, " min=-100 max=100 step=0.2 ");
 
   TwAddVarRW(_TweakBarGUI, "Acceleration Rate", TW_TYPE_FLOAT, _AttractorHandle->GetAccelerationRateRef(), " min=-20 max=50 step=0.2 ");
+
+  // Color updater
+  _TweakBarProperties._ColdColor = _ColorUpdaterHandle->GetColdColor();
+  _TweakBarProperties._HotColor = _ColorUpdaterHandle->GetHotColor();
+  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
+  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
+  TwAddVarRW(_TweakBarGUI, "Cold Color", TW_TYPE_COLOR32, &_TweakBarProperties._ColdColor, " coloralpha=true ");
+  TwAddVarRW(_TweakBarGUI, "Hot Color", TW_TYPE_COLOR32, &_TweakBarProperties._HotColor, " coloralpha=true ");
 }
 }
 
@@ -278,6 +289,14 @@ void Update() {
   // Update tweakbar properties
   _TweakBarProperties._ActiveParticleCount = particle_module::GetActiveParticlesCount();
   _TweakBarProperties._FPS = timer::Chrono::GetInstance().GetFPS();
+
+  // Update color gradient if needed
+  if (_TweakBarProperties._PrevColdColor != _TweakBarProperties._ColdColor ||
+    _TweakBarProperties._PrevHotColor != _TweakBarProperties._HotColor) {
+    _ColorUpdaterHandle->UpdateColorGradient(_TweakBarProperties._HotColor, _TweakBarProperties._ColdColor);
+    _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
+    _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
+  }
 
   TwDraw();
 }
