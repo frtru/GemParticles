@@ -37,7 +37,7 @@ glm::u8vec4   _HotColor         = { 255u, 255u, 128u, 255u };
 glm::u8vec4   _ColdColor        = { 255u, 0u, 0u, 255u };
 glm::f32vec3  _POI              = { 1.0f, 1.0f, 1.0f };
 float         _InitialRadius    = 0.5f;
-float         _AccelerationRate = 7.0f;
+float         _AccelerationRate = 15.0f;
 float         _MaxDistance      = 7.0f;
 std::size_t   _ParticleCount    = 1000000u;
 std::string   _ParticleSystemName;

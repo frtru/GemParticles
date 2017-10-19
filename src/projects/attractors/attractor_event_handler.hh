@@ -26,6 +26,7 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
   const std::shared_ptr<ParticleAttractor>& a_pAttractorHandle,
   const std::shared_ptr<ProximityColorUpdater>& a_pColorUpdater);
 void Terminate();
+void Update();
 } /* namespace event_handler*/
 } /* namespace attractor_project */
 } /* namespace particle */

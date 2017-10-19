@@ -18,6 +18,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <AntTweakBar.h>
 
 #include "graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"
@@ -59,6 +60,7 @@ bool firstMouse = true;
 std::shared_ptr<GraphicContext>         context_handle;
 std::shared_ptr<ParticleAttractor>      _AttractorHandle;
 std::shared_ptr<ProximityColorUpdater>  _ColorUpdaterHandle;
+TwBar*                                   _TweakBarMenu;
 
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
   // TODO: Handle all necessary cases
@@ -143,7 +145,10 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
       glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
       glm::vec4(0, 0, _WindowWidth, _WindowHeight));
 
-    glm::f32vec3 wNewPos = from + glm::normalize((to - from)) * 3.5f;
+    const glm::f32vec3 wCameraPos = camera::GetEyePosition();
+
+	  glm::f32vec3 wNewPos = from + glm::normalize((to - from)) * 
+      glm::distance(wCameraPos, glm::f32vec3(0.0f,0.0f,0.0f));
     _AttractorHandle->SetAttractorPosition(wNewPos);
     _ColorUpdaterHandle->SetPOI(wNewPos);
   }
@@ -194,7 +199,7 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
   }
 }
 
-void FramebuggerSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight) {
+void FramebufferSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight) {
   _WindowWidth = a_nWidth;
   _WindowHeight = a_nHeight;
   glViewport(0, 0, a_nWidth, a_nHeight);
@@ -202,6 +207,7 @@ void FramebuggerSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight)
     glm::radians(45.0f),
     a_nWidth, a_nHeight,
     0.1f, 100.0f);
+  TwWindowSize(a_nWidth, a_nHeight);
 }
 }
 
@@ -209,6 +215,11 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
   const std::shared_ptr<ParticleAttractor>& a_pAttractorHandle,
   const std::shared_ptr<ProximityColorUpdater>& a_pColorUpdater) {
   std::call_once(init_flag, [&]() {
+    // AntTweakBar initialization
+    TwInit(TW_OPENGL, nullptr);
+    TwWindowSize(640, 480);
+    _TweakBarMenu = TwNewBar("Attractor Project");
+
     // Get a reference on the dynamics of this project
     _AttractorHandle = a_pAttractorHandle;
     _ColorUpdaterHandle = a_pColorUpdater;
@@ -231,12 +242,16 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
     glfwSetMouseButtonCallback(window, MouseButtonCallBack);
     glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
     glfwSetKeyCallback(window, KeyCallback);
-    glfwSetFramebufferSizeCallback(window, FramebuggerSizeCallback);
+    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
   });
 }
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {});
+}
+
+void Update() {
+  TwDraw();
 }
 } /* namespace event_handler*/
 } /* namespace attractor_project */

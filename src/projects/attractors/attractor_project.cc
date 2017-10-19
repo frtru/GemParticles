@@ -18,6 +18,7 @@
 #include <iostream>
 #include <sstream>
 //Other libraries' .h files
+#include <AntTweakBar.h>
 //Your project's .h files
 #include "project_dictionary.hh"
 #include "utils/timer.hh"
@@ -93,9 +94,11 @@ void Run() {
       graphic_context->GetWindowHandle()), ss.str().c_str());
     
     scene::Render();
-    particle_module::Update(dt);    
+    particle_module::Update(dt);
 
+    event_handler::Update(); // Has to be placed before before clearing depth buffer bit
     graphic_context->Update();
+
     timer::Chrono::GetInstance().Update();
   }
 }
