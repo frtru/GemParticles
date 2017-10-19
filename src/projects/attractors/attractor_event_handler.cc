@@ -56,15 +56,18 @@ enum MouseState {
 MouseState                      mouse_state;
 bool firstMouse = true;
 
+struct TweakBarGUIProperties {
+} _TweakBarProperties;
+
 // Handles
 std::shared_ptr<GraphicContext>         context_handle;
 std::shared_ptr<ParticleAttractor>      _AttractorHandle;
 std::shared_ptr<ProximityColorUpdater>  _ColorUpdaterHandle;
-TwBar*                                   _TweakBarMenu;
+TwBar*                                  _TweakBarGUI;
 
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
-  // TODO: Handle all necessary cases
-  switch (a_nButtonID) {
+  if (!TwEventMouseButtonGLFW(a_nButtonID, a_nAction)) {
+    switch (a_nButtonID) {
     case GLFW_MOUSE_BUTTON_LEFT:
       if (a_nAction == GLFW_PRESS) {
         mouse_state = POI_MOVING;
@@ -73,7 +76,7 @@ void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, 
         mouse_state = FREE_CURSOR;
         firstMouse = true;
       }
-    break;
+      break;
     case GLFW_MOUSE_BUTTON_MIDDLE:
       break;
     case GLFW_MOUSE_BUTTON_RIGHT:
@@ -87,73 +90,75 @@ void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, 
       break;
     default:
       break;
+    }
   }
 }
 
 void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a_dYPos) {
+  if (!TwEventMousePosGLFW(static_cast<int>(a_dXPos), static_cast<int>(a_dYPos))) {
+    if (mouse_state == CAMERA_MOVING) {
+      /*
+      * Reference: https://learnopengl.com/index.php#!Getting-started/Camera
+      */
+      if (firstMouse)
+      {
+        last_x = a_dXPos;
+        last_y = a_dYPos;
+        firstMouse = false;
+        return;
+      }
 
-  if (mouse_state == CAMERA_MOVING) {
-    /*
-     * Reference: https://learnopengl.com/index.php#!Getting-started/Camera
-     */
-    if (firstMouse)
-    {
+      double xoffset = a_dXPos - last_x;
+      double yoffset = last_y - a_dYPos; // Reversed since y-coordinates go from bottom to left
       last_x = a_dXPos;
       last_y = a_dYPos;
-      firstMouse = false;
-      return;
+
+      double sensitivity = 0.10;	// Change this value to your liking
+      xoffset *= sensitivity;
+      yoffset *= sensitivity;
+
+      yaw += xoffset;
+      pitch += yoffset;
+
+      // Make sure that when pitch is out of bounds, screen doesn't get flipped
+      // TODO: Create constants for these magical numbers/values
+      if (pitch > 89.0f)
+        pitch = 89.0f;
+      if (pitch < -89.0f)
+        pitch = -89.0f;
+
+      glm::vec3 front = {
+        cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+        sin(glm::radians(pitch)),
+        sin(glm::radians(yaw)) * cos(glm::radians(pitch))
+      };
+
+      camera_direction = glm::normalize(front);
+      auto  position = camera::GetEyePosition(),
+        up = camera::GetUpVector();
+      camera::LookAt(position, position + camera_direction, up);
     }
+    else if (mouse_state == POI_MOVING) {
+      glm::mat4 P = camera::GetProjectionMatrix();
+      glm::mat4 V = camera::GetViewMatrix();
 
-    double xoffset = a_dXPos - last_x;
-    double yoffset = last_y - a_dYPos; // Reversed since y-coordinates go from bottom to left
-    last_x = a_dXPos;
-    last_y = a_dYPos;
+      glm::vec3 from = glm::unProject(
+        glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
+        glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+      glm::vec3 to = glm::unProject(
+        glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
+        glm::vec4(0, 0, _WindowWidth, _WindowHeight));
 
-    double sensitivity = 0.10;	// Change this value to your liking
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
+      const glm::f32vec3 wCameraPos = camera::GetEyePosition();
 
-    yaw += xoffset;
-    pitch += yoffset;
-
-    // Make sure that when pitch is out of bounds, screen doesn't get flipped
-    // TODO: Create constants for these magical numbers/values
-    if (pitch > 89.0f)
-      pitch = 89.0f;
-    if (pitch < -89.0f)
-      pitch = -89.0f;
-
-    glm::vec3 front = {
-      cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-      sin(glm::radians(pitch)),
-      sin(glm::radians(yaw)) * cos(glm::radians(pitch)) 
-    };
-
-    camera_direction = glm::normalize(front);
-    auto  position = camera::GetEyePosition(),
-          up = camera::GetUpVector();
-    camera::LookAt(position, position + camera_direction, up);
-  }
-  else if(mouse_state == POI_MOVING) {
-    glm::mat4 P = camera::GetProjectionMatrix();
-    glm::mat4 V = camera::GetViewMatrix();
-
-    glm::vec3 from = glm::unProject(
-      glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
-      glm::vec4(0, 0, _WindowWidth, _WindowHeight));
-    glm::vec3 to = glm::unProject(
-      glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
-      glm::vec4(0, 0, _WindowWidth, _WindowHeight));
-
-    const glm::f32vec3 wCameraPos = camera::GetEyePosition();
-
-	  glm::f32vec3 wNewPos = from + glm::normalize((to - from)) * 
-      glm::distance(wCameraPos, glm::f32vec3(0.0f,0.0f,0.0f));
-    _AttractorHandle->SetAttractorPosition(wNewPos);
-    _ColorUpdaterHandle->SetPOI(wNewPos);
-  }
-  else {
-    // DO NOTHING
+      glm::f32vec3 wNewPos = from + glm::normalize((to - from)) *
+        glm::distance(wCameraPos, glm::f32vec3(0.0f, 0.0f, 0.0f));
+      _AttractorHandle->SetAttractorPosition(wNewPos);
+      _ColorUpdaterHandle->SetPOI(wNewPos);
+    }
+    else {
+      // DO NOTHING
+    }
   }
 }
 
@@ -209,20 +214,32 @@ void FramebufferSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight)
     0.1f, 100.0f);
   TwWindowSize(a_nWidth, a_nHeight);
 }
+
+void BuildAntTweakBarGUI() {
+  // Set the properties properly
+
+  // Add variables to AntTweakBar with properties
+  TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
+  TwAddVarRW(_TweakBarGUI, "Attractor Position Y", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->y, " min=-100 max=100 step=0.2 ");
+  TwAddVarRW(_TweakBarGUI, "Attractor Position Z", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->z, " min=-100 max=100 step=0.2 ");
+
+  TwAddVarRW(_TweakBarGUI, "Acceleration Rate", TW_TYPE_FLOAT, _AttractorHandle->GetAccelerationRateRef(), " min=-20 max=50 step=0.2 ");
+}
 }
 
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
   const std::shared_ptr<ParticleAttractor>& a_pAttractorHandle,
   const std::shared_ptr<ProximityColorUpdater>& a_pColorUpdater) {
   std::call_once(init_flag, [&]() {
-    // AntTweakBar initialization
-    TwInit(TW_OPENGL, nullptr);
-    TwWindowSize(640, 480);
-    _TweakBarMenu = TwNewBar("Attractor Project");
-
     // Get a reference on the dynamics of this project
     _AttractorHandle = a_pAttractorHandle;
     _ColorUpdaterHandle = a_pColorUpdater;
+    
+    // AntTweakBar initialization
+    TwInit(TW_OPENGL, nullptr);
+    TwWindowSize(640, 480);
+    _TweakBarGUI = TwNewBar("Attractor Project");
+    BuildAntTweakBarGUI();
 
     // TODO: If it's worth it, move these hardcoded values someplace else
     yaw = -90.0f;

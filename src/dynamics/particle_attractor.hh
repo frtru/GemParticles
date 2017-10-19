@@ -27,8 +27,14 @@ public:
   ~ParticleAttractor() = default;
 
   void SetAttractorPosition(const glm::f32vec3& a_vPos) { m_fvAttractionPosition = a_vPos; }
-  glm::f32vec3 GetAttractorPosition() const { return m_fvAttractionPosition; }
+  void SetAccelerationRate(float a_dRate) { m_fAccelerationRate = a_dRate; }
   
+  float GetAccelerationRate() const { return m_fAccelerationRate; }
+  glm::f32vec3 GetAttractorPosition() const { return m_fvAttractionPosition; }
+
+  float* GetAccelerationRateRef() { return &m_fAccelerationRate; }
+  glm::f32vec3* GetAttractorPositionRef() { return &m_fvAttractionPosition; }
+
   void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 private:
   glm::f32vec3	m_fvAttractionPosition;
