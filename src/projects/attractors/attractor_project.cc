@@ -16,7 +16,6 @@
 //C++ system files
 #include <memory>
 #include <iostream>
-#include <sstream>
 //Other libraries' .h files
 #include <AntTweakBar.h>
 //Your project's .h files
@@ -74,7 +73,7 @@ void Init() {
   // Particle system initialization
   particle_module::Init();
   blueprint::attractor_system_builder::SetParticleSystemName("Amazing attractor system");
-  blueprint::attractor_system_builder::SetParticleCount(1000000u);
+  blueprint::attractor_system_builder::SetParticleCount(500001u);
   blueprint::attractor_system_builder::Create();
 
   // Event handler initialization
@@ -84,14 +83,10 @@ void Init() {
 }
 
 void Run() {
-
+  glfwSetWindowTitle(static_cast<GLFWwindow*>(
+    graphic_context->GetWindowHandle()), "GemParticles");
   while (!graphic_context->PollWindowClosedEvent()) {
-    double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
-    std::stringstream ss; 
-    ss << "GemParticles, FPS: "  << timer::Chrono::GetInstance().GetFPS()
-      << " | Active Particles: " << particle_module::GetActiveParticlesCount();
-    glfwSetWindowTitle(static_cast<GLFWwindow*>(
-      graphic_context->GetWindowHandle()), ss.str().c_str());
+    const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
     
     scene::Render();
     particle_module::Update(dt);

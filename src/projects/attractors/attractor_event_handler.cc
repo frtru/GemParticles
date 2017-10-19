@@ -22,6 +22,7 @@
 
 #include "graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"
+#include "utils/timer.hh"
 #include "utils/scene.hh"
 #include "utils/camera.hh"
 #include <glm/gtc/matrix_transform.inl>
@@ -57,6 +58,8 @@ MouseState                      mouse_state;
 bool firstMouse = true;
 
 struct TweakBarGUIProperties {
+  std::size_t _ActiveParticleCount;
+  std::size_t _FPS;
 } _TweakBarProperties;
 
 // Handles
@@ -217,6 +220,8 @@ void FramebufferSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight)
 
 void BuildAntTweakBarGUI() {
   // Set the properties properly
+  TwAddVarRO(_TweakBarGUI, "FPS", TW_TYPE_UINT32, &_TweakBarProperties._FPS, nullptr);
+  TwAddVarRO(_TweakBarGUI, "Active particles", TW_TYPE_UINT32, &_TweakBarProperties._ActiveParticleCount, nullptr);
 
   // Add variables to AntTweakBar with properties
   TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
@@ -264,10 +269,16 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {});
+  std::call_once(terminate_flag, [&]() {
+    TwTerminate();
+  });
 }
 
-void Update() {
+void Update() { 
+  // Update tweakbar properties
+  _TweakBarProperties._ActiveParticleCount = particle_module::GetActiveParticlesCount();
+  _TweakBarProperties._FPS = timer::Chrono::GetInstance().GetFPS();
+
   TwDraw();
 }
 } /* namespace event_handler*/
