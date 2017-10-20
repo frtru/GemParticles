@@ -203,6 +203,9 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
       case GLFW_KEY_B:
         scene::SetDebugOption(!scene::IsDebug());
         break;
+      case GLFW_KEY_SPACE:
+        camera::LookAt(position, { 0.0f,0.0f,0.0f }, camera::GetUpVector());
+        break;
       default:
         break;
     }
