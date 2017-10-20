@@ -35,6 +35,9 @@
     <ClCompile Include="src\projects\attractors\attractor_system_blueprint.cc" />
     <ClCompile Include="src\projects\attractors\avx_particle_attractor.cc" />
     <ClCompile Include="src\projects\attractors\proximity_color_updater.cc" />
+    <ClCompile Include="src\projects\light\light_event_handler.cc" />
+    <ClCompile Include="src\projects\light\light_project.cc" />
+    <ClCompile Include="src\projects\light\scene_with_light.cc" />
     <ClCompile Include="src\projects\rain\rain_emitter.cc" />
     <ClCompile Include="src\projects\rain\rain_particles_blueprint.cc" />
     <ClCompile Include="src\projects\rain\rain_project.cc" />
@@ -74,6 +77,9 @@
     <ClInclude Include="src\projects\attractors\attractor_system_blueprint.hh" />
     <ClInclude Include="src\projects\attractors\avx_particle_attractor.hh" />
     <ClInclude Include="src\projects\attractors\proximity_color_updater.hh" />
+    <ClInclude Include="src\projects\light\light_event_handler.hh" />
+    <ClInclude Include="src\projects\light\light_project.hh" />
+    <ClInclude Include="src\projects\light\scene_with_light.hh" />
     <ClInclude Include="src\projects\rain\rain_emitter.hh" />
     <ClInclude Include="src\projects\rain\rain_particles_blueprint.hh" />
     <ClInclude Include="src\projects\rain\rain_project.hh" />

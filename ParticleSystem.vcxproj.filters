@@ -44,6 +44,9 @@
     <Filter Include="projects\attractors\shaders">
       <UniqueIdentifier>{c48000f6-7386-4f71-946b-f7dff01df797}</UniqueIdentifier>
     </Filter>
+    <Filter Include="projects\light">
+      <UniqueIdentifier>{d9418cd2-c77c-444a-9f2a-cc84c404297c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\particle_module.cc">
@@ -129,6 +132,15 @@
     </ClCompile>
     <ClCompile Include="src\projects\attractors\attractor_event_handler.cc">
       <Filter>projects\attractors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\light\scene_with_light.cc">
+      <Filter>projects\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\light\light_event_handler.cc">
+      <Filter>projects\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\light\light_project.cc">
+      <Filter>projects\light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +262,15 @@
     </ClInclude>
     <ClInclude Include="src\projects\attractors\attractor_particle_system.hh">
       <Filter>projects\attractors</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\light\scene_with_light.hh">
+      <Filter>projects\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\light\light_event_handler.hh">
+      <Filter>projects\light</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\light\light_project.hh">
+      <Filter>projects\light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

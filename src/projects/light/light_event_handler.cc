@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/attractors/attractor_event_handler.hh"
+#include "projects/light/light_event_handler.hh"
 
 #include <iostream>
 #include <mutex>
@@ -28,7 +28,7 @@
 #include <glm/gtc/matrix_transform.inl>
 
 namespace gem { namespace particle {
-namespace attractor_project {
+namespace light_project {
 namespace event_handler {
 namespace {
 
@@ -66,8 +66,7 @@ struct TweakBarGUIProperties {
 
 // Handles
 std::shared_ptr<GraphicContext>         context_handle;
-std::shared_ptr<ParticleAttractor>      _AttractorHandle;
-std::shared_ptr<ProximityColorUpdater>  _ColorUpdaterHandle;
+
 TwBar*                                  _TweakBarGUI;
 
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
@@ -75,7 +74,6 @@ void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, 
     switch (a_nButtonID) {
     case GLFW_MOUSE_BUTTON_LEFT:
       if (a_nAction == GLFW_PRESS) {
-        mouse_state = POI_MOVING;
       }
       else {
         mouse_state = FREE_CURSOR;
@@ -143,24 +141,24 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
         up = camera::GetUpVector();
       camera::LookAt(position, position + camera_direction, up);
     }
-    else if (mouse_state == POI_MOVING) {
-      glm::mat4 P = camera::GetProjectionMatrix();
-      glm::mat4 V = camera::GetViewMatrix();
+    //else if (mouse_state == POI_MOVING) {
+    //  glm::mat4 P = camera::GetProjectionMatrix();
+    //  glm::mat4 V = camera::GetViewMatrix();
 
-      glm::vec3 from = glm::unProject(
-        glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
-        glm::vec4(0, 0, _WindowWidth, _WindowHeight));
-      glm::vec3 to = glm::unProject(
-        glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
-        glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+    //  glm::vec3 from = glm::unProject(
+    //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
+    //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+    //  glm::vec3 to = glm::unProject(
+    //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
+    //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
 
-      const glm::f32vec3 wCameraPos = camera::GetEyePosition();
+    //  const glm::f32vec3 wCameraPos = camera::GetEyePosition();
 
-      glm::f32vec3 wNewPos = from + glm::normalize((to - from)) *
-        glm::distance(wCameraPos, glm::f32vec3(0.0f, 0.0f, 0.0f));
-      _AttractorHandle->SetAttractorPosition(wNewPos);
-      _ColorUpdaterHandle->SetPOI(wNewPos);
-    }
+    //  glm::f32vec3 wNewPos = from + glm::normalize((to - from)) *
+    //    glm::distance(wCameraPos, glm::f32vec3(0.0f, 0.0f, 0.0f));
+    //  _AttractorHandle->SetAttractorPosition(wNewPos);
+    //  _ColorUpdaterHandle->SetPOI(wNewPos);
+    //}
     else {
       // DO NOTHING
     }
@@ -227,35 +225,33 @@ void BuildAntTweakBarGUI() {
 
   // Add variables to AntTweakBar with properties
   // Particle Attractor
-  TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
-  TwAddVarRW(_TweakBarGUI, "Attractor Position Y", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->y, " min=-100 max=100 step=0.2 ");
-  TwAddVarRW(_TweakBarGUI, "Attractor Position Z", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->z, " min=-100 max=100 step=0.2 ");
+  //TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
+  //TwAddVarRW(_TweakBarGUI, "Attractor Position Y", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->y, " min=-100 max=100 step=0.2 ");
+  //TwAddVarRW(_TweakBarGUI, "Attractor Position Z", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->z, " min=-100 max=100 step=0.2 ");
 
-  TwAddVarRW(_TweakBarGUI, "Acceleration Rate", TW_TYPE_FLOAT, _AttractorHandle->GetAccelerationRateRef(), " min=-20 max=50 step=0.2 ");
+  //TwAddVarRW(_TweakBarGUI, "Acceleration Rate", TW_TYPE_FLOAT, _AttractorHandle->GetAccelerationRateRef(), " min=-20 max=50 step=0.2 ");
 
   // Color updater
-  _TweakBarProperties._ColdColor = _ColorUpdaterHandle->GetColdColor();
-  _TweakBarProperties._HotColor = _ColorUpdaterHandle->GetHotColor();
-  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
-  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
-  TwAddVarRW(_TweakBarGUI, "Cold Color", TW_TYPE_COLOR32, &_TweakBarProperties._ColdColor, " coloralpha=true ");
-  TwAddVarRW(_TweakBarGUI, "Hot Color", TW_TYPE_COLOR32, &_TweakBarProperties._HotColor, " coloralpha=true ");
+  //_TweakBarProperties._ColdColor = _ColorUpdaterHandle->GetColdColor();
+  //_TweakBarProperties._HotColor = _ColorUpdaterHandle->GetHotColor();
+  //_TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
+  //_TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
+  //TwAddVarRW(_TweakBarGUI, "Cold Color", TW_TYPE_COLOR32, &_TweakBarProperties._ColdColor, " coloralpha=true ");
+  //TwAddVarRW(_TweakBarGUI, "Hot Color", TW_TYPE_COLOR32, &_TweakBarProperties._HotColor, " coloralpha=true ");
 }
 }
 
-void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
-  const std::shared_ptr<ParticleAttractor>& a_pAttractorHandle,
-  const std::shared_ptr<ProximityColorUpdater>& a_pColorUpdater) {
+void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
   std::call_once(init_flag, [&]() {
     // Get a reference on the dynamics of this project
-    _AttractorHandle = a_pAttractorHandle;
-    _ColorUpdaterHandle = a_pColorUpdater;
+    //_AttractorHandle = a_pAttractorHandle;
+    //_ColorUpdaterHandle = a_pColorUpdater;
     
     // AntTweakBar initialization
     TwInit(TW_OPENGL, nullptr);
     TwWindowSize(640, 480);
-    _TweakBarGUI = TwNewBar("Attractor Project");
-    TwDefine(" Attractor Project refresh=0.5 ");
+    _TweakBarGUI = TwNewBar("Light Project");
+    TwDefine(" Light Project refresh=0.5 ");
     BuildAntTweakBarGUI();
 
     // TODO: If it's worth it, move these hardcoded values someplace else
@@ -292,16 +288,16 @@ void Update() {
   _TweakBarProperties._FPS = timer::Chrono::GetInstance().GetFPS();
 
   // Update color gradient if needed
-  if (_TweakBarProperties._PrevColdColor != _TweakBarProperties._ColdColor ||
-    _TweakBarProperties._PrevHotColor != _TweakBarProperties._HotColor) {
-    _ColorUpdaterHandle->UpdateColorGradient(_TweakBarProperties._HotColor, _TweakBarProperties._ColdColor);
-    _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
-    _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
-  }
+  //if (_TweakBarProperties._PrevColdColor != _TweakBarProperties._ColdColor ||
+  //  _TweakBarProperties._PrevHotColor != _TweakBarProperties._HotColor) {
+  //  _ColorUpdaterHandle->UpdateColorGradient(_TweakBarProperties._HotColor, _TweakBarProperties._ColdColor);
+  //  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
+  //  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
+  //}
 
   TwDraw();
 }
 } /* namespace event_handler*/
-} /* namespace attractor_project */
+} /* namespace light_project */
 } /* namespace particle */
 } /* namespace gem */

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,15 +11,22 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef SCENE_HH
+#define SCENE_HH
 
-using namespace gem::particle;
+namespace gem { namespace particle {
+namespace light_project {
+namespace scene {
+void Init(bool a_isDebug = false);
+void Terminate();
 
-int main(int argc, const char *argv[]) {
-  app::Launch("light");
-  return app::GetAppStatusError();
-}
+bool IsDebug();
+void SetDebugOption(bool a_isDebug);
+void Render();
+} /* namespace scene */
+} /* namespace light_project */
+} /* namespace particle */
+} /* namespace gem */
+
+#endif /* end of include guard: SCENE_HH */
+
