@@ -101,6 +101,10 @@ void OpenGLContext::InitImpl() {
 
   //glEnable(GL_POINT_SMOOTH);
   glEnable(GL_CULL_FACE);
+  // Enable depth test
+  glEnable(GL_DEPTH_TEST);
+  // Accept fragment if it closer to the camera than the former one
+  glDepthFunc(GL_LESS);
   // TODO: Might have to send the size depending on the 
   // type of particles sent...
   //glPointSize(0.1f);

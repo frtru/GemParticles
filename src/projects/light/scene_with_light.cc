@@ -31,11 +31,11 @@ namespace scene {
 namespace {
 const GLfloat AXES_POINTS[] = {
   0.0f,0.0f,0.0f,
-  1.0f,0.0f,0.0f,
+  3.0f,0.0f,0.0f,
   0.0f,0.0f,0.0f,
-  0.0f,1.0f,0.0f,
+  0.0f,3.0f,0.0f,
   0.0f,0.0f,0.0f,
-  0.0f,0.0f,1.0f
+  0.0f,0.0f,3.0f
 };
 
 const unsigned char AXES_COLOR[] = {
@@ -49,7 +49,7 @@ const unsigned char AXES_COLOR[] = {
 
 // Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
 // A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
-const GLfloat g_vertex_buffer_data[] = {
+const GLfloat BOX_POINTS[] = {
   -1.0f,-1.0f,-1.0f, // triangle 1 : begin
   -1.0f,-1.0f, 1.0f,
   -1.0f, 1.0f, 1.0f, // triangle 1 : end
@@ -88,22 +88,168 @@ const GLfloat g_vertex_buffer_data[] = {
   1.0f,-1.0f, 1.0f
 };
 
+// According to : https://www.opengl.org/discussion_boards/showthread.php/171379-VBOs-Drawing-vertices-of-same-color
+// "You have to specify the color for each vertex."
+const unsigned char BOX_COLOR[] = {
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+  195u,195u,195u,195u,
+};
+
 bool    debug_mode;
-GLuint  vertex_array_ID;
-GLuint  vertex_buffer_ID;
-GLuint  color_buffer_ID;
+GLuint  vertex_array_IDs[2];
+
+GLuint  axes_vertex_buffer_ID;
+GLuint  axes_color_buffer_ID;
+GLuint  box_vertex_buffer_ID;
+GLuint  box_color_buffer_ID;
 GLuint  shader_program_ID;
 
 std::once_flag init_flag;
 std::once_flag terminate_flag;
 
-void DrawAxes() {
-  shader::module::Use(shader_program_ID);
-  glBindVertexArray(vertex_array_ID);
+void DrawDebugObjects() {
+  glBindVertexArray(vertex_array_IDs[0]);
   glDrawArrays(GL_LINES, 0, 2);
   glDrawArrays(GL_LINES, 2, 2);
   glDrawArrays(GL_LINES, 4, 2);
+  glBindVertexArray(vertex_array_IDs[1]);
+  glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
   glBindVertexArray(0);
+}
+
+void InitializeAxes() {
+  // Positions
+
+  glGenBuffers(1, &axes_vertex_buffer_ID);
+  std::cout << "Scene::Init -> Generated position VBO ID = ";
+  std::cout << axes_vertex_buffer_ID << std::endl;
+  glBindBuffer(GL_ARRAY_BUFFER, axes_vertex_buffer_ID);
+  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
+  std::cout << axes_vertex_buffer_ID << std::endl;
+  glBufferData(GL_ARRAY_BUFFER, sizeof(AXES_POINTS), AXES_POINTS, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+
+  if (GL_ARB_vertex_attrib_binding) {
+    glBindVertexBuffer(0, axes_vertex_buffer_ID, 0, 3 * sizeof(GL_FLOAT));
+    glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexAttribBinding(0, 0);
+  }
+  else {
+    glVertexAttribPointer(
+      0, 3,
+      GL_FLOAT, GL_FALSE,
+      3 * sizeof(GL_FLOAT), nullptr);
+  }
+
+  // Colors
+
+  //Color VBO Initialization
+  glGenBuffers(1, &axes_color_buffer_ID);
+  std::cout << "Scene::Init -> Generated color VBO ID = ";
+  std::cout << axes_color_buffer_ID << std::endl;
+  glBindBuffer(GL_ARRAY_BUFFER, axes_color_buffer_ID);
+  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
+  std::cout << axes_color_buffer_ID << std::endl;
+  glBufferData(GL_ARRAY_BUFFER, sizeof(AXES_COLOR), AXES_COLOR, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(1);
+
+  if (GL_ARB_vertex_attrib_binding) {
+    glBindVertexBuffer(1, axes_color_buffer_ID, 0, 4 * sizeof(unsigned char));
+    glVertexAttribFormat(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0);
+    glVertexAttribBinding(1, 1);
+  }
+  else {
+    glVertexAttribPointer(
+      1, 4,
+      GL_UNSIGNED_BYTE, GL_TRUE,
+      4 * sizeof(unsigned char), nullptr);
+  }
+}
+void InitializeTestingBox() {
+  // Positions
+
+  glGenBuffers(1, &box_vertex_buffer_ID);
+  std::cout << "Scene::Init -> Generated position VBO ID = ";
+  std::cout << box_vertex_buffer_ID << std::endl;
+  glBindBuffer(GL_ARRAY_BUFFER, box_vertex_buffer_ID);
+  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
+  std::cout << box_vertex_buffer_ID << std::endl;
+  glBufferData(GL_ARRAY_BUFFER, sizeof(BOX_POINTS), BOX_POINTS, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+
+  if (GL_ARB_vertex_attrib_binding) {
+    glBindVertexBuffer(0, box_vertex_buffer_ID, 0, 3 * sizeof(GL_FLOAT));
+    glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexAttribBinding(0, 0);
+  }
+  else {
+    glVertexAttribPointer(
+      0, 3,
+      GL_FLOAT, GL_FALSE,
+      3 * sizeof(GL_FLOAT), nullptr);
+  }
+
+  // Colors
+
+  //Color VBO Initialization
+  glGenBuffers(1, &box_color_buffer_ID);
+  std::cout << "Scene::Init -> Generated color VBO ID = ";
+  std::cout << box_color_buffer_ID << std::endl;
+  glBindBuffer(GL_ARRAY_BUFFER, box_color_buffer_ID);
+  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
+  std::cout << box_color_buffer_ID << std::endl;
+  glBufferData(GL_ARRAY_BUFFER, sizeof(BOX_COLOR), BOX_COLOR, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(1);
+
+  if (GL_ARB_vertex_attrib_binding) {
+    glBindVertexBuffer(1, box_color_buffer_ID, 0, 4 * sizeof(unsigned char));
+    glVertexAttribFormat(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0);
+    glVertexAttribBinding(1, 1);
+  }
+  else {
+    glVertexAttribPointer(
+      1, 4,
+      GL_UNSIGNED_BYTE, GL_TRUE,
+      4 * sizeof(unsigned char), nullptr);
+  }
 }
 }
 
@@ -115,75 +261,45 @@ void Init(bool a_isDebug) {
     shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
     shader_program_ID = shader::factory::CreateProgram();
 
-    glGenVertexArrays(1, &vertex_array_ID);
-    std::cout << "Scene::Init -> Generated VAO ID = ";
-    std::cout << vertex_array_ID << std::endl;
-    glBindVertexArray(vertex_array_ID);
+    glGenVertexArrays(2, vertex_array_IDs);
+    std::cout << "Scene::Init -> Generated VAO IDs = ";
+    std::cout << vertex_array_IDs[0] << " & " << vertex_array_IDs[1] << " respectively for axes and box." << std::endl;
+
+    glBindVertexArray(vertex_array_IDs[0]);
     std::cout << "Scene::Init -> Allocated array memory for ID = ";
-    std::cout << vertex_array_ID << std::endl;
+    std::cout << vertex_array_IDs[0] << std::endl;
+    InitializeAxes();
 
-    // Positions
+    glBindVertexArray(vertex_array_IDs[1]);
+    std::cout << "Scene::Init -> Allocated array memory for ID = ";
+    std::cout << vertex_array_IDs[1] << std::endl;
+    InitializeTestingBox();
 
-    glGenBuffers(1, &vertex_buffer_ID);
-    std::cout << "Scene::Init -> Generated position VBO ID = ";
-    std::cout << vertex_buffer_ID << std::endl;
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
-    std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
-    std::cout << vertex_buffer_ID << std::endl;
-    glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), AXES_POINTS, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-
-    if (GL_ARB_vertex_attrib_binding) {
-      glBindVertexBuffer(0, vertex_buffer_ID, 0, 3*sizeof(GL_FLOAT));
-      glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
-      glVertexAttribBinding(0, 0);
-    }
-    else {
-      glVertexAttribPointer(
-        0, 3,
-        GL_FLOAT, GL_FALSE,
-        3 * sizeof(GL_FLOAT), nullptr);
-    }
-
-    // Colors
-
-    //Color VBO Initialization
-    glGenBuffers(1, &color_buffer_ID);
-    std::cout << "Scene::Init -> Generated color VBO ID = ";
-    std::cout << color_buffer_ID << std::endl;
-    glBindBuffer(GL_ARRAY_BUFFER, color_buffer_ID);
-    std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
-    std::cout << color_buffer_ID << std::endl;
-    glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), AXES_COLOR, GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(1);
-
-    if (GL_ARB_vertex_attrib_binding) {
-      glBindVertexBuffer(1, color_buffer_ID, 0, 4*sizeof(unsigned char));
-      glVertexAttribFormat(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0);
-      glVertexAttribBinding(1, 1);
-    }
-    else {
-      glVertexAttribPointer(
-        1, 4,
-        GL_UNSIGNED_BYTE, GL_TRUE,
-        4 * sizeof(unsigned char), nullptr);
-    }
+    glBindVertexArray(0);
   });
 }
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
-    if (vertex_buffer_ID != 0) {
+    if (axes_vertex_buffer_ID != 0) {
       std::cout << "scene::Terminate -> Deallocating vertex VBO" << std::endl;
-      glDeleteBuffers(1, &vertex_buffer_ID);
-      vertex_buffer_ID = 0;
+      glDeleteBuffers(1, &axes_vertex_buffer_ID);
+      axes_vertex_buffer_ID = 0;
     }
-    if (color_buffer_ID != 0) {
+    if (axes_color_buffer_ID != 0) {
       std::cout << "scene::Terminate -> Deallocating color VBO" << std::endl;
-      glDeleteBuffers(1, &color_buffer_ID);
-      color_buffer_ID = 0;
+      glDeleteBuffers(1, &axes_color_buffer_ID);
+      axes_color_buffer_ID = 0;
+    }
+    if (box_vertex_buffer_ID != 0) {
+      std::cout << "scene::Terminate -> Deallocating vertex VBO" << std::endl;
+      glDeleteBuffers(1, &box_vertex_buffer_ID);
+      box_vertex_buffer_ID = 0;
+    }
+    if (box_color_buffer_ID != 0) {
+      std::cout << "scene::Terminate -> Deallocating color VBO" << std::endl;
+      glDeleteBuffers(1, &box_color_buffer_ID);
+      box_color_buffer_ID = 0;
     }
   });
 }
@@ -193,7 +309,8 @@ void SetDebugOption(bool a_isDebug) { debug_mode = a_isDebug; }
 
 void Render() {
   if (debug_mode) {
-    DrawAxes();
+    shader::module::Use(shader_program_ID);
+    DrawDebugObjects();
   }
 }
 } /* namespace scene */
