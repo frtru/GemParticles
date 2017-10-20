@@ -111,6 +111,11 @@
     <None Include="shaders\simple_texture.frag" />
     <None Include="shaders\test.frag" />
     <None Include="shaders\test.vert" />
+    <None Include="src\projects\light\shaders\scene.vert" />
+    <None Include="src\projects\light\shaders\default.frag" />
+    <None Include="src\projects\light\shaders\particle_billboard.geom" />
+    <None Include="src\projects\light\shaders\particle_billboard.vert" />
+    <None Include="src\projects\light\shaders\simple_texture.frag" />
     <None Include="src\projects\rain\shaders\debug_axes.vert" />
     <None Include="src\projects\rain\shaders\default.frag" />
     <None Include="src\projects\rain\shaders\particle_billboard.geom" />

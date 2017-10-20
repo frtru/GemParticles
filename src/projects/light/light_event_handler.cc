@@ -23,9 +23,10 @@
 #include "graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"
 #include "utils/timer.hh"
-#include "utils/scene.hh"
 #include "utils/camera.hh"
 #include <glm/gtc/matrix_transform.inl>
+
+#include "projects/light/scene_with_light.hh"
 
 namespace gem { namespace particle {
 namespace light_project {
@@ -253,8 +254,8 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
     // AntTweakBar initialization
     TwInit(TW_OPENGL, nullptr);
     TwWindowSize(640, 480);
-    _TweakBarGUI = TwNewBar("Light Project");
-    TwDefine(" Light Project refresh=0.5 ");
+    _TweakBarGUI = TwNewBar("LightProject");
+    TwDefine(" LightProject refresh=0.5 ");
     BuildAntTweakBarGUI();
 
     // TODO: If it's worth it, move these hardcoded values someplace else

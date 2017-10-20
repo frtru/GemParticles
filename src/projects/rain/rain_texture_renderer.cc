@@ -96,7 +96,7 @@ void TextureCoreGLRenderer::ParticlePositionsInit(
     glVertexAttribPointer(
       0, 3,
       GL_FLOAT, GL_FALSE,
-      sizeof(glm::f32vec3), (void *)0);
+      sizeof(glm::f32vec3), nullptr);
   }
 }
 
@@ -128,7 +128,7 @@ void TextureCoreGLRenderer::ParticleColorsInit(
     glVertexAttribPointer(
       1, 4,
       GL_UNSIGNED_BYTE, GL_TRUE,
-      sizeof(glm::u8vec4), (void *)0);
+      sizeof(glm::u8vec4), nullptr);
   }
 }
 

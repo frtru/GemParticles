@@ -47,6 +47,9 @@
     <Filter Include="projects\light">
       <UniqueIdentifier>{d9418cd2-c77c-444a-9f2a-cc84c404297c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="projects\light\shaders">
+      <UniqueIdentifier>{7ca138bb-fbc3-4370-979c-3a1eadfdbab5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\particle_module.cc">
@@ -321,6 +324,21 @@
     </None>
     <None Include="shaders\test.vert">
       <Filter>resources files\shaders</Filter>
+    </None>
+    <None Include="src\projects\light\shaders\default.frag">
+      <Filter>projects\light\shaders</Filter>
+    </None>
+    <None Include="src\projects\light\shaders\particle_billboard.geom">
+      <Filter>projects\light\shaders</Filter>
+    </None>
+    <None Include="src\projects\light\shaders\particle_billboard.vert">
+      <Filter>projects\light\shaders</Filter>
+    </None>
+    <None Include="src\projects\light\shaders\simple_texture.frag">
+      <Filter>projects\light\shaders</Filter>
+    </None>
+    <None Include="src\projects\light\shaders\scene.vert">
+      <Filter>projects\light\shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

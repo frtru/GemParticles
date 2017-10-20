@@ -25,12 +25,12 @@
 #include "utils/shader_factory.hh"
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
-#include "utils/scene.hh"
 #include "graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
 
 // Specific project particle blueprints
 #include "projects/light/light_event_handler.hh"
+#include "projects/light/scene_with_light.hh"
 
 namespace gem { namespace particle {
 namespace light_project {

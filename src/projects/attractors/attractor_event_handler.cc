@@ -257,8 +257,8 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
     // AntTweakBar initialization
     TwInit(TW_OPENGL, nullptr);
     TwWindowSize(640, 480);
-    _TweakBarGUI = TwNewBar("Attractor Project");
-    TwDefine(" Attractor Project refresh=0.5 ");
+    _TweakBarGUI = TwNewBar("AttractorProject");
+    TwDefine(" AttractorProject refresh=0.5 ");
     BuildAntTweakBarGUI();
 
     // TODO: If it's worth it, move these hardcoded values someplace else
