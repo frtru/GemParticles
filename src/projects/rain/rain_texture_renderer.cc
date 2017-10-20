@@ -27,11 +27,10 @@
 #include <iostream>
 namespace gem { namespace particle {
 namespace rain_project {
-const std::string TextureCoreGLRenderer::SHADERS_PATH = "src/projects/rain/shaders/";
 TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath) {
-  shader::factory::CompileShaderFile(SHADERS_PATH + "particle_billboard.vert", GL_VERTEX_SHADER);
-  shader::factory::CompileShaderFile(SHADERS_PATH + "particle_billboard.geom", GL_GEOMETRY_SHADER);
-  shader::factory::CompileShaderFile(SHADERS_PATH + "simple_texture.frag", GL_FRAGMENT_SHADER);
+  shader::factory::CompileShaderFile("particle_billboard.vert", GL_VERTEX_SHADER);
+  shader::factory::CompileShaderFile("particle_billboard.geom", GL_GEOMETRY_SHADER);
+  shader::factory::CompileShaderFile("simple_texture.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader::factory::CreateProgram();
 
   // VAO initialization

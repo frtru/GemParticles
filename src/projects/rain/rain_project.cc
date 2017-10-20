@@ -22,6 +22,7 @@
 #include "project_dictionary.hh"
 #include "utils/timer.hh"
 #include "utils/shader_module.hh"
+#include "utils/shader_factory.hh"
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
 #include "utils/scene.hh"
@@ -53,6 +54,7 @@ void Init() {
   graphic_context->Init();
 
   shader::module::Init();
+  shader::factory::SetShadersFolderBasePath("src/projects/rain/shaders/");
   texture::module::Init();
 
   // Camera initialization

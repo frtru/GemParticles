@@ -28,8 +28,8 @@
 namespace gem {
 namespace particle {
 CoreGLRenderer::CoreGLRenderer() {
-  shader::factory::CompileShaderFile("shaders/default.vert", GL_VERTEX_SHADER);
-  shader::factory::CompileShaderFile("shaders/default.frag", GL_FRAGMENT_SHADER);
+  shader::factory::CompileShaderFile("default.vert", GL_VERTEX_SHADER);
+  shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader::factory::CreateProgram();
 
   // VAO initialization

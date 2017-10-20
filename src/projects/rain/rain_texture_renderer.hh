@@ -23,8 +23,6 @@ namespace gem { namespace particle {
 namespace rain_project {
 // TODO: Should add texture(s) name/filepaths as a parameter in the constructor
 class TextureCoreGLRenderer : public Renderer<CoreParticles> {
-  // Base folder for fetching the shaders
-  static const std::string SHADERS_PATH;
 public:
   TextureCoreGLRenderer(const std::string& a_sTexturePath);
   virtual ~TextureCoreGLRenderer();

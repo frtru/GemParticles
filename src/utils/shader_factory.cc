@@ -28,7 +28,7 @@ namespace {
 std::map<GLuint, std::vector<std::string> >         shader_programs;
 std::vector<GLuint>                                 compilation_cache;
 std::vector<std::string>                            compilation_sources;
-
+std::string                                         shader_base_path;
 std::once_flag init_flag;
 std::once_flag terminate_flag;
 }
@@ -46,20 +46,24 @@ void Terminate() {
   });
 }
 
+void SetShadersFolderBasePath(const std::string & a_sPath) {
+  shader_base_path = a_sPath;
+}
+
 bool CompileShaderFile(const std::string& a_sFileName, GLenum a_eShaderType) {
   std::ifstream fparser;
-  fparser.open(a_sFileName, std::ios_base::in);
+  fparser.open(shader_base_path + a_sFileName, std::ios_base::in);
   if (fparser) {
     ///read + load
     std::string buffer(
       std::istreambuf_iterator<char>(fparser), 
       (std::istreambuf_iterator<char>())
     );
-    return CompileShaderText(buffer, a_eShaderType, a_sFileName);
+    return CompileShaderText(buffer, a_eShaderType, shader_base_path + a_sFileName);
   }
   std::cerr << "shader_factory::CompileShaderFile -> "
     << "Invalid fileName path : "
-    << a_sFileName << std::endl;
+    << shader_base_path + a_sFileName << std::endl;
   return false;
 }
 

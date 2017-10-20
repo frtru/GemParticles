@@ -22,6 +22,8 @@ namespace factory {
 void Init();
 void Terminate();
 
+void SetShadersFolderBasePath(const std::string & a_sPath);
+
 bool CompileShaderFile(const std::string& a_sFileName, 
   GLenum a_eShaderType);
 bool CompileShaderText(const std::string& a_rShaderText,

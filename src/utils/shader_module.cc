@@ -27,7 +27,7 @@ namespace module {
 namespace {
 GLuint                                              current_program;
 std::map<GLuint, std::map<std::string, GLuint> >    attrib_list;
-std::map<GLuint, std::map<std::string, GLint> >    uniform_location_list;
+std::map<GLuint, std::map<std::string, GLint> >     uniform_location_list;
 std::map<GLuint, GLuint >                           uniform_block_list;
 
 std::once_flag init_flag;
