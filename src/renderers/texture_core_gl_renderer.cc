@@ -134,7 +134,7 @@ void TextureCoreGLRenderer::ParticleColorsInit(
 
 void TextureCoreGLRenderer::ParticleTexturesInit(const std::string& a_sTexturePath) {
   m_textureID = texture::factory::Create2DTexture(a_sTexturePath);
-  shader::module::RegisterUniform("mytexture", m_shaderProgram);
+  shader::module::GetUniformLocation(m_shaderProgram, "mytexture");
 }
 
 void TextureCoreGLRenderer::Update() {
@@ -166,7 +166,7 @@ void TextureCoreGLRenderer::Render() {
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, m_textureID);
-  glUniform1i(shader::module::GetUniformLocation("mytexture", m_shaderProgram), 0);
+  shader::module::SetUniformBool(m_shaderProgram, "mytexture", 0);
 
   glBindVertexArray(m_vertexArrayID);
   const std::size_t count = m_pPool->GetActiveParticleCount();
