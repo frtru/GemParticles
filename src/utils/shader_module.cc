@@ -25,9 +25,13 @@
 namespace shader {
 namespace module {
 namespace {
-GLuint                                              current_program;
-std::map<GLuint, std::map<std::string, GLuint> >    attrib_list;
-std::map<GLuint, GLuint >                           uniform_block_list;
+using SSBOCapacity = GLuint;
+using BindingPoint = GLuint;
+using ID = GLuint;
+ID                                                    current_program;
+std::map<GLuint, std::map<std::string, GLuint> >      attrib_list;
+std::map<BindingPoint, ID >                           uniform_block_list;
+std::map<BindingPoint, std::pair<ID, SSBOCapacity> >  SSBO_list;
 
 std::once_flag init_flag;
 std::once_flag terminate_flag;
@@ -45,6 +49,9 @@ void Terminate() {
     std::cout << "shader_module::Terminate -> Deleting UBOs." << std::endl;
     for (auto uniformBlocks : uniform_block_list) {
       glDeleteBuffers(1, &uniformBlocks.second);
+    }
+    for (auto SSBO : SSBO_list) {
+      glDeleteBuffers(1, &SSBO.second.first);
     }
   });
 }
@@ -152,6 +159,58 @@ void SetUniformBlockValue(GLuint a_unBindingPoint,
   else {
     std::cerr << "shader_module::SetUniformBlockValue -> Trying to set value to binding point " << a_unBindingPoint << std::endl
       << "without registering an UBO. Will ignore instruction..." << std::endl;
+  }
+}
+
+void RegisterSSBOBlock(GLuint a_unBindingPoint, 
+  GLuint a_unSSBOSize, void* a_pData, GLenum a_eUsage) {
+  if (SSBO_list.count(a_unBindingPoint) == 0) {
+    GLuint unSSBOID;
+    glGenBuffers(1, &unSSBOID);
+    SSBO_list[a_unBindingPoint] = std::make_pair(unSSBOID, a_unSSBOSize);
+    std::cout << __func__ << " -> Generated a SSBO, ID = " << unSSBOID << std::endl;
+    UpdateSSBOBlockData(a_unBindingPoint, a_unSSBOSize, a_pData, a_eUsage);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, a_unBindingPoint, unSSBOID);
+    SSBO_list[a_unBindingPoint] = std::make_pair(unSSBOID, a_unSSBOSize);
+  }
+  else {
+    std::cerr << "shader_module::RegisterSSBO -> Trying to register binding point " << a_unBindingPoint << std::endl
+      << "which is already registered. Will ignore instruction..." << std::endl;
+  }
+}
+
+void UpdateSSBOBlockData(GLuint a_unBindingPoint,
+  GLuint a_unSSBOSize, void* a_pData, GLenum a_eUsage) {
+  auto SSBO = SSBO_list.find(a_unBindingPoint);
+  if (SSBO != SSBO_list.end()) {
+    GLuint unSSBOID = SSBO->second.first;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, unSSBOID);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, a_unSSBOSize, a_pData, a_eUsage);
+    std::cout << __func__ << " -> Updated SSBO with ID " << unSSBOID;
+    std::cout << ", final size = " << a_unSSBOSize << std::endl;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); //unbind
+  }
+  else {
+    std::cerr << "shader_module::UpdateSSBOBlockData -> Trying to update value to binding point " << a_unBindingPoint << std::endl
+      << "without registering an SSBO. Will ignore instruction..." << std::endl;
+  }
+}
+
+void SetSSBOBlockSubData(GLuint a_unBindingPoint,
+  GLuint a_unOffset, void* a_pData, GLuint a_unSize) {
+  auto SSBO = SSBO_list.find(a_unBindingPoint);
+  if (SSBO != SSBO_list.end()) {
+    GLuint unSSBOID = SSBO->second.first;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, unSSBOID);
+    glBufferSubData(GL_SHADER_STORAGE_BUFFER, a_unOffset, a_unSize, a_pData);
+    std::cout << __func__ << " -> Set sub data in SSBO with ID " << unSSBOID;
+    std::cout << ", offset = " << a_unOffset << " & ";
+    std::cout << " size = " << a_unSize << std::endl;
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+  }
+  else {
+    std::cerr << "shader_module::SetSSBOValue -> Trying to set value to binding point " << a_unBindingPoint << std::endl
+      << "without registering an SSBO. Will ignore instruction..." << std::endl;
   }
 }
 

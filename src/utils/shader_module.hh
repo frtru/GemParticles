@@ -89,6 +89,11 @@ void SetUniformBlockValue(GLuint a_unBindingPoint,
   GLuint a_unUBOSize,
   void* a_pValue);
 
+// Shader Storage Buffer Object can be used since OpenGL core profile 4.3
+void RegisterSSBOBlock(GLuint a_unBindingPoint, GLuint a_unSSBOSize, void* a_pData, GLenum a_eUsage = GL_DYNAMIC_DRAW);
+void UpdateSSBOBlockData(GLuint a_unBindingPoint, GLuint a_unSSBOSize, void* a_pData, GLenum a_eUsage = GL_DYNAMIC_DRAW);
+void SetSSBOBlockSubData(GLuint a_unBindingPoint, GLuint a_unOffset, void* a_pData, GLuint a_unSize);
+
 void Use(GLuint a_unProgramID);
 void Detach();
 } /* namespace module */

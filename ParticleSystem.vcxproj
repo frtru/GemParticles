@@ -47,6 +47,7 @@
     <ClCompile Include="src\renderers\texture_core_gl_renderer.cc" />
     <ClCompile Include="src\utils\camera.cc" />
     <ClCompile Include="src\utils\basic_event_handler.cc" />
+    <ClCompile Include="src\utils\light_module.cc" />
     <ClCompile Include="src\utils\scene.cc" />
     <ClCompile Include="src\utils\shader_factory.cc" />
     <ClCompile Include="src\utils\shader_module.cc" />
@@ -90,6 +91,7 @@
     <ClInclude Include="src\renderers\texture_core_gl_renderer.hh" />
     <ClInclude Include="src\utils\camera.hh" />
     <ClInclude Include="src\utils\basic_event_handler.hh" />
+    <ClInclude Include="src\utils\light_module.hh" />
     <ClInclude Include="src\utils\macro_definitions.hh" />
     <ClInclude Include="src\utils\scene.hh" />
     <ClInclude Include="src\utils\shader_factory.hh" />

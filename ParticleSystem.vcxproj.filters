@@ -145,6 +145,9 @@
     <ClCompile Include="src\projects\light\light_project.cc">
       <Filter>projects\light</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils\light_module.cc">
+      <Filter>utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\particle_core_data.hh">
@@ -275,6 +278,9 @@
     <ClInclude Include="src\projects\light\light_project.hh">
       <Filter>projects\light</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\light_module.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\projects\rain\shaders\debug_axes.vert">
@@ -325,9 +331,6 @@
     <None Include="shaders\test.vert">
       <Filter>resources files\shaders</Filter>
     </None>
-    <None Include="src\projects\light\shaders\default.frag">
-      <Filter>projects\light\shaders</Filter>
-    </None>
     <None Include="src\projects\light\shaders\particle_billboard.geom">
       <Filter>projects\light\shaders</Filter>
     </None>
@@ -338,6 +341,9 @@
       <Filter>projects\light\shaders</Filter>
     </None>
     <None Include="src\projects\light\shaders\scene.vert">
+      <Filter>projects\light\shaders</Filter>
+    </None>
+    <None Include="src\projects\light\shaders\default.frag">
       <Filter>projects\light\shaders</Filter>
     </None>
   </ItemGroup>
