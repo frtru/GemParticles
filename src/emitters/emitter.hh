@@ -105,7 +105,7 @@ const double Emitter<ParticleType>::DEFAULT_EMISSION_RATE = 1000.0;
 // Default redish transparent color 
 // overwritten by updaters start/end color
 template <class ParticleType>
-const glm::u8vec4 Emitter<ParticleType>::DEFAULT_COLOR = { 255u,255u,255u,255u };
+const glm::u8vec4 Emitter<ParticleType>::DEFAULT_COLOR = { 140u,213u,221u,255u };
 } /* namespace particle */
 } /* namespace gem */
 
