@@ -21,9 +21,7 @@
 // shader utilities
 #include "utils/shader_factory.hh"
 #include "utils/shader_module.hh"
-
-// TODO: Add lights by registering their positions
-// as an UBO in the shaders maybe?
+#include "utils/light_module.hh"
 
 namespace gem { namespace particle {
 namespace light_project {
@@ -96,42 +94,42 @@ const GLfloat BOX_POINTS[] = {
 // According to : https://www.opengl.org/discussion_boards/showthread.php/171379-VBOs-Drawing-vertices-of-same-color
 // "You have to specify the color for each vertex."
 const unsigned char BOX_COLOR[] = {
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
-  225u,128u,0u,195u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
+  225u,128u,0u,255u,
 };
 
 bool    debug_mode;
@@ -280,7 +278,27 @@ void Init(bool a_isDebug) {
     shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
     shader::module::SetUniformVec3(shader_program_ID, "ambient_light_color", { 1.0f, 1.0f, 1.0f });
     shader::module::SetUniformFloat(shader_program_ID, "ambient_light_intensity", 0.5f);
-    shader::module::Use(0);
+    shader::module::Detach();
+    
+    // Should already be initialized but just in case
+    light::module::Init();
+
+    // Add lights in the scene in the SSBO
+    light::Light wFrontLight/*, wBackLight*/;
+    wFrontLight.position = { 0.0f, 0.0f, 2.0f };
+    wFrontLight.color = { 0.0f, 0.0f, 1.0f };
+    wFrontLight.intensity = 1.0f;
+    wFrontLight.attenuation = 0.0f;
+    wFrontLight.radius = 10.0f;
+
+    //wBackLight.position = { 0.0f, 0.0f, -1.0f };
+    //wBackLight.color = { 1.0f, 0.0f, 0.0f };
+    //wBackLight.intensity = 1.0f;
+    //wBackLight.attenuation = 0.0f;
+    //wBackLight.radius = 10.0f;
+
+    light::module::AddLight(wFrontLight);
+    //light::module::AddLight(wBackLight);
 
     glGenVertexArrays(2, vertex_array_IDs);
     std::cout << "Scene::Init -> Generated VAO IDs = ";
@@ -322,6 +340,9 @@ void Terminate() {
       glDeleteBuffers(1, &box_VBO_IDs[COLORS_VBO_IDX]);
       box_VBO_IDs[COLORS_VBO_IDX] = 0;
     }
+
+    // Should already be done, but just in case
+    light::module::Terminate();
   });
 }
 

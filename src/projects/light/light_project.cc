@@ -25,6 +25,7 @@
 #include "utils/shader_factory.hh"
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
+#include "utils/light_module.hh"
 #include "graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
 
@@ -66,7 +67,10 @@ void Init() {
     glm::radians(45.0f), 
     4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
     0.1f, 100.0f);
-  
+
+  // Light module initialization
+  light::module::Init();
+
   // Scene initialization
   scene::Init();
   scene::SetDebugOption(true);
@@ -97,6 +101,7 @@ void Run() {
 void Terminate() {
   // App destruction
   particle_module::Terminate();
+  light::module::Terminate();
   scene::Terminate();
   event_handler::Terminate();
   texture::module::Terminate();
