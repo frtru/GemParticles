@@ -17,7 +17,6 @@
 #include <memory>
 #include <iostream>
 //Other libraries' .h files
-#include <AntTweakBar.h>
 //Your project's .h files
 #include "project_dictionary.hh"
 #include "utils/timer.hh"

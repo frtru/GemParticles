@@ -18,7 +18,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <AntTweakBar.h>
+//#include <AntTweakBar.h>
 
 #include "graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"
@@ -58,111 +58,98 @@ enum MouseState {
 MouseState                      mouse_state;
 bool firstMouse = true;
 
-struct TweakBarGUIProperties {
-  std::size_t _ActiveParticleCount;
-  std::size_t _FPS;
-  glm::u8vec4 _ColdColor; glm::u8vec4 _PrevColdColor;
-  glm::u8vec4 _HotColor; glm::u8vec4 _PrevHotColor;
-} _TweakBarProperties;
-
 // Handles
 std::shared_ptr<GraphicContext>         context_handle;
 
-TwBar*                                  _TweakBarGUI;
-
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
-  if (!TwEventMouseButtonGLFW(a_nButtonID, a_nAction)) {
-    switch (a_nButtonID) {
-    case GLFW_MOUSE_BUTTON_LEFT:
-      if (a_nAction == GLFW_PRESS) {
-      }
-      else {
-        mouse_state = FREE_CURSOR;
-        firstMouse = true;
-      }
-      break;
-    case GLFW_MOUSE_BUTTON_MIDDLE:
-      break;
-    case GLFW_MOUSE_BUTTON_RIGHT:
-      if (a_nAction == GLFW_PRESS) {
-        mouse_state = CAMERA_MOVING;
-      }
-      else {
-        mouse_state = FREE_CURSOR;
-        firstMouse = true;
-      }
-      break;
-    default:
-      break;
+  switch (a_nButtonID) {
+  case GLFW_MOUSE_BUTTON_LEFT:
+    if (a_nAction == GLFW_PRESS) {
     }
+    else {
+      mouse_state = FREE_CURSOR;
+      firstMouse = true;
+    }
+    break;
+  case GLFW_MOUSE_BUTTON_MIDDLE:
+    break;
+  case GLFW_MOUSE_BUTTON_RIGHT:
+    if (a_nAction == GLFW_PRESS) {
+      mouse_state = CAMERA_MOVING;
+    }
+    else {
+      mouse_state = FREE_CURSOR;
+      firstMouse = true;
+    }
+    break;
+  default:
+    break;
   }
 }
 
 void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a_dYPos) {
-  if (!TwEventMousePosGLFW(static_cast<int>(a_dXPos), static_cast<int>(a_dYPos))) {
-    if (mouse_state == CAMERA_MOVING) {
-      /*
-      * Reference: https://learnopengl.com/index.php#!Getting-started/Camera
-      */
-      if (firstMouse)
-      {
-        last_x = a_dXPos;
-        last_y = a_dYPos;
-        firstMouse = false;
-        return;
-      }
-
-      double xoffset = a_dXPos - last_x;
-      double yoffset = last_y - a_dYPos; // Reversed since y-coordinates go from bottom to left
+  if (mouse_state == CAMERA_MOVING) {
+    /*
+    * Reference: https://learnopengl.com/index.php#!Getting-started/Camera
+    */
+    if (firstMouse)
+    {
       last_x = a_dXPos;
       last_y = a_dYPos;
-
-      double sensitivity = 0.10;	// Change this value to your liking
-      xoffset *= sensitivity;
-      yoffset *= sensitivity;
-
-      yaw += xoffset;
-      pitch += yoffset;
-
-      // Make sure that when pitch is out of bounds, screen doesn't get flipped
-      // TODO: Create constants for these magical numbers/values
-      if (pitch > 89.0f)
-        pitch = 89.0f;
-      if (pitch < -89.0f)
-        pitch = -89.0f;
-
-      glm::vec3 front = {
-        cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-        sin(glm::radians(pitch)),
-        sin(glm::radians(yaw)) * cos(glm::radians(pitch))
-      };
-
-      camera_direction = glm::normalize(front);
-      auto  position = camera::GetEyePosition(),
-        up = camera::GetUpVector();
-      camera::LookAt(position, position + camera_direction, up);
+      firstMouse = false;
+      return;
     }
-    //else if (mouse_state == POI_MOVING) {
-    //  glm::mat4 P = camera::GetProjectionMatrix();
-    //  glm::mat4 V = camera::GetViewMatrix();
 
-    //  glm::vec3 from = glm::unProject(
-    //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
-    //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
-    //  glm::vec3 to = glm::unProject(
-    //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
-    //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+    double xoffset = a_dXPos - last_x;
+    double yoffset = last_y - a_dYPos; // Reversed since y-coordinates go from bottom to left
+    last_x = a_dXPos;
+    last_y = a_dYPos;
 
-    //  const glm::f32vec3 wCameraPos = camera::GetEyePosition();
+    double sensitivity = 0.10;	// Change this value to your liking
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
 
-    //  glm::f32vec3 wNewPos = from + glm::normalize((to - from)) *
-    //    glm::distance(wCameraPos, glm::f32vec3(0.0f, 0.0f, 0.0f));
-    //  _AttractorHandle->SetAttractorPosition(wNewPos);
-    //  _ColorUpdaterHandle->SetPOI(wNewPos);
-    //}
-    else {
-      // DO NOTHING
-    }
+    yaw += xoffset;
+    pitch += yoffset;
+
+    // Make sure that when pitch is out of bounds, screen doesn't get flipped
+    // TODO: Create constants for these magical numbers/values
+    if (pitch > 89.0f)
+      pitch = 89.0f;
+    if (pitch < -89.0f)
+      pitch = -89.0f;
+
+    glm::vec3 front = {
+      cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+      sin(glm::radians(pitch)),
+      sin(glm::radians(yaw)) * cos(glm::radians(pitch))
+    };
+
+    camera_direction = glm::normalize(front);
+    auto  position = camera::GetEyePosition(),
+      up = camera::GetUpVector();
+    camera::LookAt(position, position + camera_direction, up);
+  }
+  //else if (mouse_state == POI_MOVING) {
+  //  glm::mat4 P = camera::GetProjectionMatrix();
+  //  glm::mat4 V = camera::GetViewMatrix();
+
+  //  glm::vec3 from = glm::unProject(
+  //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
+  //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+  //  glm::vec3 to = glm::unProject(
+  //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
+  //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+
+  //  const glm::f32vec3 wCameraPos = camera::GetEyePosition();
+
+  //  glm::f32vec3 wNewPos = from + glm::normalize((to - from)) *
+  //    glm::distance(wCameraPos, glm::f32vec3(0.0f, 0.0f, 0.0f));
+  //  _AttractorHandle->SetAttractorPosition(wNewPos);
+  //  _ColorUpdaterHandle->SetPOI(wNewPos);
+  //}
+  else {
+    // DO NOTHING
   }
 }
 
@@ -219,29 +206,6 @@ void FramebufferSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight)
     glm::radians(45.0f),
     a_nWidth, a_nHeight,
     0.1f, 100.0f);
-  TwWindowSize(a_nWidth, a_nHeight);
-}
-
-void BuildAntTweakBarGUI() {
-  // Set the properties properly
-  TwAddVarRO(_TweakBarGUI, "FPS", TW_TYPE_UINT32, &_TweakBarProperties._FPS, nullptr);
-  TwAddVarRO(_TweakBarGUI, "Active particles", TW_TYPE_UINT32, &_TweakBarProperties._ActiveParticleCount, nullptr);
-
-  // Add variables to AntTweakBar with properties
-  // Particle Attractor
-  //TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
-  //TwAddVarRW(_TweakBarGUI, "Attractor Position Y", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->y, " min=-100 max=100 step=0.2 ");
-  //TwAddVarRW(_TweakBarGUI, "Attractor Position Z", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->z, " min=-100 max=100 step=0.2 ");
-
-  //TwAddVarRW(_TweakBarGUI, "Acceleration Rate", TW_TYPE_FLOAT, _AttractorHandle->GetAccelerationRateRef(), " min=-20 max=50 step=0.2 ");
-
-  // Color updater
-  //_TweakBarProperties._ColdColor = _ColorUpdaterHandle->GetColdColor();
-  //_TweakBarProperties._HotColor = _ColorUpdaterHandle->GetHotColor();
-  //_TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
-  //_TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
-  //TwAddVarRW(_TweakBarGUI, "Cold Color", TW_TYPE_COLOR32, &_TweakBarProperties._ColdColor, " coloralpha=true ");
-  //TwAddVarRW(_TweakBarGUI, "Hot Color", TW_TYPE_COLOR32, &_TweakBarProperties._HotColor, " coloralpha=true ");
 }
 }
 
@@ -250,13 +214,6 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
     // Get a reference on the dynamics of this project
     //_AttractorHandle = a_pAttractorHandle;
     //_ColorUpdaterHandle = a_pColorUpdater;
-    
-    // AntTweakBar initialization
-    TwInit(TW_OPENGL, nullptr);
-    TwWindowSize(640, 480);
-    _TweakBarGUI = TwNewBar("LightProject");
-    TwDefine(" LightProject refresh=0.5 ");
-    BuildAntTweakBarGUI();
 
     // TODO: If it's worth it, move these hardcoded values someplace else
     yaw = -90.0f;
@@ -282,24 +239,10 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
-    TwTerminate();
   });
 }
 
 void Update() { 
-  // Update tweakbar properties
-  _TweakBarProperties._ActiveParticleCount = particle_module::GetActiveParticlesCount();
-  _TweakBarProperties._FPS = timer::Chrono::GetInstance().GetFPS();
-
-  // Update color gradient if needed
-  //if (_TweakBarProperties._PrevColdColor != _TweakBarProperties._ColdColor ||
-  //  _TweakBarProperties._PrevHotColor != _TweakBarProperties._HotColor) {
-  //  _ColorUpdaterHandle->UpdateColorGradient(_TweakBarProperties._HotColor, _TweakBarProperties._ColdColor);
-  //  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
-  //  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
-  //}
-
-  TwDraw();
 }
 } /* namespace event_handler*/
 } /* namespace light_project */

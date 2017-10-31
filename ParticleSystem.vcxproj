@@ -201,7 +201,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(GLFW_HOME)\lib-vc2015;$(ANTTWEAKBAR_HOME)/lib;$(GLEW_HOME)\lib\Release\x64;$(FREEIMAGE_HOME)\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;OpenGL32.lib;FreeImage.lib;AntTweakBar64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32.lib;glew32s.lib;glfw3.lib;glfw3dll.lib;OpenGL32.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

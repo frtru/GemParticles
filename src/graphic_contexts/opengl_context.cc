@@ -72,6 +72,13 @@ void OpenGLContext::InitImpl() {
   /* Initialize the library */
   if (!glfwInit())
     std::cerr << "OpenGLSetup -> glfwInit failed!" << std::endl;
+  
+  // Modern OpenGL
+  // NOTE: MUST BE COMMENTED-OUT IN ORDER TO USE ANTTWEAKBAR
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   /* Create a windowed mode window and its OpenGL context */
   m_pWindow = glfwCreateWindow(640, 480, "GemParticles", NULL, NULL);
