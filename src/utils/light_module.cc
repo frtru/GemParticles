@@ -22,18 +22,18 @@
 namespace gem { namespace particle {
 namespace light {
 namespace {
-constexpr GLuint        LIGHTS_SSBO_BINDING_POINT = 0U;
-GLuint                  _MaxLightCount = 10U;
+constexpr GLuint        LIGHTS_SSBO_BINDING_POINT = 1U;
+GLuint                  _MaxLightCount = 0u;
 std::vector<Light>      _Lights;
 std::once_flag          _InitFlag;
 std::once_flag          _TerminateFlag;
 
 void UpdateLightsGPUBuffer(std::size_t a_unIndex) {
   // Check if capacity changed after add
-  if (_MaxLightCount != _Lights.capacity()) {
-    _MaxLightCount = _Lights.capacity();
+  if (_MaxLightCount != _Lights.size()) {
+    _MaxLightCount = _Lights.size();
     shader::module::UpdateSSBOBlockData(
-      LIGHTS_SSBO_BINDING_POINT, _MaxLightCount,
+      LIGHTS_SSBO_BINDING_POINT, _MaxLightCount* sizeof(Light),
       static_cast<void*>(_Lights.data()));
   }
   else { // Otherwise just update 
@@ -51,7 +51,7 @@ void Init() {
     _Lights.reserve(_MaxLightCount);
     shader::module::RegisterSSBOBlock(
       LIGHTS_SSBO_BINDING_POINT,
-      _Lights.capacity() * sizeof(Light),
+      _Lights.size() * sizeof(Light),
       static_cast<void*>(_Lights.data()));
   });
 }
