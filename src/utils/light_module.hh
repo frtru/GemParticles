@@ -18,12 +18,15 @@
 
 namespace gem { namespace particle {
 namespace light {
+// Requires padding at the end in order to be used
+// in a SSBO
 struct Light {
   glm::f32vec3  position;
   glm::f32vec3  color;
   float         intensity;
   float         attenuation;
   float         radius;
+  float         padding[3];
 };
 struct SpotLight {
   glm::f32vec3  position;
