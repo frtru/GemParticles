@@ -19,7 +19,7 @@ layout (std430, binding = 1) readonly buffer LightsData {
 	Light lights[];
 };
 
-uniform vec3 ambient_light_color;
+uniform vec3  ambient_light_color;
 uniform float ambient_light_intensity;
 
 in  vec3 ex_FragPos;
@@ -40,14 +40,15 @@ void main(void)
 		// Basic diffuse light
 		vec3 norm = normalize(ex_Normal); // in this project the normals are all normalized anyway...
 		vec3 lightDir = normalize(wLight.position - ex_FragPos);
-		float diff = max(dot(norm, lightDir), 0.0);
-		diffuse += diff * wLight.color;
+		vec3 diff = max(dot(norm, lightDir), 0.0) * wLight.color;
+		diffuse = max(diff,diffuse);
 		
 		// Basic specular light
 		vec3 viewDir = normalize(eye - ex_FragPos);
 		vec3 reflectDir = reflect(-lightDir, norm);  
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-		specular += wLight.intensity * spec * wLight.color;  
+		vec3 specLight = wLight.intensity * spec * wLight.color;
+		specular = max(specLight,specular);  
 	}
 
 	out_Color = ex_Color * vec4(specular + diffuse + ambient_light,1.0); 
