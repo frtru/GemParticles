@@ -24,6 +24,7 @@
 #include "core/particle_module.hh"
 #include "utils/timer.hh"
 #include "utils/camera.hh"
+#include "utils/light_module.hh"
 #include <glm/gtc/matrix_transform.inl>
 
 #include "projects/light/scene_with_light.hh"
@@ -160,6 +161,8 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
   auto up = camera::GetUpVector();
   auto camera_right = glm::normalize(glm::cross(camera_direction, up)) * camera_speed;
   auto camera_forward = camera_direction * camera_speed;
+  constexpr std::size_t lightNumber = 1U;
+  light::Light wLight = light::module::GetLight(lightNumber);
     switch(a_nKeyID) {
       // Move forward
       case GLFW_KEY_W:
@@ -191,6 +194,30 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         break;
       case GLFW_KEY_SPACE:
         camera::LookAt(position, { 0.0f,0.0f,0.0f }, camera::GetUpVector());
+        break;
+      case GLFW_KEY_U:
+        wLight.position += glm::f32vec3(0.1f,0.0f,0.0f);
+        light::module::UpdateLight(lightNumber, wLight);
+        break;
+      case GLFW_KEY_I:
+        wLight.position += glm::f32vec3(0.0f, 0.1f, 0.0f);
+        light::module::UpdateLight(lightNumber, wLight);
+        break;
+      case GLFW_KEY_O:
+        wLight.position += glm::f32vec3(0.0f, 0.0f, 0.1f);
+        light::module::UpdateLight(lightNumber, wLight);
+        break;
+      case GLFW_KEY_J:
+        wLight.position -= glm::f32vec3(0.1f, 0.0f, 0.0f);
+        light::module::UpdateLight(lightNumber, wLight);
+        break;
+      case GLFW_KEY_K:
+        wLight.position -= glm::f32vec3(0.0f, 0.1f, 0.0f);
+        light::module::UpdateLight(lightNumber, wLight);
+        break;
+      case GLFW_KEY_L:
+        wLight.position -= glm::f32vec3(0.0f, 0.0f, 0.1f);
+        light::module::UpdateLight(lightNumber, wLight);
         break;
       default:
         break;

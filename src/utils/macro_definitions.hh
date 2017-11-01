@@ -58,6 +58,7 @@
   ClassName& operator=(ClassName&& other) = delete;
 
 // Alignment cross-compiler compatible (useful for SIMD instructions) 
+// DEPRECATED: C++11 offers the alignas directive
 #if defined(_MSC_VER)
 #define ALIGNED_(x) __declspec(align(x))
 #else
