@@ -91,6 +91,8 @@ const GLfloat BOX_POINTS[] = {
   -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f
 };
 
+// NOTE : With the material being sent through with an uniform,
+// This is actually not being used. The color is sent in the material directly.
 // According to : https://www.opengl.org/discussion_boards/showthread.php/171379-VBOs-Drawing-vertices-of-same-color
 // "You have to specify the color for each vertex."
 const unsigned char BOX_COLOR[] = {
@@ -145,6 +147,8 @@ GLuint  shader_program_ID;
 
 std::once_flag init_flag;
 std::once_flag terminate_flag;
+
+light::Material box_material;
 
 void DrawDebugObjects() {
   glBindVertexArray(vertex_array_IDs[0]);
@@ -264,6 +268,13 @@ void InitializeTestingBox() {
       4 * sizeof(unsigned char), nullptr);
   }
 }
+
+void UpdateMaterialUniform() {
+  shader::module::SetUniformVec3(shader_program_ID, "material.ambientFactor", box_material.ambientFactor);
+  shader::module::SetUniformVec3(shader_program_ID, "material.diffuseFactor", box_material.diffuseFactor);
+  shader::module::SetUniformVec3(shader_program_ID, "material.specularFactor", box_material.specularFactor);
+  shader::module::SetUniformFloat(shader_program_ID, "material.shininessFactor", box_material.shininessFactor);
+}
 }
 
 void Init(bool a_isDebug) {
@@ -278,6 +289,13 @@ void Init(bool a_isDebug) {
     shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
     shader::module::SetUniformVec3(shader_program_ID, "ambient_light_color", { 1.0f, 1.0f, 1.0f });
     shader::module::SetUniformFloat(shader_program_ID, "ambient_light_intensity", 0.5f);
+
+    // Color of the box is sent through the material
+    box_material.ambientFactor    = { 1.0f, 0.5f, 0.31f }; 
+    box_material.diffuseFactor    = { 1.0f, 0.5f, 0.31f };
+    box_material.specularFactor   = { 0.5f, 0.5f, 0.5f };
+    box_material.shininessFactor  = 32.0f;
+    UpdateMaterialUniform();
     shader::module::Detach();
     
     // Should already be initialized but just in case
@@ -346,13 +364,18 @@ void Terminate() {
   });
 }
 
+void UpdateMaterial(const light::Material& a_material) { box_material = a_material; }
+light::Material GetMaterial() { return box_material; }
+
 bool IsDebug() { return debug_mode; }
 void SetDebugOption(bool a_isDebug) { debug_mode = a_isDebug; }
 
 void Render() {
   if (debug_mode) {
     shader::module::Use(shader_program_ID);
+    UpdateMaterialUniform();
     DrawDebugObjects();
+    shader::module::Detach();
   }
 }
 } /* namespace scene */

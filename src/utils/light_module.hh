@@ -41,7 +41,7 @@ struct Material {
   glm::f32vec3  ambientFactor;
   glm::f32vec3  diffuseFactor;
   glm::f32vec3  specularFactor;
-  glm::f32vec3  shininessFactor;
+  float         shininessFactor;
 };
 namespace module {
 /* Setup functions */

@@ -14,12 +14,16 @@
 #ifndef SCENE_HH
 #define SCENE_HH
 
+#include "utils/light_module.hh"
+
 namespace gem { namespace particle {
 namespace light_project {
 namespace scene {
 void Init(bool a_isDebug = false);
 void Terminate();
 
+void UpdateMaterial(const light::Material& a_material);
+light::Material GetMaterial();
 bool IsDebug();
 void SetDebugOption(bool a_isDebug);
 void Render();

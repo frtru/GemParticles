@@ -161,8 +161,9 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
   auto up = camera::GetUpVector();
   auto camera_right = glm::normalize(glm::cross(camera_direction, up)) * camera_speed;
   auto camera_forward = camera_direction * camera_speed;
-  constexpr std::size_t lightNumber = 1U;
+  constexpr std::size_t lightNumber = 0U;
   light::Light wLight = light::module::GetLight(lightNumber);
+  light::Material wMaterial = scene::GetMaterial();
     switch(a_nKeyID) {
       // Move forward
       case GLFW_KEY_W:
@@ -196,28 +197,68 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         camera::LookAt(position, { 0.0f,0.0f,0.0f }, camera::GetUpVector());
         break;
       case GLFW_KEY_U:
-        wLight.position += glm::f32vec3(0.1f,0.0f,0.0f);
+        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(-0.1f, 0.0f, 0.0f) : glm::f32vec3(0.1f, 0.0f, 0.0f));
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_I:
-        wLight.position += glm::f32vec3(0.0f, 0.1f, 0.0f);
+        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, -0.1f, 0.0f) : glm::f32vec3(0.0f, 0.1f, 0.0f));
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_O:
-        wLight.position += glm::f32vec3(0.0f, 0.0f, 0.1f);
+        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, 0.0f, -0.1f) : glm::f32vec3(0.0f, 0.0f, 0.1f));
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_J:
-        wLight.position -= glm::f32vec3(0.1f, 0.0f, 0.0f);
+        wLight.intensity += (n_aMods == GLFW_MOD_CONTROL ? -0.1f : 0.1f);
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_K:
-        wLight.position -= glm::f32vec3(0.0f, 0.1f, 0.0f);
+        wLight.attenuation += (n_aMods == GLFW_MOD_CONTROL ? -0.1f : 0.1f);
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_L:
-        wLight.position -= glm::f32vec3(0.0f, 0.0f, 0.1f);
+        wLight.radius += (n_aMods == GLFW_MOD_CONTROL ? -0.1f : 0.1f);
         light::module::UpdateLight(lightNumber, wLight);
+        break;
+      case GLFW_KEY_KP_7:
+        wMaterial.ambientFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(-0.1f, 0.0f, 0.0f) : glm::f32vec3(0.1f, 0.0f, 0.0f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_8:
+        wMaterial.ambientFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, -0.1f, 0.0f) : glm::f32vec3(0.0f, 0.1f, 0.0f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_9:
+        wMaterial.ambientFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, 0.0f, -0.1f) : glm::f32vec3(0.0f, 0.0f, 0.1f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_4:
+        wMaterial.diffuseFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(-0.1f, 0.0f, 0.0f) : glm::f32vec3(0.1f, 0.0f, 0.0f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_5:
+        wMaterial.diffuseFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, -0.1f, 0.0f) : glm::f32vec3(0.0f, 0.1f, 0.0f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_6:
+        wMaterial.diffuseFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, 0.0f, -0.1f) : glm::f32vec3(0.0f, 0.0f, 0.1f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_1:
+        wMaterial.specularFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(-0.1f, 0.0f, 0.0f) : glm::f32vec3(0.1f, 0.0f, 0.0f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_2:
+        wMaterial.specularFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, -0.1f, 0.0f) : glm::f32vec3(0.0f, 0.1f, 0.0f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_3:
+        wMaterial.specularFactor += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, 0.0f, -0.1f) : glm::f32vec3(0.0f, 0.0f, 0.1f));
+        scene::UpdateMaterial(wMaterial);
+        break;
+      case GLFW_KEY_KP_0:
+        wMaterial.shininessFactor += (n_aMods == GLFW_MOD_CONTROL ? -0.1f: 0.1f);
+        scene::UpdateMaterial(wMaterial);
         break;
       default:
         break;
