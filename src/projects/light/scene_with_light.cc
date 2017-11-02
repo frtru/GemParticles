@@ -303,14 +303,14 @@ void Init(bool a_isDebug) {
 
     // Add lights in the scene in the SSBO
     light::Light wFrontLight, wBackLight;
-    wFrontLight.position = { 0.0f, 0.0f, 2.0f };
-    wFrontLight.color = { 1.0f, 1.0f, 1.0f };
+    wFrontLight.position = { 0.0f, 0.0f, 2.0f, 0.0f };
+    wFrontLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
     wFrontLight.intensity = 1.0f;
     wFrontLight.attenuation = 0.0f;
     wFrontLight.radius = 10.0f;
 
-    wBackLight.position = { 2.0f, 0.0f, 0.0f };
-    wBackLight.color = { 1.0f, 1.0f, 1.0f };
+    wBackLight.position = { 2.0f, 0.0f, 0.0f, 0.0f };
+    wBackLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
     wBackLight.intensity = 1.0f;
     wBackLight.attenuation = 0.0f;
     wBackLight.radius = 10.0f;

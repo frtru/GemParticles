@@ -197,15 +197,15 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
         camera::LookAt(position, { 0.0f,0.0f,0.0f }, camera::GetUpVector());
         break;
       case GLFW_KEY_U:
-        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(-0.1f, 0.0f, 0.0f) : glm::f32vec3(0.1f, 0.0f, 0.0f));
+        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::vec4(-0.1f, 0.0f, 0.0f, 0.0f) : glm::vec4(0.1f, 0.0f, 0.0f, 0.0f));
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_I:
-        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, -0.1f, 0.0f) : glm::f32vec3(0.0f, 0.1f, 0.0f));
+        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::vec4(0.0f, -0.1f, 0.0f, 0.0f) : glm::vec4(0.0f, 0.1f, 0.0f, 0.0f));
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_O:
-        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::f32vec3(0.0f, 0.0f, -0.1f) : glm::f32vec3(0.0f, 0.0f, 0.1f));
+        wLight.position += (n_aMods == GLFW_MOD_CONTROL ? glm::vec4(0.0f, 0.0f, -0.1f, 0.0f) : glm::vec4(0.0f, 0.0f, 0.1f, 0.0f));
         light::module::UpdateLight(lightNumber, wLight);
         break;
       case GLFW_KEY_J:

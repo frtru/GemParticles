@@ -3,8 +3,8 @@
 #version 430
 
 struct Light {
-  vec3  position;
-  vec3  color;
+  vec4  position;
+  vec4  color;
   float intensity;
   float attenuation;
   float radius;
@@ -59,11 +59,11 @@ void main(void)
 	vec3 specular = vec3(0.0,0.0,0.0);
 	for (i = 0; i < lights.length(); ++i) {
 		Light wLight = lights[i];
-		vec3 wLightColorsIntensity = wLight.color; // wLight.intensity not working?
+		vec3 wLightColorsIntensity = wLight.color.rgb * wLight.intensity;
 		// Basic diffuse light
 		vec3 norm = normalize(ex_Normal); // in this project the normals are all normalized anyway...
-		vec3 lightDir = normalize(wLight.position - ex_FragPos);
-		vec3 diff =  max(dot(norm, lightDir), 0.0) * wLight.color * material.diffuseFactor;
+		vec3 lightDir = normalize(wLight.position.xyz - ex_FragPos);
+		vec3 diff =  max(dot(norm, lightDir), 0.0) * wLightColorsIntensity * material.diffuseFactor;
 		diffuse = max(diff,diffuse);
 		
 		// Basic specular light
@@ -72,7 +72,7 @@ void main(void)
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininessFactor);
 		vec3 specLight = wLightColorsIntensity * (spec * material.specularFactor);
 		specular = max(specLight,specular);
-		//out_Color.rgb = vec3(wLight.intensity, wLight.attenuation, wLight.radius);
+		//out_Color.rgb = normalize(vec3(wLight.intensity, wLight.attenuation, wLight.radius));
 		//out_Color.a = 1.0;
 		//return;
 	}

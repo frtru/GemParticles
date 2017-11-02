@@ -19,14 +19,16 @@
 namespace gem { namespace particle {
 namespace light {
 // Requires padding at the end in order to be used
-// in a SSBO
+// in a SSBO. Also according to this post https://stackoverflow.com/questions/38172696/should-i-ever-use-a-vec3-inside-of-a-uniform-buffer-or-shader-storage-buffer-o
+// vec3 should never be used in SSBO. (Maybe this is due to std140?)
+// Maybe I could also use some padding at the end of each vec3 to emulate the gpu side
 struct Light {
-  glm::f32vec3  position;
-  glm::f32vec3  color;
+  glm::vec4  position;
+  glm::vec4  color;
   float         intensity;
   float         attenuation;
   float         radius;
-  float         padding[3];
+  float         padding;
 };
 struct SpotLight {
   glm::f32vec3  position;
