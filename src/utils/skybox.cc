@@ -83,12 +83,12 @@ GLuint skybox_positions_VBO_id;
 
 std::vector<std::string> texture_file_names;
 
-const std::string CUBE_MAP_TEXTURE_RIGHT_FILE_PATH  = "textures/skybox/right.jpg";
-const std::string CUBE_MAP_TEXTURE_LEFT_FILE_PATH   = "textures/skybox/left.jpg";
-const std::string CUBE_MAP_TEXTURE_TOP_FILE_PATH    = "textures/skybox/top.jpg";
-const std::string CUBE_MAP_TEXTURE_BOTTOM_FILE_PATH = "textures/skybox/bottom.jpg";
-const std::string CUBE_MAP_TEXTURE_BACK_FILE_PATH   = "textures/skybox/back.jpg";
-const std::string CUBE_MAP_TEXTURE_FRONT_FILE_PATH  = "textures/skybox/front.jpg";
+const std::string CUBE_MAP_TEXTURE_RIGHT_FILE_PATH  = "textures/skybox2/posx.jpg";
+const std::string CUBE_MAP_TEXTURE_LEFT_FILE_PATH   = "textures/skybox2/negx.jpg";
+const std::string CUBE_MAP_TEXTURE_TOP_FILE_PATH    = "textures/skybox2/posy.jpg";
+const std::string CUBE_MAP_TEXTURE_BOTTOM_FILE_PATH = "textures/skybox2/negy.jpg";
+const std::string CUBE_MAP_TEXTURE_BACK_FILE_PATH   = "textures/skybox2/posz.jpg";
+const std::string CUBE_MAP_TEXTURE_FRONT_FILE_PATH  = "textures/skybox2/negz.jpg";
 
 void InitializeCube() {
   glGenVertexArrays(1, &skybox_VAO_id);
