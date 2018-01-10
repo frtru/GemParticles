@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/glass/glass_project.hh"
+#include "projects/skybox/skybox_project.hh"
 //C system files
 //C++ system files
 #include <memory>
@@ -29,11 +29,11 @@
 #include "core/particle_module.hh"
 
 // Specific project particle blueprints
-#include "projects/glass/glass_event_handler.hh"
-#include "projects/glass/glass_scene.hh"
+#include "projects/skybox/skybox_event_handler.hh"
+#include "projects/skybox/skybox_scene.hh"
 
 namespace gem { namespace particle {
-namespace glass_project {
+namespace skybox_project {
 namespace {
 // A pointer to interface, to enable flexibility over
 // window management system or 3D API (GLFW/Windows
@@ -42,9 +42,9 @@ std::shared_ptr<GraphicContext> graphic_context;
 }
 
 void RegisterProject() {
-  project_dict::AddStage("glass", std::bind(&Init));
-  project_dict::AddStage("glass", std::bind(&Run));
-  project_dict::AddStage("glass", std::bind(&Terminate));
+  project_dict::AddStage("skybox", std::bind(&Init));
+  project_dict::AddStage("skybox", std::bind(&Run));
+  project_dict::AddStage("skybox", std::bind(&Terminate));
 }
 
 void Init() {
@@ -53,7 +53,7 @@ void Init() {
   graphic_context->Init();
 
   shader::module::Init();
-  shader::factory::SetShadersFolderBasePath("src/projects/glass/shaders/");
+  shader::factory::SetShadersFolderBasePath("src/projects/skybox/shaders/");
   texture::module::Init();
 
   // Camera initialization
@@ -107,7 +107,7 @@ void Terminate() {
   shader::module::Terminate();
   graphic_context->Terminate();
 }
-} /* namespace glass_project */
+} /* namespace skybox_project */
 } /* namespace particle */
 } /* namespace gem */
 

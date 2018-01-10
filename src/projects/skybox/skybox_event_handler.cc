@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/glass/glass_event_handler.hh"
+#include "projects/skybox/skybox_event_handler.hh"
 
 #include <iostream>
 #include <mutex>
@@ -27,10 +27,10 @@
 #include "utils/light_module.hh"
 #include <glm/gtc/matrix_transform.inl>
 
-#include "projects/glass/glass_scene.hh"
+#include "projects/skybox/skybox_scene.hh"
 
 namespace gem { namespace particle {
-namespace glass_project {
+namespace skybox_project {
 namespace event_handler {
 namespace {
 
@@ -313,6 +313,6 @@ void Terminate() {
 void Update() { 
 }
 } /* namespace event_handler*/
-} /* namespace glass_project */
+} /* namespace skybox_project */
 } /* namespace particle */
 } /* namespace gem */

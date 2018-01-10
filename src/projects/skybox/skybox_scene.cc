@@ -11,7 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/glass/glass_scene.hh"
+#include "projects/skybox/skybox_scene.hh"
 
 #include <iostream>
 #include <mutex>
@@ -24,7 +24,7 @@
 #include "utils/skybox.hh"
 
 namespace gem { namespace particle {
-namespace glass_project {
+namespace skybox_project {
 namespace scene {
 namespace {
 const GLfloat AXES_POINTS[] = {
@@ -383,6 +383,6 @@ void Render() {
   }
 }
 } /* namespace scene */
-} /* namespace glass_project */
+} /* namespace skybox_project */
 } /* namespace particle */
 } /* namespace gem */

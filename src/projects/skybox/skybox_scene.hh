@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Fran�ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,17 +11,26 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLASS_PROJECT_HH
-#define GLASS_PROJECT_HH
+#ifndef SKYBOX_SCENE_HH
+#define SKYBOX_SCENE_HH
+
+#include "utils/light_module.hh"
 
 namespace gem { namespace particle {
-namespace glass_project {
-void RegisterProject();
-void Init();
-void Run();
+namespace skybox_project {
+namespace scene {
+void Init(bool a_isDebug = false);
 void Terminate();
-} /* namespace glass_project */
+
+void UpdateMaterial(const light::Material& a_material);
+light::Material GetMaterial();
+bool IsDebug();
+void SetDebugOption(bool a_isDebug);
+void Render();
+} /* namespace scene */
+} /* namespace skybox_project */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: GLASS_PROJECT_HH */
+#endif /* end of include guard: SKYBOX_SCENE_HH */
+

@@ -11,22 +11,22 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef GLASS_EVENT_HANDLER_HH
-#define GLASS_EVENT_HANDLER_HH
+#ifndef SKYBOX_EVENT_HANDLER_HH
+#define SKYBOX_EVENT_HANDLER_HH
 
 #include <memory>
 #include "graphic_contexts/graphic_context.hh"
 
 namespace gem { namespace particle {
-namespace glass_project {
+namespace skybox_project {
 namespace event_handler {
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
 void Terminate();
 void Update();
 } /* namespace event_handler*/
-} /* namespace glass_project */
+} /* namespace skybox_project */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: GLASS_EVENT_HANDLER_HH */
+#endif /* end of include guard: SKYBOX_EVENT_HANDLER_HH */
 
