@@ -16,6 +16,7 @@
 
 #include <GL/glew.h>
 #include <string>
+#include <vector>
 
 namespace texture {
 namespace factory {
@@ -29,6 +30,15 @@ GLuint Create2DTexture(const std::string& a_sFileName,
   GLint a_nTexVerticalWrapParam = GL_REPEAT,
   GLint a_nInternalFormat = GL_RGBA8, 
   GLint a_nImageFormat = GL_BGRA);
+
+GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
+  GLint a_nMagFilterParam = GL_LINEAR,
+  GLint a_nMinFilterParm = GL_LINEAR,
+  GLint a_nTexHorizontalWrapParam = GL_CLAMP_TO_EDGE,
+  GLint a_nTexVerticalWrapParam = GL_CLAMP_TO_EDGE,
+  GLint a_nTexDepthWrapParam = GL_CLAMP_TO_EDGE,
+  GLint a_nInternalFormat = GL_RGB,
+  GLint a_nImageFormat = GL_BGR);
 } /* namespace factory */
 } /* namespace texture */
 #endif /* end of include guard: TEXTURE_FACTORY_HH */

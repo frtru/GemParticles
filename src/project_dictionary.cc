@@ -20,6 +20,7 @@
 #include "projects/rain/rain_project.hh"
 #include "projects/attractors/attractor_project.hh"
 #include "projects/light/light_project.hh"
+#include "projects/glass/glass_project.hh"
 //#include "projects/glass_particles/glass_particles_project.hh"
 
 namespace gem {
@@ -39,6 +40,7 @@ void Init() {
     rain_project::RegisterProject();
     attractor_project::RegisterProject();
     light_project::RegisterProject();
+	glass_project::RegisterProject();
   });
 }
 

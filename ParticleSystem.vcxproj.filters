@@ -50,6 +50,12 @@
     <Filter Include="projects\light\shaders">
       <UniqueIdentifier>{7ca138bb-fbc3-4370-979c-3a1eadfdbab5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="projects\glass">
+      <UniqueIdentifier>{385e24bf-68c2-4960-9bab-405f9be7e783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="projects\glass\shaders">
+      <UniqueIdentifier>{de707219-0550-43aa-9d60-19227d7183cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\particle_module.cc">
@@ -146,6 +152,18 @@
       <Filter>projects\light</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\light_module.cc">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\glass\glass_event_handler.cc">
+      <Filter>projects\glass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\glass\glass_project.cc">
+      <Filter>projects\glass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\glass\glass_scene.cc">
+      <Filter>projects\glass</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\skybox.cc">
       <Filter>utils</Filter>
     </ClCompile>
   </ItemGroup>
@@ -281,6 +299,18 @@
     <ClInclude Include="src\utils\light_module.hh">
       <Filter>utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\projects\glass\glass_event_handler.hh">
+      <Filter>projects\glass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\glass\glass_project.hh">
+      <Filter>projects\glass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\glass\glass_scene.hh">
+      <Filter>projects\glass</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\skybox.hh">
+      <Filter>utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\projects\rain\shaders\debug_axes.vert">
@@ -345,6 +375,27 @@
     </None>
     <None Include="src\projects\light\shaders\default.frag">
       <Filter>projects\light\shaders</Filter>
+    </None>
+    <None Include="src\projects\glass\shaders\default.frag">
+      <Filter>projects\glass\shaders</Filter>
+    </None>
+    <None Include="src\projects\glass\shaders\particle_billboard.geom">
+      <Filter>projects\glass\shaders</Filter>
+    </None>
+    <None Include="src\projects\glass\shaders\particle_billboard.vert">
+      <Filter>projects\glass\shaders</Filter>
+    </None>
+    <None Include="src\projects\glass\shaders\scene.vert">
+      <Filter>projects\glass\shaders</Filter>
+    </None>
+    <None Include="src\projects\glass\shaders\simple_texture.frag">
+      <Filter>projects\glass\shaders</Filter>
+    </None>
+    <None Include="src\projects\glass\shaders\skybox.frag">
+      <Filter>projects\glass\shaders</Filter>
+    </None>
+    <None Include="src\projects\glass\shaders\skybox.vert">
+      <Filter>projects\glass\shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -33,7 +33,8 @@ FIBITMAP       *bitmap_handle; //pointer to the image, once loaded
 bool LoadImage(const std::string& a_sFileName,
   unsigned char **a_pImage,
   GLsizei& a_rWidth,
-  GLsizei& a_rHeight) {
+  GLsizei& a_rHeight,
+  bool a_bImageHasAlphaChannel) {
   const char *wFilename = a_sFileName.c_str();
   bitmap_handle = nullptr;
   //image format
@@ -55,7 +56,9 @@ bool LoadImage(const std::string& a_sFileName,
 
   //check that the plugin has reading capabilities and load the file
   if (FreeImage_FIFSupportsReading(fif))
-    bitmap_handle = FreeImage_ConvertTo32Bits(FreeImage_Load(fif, wFilename));
+    bitmap_handle = a_bImageHasAlphaChannel ?
+      FreeImage_ConvertTo32Bits(FreeImage_Load(fif, wFilename)) :
+      FreeImage_Load(fif, wFilename);
   //if the image failed to load, return failure
   if (!bitmap_handle)
     return false;
@@ -99,13 +102,13 @@ void Terminate() {
 }
 
 GLuint Create2DTexture(const std::string& a_sFileName,
-  GLint a_nMagFilterParam, GLint a_nMinFilterParm,
-  GLint a_nTexHorizontalWrapParam, GLint a_nTexVerticalWrapParam,
-  GLint a_nInternalFormat, GLint a_nImageFormat) {
+ GLint a_nMagFilterParam, GLint a_nMinFilterParm,
+ GLint a_nTexHorizontalWrapParam, GLint a_nTexVerticalWrapParam,
+ GLint a_nInternalFormat, GLint a_nImageFormat) {
   GLsizei wWidth, wHeight;
   unsigned char *wImage = nullptr;
   
-  if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight)) {
+  if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight, a_nInternalFormat == GL_RGBA)) {
     std::cerr << "texture_factory::Create2DTexture -> Loading image failed. " << std::endl
       << "Returning 0xFFFFFFFF..." << std::endl;
     return 0xFFFFFFFF;
@@ -133,6 +136,46 @@ GLuint Create2DTexture(const std::string& a_sFileName,
 
   FreeImage();
   glBindTexture(GL_TEXTURE_2D, 0);
+
+  return wTexture;
+}
+
+GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
+ GLint a_nMagFilterParam, GLint a_nMinFilterParm,
+ GLint a_nTexHorizontalWrapParam, GLint a_nTexVerticalWrapParam, GLint a_nTexDepthWrapParam,
+ GLint a_nInternalFormat, GLint a_nImageFormat) {
+  GLuint wTexture;
+  glGenTextures(1, &wTexture);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, wTexture);
+  
+  for (std::size_t i = 0; i < a_vTextures.size(); ++i) {
+    std::string textureFileName = a_vTextures[i];
+    GLsizei wWidth, wHeight;
+    unsigned char *wImage = nullptr;
+
+    if (!LoadImage(textureFileName, &wImage, wWidth, wHeight, a_nInternalFormat == GL_RGBA)) {
+      std::cerr << "texture_factory::CreateCubeMap -> Loading image " << textureFileName << " failed.\n"
+        << "Returning 0xFFFFFFFF..." << std::endl;
+      return 0xFFFFFFFF;
+    }
+    glTexImage2D(
+      GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,      // 2D texture target
+      0,                  // Base mipmap level
+      a_nInternalFormat,  // RGB color components
+      wWidth, wHeight,    // Dimensions
+      0,                  // Must be 0...
+      a_nImageFormat,     // Pixel data format
+      GL_UNSIGNED_BYTE,   // Depends on what the LoadImage function return type
+      wImage);            // Loaded image
+
+    FreeImage();
+  }
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, a_nMagFilterParam);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, a_nMinFilterParm);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, a_nTexHorizontalWrapParam);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, a_nTexVerticalWrapParam);
+  glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, a_nTexDepthWrapParam);
+  glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 
   return wTexture;
 }

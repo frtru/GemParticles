@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 FranÃ§ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,15 +11,17 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef GLASS_PROJECT_HH
+#define GLASS_PROJECT_HH
 
-using namespace gem::particle;
+namespace gem { namespace particle {
+namespace glass_project {
+void RegisterProject();
+void Init();
+void Run();
+void Terminate();
+} /* namespace glass_project */
+} /* namespace particle */
+} /* namespace gem */
 
-int main(int argc, const char *argv[]) {
-  app::Launch("glass");
-  return app::GetAppStatusError();
-}
+#endif /* end of include guard: GLASS_PROJECT_HH */

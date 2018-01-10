@@ -11,20 +11,20 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/light/scene_with_light.hh"
+#include "projects/glass/glass_scene.hh"
 
 #include <iostream>
 #include <mutex>
 
 #include <GL/glew.h>
 
-// shader utilities
 #include "utils/shader_factory.hh"
 #include "utils/shader_module.hh"
 #include "utils/light_module.hh"
+#include "utils/skybox.hh"
 
 namespace gem { namespace particle {
-namespace light_project {
+namespace glass_project {
 namespace scene {
 namespace {
 const GLfloat AXES_POINTS[] = {
@@ -281,6 +281,8 @@ void Init(bool a_isDebug) {
   std::call_once(init_flag, [&]() {
     debug_mode = a_isDebug;
 
+    skybox::LoadSkyBox();
+
     shader::factory::CompileShaderFile("scene.vert", GL_VERTEX_SHADER);
     shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
     shader_program_ID = shader::factory::CreateProgram();
@@ -338,6 +340,7 @@ void Init(bool a_isDebug) {
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
+    skybox::Destroy();
     if (axes_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
       std::cout << "scene::Terminate -> Deallocating vertex VBO" << std::endl;
       glDeleteBuffers(1, &axes_VBO_IDs[POSITIONS_VBO_IDX]);
@@ -371,6 +374,7 @@ bool IsDebug() { return debug_mode; }
 void SetDebugOption(bool a_isDebug) { debug_mode = a_isDebug; }
 
 void Render() {
+  skybox::Render();
   if (debug_mode) {
     shader::module::Use(shader_program_ID);
     UpdateMaterialUniform();
@@ -379,6 +383,6 @@ void Render() {
   }
 }
 } /* namespace scene */
-} /* namespace light_project */
+} /* namespace glass_project */
 } /* namespace particle */
 } /* namespace gem */

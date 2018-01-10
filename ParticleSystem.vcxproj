@@ -35,6 +35,9 @@
     <ClCompile Include="src\projects\attractors\attractor_system_blueprint.cc" />
     <ClCompile Include="src\projects\attractors\avx_particle_attractor.cc" />
     <ClCompile Include="src\projects\attractors\proximity_color_updater.cc" />
+    <ClCompile Include="src\projects\glass\glass_event_handler.cc" />
+    <ClCompile Include="src\projects\glass\glass_project.cc" />
+    <ClCompile Include="src\projects\glass\glass_scene.cc" />
     <ClCompile Include="src\projects\light\light_event_handler.cc" />
     <ClCompile Include="src\projects\light\light_project.cc" />
     <ClCompile Include="src\projects\light\scene_with_light.cc" />
@@ -51,6 +54,7 @@
     <ClCompile Include="src\utils\scene.cc" />
     <ClCompile Include="src\utils\shader_factory.cc" />
     <ClCompile Include="src\utils\shader_module.cc" />
+    <ClCompile Include="src\utils\skybox.cc" />
     <ClCompile Include="src\utils\texture_factory.cc" />
     <ClCompile Include="src\utils\texture_module.cc" />
   </ItemGroup>
@@ -78,6 +82,9 @@
     <ClInclude Include="src\projects\attractors\attractor_system_blueprint.hh" />
     <ClInclude Include="src\projects\attractors\avx_particle_attractor.hh" />
     <ClInclude Include="src\projects\attractors\proximity_color_updater.hh" />
+    <ClInclude Include="src\projects\glass\glass_event_handler.hh" />
+    <ClInclude Include="src\projects\glass\glass_project.hh" />
+    <ClInclude Include="src\projects\glass\glass_scene.hh" />
     <ClInclude Include="src\projects\light\light_event_handler.hh" />
     <ClInclude Include="src\projects\light\light_project.hh" />
     <ClInclude Include="src\projects\light\scene_with_light.hh" />
@@ -97,6 +104,7 @@
     <ClInclude Include="src\utils\shader_factory.hh" />
     <ClInclude Include="src\utils\shader_module.hh" />
     <ClInclude Include="src\utils\singleton.hh" />
+    <ClInclude Include="src\utils\skybox.hh" />
     <ClInclude Include="src\utils\texture_factory.hh" />
     <ClInclude Include="src\utils\texture_module.hh" />
     <ClInclude Include="src\utils\timer.hh" />
@@ -113,6 +121,13 @@
     <None Include="shaders\simple_texture.frag" />
     <None Include="shaders\test.frag" />
     <None Include="shaders\test.vert" />
+    <None Include="src\projects\glass\shaders\default.frag" />
+    <None Include="src\projects\glass\shaders\particle_billboard.geom" />
+    <None Include="src\projects\glass\shaders\particle_billboard.vert" />
+    <None Include="src\projects\glass\shaders\scene.vert" />
+    <None Include="src\projects\glass\shaders\simple_texture.frag" />
+    <None Include="src\projects\glass\shaders\skybox.frag" />
+    <None Include="src\projects\glass\shaders\skybox.vert" />
     <None Include="src\projects\light\shaders\scene.vert" />
     <None Include="src\projects\light\shaders\default.frag" />
     <None Include="src\projects\light\shaders\particle_billboard.geom" />

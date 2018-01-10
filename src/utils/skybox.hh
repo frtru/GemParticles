@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,15 +11,26 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef SKYBOX_HH
+#define SKYBOX_HH
 
-using namespace gem::particle;
+#include <string>
+#include <vector>
 
-int main(int argc, const char *argv[]) {
-  app::Launch("glass");
-  return app::GetAppStatusError();
-}
+namespace gem {
+namespace particle {
+namespace skybox {
+void LoadSkyBox();
+void Destroy();
+// Can be used BEFORE calling LoadSkyBox to override
+// the textures used for the skybox.
+// NOTE: The textures must be provided in the following
+// order: right, left, top, bottom, back, front.
+void SetTextures(std::vector<std::string>&& a_vTextures);
+void Render();
+} /* namespace skybox */
+} /* namespace particle */
+} /* namespace gem */
+
+#endif /* end of include guard: SKYBOX_HH */
+
