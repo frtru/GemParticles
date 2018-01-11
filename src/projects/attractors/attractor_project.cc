@@ -97,6 +97,11 @@ void Run() {
     const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
     ImGui_ImplGlfwGL3_NewFrame();
 
+    ImGui::Begin("Stats");
+    ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Total active particles = %d\n", particle_module::GetActiveParticlesCount());
+    ImGui::End();
+
     scene::Render();
     particle_module::Update(dt);
 
