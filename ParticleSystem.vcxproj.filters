@@ -56,6 +56,12 @@
     <Filter Include="projects\skybox\shaders">
       <UniqueIdentifier>{de707219-0550-43aa-9d60-19227d7183cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utils\imgui">
+      <UniqueIdentifier>{43ff2d50-05f9-495f-bc74-41e396987bc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utils\imgui\extra_fonts">
+      <UniqueIdentifier>{30a62775-a8e2-4f14-8ea6-ff6818110d0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\particle_module.cc">
@@ -165,6 +171,18 @@
     </ClCompile>
     <ClCompile Include="src\projects\skybox\skybox_scene.cc">
       <Filter>projects\skybox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\imgui\imgui.cpp">
+      <Filter>utils\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\imgui\imgui_demo.cpp">
+      <Filter>utils\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\imgui\imgui_draw.cpp">
+      <Filter>utils\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\imgui\imgui_glfw.cpp">
+      <Filter>utils\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -311,6 +329,27 @@
     <ClInclude Include="src\projects\skybox\skybox_scene.hh">
       <Filter>projects\skybox</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\imgui\imconfig.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\imgui\imgui.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\imgui\imgui_internal.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\imgui\stb_rect_pack.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\imgui\stb_textedit.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\imgui\stb_truetype.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\imgui\imgui_glfw.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\projects\rain\shaders\debug_axes.vert">
@@ -397,5 +436,25 @@
     <None Include="src\projects\skybox\shaders\skybox.vert">
       <Filter>projects\skybox\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="src\utils\imgui\extra_fonts\Cousine-Regular.ttf">
+      <Filter>utils\imgui\extra_fonts</Filter>
+    </Font>
+    <Font Include="src\utils\imgui\extra_fonts\DroidSans.ttf">
+      <Filter>utils\imgui\extra_fonts</Filter>
+    </Font>
+    <Font Include="src\utils\imgui\extra_fonts\Karla-Regular.ttf">
+      <Filter>utils\imgui\extra_fonts</Filter>
+    </Font>
+    <Font Include="src\utils\imgui\extra_fonts\ProggyClean.ttf">
+      <Filter>utils\imgui\extra_fonts</Filter>
+    </Font>
+    <Font Include="src\utils\imgui\extra_fonts\ProggyTiny.ttf">
+      <Filter>utils\imgui\extra_fonts</Filter>
+    </Font>
+    <Font Include="src\utils\imgui\extra_fonts\Roboto-Medium.ttf">
+      <Filter>utils\imgui\extra_fonts</Filter>
+    </Font>
   </ItemGroup>
 </Project>

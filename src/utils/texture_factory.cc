@@ -140,6 +140,26 @@ GLuint Create2DTexture(const std::string& a_sFileName,
   return wTexture;
 }
 
+GLuint CreateTextureFromMemoryPixels(unsigned char *pixels, GLint width, GLint height) {
+  GLuint wTexture;
+  glGenTextures(1, &wTexture);
+  glBindTexture(GL_TEXTURE_2D, wTexture);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glTexImage2D(
+    GL_TEXTURE_2D,      // 2D texture target
+    0,                  // Base mipmap level
+    GL_RGBA,            // RGB color components
+    width, height,      // Dimensions
+    0,                  // Must be 0...
+    GL_RGBA,            // Pixel data format
+    GL_UNSIGNED_BYTE,   // Depends on what the LoadImage function return type
+    pixels);            // Loaded image
+  return wTexture;
+}
+
 GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
  GLint a_nMagFilterParam, GLint a_nMinFilterParm,
  GLint a_nTexHorizontalWrapParam, GLint a_nTexVerticalWrapParam, GLint a_nTexDepthWrapParam,

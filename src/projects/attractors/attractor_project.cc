@@ -17,7 +17,8 @@
 #include <memory>
 #include <iostream>
 //Other libraries' .h files
-#include <AntTweakBar.h>
+#include "utils/imgui/imgui_glfw.h"
+//#include <AntTweakBar.h>
 //Your project's .h files
 #include "project_dictionary.hh"
 #include "utils/timer.hh"
@@ -57,6 +58,10 @@ void Init() {
   shader::factory::SetShadersFolderBasePath("shaders/");
   texture::module::Init();
 
+  // ImGui initialization
+  ImGui_ImplGlfwGL3_Init(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
+  ImGui::StyleColorsClassic(); 
+
   // Camera initialization
   camera::Init();
   camera::LookAt( 
@@ -89,12 +94,16 @@ void Run() {
     graphic_context->GetWindowHandle()), "GemParticles");
   while (!graphic_context->PollWindowClosedEvent()) {
     const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
-    
+    ImGui_ImplGlfwGL3_NewFrame();
+
+    ImGui::Text("Hello, world!");                           // Some text (you can use a format string too)
+
     scene::Render();
     particle_module::Update(dt);
 
     event_handler::Update(); // Has to be placed before before clearing depth buffer bit
     graphic_context->Update();
+    ImGui::Render();
 
     timer::Chrono::GetInstance().Update();
   }
@@ -107,6 +116,7 @@ void Terminate() {
   event_handler::Terminate();
   texture::module::Terminate();
   shader::module::Terminate();
+  ImGui_ImplGlfwGL3_Shutdown();
   graphic_context->Terminate();
 }
 } /* namespace rain_project */

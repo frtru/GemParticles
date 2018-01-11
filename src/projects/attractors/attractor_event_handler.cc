@@ -18,13 +18,14 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <AntTweakBar.h>
+//#include <AntTweakBar.h>
 
 #include "graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"
 #include "utils/timer.hh"
 #include "utils/scene.hh"
 #include "utils/camera.hh"
+#include "utils/texture_factory.hh"
 #include <glm/gtc/matrix_transform.inl>
 
 namespace gem { namespace particle {
@@ -68,39 +69,39 @@ struct TweakBarGUIProperties {
 std::shared_ptr<GraphicContext>         context_handle;
 std::shared_ptr<ParticleAttractor>      _AttractorHandle;
 std::shared_ptr<ProximityColorUpdater>  _ColorUpdaterHandle;
-TwBar*                                  _TweakBarGUI;
+//TwBar*                                  _TweakBarGUI;
 
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
-  if (!TwEventMouseButtonGLFW(a_nButtonID, a_nAction)) {
-    switch (a_nButtonID) {
-    case GLFW_MOUSE_BUTTON_LEFT:
-      if (a_nAction == GLFW_PRESS) {
-        mouse_state = POI_MOVING;
-      }
-      else {
-        mouse_state = FREE_CURSOR;
-        firstMouse = true;
-      }
-      break;
-    case GLFW_MOUSE_BUTTON_MIDDLE:
-      break;
-    case GLFW_MOUSE_BUTTON_RIGHT:
-      if (a_nAction == GLFW_PRESS) {
-        mouse_state = CAMERA_MOVING;
-      }
-      else {
-        mouse_state = FREE_CURSOR;
-        firstMouse = true;
-      }
-      break;
-    default:
-      break;
+  //if (!TwEventMouseButtonGLFW(a_nButtonID, a_nAction)) {
+  switch (a_nButtonID) {
+  case GLFW_MOUSE_BUTTON_LEFT:
+    if (a_nAction == GLFW_PRESS) {
+      mouse_state = POI_MOVING;
     }
+    else {
+      mouse_state = FREE_CURSOR;
+      firstMouse = true;
+    }
+    break;
+  case GLFW_MOUSE_BUTTON_MIDDLE:
+    break;
+  case GLFW_MOUSE_BUTTON_RIGHT:
+    if (a_nAction == GLFW_PRESS) {
+      mouse_state = CAMERA_MOVING;
+    }
+    else {
+      mouse_state = FREE_CURSOR;
+      firstMouse = true;
+    }
+    break;
+  default:
+    break;
   }
+  //}
 }
 
 void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a_dYPos) {
-  if (!TwEventMousePosGLFW(static_cast<int>(a_dXPos), static_cast<int>(a_dYPos))) {
+  //if (!TwEventMousePosGLFW(static_cast<int>(a_dXPos), static_cast<int>(a_dYPos))) {
     if (mouse_state == CAMERA_MOVING) {
       /*
       * Reference: https://learnopengl.com/index.php#!Getting-started/Camera
@@ -164,7 +165,7 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
     else {
       // DO NOTHING
     }
-  }
+  //}
 }
 
 void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nAction, int n_aMods) {
@@ -220,30 +221,30 @@ void FramebufferSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight)
     glm::radians(45.0f),
     a_nWidth, a_nHeight,
     0.1f, 100.0f);
-  TwWindowSize(a_nWidth, a_nHeight);
+  //TwWindowSize(a_nWidth, a_nHeight);
 }
 
-void BuildAntTweakBarGUI() {
-  // Set the properties properly
-  TwAddVarRO(_TweakBarGUI, "FPS", TW_TYPE_UINT32, &_TweakBarProperties._FPS, nullptr);
-  TwAddVarRO(_TweakBarGUI, "Active particles", TW_TYPE_UINT32, &_TweakBarProperties._ActiveParticleCount, nullptr);
-
-  // Add variables to AntTweakBar with properties
-  // Particle Attractor
-  TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
-  TwAddVarRW(_TweakBarGUI, "Attractor Position Y", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->y, " min=-100 max=100 step=0.2 ");
-  TwAddVarRW(_TweakBarGUI, "Attractor Position Z", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->z, " min=-100 max=100 step=0.2 ");
-
-  TwAddVarRW(_TweakBarGUI, "Acceleration Rate", TW_TYPE_FLOAT, _AttractorHandle->GetAccelerationRateRef(), " min=-20 max=50 step=0.2 ");
-
-  // Color updater
-  _TweakBarProperties._ColdColor = _ColorUpdaterHandle->GetColdColor();
-  _TweakBarProperties._HotColor = _ColorUpdaterHandle->GetHotColor();
-  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
-  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
-  TwAddVarRW(_TweakBarGUI, "Cold Color", TW_TYPE_COLOR32, &_TweakBarProperties._ColdColor, " coloralpha=true ");
-  TwAddVarRW(_TweakBarGUI, "Hot Color", TW_TYPE_COLOR32, &_TweakBarProperties._HotColor, " coloralpha=true ");
-}
+//void BuildAntTweakBarGUI() {
+//  // Set the properties properly
+//  TwAddVarRO(_TweakBarGUI, "FPS", TW_TYPE_UINT32, &_TweakBarProperties._FPS, nullptr);
+//  TwAddVarRO(_TweakBarGUI, "Active particles", TW_TYPE_UINT32, &_TweakBarProperties._ActiveParticleCount, nullptr);
+//
+//  // Add variables to AntTweakBar with properties
+//  // Particle Attractor
+//  TwAddVarRW(_TweakBarGUI, "Attractor Position X", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->x, " min=-100 max=100 step=0.2 ");
+//  TwAddVarRW(_TweakBarGUI, "Attractor Position Y", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->y, " min=-100 max=100 step=0.2 ");
+//  TwAddVarRW(_TweakBarGUI, "Attractor Position Z", TW_TYPE_FLOAT, &_AttractorHandle->GetAttractorPositionRef()->z, " min=-100 max=100 step=0.2 ");
+//
+//  TwAddVarRW(_TweakBarGUI, "Acceleration Rate", TW_TYPE_FLOAT, _AttractorHandle->GetAccelerationRateRef(), " min=-20 max=50 step=0.2 ");
+//
+//  // Color updater
+//  _TweakBarProperties._ColdColor = _ColorUpdaterHandle->GetColdColor();
+//  _TweakBarProperties._HotColor = _ColorUpdaterHandle->GetHotColor();
+//  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
+//  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
+//  TwAddVarRW(_TweakBarGUI, "Cold Color", TW_TYPE_COLOR32, &_TweakBarProperties._ColdColor, " coloralpha=true ");
+//  TwAddVarRW(_TweakBarGUI, "Hot Color", TW_TYPE_COLOR32, &_TweakBarProperties._HotColor, " coloralpha=true ");
+//}
 }
 
 void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
@@ -253,13 +254,13 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
     // Get a reference on the dynamics of this project
     _AttractorHandle = a_pAttractorHandle;
     _ColorUpdaterHandle = a_pColorUpdater;
-    
+
     // AntTweakBar initialization
-    TwInit(TW_OPENGL, nullptr);
-    TwWindowSize(640, 480);
-    _TweakBarGUI = TwNewBar("AttractorProject");
-    TwDefine(" AttractorProject refresh=0.5 ");
-    BuildAntTweakBarGUI();
+    //TwInit(TW_OPENGL, nullptr);
+    //TwWindowSize(640, 480);
+    //_TweakBarGUI = TwNewBar("AttractorProject");
+    //TwDefine(" AttractorProject refresh=0.5 ");
+    //BuildAntTweakBarGUI();
 
     // TODO: If it's worth it, move these hardcoded values someplace else
     yaw = -90.0f;
@@ -285,24 +286,24 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
-    TwTerminate();
+    //TwTerminate();
   });
 }
 
 void Update() { 
-  // Update tweakbar properties
-  _TweakBarProperties._ActiveParticleCount = particle_module::GetActiveParticlesCount();
-  _TweakBarProperties._FPS = timer::Chrono::GetInstance().GetFPS();
+  //// Update tweakbar properties
+  //_TweakBarProperties._ActiveParticleCount = particle_module::GetActiveParticlesCount();
+  //_TweakBarProperties._FPS = timer::Chrono::GetInstance().GetFPS();
 
-  // Update color gradient if needed
-  if (_TweakBarProperties._PrevColdColor != _TweakBarProperties._ColdColor ||
-    _TweakBarProperties._PrevHotColor != _TweakBarProperties._HotColor) {
-    _ColorUpdaterHandle->UpdateColorGradient(_TweakBarProperties._HotColor, _TweakBarProperties._ColdColor);
-    _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
-    _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
-  }
+  //// Update color gradient if needed
+  //if (_TweakBarProperties._PrevColdColor != _TweakBarProperties._ColdColor ||
+  //  _TweakBarProperties._PrevHotColor != _TweakBarProperties._HotColor) {
+  //  _ColorUpdaterHandle->UpdateColorGradient(_TweakBarProperties._HotColor, _TweakBarProperties._ColdColor);
+  //  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
+  //  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
+  //}
 
-  TwDraw();
+  //TwDraw();
 }
 } /* namespace event_handler*/
 } /* namespace attractor_project */

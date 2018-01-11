@@ -31,6 +31,8 @@ GLuint Create2DTexture(const std::string& a_sFileName,
   GLint a_nInternalFormat = GL_RGBA8, 
   GLint a_nImageFormat = GL_BGRA);
 
+GLuint CreateTextureFromMemoryPixels(unsigned char *pixels, GLint width, GLint height);
+
 GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
   GLint a_nMagFilterParam = GL_LINEAR,
   GLint a_nMinFilterParm = GL_LINEAR,

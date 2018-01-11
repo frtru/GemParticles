@@ -50,6 +50,10 @@
     <ClCompile Include="src\renderers\texture_core_gl_renderer.cc" />
     <ClCompile Include="src\utils\camera.cc" />
     <ClCompile Include="src\utils\basic_event_handler.cc" />
+    <ClCompile Include="src\utils\imgui\imgui.cpp" />
+    <ClCompile Include="src\utils\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\utils\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\utils\imgui\imgui_glfw.cpp" />
     <ClCompile Include="src\utils\light_module.cc" />
     <ClCompile Include="src\utils\scene.cc" />
     <ClCompile Include="src\utils\shader_factory.cc" />
@@ -98,6 +102,13 @@
     <ClInclude Include="src\renderers\texture_core_gl_renderer.hh" />
     <ClInclude Include="src\utils\camera.hh" />
     <ClInclude Include="src\utils\basic_event_handler.hh" />
+    <ClInclude Include="src\utils\imgui\imconfig.h" />
+    <ClInclude Include="src\utils\imgui\imgui.h" />
+    <ClInclude Include="src\utils\imgui\imgui_glfw.h" />
+    <ClInclude Include="src\utils\imgui\imgui_internal.h" />
+    <ClInclude Include="src\utils\imgui\stb_rect_pack.h" />
+    <ClInclude Include="src\utils\imgui\stb_textedit.h" />
+    <ClInclude Include="src\utils\imgui\stb_truetype.h" />
     <ClInclude Include="src\utils\light_module.hh" />
     <ClInclude Include="src\utils\macro_definitions.hh" />
     <ClInclude Include="src\utils\scene.hh" />
@@ -138,6 +149,14 @@
     <None Include="src\projects\skybox\shaders\simple_texture.frag" />
     <None Include="src\projects\skybox\shaders\skybox.frag" />
     <None Include="src\projects\skybox\shaders\skybox.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="src\utils\imgui\extra_fonts\Cousine-Regular.ttf" />
+    <Font Include="src\utils\imgui\extra_fonts\DroidSans.ttf" />
+    <Font Include="src\utils\imgui\extra_fonts\Karla-Regular.ttf" />
+    <Font Include="src\utils\imgui\extra_fonts\ProggyClean.ttf" />
+    <Font Include="src\utils\imgui\extra_fonts\ProggyTiny.ttf" />
+    <Font Include="src\utils\imgui\extra_fonts\Roboto-Medium.ttf" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7F3CDCAC-4D79-4270-825F-7E58D01BC885}</ProjectGuid>
