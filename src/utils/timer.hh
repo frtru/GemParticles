@@ -53,7 +53,7 @@ public:
   template <typename DurationType>
   inline unsigned long long GetTimeElapsed() const {
     return std::chrono::duration_cast<DurationType>(
-      _CurrentTime -_PreviousTime).count();
+      abs(_CurrentTime -_PreviousTime)).count();
   }
 
   double GetTimeElapsedInSeconds() const {
