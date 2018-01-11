@@ -41,9 +41,6 @@
     <Filter Include="projects\attractors">
       <UniqueIdentifier>{4f22ed93-b4ab-41b5-b526-b66f03df2cc6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="projects\attractors\shaders">
-      <UniqueIdentifier>{c48000f6-7386-4f71-946b-f7dff01df797}</UniqueIdentifier>
-    </Filter>
     <Filter Include="projects\light">
       <UniqueIdentifier>{d9418cd2-c77c-444a-9f2a-cc84c404297c}</UniqueIdentifier>
     </Filter>
@@ -348,6 +345,9 @@
       <Filter>utils\imgui</Filter>
     </ClInclude>
     <ClInclude Include="src\utils\imgui\imgui_glfw.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\imgui\imgui_log.h">
       <Filter>utils\imgui</Filter>
     </ClInclude>
   </ItemGroup>

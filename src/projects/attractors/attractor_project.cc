@@ -27,6 +27,7 @@
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
 #include "utils/scene.hh"
+#include "utils/imgui/imgui_log.h"
 #include "graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
 
@@ -54,13 +55,13 @@ void Init() {
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
 
+  // ImGui initialization
+  ImGui_ImplGlfwGL3_Init(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
+  ImGui::StyleColorsClassic();
+
   shader::module::Init();
   shader::factory::SetShadersFolderBasePath("shaders/");
   texture::module::Init();
-
-  // ImGui initialization
-  ImGui_ImplGlfwGL3_Init(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
-  ImGui::StyleColorsClassic(); 
 
   // Camera initialization
   camera::Init();
@@ -96,13 +97,13 @@ void Run() {
     const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
     ImGui_ImplGlfwGL3_NewFrame();
 
-    ImGui::Text("Hello, world!");                           // Some text (you can use a format string too)
-
     scene::Render();
     particle_module::Update(dt);
 
     event_handler::Update(); // Has to be placed before before clearing depth buffer bit
     graphic_context->Update();
+
+    ImGuiLog::GetInstance().Draw("Debugging logs");
     ImGui::Render();
 
     timer::Chrono::GetInstance().Update();

@@ -104,6 +104,7 @@
     <ClInclude Include="src\utils\basic_event_handler.hh" />
     <ClInclude Include="src\utils\imgui\imconfig.h" />
     <ClInclude Include="src\utils\imgui\imgui.h" />
+    <ClInclude Include="src\utils\imgui\imgui_log.h" />
     <ClInclude Include="src\utils\imgui\imgui_glfw.h" />
     <ClInclude Include="src\utils\imgui\imgui_internal.h" />
     <ClInclude Include="src\utils\imgui\stb_rect_pack.h" />

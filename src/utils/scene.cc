@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "utils/scene.hh"
 
-#include <iostream>
 #include <mutex>
 
 #include <GL/glew.h>
@@ -22,8 +21,8 @@
 #include "utils/shader_factory.hh"
 #include "utils/shader_module.hh"
 
-// TODO: Add lights by registering their positions
-// as an UBO in the shaders maybe?
+// logger utility
+#include "utils/imgui/imgui_log.h"
 
 namespace gem {
 namespace particle {
@@ -65,19 +64,15 @@ void Init(bool a_isDebug) {
     shader_program_ID = shader::factory::CreateProgram();
 
     glGenVertexArrays(1, &vertex_array_ID);
-    std::cout << "Scene::Init -> Generated VAO ID = ";
-    std::cout << vertex_array_ID << std::endl;
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO ID = %d\n", vertex_array_ID);
     glBindVertexArray(vertex_array_ID);
-    std::cout << "Scene::Init -> Allocated array memory for ID = ";
-    std::cout << vertex_array_ID << std::endl;
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_ID);
     glEnableVertexAttribArray(0);
 
     glGenBuffers(1, &vertex_buffer_ID);
-    std::cout << "Scene::Init -> Generated color VBO ID = ";
-    std::cout << vertex_buffer_ID << std::endl;
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated color VBO ID = %d\n", vertex_buffer_ID);
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
-    std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
-    std::cout << vertex_buffer_ID << std::endl;
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated buffer memory for ID = %d\n", vertex_buffer_ID);
     glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), AXES_POINTS, GL_STATIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
   });
@@ -86,7 +81,7 @@ void Init(bool a_isDebug) {
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
     if (vertex_buffer_ID != 0) {
-      std::cout << "scene::Terminate -> Deallocating vertex VBO" << std::endl;
+      ImGuiLog::GetInstance().AddLog("scene::Terminate->Deallocating vertex VBO\n");
       glDeleteBuffers(1, &vertex_buffer_ID);
       vertex_buffer_ID = 0;
     }
