@@ -18,6 +18,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "utils/imgui/imgui_glfw.h"
 //#include <AntTweakBar.h>
 
 #include "graphic_contexts/graphic_context.hh"
@@ -169,6 +170,7 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
 }
 
 void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nAction, int n_aMods) {
+  ImGui_ImplGlfwGL3_KeyCallback(a_pWindow, a_nKeyID, a_nScanCode, a_nAction, n_aMods);
   if (a_nAction == GLFW_PRESS || a_nAction == GLFW_REPEAT) {
   auto position       = camera::GetEyePosition();
   auto targetPosition = camera::GetTargetPosition();

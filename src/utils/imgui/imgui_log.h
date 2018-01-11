@@ -1,3 +1,16 @@
+/*************************************************************************
+* Copyright (c) 2018 François Trudel
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*************************************************************************/
 #pragma once
 #if defined(_MSC_VER) && !defined(_CRT_SECURE_NO_WARNINGS)
 #define _CRT_SECURE_NO_WARNINGS
@@ -52,78 +65,60 @@
 //  my_log.Draw("title");
 struct ImGuiLog : public Singleton<ImGuiLog>
 {
-    ImGuiTextBuffer     Buf;
-    ImGuiTextFilter     Filter;
-    ImVector<int>       LineOffsets;        // Index to lines offset
-    bool                ScrollToBottom;
+  ImGuiTextBuffer     Buf;
+  ImGuiTextFilter     Filter;
+  ImVector<int>       LineOffsets;        // Index to lines offset
+  bool                ScrollToBottom;
 
-    void    Clear()     { Buf.clear(); LineOffsets.clear(); }
+  void    Clear() { Buf.clear(); LineOffsets.clear(); }
 
-    void    AddLog(const char* fmt, ...) IM_FMTARGS(2)
+  void    AddLog(const char* fmt, ...) IM_FMTARGS(2)
+  {
+    int old_size = Buf.size();
+    va_list args;
+    va_start(args, fmt);
+    Buf.appendfv(fmt, args);
+    va_end(args);
+    for (int new_size = Buf.size(); old_size < new_size; old_size++)
+      if (Buf[old_size] == '\n')
+        LineOffsets.push_back(old_size);
+    ScrollToBottom = true;
+  }
+
+  void    Draw(const char* title, bool* p_open = NULL)
+  {
+    ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
+    ImGui::Begin(title, p_open);
+    if (ImGui::Button("Clear")) Clear();
+    ImGui::SameLine();
+    bool copy = ImGui::Button("Copy");
+    ImGui::SameLine();
+    Filter.Draw("Filter", -100.0f);
+    ImGui::Separator();
+    ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+    if (copy) ImGui::LogToClipboard();
+
+    if (Filter.IsActive())
     {
-        int old_size = Buf.size();
-        va_list args;
-        va_start(args, fmt);
-        Buf.appendfv(fmt, args);
-        va_end(args);
-        for (int new_size = Buf.size(); old_size < new_size; old_size++)
-            if (Buf[old_size] == '\n')
-                LineOffsets.push_back(old_size);
-        ScrollToBottom = true;
+      const char* buf_begin = Buf.begin();
+      const char* line = buf_begin;
+      for (int line_no = 0; line != NULL; line_no++)
+      {
+        const char* line_end = (line_no < LineOffsets.Size) ? buf_begin + LineOffsets[line_no] : NULL;
+        if (Filter.PassFilter(line, line_end))
+          ImGui::TextUnformatted(line, line_end);
+        line = line_end && line_end[1] ? line_end + 1 : NULL;
+      }
+    }
+    else
+    {
+      ImGui::TextUnformatted(Buf.begin());
     }
 
-    void    Draw(const char* title, bool* p_open = NULL)
-    {
-        ImGui::SetNextWindowSize(ImVec2(500,400), ImGuiCond_FirstUseEver);
-        ImGui::Begin(title, p_open);
-        if (ImGui::Button("Clear")) Clear();
-        ImGui::SameLine();
-        bool copy = ImGui::Button("Copy");
-        ImGui::SameLine();
-        Filter.Draw("Filter", -100.0f);
-        ImGui::Separator();
-        ImGui::BeginChild("scrolling", ImVec2(0,0), false, ImGuiWindowFlags_HorizontalScrollbar);
-        if (copy) ImGui::LogToClipboard();
-
-        if (Filter.IsActive())
-        {
-            const char* buf_begin = Buf.begin();
-            const char* line = buf_begin;
-            for (int line_no = 0; line != NULL; line_no++)
-            {
-                const char* line_end = (line_no < LineOffsets.Size) ? buf_begin + LineOffsets[line_no] : NULL;
-                if (Filter.PassFilter(line, line_end))
-                    ImGui::TextUnformatted(line, line_end);
-                line = line_end && line_end[1] ? line_end + 1 : NULL;
-            }
-        }
-        else
-        {
-            ImGui::TextUnformatted(Buf.begin());
-        }
-
-        if (ScrollToBottom)
-            ImGui::SetScrollHere(1.0f);
-        ScrollToBottom = false;
-        ImGui::EndChild();
-        ImGui::End();
-    }
+    if (ScrollToBottom)
+      ImGui::SetScrollHere(1.0f);
+    ScrollToBottom = false;
+    ImGui::EndChild();
+    ImGui::End();
+  }
 };
-
-// Demonstrate creating a simple log window with basic filtering.
-//static void ShowExampleAppLog(bool* p_open)
-//{
-//    static ExampleAppLog log;
-//
-//    // Demo: add random items (unless Ctrl is held)
-//    static float last_time = -1.0f;
-//    float time = ImGui::GetTime();
-//    if (time - last_time >= 0.20f && !ImGui::GetIO().KeyCtrl)
-//    {
-//        const char* random_words[] = { "system", "info", "warning", "error", "fatal", "notice", "log" };
-//        log.AddLog("[%s] Hello, time is %.1f, frame count is %d\n", random_words[rand() % IM_ARRAYSIZE(random_words)], time, ImGui::GetFrameCount());
-//        last_time = time;
-//    }
-//
-//    log.Draw("Example: Log", p_open);
-//}
