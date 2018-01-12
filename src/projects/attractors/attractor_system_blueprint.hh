@@ -34,8 +34,8 @@ std::shared_ptr< ParticleAttractor >      GetAttractorHandle();
 std::shared_ptr< ProximityColorUpdater >  GetProximityColorUpdaterHandle();
 
 // Some setters for the parameters used for the creation of the system
-void SetHotColor(const glm::u8vec4 &color);
-void SetColdColor(const glm::u8vec4 &color);
+void SetHotColor(const glm::vec4 &color);
+void SetColdColor(const glm::vec4 &color);
 void SetPOI(const glm::f32vec3 &pos);
 void SetInitialRadius(float radius);
 void SetAccelerationRate(float rate);

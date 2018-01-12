@@ -107,6 +107,7 @@
     <ClInclude Include="src\utils\imgui\imgui_log.h" />
     <ClInclude Include="src\utils\imgui\imgui_glfw.h" />
     <ClInclude Include="src\utils\imgui\imgui_internal.h" />
+    <ClInclude Include="src\utils\imgui\imgui_property_editor.h" />
     <ClInclude Include="src\utils\imgui\stb_rect_pack.h" />
     <ClInclude Include="src\utils\imgui\stb_textedit.h" />
     <ClInclude Include="src\utils\imgui\stb_truetype.h" />

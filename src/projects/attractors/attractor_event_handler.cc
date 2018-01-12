@@ -59,18 +59,17 @@ enum MouseState {
 MouseState                      mouse_state;
 bool firstMouse = true;
 
-struct TweakBarGUIProperties {
+struct DataBindings {
   std::size_t _ActiveParticleCount;
   std::size_t _FPS;
-  glm::u8vec4 _ColdColor; glm::u8vec4 _PrevColdColor;
-  glm::u8vec4 _HotColor; glm::u8vec4 _PrevHotColor;
-} _TweakBarProperties;
+  glm::vec4 _PrevColdColor;
+  glm::vec4 _PrevHotColor;
+} _Bindings;
 
 // Handles
 std::shared_ptr<GraphicContext>         context_handle;
 std::shared_ptr<ParticleAttractor>      _AttractorHandle;
 std::shared_ptr<ProximityColorUpdater>  _ColorUpdaterHandle;
-//TwBar*                                  _TweakBarGUI;
 
 void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
   //if (!TwEventMouseButtonGLFW(a_nButtonID, a_nAction)) {
@@ -257,12 +256,9 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
     _AttractorHandle = a_pAttractorHandle;
     _ColorUpdaterHandle = a_pColorUpdater;
 
-    // AntTweakBar initialization
-    //TwInit(TW_OPENGL, nullptr);
-    //TwWindowSize(640, 480);
-    //_TweakBarGUI = TwNewBar("AttractorProject");
-    //TwDefine(" AttractorProject refresh=0.5 ");
-    //BuildAntTweakBarGUI();
+    // ImGui initialization
+    _Bindings._PrevColdColor = _ColorUpdaterHandle->GetColdColor();
+    _Bindings._PrevHotColor = _ColorUpdaterHandle->GetHotColor();
 
     // TODO: If it's worth it, move these hardcoded values someplace else
     yaw = -90.0f;
@@ -292,20 +288,14 @@ void Terminate() {
   });
 }
 
-void Update() { 
-  //// Update tweakbar properties
-  //_TweakBarProperties._ActiveParticleCount = particle_module::GetActiveParticlesCount();
-  //_TweakBarProperties._FPS = timer::Chrono::GetInstance().GetFPS();
-
-  //// Update color gradient if needed
-  //if (_TweakBarProperties._PrevColdColor != _TweakBarProperties._ColdColor ||
-  //  _TweakBarProperties._PrevHotColor != _TweakBarProperties._HotColor) {
-  //  _ColorUpdaterHandle->UpdateColorGradient(_TweakBarProperties._HotColor, _TweakBarProperties._ColdColor);
-  //  _TweakBarProperties._PrevColdColor = _TweakBarProperties._ColdColor;
-  //  _TweakBarProperties._PrevHotColor = _TweakBarProperties._HotColor;
-  //}
-
-  //TwDraw();
+void Update() {
+  // Update color gradient if needed
+  if (_Bindings._PrevColdColor != _ColorUpdaterHandle->GetColdColor() ||
+    _Bindings._PrevHotColor != _ColorUpdaterHandle->GetHotColor()) {
+    _ColorUpdaterHandle->UpdateColorGradient();
+    _Bindings._PrevColdColor = _ColorUpdaterHandle->GetColdColor();
+    _Bindings._PrevHotColor = _ColorUpdaterHandle->GetHotColor();
+  }
 }
 } /* namespace event_handler*/
 } /* namespace attractor_project */

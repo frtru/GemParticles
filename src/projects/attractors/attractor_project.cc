@@ -28,6 +28,7 @@
 #include "utils/camera.hh"
 #include "utils/scene.hh"
 #include "utils/imgui/imgui_log.h"
+#include "utils/imgui/imgui_property_editor.h"
 #include "graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
 
@@ -108,6 +109,7 @@ void Run() {
     event_handler::Update(); // Has to be placed before before clearing depth buffer bit
     graphic_context->Update();
 
+    ImGuiPropertyEditor::GetInstance().Draw("Property editor");
     ImGuiLog::GetInstance().Draw("Debugging logs");
     ImGui::Render();
 

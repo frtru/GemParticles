@@ -33,8 +33,8 @@ namespace {
 const glm::f32vec3 _ZeroVector = glm::f32vec3(0.0f, 0.0f, 0.0f);
 // Instead of using setters for every attribute, might as well put them public.
 // These parameters will be used during the Create() function to properly build the particle system
-glm::u8vec4   _HotColor         = { 255u, 255u, 128u, 255u };
-glm::u8vec4   _ColdColor        = { 255u, 0u, 0u, 255u };
+glm::vec4   _HotColor           = { 1.0f, 1.0f, 0.5f, 1.0f };
+glm::vec4   _ColdColor          = { 1.0f, 0u, 0u, 1.0f };
 glm::f32vec3  _POI              = { 1.0f, 1.0f, 1.0f };
 float         _InitialRadius    = 0.5f;
 float         _AccelerationRate = 15.0f;
@@ -65,8 +65,8 @@ void Create() {
 std::shared_ptr< ParticleAttractor >      GetAttractorHandle() { return _AttractorDynamicHandle; }
 std::shared_ptr< ProximityColorUpdater >  GetProximityColorUpdaterHandle() { return _ProximityColorUpdaterHandle; }
 
-void SetHotColor(const glm::u8vec4 &color)          { _HotColor = color;          }
-void SetColdColor(const glm::u8vec4 &color)         { _ColdColor = color;         }
+void SetHotColor(const glm::vec4 &color)          { _HotColor = color;          }
+void SetColdColor(const glm::vec4 &color)         { _ColdColor = color;         }
 void SetPOI(const glm::f32vec3 &pos)                { _POI = pos;                 }
 void SetInitialRadius(float radius)                 { _InitialRadius = radius;    }
 void SetAccelerationRate(float rate)                { _AccelerationRate = rate;   }

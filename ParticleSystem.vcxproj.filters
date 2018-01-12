@@ -350,6 +350,9 @@
     <ClInclude Include="src\utils\imgui\imgui_log.h">
       <Filter>utils\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\utils\imgui\imgui_property_editor.h">
+      <Filter>utils\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\projects\rain\shaders\debug_axes.vert">

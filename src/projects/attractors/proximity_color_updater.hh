@@ -23,24 +23,23 @@ class ProximityColorUpdater : public Dynamic<CoreParticles> {
 public:
   explicit ProximityColorUpdater(
     const glm::f32vec3 &a_fvPositionOfInterest,
-    const glm::u8vec4 &a_fvHotColor,
-    const glm::u8vec4 &a_fvColdColor,
+    const glm::vec4 &a_fvHotColor,
+    const glm::vec4 &a_fvColdColor,
     float a_fMaxDistance = 100.0f);
   ~ProximityColorUpdater();
 
   void SetPOI(const glm::f32vec3& a_vPOI) { m_fvPositionOfInterest = a_vPOI; }
 
-  const glm::u8vec4& GetColdColor() const { return *m_vColdColor; }
-  const glm::u8vec4& GetHotColor() const { return *m_vHotColor; }
+  const glm::vec4& GetColdColor() const { return *m_vColdColor; }
+  const glm::vec4& GetHotColor() const { return *m_vHotColor; }
 
-  void UpdateColorGradient(const glm::u8vec4 &a_fvHotColor,
-    const glm::u8vec4 &a_fvColdColor);
+  void UpdateColorGradient();
   void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
 private:
 	glm::f32vec3	            m_fvPositionOfInterest;
   float                     m_fMaxDistance;
-  std::vector<glm::u8vec4>  m_vColorGradient;
-  glm::u8vec4              *m_vColdColor, *m_vHotColor;
+  std::vector<glm::vec4>    m_vColorGradient;
+  glm::vec4              *m_vColdColor, *m_vHotColor;
 
 }; /* class ParticleAttractor*/
 } /* namespace attractor_project */

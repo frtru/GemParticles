@@ -57,19 +57,9 @@
 
 #define IM_MAX(_A,_B)       (((_A) >= (_B)) ? (_A) : (_B))
 
-//static void ShowExampleAppLog(bool* p_open);
-
-// Usage:
-//  static ExampleAppLog my_log;
-//  my_log.AddLog("Hello %d world\n", 123);
-//  my_log.Draw("title");
-struct ImGuiLog : public Singleton<ImGuiLog>
+class ImGuiLog : public Singleton<ImGuiLog>
 {
-  ImGuiTextBuffer     Buf;
-  ImGuiTextFilter     Filter;
-  ImVector<int>       LineOffsets;        // Index to lines offset
-  bool                ScrollToBottom;
-
+public:
   void    Clear() { Buf.clear(); LineOffsets.clear(); }
 
   void    AddLog(const char* fmt, ...) IM_FMTARGS(2)
@@ -121,4 +111,9 @@ struct ImGuiLog : public Singleton<ImGuiLog>
     ImGui::EndChild();
     ImGui::End();
   }
+private:
+  ImGuiTextBuffer     Buf;
+  ImGuiTextFilter     Filter;
+  ImVector<int>       LineOffsets;        // Index to lines offset
+  bool                ScrollToBottom;
 };
