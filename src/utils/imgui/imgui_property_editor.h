@@ -71,13 +71,13 @@ enum EditableProperty {
 class ImGuiPropertyEditor : public Singleton<ImGuiPropertyEditor>
 {
 public:
-  using Property = std::tuple<std::string, int, EditableProperty, void*>;
+  using Property = std::tuple<std::string, EditableProperty, void*>;
   void AddObject(const std::string& name, void *uid) {
-    _PropertiesVector.push_back(std::make_tuple(name, 0, NEW_OBJECT, uid));
+    _PropertiesVector.push_back(std::make_tuple(name, NEW_OBJECT, uid));
   }
 
-  void AddProperty(const std::string& prefix, EditableProperty type, int id, void* data) {
-    _PropertiesVector.push_back(std::make_tuple(prefix, id, type, data));
+  void AddProperty(const std::string& prefix, EditableProperty type, void* data) {
+    _PropertiesVector.push_back(std::make_tuple(prefix, type, data));
   }
 
   void Draw(const char* title, bool* p_open = NULL) {
@@ -88,7 +88,10 @@ public:
     }
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
     ImGui::Columns(2);
-    for (const Property &prop : _PropertiesVector) { CreateComponentFromType(prop); }
+    for (int i = 0; i < _PropertiesVector.size(); ++i) {
+      const Property &prop = _PropertiesVector[i];
+      CreateComponentFromType(prop, i); 
+    }
     ImGui::Columns(1);
     ImGui::Separator();
     ImGui::PopStyleVar();
@@ -96,14 +99,13 @@ public:
   }
 private:
 
-  void CreateComponentFromType(const Property& prop) {
+  void CreateComponentFromType(const Property& prop, int id) {
     EditableProperty type = std::get<EditableProperty>(prop);
     std::string name      = std::get<std::string>(prop);
-    int id                = std::get<int>(prop);
     void* data            = std::get<void*>(prop);
     switch (type) {
       case NEW_OBJECT:
-        CreateTreeNodeComponent(name, data);
+        CreateParent(name, data);
         break;
       case TOGGLE_BOOL:
         break;
@@ -123,8 +125,7 @@ private:
         CreateColorPickerComponent(name, data, id);
         break;
       case VEC3:
-        ImGui::PushID(id);
-        ImGui::PopID();
+        CreateVec3DragComponent(name, data, id);
         break;
       case STRING:
         break;
@@ -208,17 +209,31 @@ private:
     // -------------------
     ImGui::PopID();
   }
-  void CreateTreeNodeComponent(const std::string & name, void *data) {
+  void CreateParent(const std::string & name, void *data) {
     ImGui::PushID(data);
     ImGui::Separator();
     ImGui::AlignTextToFramePadding();
     ImGui::Text(name.c_str());
     ImGui::NextColumn();
     ImGui::AlignTextToFramePadding();
-    ImGui::Text("Data");
+    ImGui::Text("");
     ImGui::NextColumn();
     ImGui::PopID();
   }
-
+  void CreateVec3DragComponent(const std::string &name, void *data, int id) {
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::DragFloat3("##value", static_cast<float*>(data));
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+  }
   std::vector<Property> _PropertiesVector;
 };

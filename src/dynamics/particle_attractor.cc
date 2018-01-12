@@ -13,10 +13,18 @@
 *************************************************************************/
 #include "dynamics/particle_attractor.hh"
 
+#include "utils/imgui/imgui_property_editor.h"
+
 namespace gem {
 namespace particle {
 ParticleAttractor::ParticleAttractor(const glm::f32vec3 &a_fvAttractionPosition, float a_accelerationRate)
-  : m_fvAttractionPosition(a_fvAttractionPosition), m_fAccelerationRate(a_accelerationRate) { }
+  : m_fvAttractionPosition(a_fvAttractionPosition), m_fAccelerationRate(a_accelerationRate) {
+  // Adding the properties of this component to the editor
+  ImGuiPropertyEditor &editor = ImGuiPropertyEditor::GetInstance();
+  editor.AddObject("Particle attractor", this);
+  editor.AddProperty("Acceleration rate",   EditableProperty::DRAG_FLOAT, &m_fAccelerationRate);
+  editor.AddProperty("Attraction position", EditableProperty::VEC3, &m_fvAttractionPosition);
+}
 
 void ParticleAttractor::Update(double a_dt, 
   const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) {
