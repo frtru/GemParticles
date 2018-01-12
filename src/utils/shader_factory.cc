@@ -16,9 +16,10 @@
 #include <algorithm>
 #include <vector>
 #include <map>
-#include <iostream>
 #include <fstream>
 #include <mutex>
+
+#include "utils/imgui/imgui_log.h"
 
 namespace shader {
 namespace factory {
@@ -39,7 +40,7 @@ void Init() {
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
-    std::cout << "shader_factory::Terminate -> Deleting shader programs." << std::endl;
+    ImGuiLog::GetInstance().AddLog("shader_factory::Terminate -> Deleting shader programs.\n");
     for (auto shader : shader_programs) {
       glDeleteProgram(shader.first);
     }
@@ -61,9 +62,7 @@ bool CompileShaderFile(const std::string& a_sFileName, GLenum a_eShaderType) {
     );
     return CompileShaderText(buffer, a_eShaderType, shader_base_path + a_sFileName);
   }
-  std::cerr << "shader_factory::CompileShaderFile -> "
-    << "Invalid fileName path : "
-    << shader_base_path + a_sFileName << std::endl;
+  ImGuiLog::GetInstance().AddLog("[ERROR]shader_factory::CompileShaderFile -> Invalid fileName path : %s.\n", (shader_base_path + a_sFileName).c_str());
   return false;
 }
 
@@ -83,8 +82,7 @@ bool CompileShaderText(const std::string& a_rShaderText,
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
     glGetShaderInfoLog(shader, infoLogSize, nullptr, infoLog);
-    std::cerr << "shader_factory::CompileShaderText -> "
-      << infoLog << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_factory::CompileShaderText -> %s.\n", infoLog);
     delete[] infoLog;
     return false;
   }
@@ -96,16 +94,15 @@ bool CompileShaderText(const std::string& a_rShaderText,
 GLuint CreateProgram() {
   // Check if compilation_cache is not empty before processing
   if (compilation_cache.size() == 0) {
-    std::cerr << "shader_factory::CreateProgram -> Trying to create a program from an empty " << std::endl
-      << "compilation cache. Returning 0xFFFFFFFF..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_factory::CreateProgram -> Trying to create a program from an empty \n");
+    ImGuiLog::GetInstance().AddLog("compilation cache. Returning 0xFFFFFFFF...\n");
     return 0xFFFFFFFF;
   }
 
   // Check if compilation_cache and compilation sources
   // are in sync
   if (compilation_cache.size() != compilation_sources.size()) {
-    std::cerr << "shader_factory::CreateProgram -> Incompatible sources<->cache sizes." << std::endl
-      << "Returning 0xFFFFFFFF..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_factory::CreateProgram -> Incompatible sources<->cache sizes. Returning 0xFFFFFFFF...\n");
     return 0xFFFFFFFF;
   }
 
@@ -136,8 +133,7 @@ GLuint CreateProgram() {
     glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
     glGetProgramInfoLog(programID, infoLogSize, nullptr, infoLog);
-    std::cerr << "shader_factory::CreateProgram() -> \n"
-      << infoLog << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_factory::CreateProgram() -> %s.\n Returning 0xFFFFFFFF", infoLog);
     delete[] infoLog;
     return 0xFFFFFFFF;
   }

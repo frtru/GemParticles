@@ -22,7 +22,7 @@ ParticleAttractor::ParticleAttractor(const glm::f32vec3 &a_fvAttractionPosition,
   // Adding the properties of this component to the editor
   ImGuiPropertyEditor &editor = ImGuiPropertyEditor::GetInstance();
   editor.AddObject("Particle attractor", this);
-  editor.AddProperty("Acceleration rate",   EditableProperty::DRAG_FLOAT, &m_fAccelerationRate);
+  editor.AddProperty("Acceleration rate",   EditableProperty::INPUT_FLOAT, &m_fAccelerationRate);
   editor.AddProperty("Attraction position", EditableProperty::VEC3, &m_fvAttractionPosition);
 }
 

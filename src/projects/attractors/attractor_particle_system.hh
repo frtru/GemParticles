@@ -16,13 +16,13 @@
 
 #include <vector>
 #include <memory>
-#include <iostream>
 
 #include "core/particle_system_interface.hh"
 #include "core/particle_pool_core.hh"
 #include "emitters/emitter.hh"
 #include "dynamics/dynamic.hh"
 #include "renderers/renderer.hh"
+#include "utils/imgui/imgui_log.h"
 
 namespace gem { namespace particle {
 namespace attractor_project {
@@ -56,9 +56,10 @@ public:
 
   void AddDynamic(std::shared_ptr<Dynamic<ParticleType>> a_pDynamic) {
     if (a_pDynamic->AltersParticleLifeCycle()) {
-      std::cout << "ERROR: ParticleSystem::AddDynamic -> Tried to add a ";
-      std::cout << "dynamic which alters the Life-Death cycle when it is disabled. ";
-      std::cout << "Dynamic will not be added to the system." << std::endl;
+      ImGuiLog &logger = ImGuiLog::GetInstance();
+      logger.AddLog("[ERROR] ParticleSystem::AddDynamic -> Tried to add a");
+      logger.AddLog("dynamic which alters the Life-Death cycle when it is disabled.");
+      logger.AddLog("Dynamic will not be added to the system.\n");
       return;
     }
     m_vDynamics.push_back(a_pDynamic);

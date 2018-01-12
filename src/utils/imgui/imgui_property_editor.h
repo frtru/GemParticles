@@ -143,7 +143,7 @@ private:
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
-    ImGui::InputInt("##value", static_cast<int*>(data), 0.01f);
+    ImGui::InputInt("##value", static_cast<int*>(data), 1U);
     ImGui::PopItemWidth();
     ImGui::NextColumn();
     // -------------------
@@ -158,7 +158,7 @@ private:
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
-    ImGui::InputFloat("##value", static_cast<float*>(data), 0.01f);
+    ImGui::InputFloat("##value", static_cast<float*>(data), 1.0f);
     ImGui::PopItemWidth();
     ImGui::NextColumn();
     // -------------------

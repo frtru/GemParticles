@@ -21,6 +21,7 @@
 #include <mutex>
 
 #include "utils/shader_factory.hh"
+#include "utils/imgui/imgui_log.h"
 
 namespace shader {
 namespace module {
@@ -46,7 +47,7 @@ void Init() {
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
     shader::factory::Terminate();
-    std::cout << "shader_module::Terminate -> Deleting UBOs." << std::endl;
+    ImGuiLog::GetInstance().AddLog("shader_module::Terminate -> Deleting UBOs.\n");
     for (auto uniformBlocks : uniform_block_list) {
       glDeleteBuffers(1, &uniformBlocks.second);
     }
@@ -67,7 +68,7 @@ GLuint GetAttribLocation(const std::string& a_rAttrib, GLuint a_unProgramID) {
 GLint GetUniformLocation(GLuint a_unProgramID, const std::string& a_rUniform) {
   GLint wReturnValue = glGetUniformLocation(a_unProgramID, a_rUniform.c_str());
   if (wReturnValue == -1) {
-    std::cerr << "shader_module::GetUniformLocation -> Bad uniform name." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::GetUniformLocation -> Bad uniform name.\n");
   }
   return wReturnValue;
 }
@@ -88,8 +89,8 @@ void RegisterAttribute(std::string a_sAttrib, GLuint a_unProgramID) {
       glGetAttribLocation(a_unProgramID, a_sAttrib.c_str());
   }
   else {
-    std::cerr << "shader_module::RegisterAttribute -> Trying to register uniform that already" << std::endl
-      << "exists for program " << a_unProgramID << ". Will ignore instruction..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::RegisterAttribute -> Trying to register uniform that already\n");
+    ImGuiLog::GetInstance().AddLog("exists for program %d. Will ignore instruction...\n", a_unProgramID);
   }
 }
 
@@ -115,8 +116,8 @@ void RegisterGlobalUniformBlock(GLuint a_unBindingPoint,
     uniform_block_list[a_unBindingPoint] = unUBOID;
   }
   else {
-    std::cerr << "shader_module::RegisterGlobalUniform -> Trying to register binding point " << a_unBindingPoint << std::endl
-      << "which is already registered. Will ignore instruction..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::RegisterGlobalUniform -> Trying to register binding point\n");
+    ImGuiLog::GetInstance().AddLog("%d which is already registered. Will ignore instruction...\n", a_unBindingPoint);
   }
 }
 
@@ -137,8 +138,8 @@ void RegisterGlobalUniformBlock(GLuint a_unBindingPoint,
     uniform_block_list[a_unBindingPoint] = unUBOID;
   }
   else {
-    std::cerr << "shader_module::RegisterGlobalUniform -> Trying to register binding point " << a_unBindingPoint << std::endl
-      << "which is already registered. Will ignore instruction..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::RegisterGlobalUniform -> Trying to register binding point\n");
+    ImGuiLog::GetInstance().AddLog("%d which is already registered. Will ignore instruction...\n", a_unBindingPoint);
   }
 }
 
@@ -157,8 +158,8 @@ void SetUniformBlockValue(GLuint a_unBindingPoint,
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
   }
   else {
-    std::cerr << "shader_module::SetUniformBlockValue -> Trying to set value to binding point " << a_unBindingPoint << std::endl
-      << "without registering an UBO. Will ignore instruction..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::SetUniformBlockValue -> Trying to set value to binding point\n");
+    ImGuiLog::GetInstance().AddLog("%d without registering an UBO. Will ignore instruction...\n", a_unBindingPoint);
   }
 }
 
@@ -174,8 +175,8 @@ void RegisterSSBOBlock(GLuint a_unBindingPoint,
     SSBO_list[a_unBindingPoint] = std::make_pair(unSSBOID, a_unSSBOSize);
   }
   else {
-    std::cerr << "shader_module::RegisterSSBO -> Trying to register binding point " << a_unBindingPoint << std::endl
-      << "which is already registered. Will ignore instruction..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::RegisterSSBO -> Trying to register binding point \n");
+    ImGuiLog::GetInstance().AddLog("%d which is already registered.Will ignore instruction...\n", a_unBindingPoint);
   }
 }
 
@@ -191,8 +192,8 @@ void UpdateSSBOBlockData(GLuint a_unBindingPoint,
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); //unbind
   }
   else {
-    std::cerr << "shader_module::UpdateSSBOBlockData -> Trying to update value to binding point " << a_unBindingPoint << std::endl
-      << "without registering an SSBO. Will ignore instruction..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::UpdateSSBOBlockData -> Trying to update value to binding point \n");
+    ImGuiLog::GetInstance().AddLog("%d without registering an SSBO. Will ignore instruction...\n", a_unBindingPoint);
   }
 }
 
@@ -203,14 +204,12 @@ void SetSSBOBlockSubData(GLuint a_unBindingPoint,
     GLuint unSSBOID = SSBO->second.first;
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, unSSBOID);
     glBufferSubData(GL_SHADER_STORAGE_BUFFER, a_unOffset, a_unSize, a_pData);
-    std::cout << __func__ << " -> Set sub data in SSBO with ID " << unSSBOID;
-    std::cout << ", offset = " << a_unOffset << " & ";
-    std::cout << " size = " << a_unSize << std::endl;
+    ImGuiLog::GetInstance().AddLog("shader_module::SetSSBOBlockSubData -> Set sub data in SSBO with ID %d, offset = %d, size = %d\n", unSSBOID, a_unOffset, a_unSize);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
   }
   else {
-    std::cerr << "shader_module::SetSSBOValue -> Trying to set value to binding point " << a_unBindingPoint << std::endl
-      << "without registering an SSBO. Will ignore instruction..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_module::SetSSBOValue -> Trying to set value to binding point \n");
+    ImGuiLog::GetInstance().AddLog("%d without registering an SSBO. Will ignore instruction...\n", a_unBindingPoint);
   }
 }
 

@@ -13,10 +13,10 @@
 *************************************************************************/
 #include "utils/texture_factory.hh"
 
-#include <iostream>
 #include <mutex>
 
 #include "FreeImage.h"
+#include "utils/imgui/imgui_log.h"
 
 namespace texture {
 namespace factory {
@@ -109,8 +109,7 @@ GLuint Create2DTexture(const std::string& a_sFileName,
   unsigned char *wImage = nullptr;
   
   if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight, a_nInternalFormat == GL_RGBA)) {
-    std::cerr << "texture_factory::Create2DTexture -> Loading image failed. " << std::endl
-      << "Returning 0xFFFFFFFF..." << std::endl;
+    ImGuiLog::GetInstance().AddLog("[ERROR]texture_factory::Create2DTexture -> Loading image failed.\n Returning 0xFFFFFFFF...\n");
     return 0xFFFFFFFF;
   }
 
@@ -174,8 +173,7 @@ GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
     unsigned char *wImage = nullptr;
 
     if (!LoadImage(textureFileName, &wImage, wWidth, wHeight, a_nInternalFormat == GL_RGBA)) {
-      std::cerr << "texture_factory::CreateCubeMap -> Loading image " << textureFileName << " failed.\n"
-        << "Returning 0xFFFFFFFF..." << std::endl;
+      ImGuiLog::GetInstance().AddLog("[ERROR]texture_factory::CreateCubeMap -> Loading image %s failed.\n Returning 0xFFFFFFFF...\n", textureFileName.c_str());
       return 0xFFFFFFFF;
     }
     glTexImage2D(
