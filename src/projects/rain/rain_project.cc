@@ -15,9 +15,8 @@
 //C system files
 //C++ system files
 #include <memory>
-#include <iostream>
-#include <sstream>
 //Other libraries' .h files
+#include "utils/imgui/imgui_glfw.h"
 //Your project's .h files
 #include "project_dictionary.hh"
 #include "utils/timer.hh"
@@ -26,6 +25,8 @@
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
 #include "utils/scene.hh"
+#include "utils/imgui/imgui_log.h"
+#include "utils/imgui/imgui_property_editor.h"
 #include "utils/basic_event_handler.hh"
 #include "graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
@@ -52,6 +53,10 @@ void Init() {
   // OpenGL setup
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
+
+  // ImGui initialization
+  ImGui_ImplGlfwGL3_Init(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
+  ImGui::StyleColorsClassic();
 
   shader::module::Init();
   shader::factory::SetShadersFolderBasePath("src/projects/rain/shaders/");
@@ -88,14 +93,19 @@ void Run() {
 
   while (!graphic_context->PollWindowClosedEvent()) {
     double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
-    std::stringstream ss; 
-    ss << "GemParticles, FPS: "  << timer::Chrono::GetInstance().GetFPS()
-      << " | Active Particles: " << particle_module::GetActiveParticlesCount();
-    glfwSetWindowTitle(static_cast<GLFWwindow*>(
-      graphic_context->GetWindowHandle()), ss.str().c_str());
+    ImGui_ImplGlfwGL3_NewFrame();
+
+    ImGui::Begin("Stats");
+    ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Total active particles = %d\n", particle_module::GetActiveParticlesCount());
+    ImGui::End();
     
     scene::Render();
-    particle_module::Update(dt);    
+    particle_module::Update(dt);
+
+    ImGuiPropertyEditor::GetInstance().Draw("Property editor");
+    ImGuiLog::GetInstance().Draw("Debugging logs");
+    ImGui::Render();
 
     graphic_context->Update();
     timer::Chrono::GetInstance().Update();
@@ -109,6 +119,7 @@ void Terminate() {
   event_handler::Terminate();
   texture::module::Terminate();
   shader::module::Terminate();
+  ImGui_ImplGlfwGL3_Shutdown();
   graphic_context->Terminate();
 }
 } /* namespace rain_project */

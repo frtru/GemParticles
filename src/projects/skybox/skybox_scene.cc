@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "projects/skybox/skybox_scene.hh"
 
-#include <iostream>
 #include <mutex>
 
 #include <GL/glew.h>
@@ -22,6 +21,7 @@
 #include "utils/shader_module.hh"
 #include "utils/light_module.hh"
 #include "utils/skybox.hh"
+#include "utils/imgui/imgui_log.h"
 
 namespace gem { namespace particle {
 namespace skybox_project {
@@ -162,14 +162,13 @@ void DrawDebugObjects() {
 
 void InitializeAxes() {
   glGenBuffers(2, axes_VBO_IDs);
-  std::cout << "Scene::Init -> Generated axes VBOs, IDs = ";
-  std::cout << axes_VBO_IDs[POSITIONS_VBO_IDX] << " & ";
-  std::cout << axes_VBO_IDs[COLORS_VBO_IDX] << std::endl;
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeAxes->Generated axes VBOs, IDs = %d & %d\n",
+    axes_VBO_IDs[POSITIONS_VBO_IDX], axes_VBO_IDs[COLORS_VBO_IDX]);
 
   // Positions
   glBindBuffer(GL_ARRAY_BUFFER, axes_VBO_IDs[POSITIONS_VBO_IDX]);
-  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
-  std::cout << axes_VBO_IDs[POSITIONS_VBO_IDX] << std::endl;
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeAxes -> Allocated buffer memory for ID = %d\n",
+    axes_VBO_IDs[POSITIONS_VBO_IDX]);
   glBufferData(GL_ARRAY_BUFFER, sizeof(AXES_POINTS), AXES_POINTS, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);
@@ -190,8 +189,8 @@ void InitializeAxes() {
 
   //Color VBO Initialization
   glBindBuffer(GL_ARRAY_BUFFER, axes_VBO_IDs[COLORS_VBO_IDX]);
-  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
-  std::cout << axes_VBO_IDs[COLORS_VBO_IDX] << std::endl;
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeAxes -> Allocated buffer memory for ID = %d\n",
+    axes_VBO_IDs[COLORS_VBO_IDX]);
   glBufferData(GL_ARRAY_BUFFER, sizeof(AXES_COLOR), AXES_COLOR, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
@@ -210,14 +209,13 @@ void InitializeAxes() {
 }
 void InitializeTestingBox() {
   glGenBuffers(2, box_VBO_IDs);
-  std::cout << "Scene::Init -> Generated 2 VBOs, IDs = ";
-  std::cout << box_VBO_IDs[POSITIONS_VBO_IDX] << " & ";
-  std::cout << box_VBO_IDs[COLORS_VBO_IDX] << std::endl;
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeTestingBox -> Generated 2 VBOs, IDs = %d & %d\n",
+    box_VBO_IDs[POSITIONS_VBO_IDX], box_VBO_IDs[COLORS_VBO_IDX]);
 
   // Positions
   glBindBuffer(GL_ARRAY_BUFFER, box_VBO_IDs[POSITIONS_VBO_IDX]);
-  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
-  std::cout << box_VBO_IDs[POSITIONS_VBO_IDX] << std::endl;
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeTestingBox -> Allocated buffer memory for ID = %d\n",
+    box_VBO_IDs[POSITIONS_VBO_IDX]);
   glBufferData(GL_ARRAY_BUFFER, sizeof(BOX_POINTS), BOX_POINTS, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);
@@ -251,8 +249,8 @@ void InitializeTestingBox() {
 
   //Color VBO Initialization
   glBindBuffer(GL_ARRAY_BUFFER, box_VBO_IDs[COLORS_VBO_IDX]);
-  std::cout << "Scene::Init -> Allocated buffer memory for ID = ";
-  std::cout << box_VBO_IDs[COLORS_VBO_IDX] << std::endl;
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeTestingBox -> Allocated buffer memory for ID = %d\n",
+    box_VBO_IDs[COLORS_VBO_IDX]);
   glBufferData(GL_ARRAY_BUFFER, sizeof(BOX_COLOR), BOX_COLOR, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
@@ -321,17 +319,15 @@ void Init(bool a_isDebug) {
     light::module::AddLight(wBackLight);
 
     glGenVertexArrays(2, vertex_array_IDs);
-    std::cout << "Scene::Init -> Generated VAO IDs = ";
-    std::cout << vertex_array_IDs[0] << " & " << vertex_array_IDs[1] << " respectively for axes and box." << std::endl;
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",
+      vertex_array_IDs[0], vertex_array_IDs[1]);
 
     glBindVertexArray(vertex_array_IDs[0]);
-    std::cout << "Scene::Init -> Allocated array memory for ID = ";
-    std::cout << vertex_array_IDs[0] << std::endl;
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[0]);
     InitializeAxes();
 
     glBindVertexArray(vertex_array_IDs[1]);
-    std::cout << "Scene::Init -> Allocated array memory for ID = ";
-    std::cout << vertex_array_IDs[1] << std::endl;
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[1]);
     InitializeTestingBox();
 
     glBindVertexArray(0);
@@ -342,22 +338,22 @@ void Terminate() {
   std::call_once(terminate_flag, [&]() {
     skybox::Destroy();
     if (axes_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
-      std::cout << "scene::Terminate -> Deallocating vertex VBO" << std::endl;
+      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating vertex VBO\n");
       glDeleteBuffers(1, &axes_VBO_IDs[POSITIONS_VBO_IDX]);
       axes_VBO_IDs[POSITIONS_VBO_IDX] = 0;
     }
     if (axes_VBO_IDs[COLORS_VBO_IDX] != 0) {
-      std::cout << "scene::Terminate -> Deallocating color VBO" << std::endl;
+      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating color VBO\n");
       glDeleteBuffers(1, &axes_VBO_IDs[COLORS_VBO_IDX]);
       axes_VBO_IDs[COLORS_VBO_IDX] = 0;
     }
     if (box_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
-      std::cout << "scene::Terminate -> Deallocating vertex VBO" << std::endl;
+      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating vertex VBO\n");
       glDeleteBuffers(1, &box_VBO_IDs[POSITIONS_VBO_IDX]);
       box_VBO_IDs[POSITIONS_VBO_IDX] = 0;
     }
     if (box_VBO_IDs[COLORS_VBO_IDX] != 0) {
-      std::cout << "scene::Terminate -> Deallocating color VBO" << std::endl;
+      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating color VBO\n");
       glDeleteBuffers(1, &box_VBO_IDs[COLORS_VBO_IDX]);
       box_VBO_IDs[COLORS_VBO_IDX] = 0;
     }

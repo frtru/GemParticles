@@ -15,8 +15,8 @@
 //C system files
 //C++ system files
 #include <memory>
-#include <iostream>
 //Other libraries' .h files
+#include "utils/imgui/imgui_glfw.h"
 //Your project's .h files
 #include "project_dictionary.hh"
 #include "utils/timer.hh"
@@ -24,6 +24,8 @@
 #include "utils/shader_factory.hh"
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
+#include "utils/imgui/imgui_log.h"
+#include "utils/imgui/imgui_property_editor.h"
 #include "utils/light_module.hh"
 #include "graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
@@ -51,6 +53,10 @@ void Init() {
   // OpenGL setup
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
+
+  // ImGui initialization
+  ImGui_ImplGlfwGL3_Init(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
+  ImGui::StyleColorsClassic();
 
   shader::module::Init();
   shader::factory::SetShadersFolderBasePath("src/projects/skybox/shaders/");
@@ -86,13 +92,22 @@ void Run() {
     graphic_context->GetWindowHandle()), "GemParticles");
   while (!graphic_context->PollWindowClosedEvent()) {
     const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
-    
+    ImGui_ImplGlfwGL3_NewFrame();
+
+    ImGui::Begin("Stats");
+    ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Total active particles = %d\n", particle_module::GetActiveParticlesCount());
+    ImGui::End();
+
     scene::Render();
     particle_module::Update(dt);
-
     event_handler::Update(); // Has to be placed before before clearing depth buffer bit
-    graphic_context->Update();
 
+    ImGuiPropertyEditor::GetInstance().Draw("Property editor");
+    ImGuiLog::GetInstance().Draw("Debugging logs");
+    ImGui::Render();
+
+    graphic_context->Update();
     timer::Chrono::GetInstance().Update();
   }
 }
@@ -105,6 +120,7 @@ void Terminate() {
   event_handler::Terminate();
   texture::module::Terminate();
   shader::module::Terminate();
+  ImGui_ImplGlfwGL3_Shutdown();
   graphic_context->Terminate();
 }
 } /* namespace skybox_project */

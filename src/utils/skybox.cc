@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "utils/skybox.hh"
 
-#include <iostream>
 #include <mutex>
 
 #include <GL/glew.h>
@@ -24,6 +23,8 @@
 
 // texture utilities
 #include "utils/texture_factory.hh"
+
+#include "utils/imgui/imgui_log.h"
 
 namespace gem {
 namespace particle {
@@ -92,17 +93,13 @@ const std::string CUBE_MAP_TEXTURE_FRONT_FILE_PATH  = "textures/skybox2/negz.jpg
 
 void InitializeCube() {
   glGenVertexArrays(1, &skybox_VAO_id);
-  std::cout << "skybox::InitializeCube -> Generated VAO ID = ";
-  std::cout << skybox_VAO_id << std::endl;
+  ImGuiLog::GetInstance().AddLog("skybox::InitializeCube -> Generated VAO ID = %d\n", skybox_VAO_id);
   glBindVertexArray(skybox_VAO_id);
-  std::cout << "skybox::InitializeCube -> Allocated array memory for ID = ";
-  std::cout << skybox_VAO_id << std::endl;
+  ImGuiLog::GetInstance().AddLog("skybox::InitializeCube->Allocated array memory for ID = %d\n", skybox_VAO_id);
   glGenBuffers(1, &skybox_positions_VBO_id);
-  std::cout << "skybox::InitializeCube -> Generated VBO ID = ";
-  std::cout << skybox_positions_VBO_id << std::endl;
+  ImGuiLog::GetInstance().AddLog("skybox::InitializeCube -> Generated VBO ID = %d\n", skybox_positions_VBO_id);
   glBindBuffer(GL_ARRAY_BUFFER, skybox_positions_VBO_id);
-  std::cout << "skybox::InitializeCube -> Allocated buffer memory for ID = ";
-  std::cout << skybox_positions_VBO_id << std::endl;
+  ImGuiLog::GetInstance().AddLog("skybox::InitializeCube -> Allocated buffer memory for ID = %d\n", skybox_positions_VBO_id);
   glBufferData(GL_ARRAY_BUFFER, sizeof(SKYBOX_VERTICES), SKYBOX_VERTICES, GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);

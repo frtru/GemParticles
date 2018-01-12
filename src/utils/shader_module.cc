@@ -15,7 +15,6 @@
 
 #include <algorithm>
 #include <vector>
-#include <iostream>
 #include <map>
 #include <fstream>
 #include <mutex>
@@ -169,7 +168,7 @@ void RegisterSSBOBlock(GLuint a_unBindingPoint,
     GLuint unSSBOID;
     glGenBuffers(1, &unSSBOID);
     SSBO_list[a_unBindingPoint] = std::make_pair(unSSBOID, a_unSSBOSize);
-    std::cout << __func__ << " -> Generated a SSBO, ID = " << unSSBOID << std::endl;
+    ImGuiLog::GetInstance().AddLog("shader_module::RegisterSSBOBlock -> Generated a SSBO, ID = %d\n", unSSBOID);
     UpdateSSBOBlockData(a_unBindingPoint, a_unSSBOSize, a_pData, a_eUsage);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, a_unBindingPoint, unSSBOID);
     SSBO_list[a_unBindingPoint] = std::make_pair(unSSBOID, a_unSSBOSize);
@@ -187,8 +186,7 @@ void UpdateSSBOBlockData(GLuint a_unBindingPoint,
     GLuint unSSBOID = SSBO->second.first;
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, unSSBOID);
     glBufferData(GL_SHADER_STORAGE_BUFFER, a_unSSBOSize, a_pData, a_eUsage);
-    std::cout << __func__ << " -> Updated SSBO with ID " << unSSBOID;
-    std::cout << ", final size = " << a_unSSBOSize << std::endl;
+    ImGuiLog::GetInstance().AddLog("shader_module::UpdateSSBOBlockData -> Updated SSBO with ID %d, final size = %d\n", unSSBOID, a_unSSBOSize);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); //unbind
   }
   else {

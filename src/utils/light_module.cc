@@ -13,11 +13,11 @@
 *************************************************************************/
 #include "utils/light_module.hh"
 
-#include <iostream>
 #include <vector>
 #include <mutex>
 
 #include "utils/shader_module.hh"
+#include "utils/imgui/imgui_log.h"
 
 namespace gem { namespace particle {
 namespace light {
@@ -67,7 +67,7 @@ std::size_t AddLight(const Light &light) {
   std::size_t wIndex = _Lights.size() - 1;
   UpdateLightsGPUBuffer(wIndex);
   // Return the index of the newly added light
-  std::cout << __func__ << " -> Added a light with index = " << wIndex << std::endl;
+  ImGuiLog::GetInstance().AddLog("light_module::AddLight -> Added a light with index = %d\n", wIndex);
   return wIndex;
 }
 std::size_t AddLight(Light&& light) {
@@ -94,7 +94,7 @@ Light GetLight(std::size_t lightID) {
   if (lightID < _Lights.size()) {
     return _Lights[lightID];
   }
-  std::cerr << __func__ << " : lightID is out of bound." << std::endl;
+  ImGuiLog::GetInstance().AddLog("[ERROR]light_module::GetNumberOfLights -> lightID is out of bound.\n");
   return Light();
 }
 
@@ -108,7 +108,7 @@ void UpdateLight(std::size_t lightID, const Light &light) {
       sizeof(Light));
     return;
   }
-  std::cerr << __func__ << " : lightID is out of bound." << std::endl;
+  ImGuiLog::GetInstance().AddLog("[ERROR]light_module::UpdateLight -> lightID is out of bound.\n");
 }
 void UpdateLight(std::size_t lightID, Light &&light) {
   if (lightID >= 0 && lightID < _Lights.size()) {
@@ -119,7 +119,7 @@ void UpdateLight(std::size_t lightID, Light &&light) {
       sizeof(Light));
     return;
   }
-  std::cerr << __func__ << " : lightID is out of bound." << std::endl;
+  ImGuiLog::GetInstance().AddLog("[ERROR]light_module::UpdateLight -> lightID is out of bound.\n");
 }
 } /* namespace module */
 } /* namespace light */

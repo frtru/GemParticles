@@ -21,10 +21,11 @@
 #include "utils/texture_factory.hh"
 #include "utils/texture_module.hh"
 
+#include "utils/imgui/imgui_log.h"
+
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
-#include <iostream>
 namespace gem { namespace particle {
 namespace rain_project {
 TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath) {
@@ -35,11 +36,9 @@ TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath) 
 
   // VAO initialization
   glGenVertexArrays(1, &m_vertexArrayID);
-  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Generated VAO ID = ";
-  std::cout << m_vertexArrayID << std::endl;
+  ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::TextureCoreGLRenderer -> Generated VAO ID = %d\n", m_vertexArrayID);
   glBindVertexArray(m_vertexArrayID);
-  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated array memory for ID = ";
-  std::cout << m_vertexArrayID << std::endl;
+  ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated array memory for ID = %d\n", m_vertexArrayID);
 
   ParticleTexturesInit(a_sTexturePath);
 
@@ -49,12 +48,12 @@ TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath) 
 
 TextureCoreGLRenderer::~TextureCoreGLRenderer() {
   if (m_colorVBOID != 0) {
-    std::cout << "TextureCoreGLRenderer::~TextureCoreGLRenderer -> Deallocating color VBO" << std::endl;
+    ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::~TextureCoreGLRenderer -> Deallocating color VBO\n");
     glDeleteBuffers(1, &m_colorVBOID);
     m_colorVBOID = 0;
   }
   if (m_vertexBufferID != 0) {
-    std::cout << "TextureCoreGLRenderer::~TextureCoreGLRenderer -> Deallocating vertex VBO" << std::endl;
+    ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::~TextureCoreGLRenderer -> Deallocating vertex VBO\n");
     glDeleteBuffers(1, &m_vertexBufferID);
     m_vertexBufferID = 0;
   }
@@ -72,11 +71,9 @@ void TextureCoreGLRenderer::ParticlePositionsInit(
   const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
   // Positions VBO initialization
   glGenBuffers(1, &m_vertexBufferID);
-  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Generated vertex VBO ID = ";
-  std::cout << m_vertexBufferID << std::endl;
+  ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::ParticlePositionsInit -> Generated vertex VBO ID = %d\n", m_vertexBufferID);
   glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
-  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated buffer memory for ID = ";
-  std::cout << m_vertexBufferID << std::endl;
+  ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::ParticlePositionsInit -> Allocated buffer memory for ID = %d\n", m_vertexBufferID);
 
   const std::size_t wParticleCount = a_pPool->GetParticleCount();
 
@@ -104,11 +101,9 @@ void TextureCoreGLRenderer::ParticleColorsInit(
   const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
-  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Generated color VBO ID = ";
-  std::cout << m_colorVBOID << std::endl;
+  ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::ParticleColorsInit -> Generated color VBO ID = %d\n", m_colorVBOID);
   glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
-  std::cout << "TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated buffer memory for ID = ";
-  std::cout << m_colorVBOID << std::endl;
+  ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::ParticleColorsInit -> Allocated buffer memory for ID = %d\n", m_colorVBOID);
 
   const std::size_t wParticleCount = a_pPool->GetParticleCount();
 

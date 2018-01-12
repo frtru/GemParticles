@@ -13,7 +13,7 @@
 *************************************************************************/
 #include "graphic_contexts/opengl_context.hh"
 
-#include "utils/imgui/imgui_log.h"
+#include <iostream>
 
 namespace gem {
 namespace particle {
@@ -71,7 +71,7 @@ void OpenGLContext::InitImpl() {
   // GLFW initialization
   /* Initialize the library */
   if (!glfwInit())
-    throw "OpenGLSetup -> glfwInit failed!";
+    std::cerr << "OpenGLSetup -> glfwInit failed!" << std::endl;
   
   // Modern OpenGL
   // NOTE: MUST BE COMMENTED-OUT IN ORDER TO USE ANTTWEAKBAR
@@ -84,7 +84,7 @@ void OpenGLContext::InitImpl() {
   m_pWindow = glfwCreateWindow(640, 480, "GemParticles", NULL, NULL);
   if (!m_pWindow) {
     glfwTerminate();
-    throw "OpenGLSetup -> glfwCreateWindow failed!";
+    std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
   }
 
   /* Make the window's context current */
@@ -98,7 +98,7 @@ void OpenGLContext::InitImpl() {
 
   // GLEW initialization
   if (GLEW_OK != glewInit()) {
-   throw "GLEW is not initialized!";
+    std::cerr << "GLEW is not initialized!" << std::endl;
   }
 
   // OpenGL initialization
@@ -118,7 +118,7 @@ void OpenGLContext::InitImpl() {
 }
 
 void OpenGLContext::TerminateImpl() {
-  ImGuiLog::GetInstance().AddLog("OpenGLContext::TerminateImpl -> Deleting glfw context.\n");
+  std::cout << "OpenGLContext::TerminateImpl -> Deleting glfw context." << std::endl;
   glfwTerminate();
 }
 } /* namespace particle */

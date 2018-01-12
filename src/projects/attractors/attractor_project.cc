@@ -15,10 +15,8 @@
 //C system files
 //C++ system files
 #include <memory>
-#include <iostream>
 //Other libraries' .h files
 #include "utils/imgui/imgui_glfw.h"
-//#include <AntTweakBar.h>
 //Your project's .h files
 #include "project_dictionary.hh"
 #include "utils/timer.hh"
