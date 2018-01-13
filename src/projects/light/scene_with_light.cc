@@ -329,8 +329,37 @@ void Init(bool a_isDebug) {
     glBindVertexArray(vertex_array_IDs[1]);
     ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[1]);
     InitializeTestingBox();
-
     glBindVertexArray(0);
+
+    // Add properties to the editor
+    ImGuiPropertyEditor &editor = ImGuiPropertyEditor::GetInstance();
+    editor.AddObject("Box material", &box_material);
+    editor.AddProperty<PropertyType::VEC3>("Ambient factor", &(box_material.ambientFactor), [&]() {
+      shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
+      UpdateMaterialUniform();
+      shader::module::Detach();
+    }, 0.1f);
+    editor.AddProperty<PropertyType::VEC3>("Diffuse factor", &(box_material.diffuseFactor), [&]() {
+      shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
+      UpdateMaterialUniform();
+      shader::module::Detach();
+    }, 0.1f);
+    editor.AddProperty<PropertyType::VEC3>("Specular factor", &(box_material.specularFactor), [&]() {
+      shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
+      UpdateMaterialUniform();
+      shader::module::Detach();
+    }, 0.1f);
+    editor.AddProperty<PropertyType::DRAG_FLOAT>("Shininess factor", &(box_material.shininessFactor), [&]() {
+      shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
+      UpdateMaterialUniform();
+      shader::module::Detach();
+    }, 0.1f);
+    // Doesn't work wtf
+    //light::Light *light1 = light::module::GetLightRef(1U);
+    //editor.AddObject("Light #1", light1);
+    //editor.AddProperty<PropertyType::VEC3>("Position", &(light1->position), [&]() {
+    //  light::module::UpdateLight(0U, *light1);
+    //}, 0.1f);
   });
 }
 

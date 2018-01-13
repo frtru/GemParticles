@@ -58,9 +58,7 @@ ProximityColorUpdater::ProximityColorUpdater(
   // Adding the properties of this component to the editor
   ImGuiPropertyEditor &editor = ImGuiPropertyEditor::GetInstance();
   editor.AddObject("Proximity Color Updater", this);
-  editor.AddProperty<PropertyType::DRAG_FLOAT>("Max distance", &m_fMaxDistance, []() {
-    ImGuiLog::GetInstance().AddLog("ProximityColorUpdater -> Max distance property changed, callback called\n Should appear multiple times when changing value...\n");
-  });
+  editor.AddProperty<PropertyType::DRAG_FLOAT>("Max distance", &m_fMaxDistance);
   editor.AddProperty<PropertyType::COLOR>("Hot color", m_vHotColor);
   editor.AddProperty<PropertyType::COLOR>("Cold color", m_vColdColor);
 }

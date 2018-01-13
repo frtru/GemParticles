@@ -71,14 +71,16 @@ enum class PropertyType {
 };
 struct IProperty {
   IProperty(const std::string &name,
-    void* data, std::function<void()> callback)
-    : _name(name), _data(data), _callback(callback) {
+    void* data, std::function<void()> callback,
+    float delta)
+    : _name(name), _data(data), _callback(callback), _delta(delta) {
   }
   
   virtual void AllocateDataCopy() = 0;
   virtual void Draw(int id) = 0;
   
   std::string           _name;
+  float                 _delta;
   void*                 _data;
   void*                 _previous_data;
   std::function<void()> _callback;
@@ -88,8 +90,9 @@ struct Property : public IProperty{};
 template <>
 struct Property<PropertyType::NEW_OBJECT> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, 0.0f) {}
 
   virtual void AllocateDataCopy() override {
     _previous_data = nullptr;
@@ -109,8 +112,9 @@ struct Property<PropertyType::NEW_OBJECT> : IProperty {
 template <>
 struct Property<PropertyType::INPUT_INT> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 
   ~Property() { free(_previous_data); }
 
@@ -130,7 +134,7 @@ struct Property<PropertyType::INPUT_INT> : IProperty {
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
-    ImGui::InputInt("##value", wData, 1U);
+    ImGui::InputInt("##value", wData);
     ImGui::PopItemWidth();
     ImGui::NextColumn();
     // -------------------
@@ -145,8 +149,9 @@ struct Property<PropertyType::INPUT_INT> : IProperty {
 template <>
 struct Property<PropertyType::DRAG_INT> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 
   ~Property() { free(_previous_data); }
 
@@ -166,7 +171,7 @@ struct Property<PropertyType::DRAG_INT> : IProperty {
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
-    ImGui::DragInt("##value", wData, 1);
+    ImGui::DragInt("##value", wData, _delta);
     ImGui::PopItemWidth();
     ImGui::NextColumn();
     // -------------------
@@ -181,8 +186,9 @@ struct Property<PropertyType::DRAG_INT> : IProperty {
 template <>
 struct Property<PropertyType::INPUT_FLOAT> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 
   ~Property() { free(_previous_data); }
 
@@ -202,7 +208,7 @@ struct Property<PropertyType::INPUT_FLOAT> : IProperty {
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
-    ImGui::InputFloat("##value", wData, 1.0f);
+    ImGui::InputFloat("##value", wData);
     ImGui::PopItemWidth();
     ImGui::NextColumn();
     // -------------------
@@ -217,8 +223,9 @@ struct Property<PropertyType::INPUT_FLOAT> : IProperty {
 template <>
 struct Property<PropertyType::DRAG_FLOAT> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 
   ~Property() { free(_previous_data); }
 
@@ -238,7 +245,7 @@ struct Property<PropertyType::DRAG_FLOAT> : IProperty {
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
-    ImGui::DragFloat("##value", wData, 0.01f);
+    ImGui::DragFloat("##value", wData, _delta);
     ImGui::PopItemWidth();
     ImGui::NextColumn();
     // -------------------
@@ -253,8 +260,9 @@ struct Property<PropertyType::DRAG_FLOAT> : IProperty {
 template <>
 struct Property<PropertyType::COLOR> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 
   ~Property() { free(_previous_data); }
 
@@ -296,8 +304,9 @@ struct Property<PropertyType::COLOR> : IProperty {
 template <>
 struct Property<PropertyType::VEC3> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 
   ~Property() { free(_previous_data); }
 
@@ -317,7 +326,7 @@ struct Property<PropertyType::VEC3> : IProperty {
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
-    ImGui::DragFloat3("##value", wData);
+    ImGui::DragFloat3("##value", wData, _delta);
     ImGui::PopItemWidth();
     ImGui::NextColumn();
     // -------------------
@@ -338,14 +347,16 @@ template <>
 // TODO: Complete following property types when they will actually be used
 struct Property<PropertyType::STRING> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 };
 template <>
 struct Property<PropertyType::TOGGLE_BOOL> : IProperty {
   Property(const std::string &name,
-    void* data, std::function<void()> callback)
-    : IProperty(name, data, callback) {}
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
 };
 
 class ImGuiPropertyEditor : public Singleton<ImGuiPropertyEditor>
@@ -356,8 +367,8 @@ public:
   }
 
   template<PropertyType type>
-  void AddProperty(const std::string& name, void* data, std::function<void()> callback = nullptr) {
-    auto ptr = std::make_shared<Property<type> >(name, data, callback);
+  void AddProperty(const std::string& name, void* data, std::function<void()> callback = nullptr, float delta = 1.0f) {
+    auto ptr = std::make_shared<Property<type> >(name, data, callback, delta);
     ptr->AllocateDataCopy();
     _PropertiesVector.emplace_back(ptr);
   }

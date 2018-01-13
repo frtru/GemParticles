@@ -20,6 +20,6 @@
 using namespace gem::particle;
 
 int main(int argc, const char *argv[]) {
-  app::Launch("attractor");
+  app::Launch("light");
   return app::GetAppStatusError();
 }
