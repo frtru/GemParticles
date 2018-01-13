@@ -20,6 +20,8 @@
 #include "utils/shader_factory.hh"
 #include "utils/shader_module.hh"
 #include "utils/light_module.hh"
+
+#include "utils/imgui/imgui_property_editor.h"
 #include "utils/imgui/imgui_log.h"
 
 

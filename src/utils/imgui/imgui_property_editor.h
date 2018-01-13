@@ -19,6 +19,8 @@
 #include <string>
 #include <vector>
 #include <tuple>
+#include <functional>
+#include <limits>
 
 #include "utils/imgui/imgui.h"
 #include "utils/imgui/imgui_log.h"
@@ -56,7 +58,7 @@
 
 #define IM_MAX(_A,_B)       (((_A) >= (_B)) ? (_A) : (_B))
 
-enum EditableProperty {
+enum class PropertyType {
   TOGGLE_BOOL,
   INPUT_INT,
   DRAG_INT,
@@ -67,20 +69,302 @@ enum EditableProperty {
   STRING,
   NEW_OBJECT
 };
+struct IProperty {
+  IProperty(const std::string &name,
+    void* data, std::function<void()> callback)
+    : _name(name), _data(data), _callback(callback) {
+  }
+  
+  virtual void AllocateDataCopy() = 0;
+  virtual void Draw(int id) = 0;
+  
+  std::string           _name;
+  void*                 _data;
+  void*                 _previous_data;
+  std::function<void()> _callback;
+};
+template <PropertyType>
+struct Property : public IProperty{};
+template <>
+struct Property<PropertyType::NEW_OBJECT> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = nullptr;
+  }
+  virtual void Draw(int id) override {
+    ImGui::PushID(_data);
+    ImGui::Separator();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text(_name.c_str());
+    ImGui::NextColumn();
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("");
+    ImGui::NextColumn();
+    ImGui::PopID();
+  }
+};
+template <>
+struct Property<PropertyType::INPUT_INT> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+
+  ~Property() { free(_previous_data); }
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = malloc(sizeof(int));
+    memcpy(_previous_data, _data, sizeof(int));
+  }
+  virtual void Draw(int id) override {
+    int *wData = static_cast<int*>(_data),
+      *wPreviousData = static_cast<int*>(_previous_data);
+
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(_name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::InputInt("##value", wData, 1U);
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+
+    if (_callback != nullptr && *wData != *wPreviousData) {
+      _callback();
+      *wPreviousData = *wData;
+    }
+  }
+};
+template <>
+struct Property<PropertyType::DRAG_INT> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+
+  ~Property() { free(_previous_data); }
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = malloc(sizeof(int));
+    memcpy(_previous_data, _data, sizeof(int));
+  }
+  virtual void Draw(int id) override {
+    int *wData = static_cast<int*>(_data),
+      *wPreviousData = static_cast<int*>(_previous_data);
+
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(_name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::DragInt("##value", wData, 1);
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+
+    if (_callback != nullptr && *wData != *wPreviousData) {
+      _callback();
+      *wPreviousData = *wData;
+    }
+  }
+};
+template <>
+struct Property<PropertyType::INPUT_FLOAT> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+
+  ~Property() { free(_previous_data); }
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = malloc(sizeof(float));
+    memcpy(_previous_data, _data, sizeof(float));
+  }
+  virtual void Draw(int id) override {
+    float *wData = static_cast<float*>(_data),
+      *wPreviousData = static_cast<float*>(_previous_data);
+
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(_name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::InputFloat("##value", wData, 1.0f);
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+
+    if (_callback != nullptr && fabs(*wData - *wPreviousData) >= 0.1f) {
+      _callback();
+      *wPreviousData = *wData;
+    }
+  }
+};
+template <>
+struct Property<PropertyType::DRAG_FLOAT> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+
+  ~Property() { free(_previous_data); }
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = malloc(sizeof(float));
+    memcpy(_previous_data, _data, sizeof(float));
+  }
+  virtual void Draw(int id) override {
+    float *wData = static_cast<float*>(_data),
+      *wPreviousData = static_cast<float*>(_previous_data);
+
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(_name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::DragFloat("##value", wData, 0.01f);
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+
+    if (_callback != nullptr && fabs(*wData - *wPreviousData) >= 0.1f) {
+      _callback();
+      *wPreviousData = *wData;
+    }
+  }
+};
+template <>
+struct Property<PropertyType::COLOR> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+
+  ~Property() { free(_previous_data); }
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = malloc(4 * sizeof(float));
+    memcpy(_previous_data, _data, 4 * sizeof(float));
+  }
+  virtual void Draw(int id) override {
+    float *wData = static_cast<float*>(_data),
+      *wPreviousData = static_cast<float*>(_previous_data);
+
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(_name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::ColorEdit4("MyColor##2", wData, ImGuiColorEditFlags_Uint8);
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+
+    if (_callback != nullptr  &&
+      std::fabs(*wData - *wPreviousData) >= 0.1f &&
+      std::fabs(*(wData + 1) - *(wPreviousData + 1)) >= 0.1f &&
+      std::fabs(*(wData + 2) - *(wPreviousData + 2)) >= 0.1f &&
+      std::fabs(*(wData + 3) - *(wPreviousData + 3)) >= 0.1f) {
+      _callback();
+      *wPreviousData = *wData;
+      *(wPreviousData + 1) = *(wData + 1);
+      *(wPreviousData + 2) = *(wData + 2);
+      *(wPreviousData + 3) = *(wData + 3);
+    }
+  }
+};
+template <>
+struct Property<PropertyType::VEC3> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+
+  ~Property() { free(_previous_data); }
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = malloc(3 * sizeof(float));
+    memcpy(_previous_data, _data, 3 * sizeof(float));
+  }
+  virtual void Draw(int id) override {
+    float *wData = static_cast<float*>(_data),
+      *wPreviousData = static_cast<float*>(_previous_data);
+
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(_name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::DragFloat3("##value", wData);
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+
+    if (_callback != nullptr  &&
+      std::fabs(*wData - *wPreviousData) >= 0.1f &&
+      std::fabs(*(wData + 1) - *(wPreviousData + 1)) >= 0.1f &&
+      std::fabs(*(wData + 2) - *(wPreviousData + 2)) >= 0.1f) {
+      _callback();
+      *wPreviousData = *wData;
+      *(wPreviousData + 1) = *(wData + 1);
+      *(wPreviousData + 2) = *(wData + 2);
+    }
+  }
+};
+template <>
+// TODO: Complete following property types when they will actually be used
+struct Property<PropertyType::STRING> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+};
+template <>
+struct Property<PropertyType::TOGGLE_BOOL> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback)
+    : IProperty(name, data, callback) {}
+};
 
 class ImGuiPropertyEditor : public Singleton<ImGuiPropertyEditor>
 {
 public:
-  using Property = std::tuple<std::string, EditableProperty, void*>;
   void AddObject(const std::string& name, void *uid) {
-    _PropertiesVector.push_back(std::make_tuple(name, NEW_OBJECT, uid));
+    AddProperty<PropertyType::NEW_OBJECT>(name, uid, nullptr);
   }
 
-  void AddProperty(const std::string& prefix, EditableProperty type, void* data) {
-    _PropertiesVector.push_back(std::make_tuple(prefix, type, data));
+  template<PropertyType type>
+  void AddProperty(const std::string& name, void* data, std::function<void()> callback = nullptr) {
+    auto ptr = std::make_shared<Property<type> >(name, data, callback);
+    ptr->AllocateDataCopy();
+    _PropertiesVector.emplace_back(ptr);
   }
 
-  void Draw(const char* title, bool* p_open = NULL) {
+  void Draw(const char* title, bool openFlag = true, bool* p_open = NULL) {
+    if (!openFlag)
+      return;
     if (!ImGui::Begin(title, p_open))
     {
       ImGui::End();
@@ -89,8 +373,8 @@ public:
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(2, 2));
     ImGui::Columns(2);
     for (int i = 0; i < _PropertiesVector.size(); ++i) {
-      const Property &prop = _PropertiesVector[i];
-      CreateComponentFromType(prop, i); 
+      std::shared_ptr<IProperty> prop = _PropertiesVector[i];
+      prop->Draw(i);
     }
     ImGui::Columns(1);
     ImGui::Separator();
@@ -98,142 +382,5 @@ public:
     ImGui::End();
   }
 private:
-
-  void CreateComponentFromType(const Property& prop, int id) {
-    EditableProperty type = std::get<EditableProperty>(prop);
-    std::string name      = std::get<std::string>(prop);
-    void* data            = std::get<void*>(prop);
-    switch (type) {
-      case NEW_OBJECT:
-        CreateParent(name, data);
-        break;
-      case TOGGLE_BOOL:
-        break;
-      case INPUT_INT:
-        CreateIntInputComponent(name, data, id);
-        break;
-      case DRAG_INT:
-        CreateIntDragComponent(name, data, id);
-        break;
-      case INPUT_FLOAT:
-        CreateFloatInputComponent(name, data, id);
-        break;
-      case DRAG_FLOAT:
-        CreateFloatDragComponent(name, data, id);
-        break;
-      case COLOR:
-        CreateColorPickerComponent(name, data, id);
-        break;
-      case VEC3:
-        CreateVec3DragComponent(name, data, id);
-        break;
-      case STRING:
-        break;
-      default:
-        break;
-    }
-  }
-
-  void CreateIntInputComponent(const std::string &name, void *data, int id) {
-    ImGui::PushID(id);
-    ImGui::AlignTextToFramePadding();
-    // -------------------
-    ImGui::Bullet();
-    ImGui::Selectable(name.c_str());
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PushItemWidth(-1);
-    ImGui::InputInt("##value", static_cast<int*>(data), 1U);
-    ImGui::PopItemWidth();
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PopID();
-  }
-  void CreateFloatInputComponent(const std::string &name, void *data, int id) {
-    ImGui::PushID(id);
-    ImGui::AlignTextToFramePadding();
-    // -------------------
-    ImGui::Bullet();
-    ImGui::Selectable(name.c_str());
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PushItemWidth(-1);
-    ImGui::InputFloat("##value", static_cast<float*>(data), 1.0f);
-    ImGui::PopItemWidth();
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PopID();
-  }
-  void CreateIntDragComponent(const std::string &name, void *data, int id) {
-    ImGui::PushID(id);
-    ImGui::AlignTextToFramePadding();
-    // -------------------
-    ImGui::Bullet();
-    ImGui::Selectable(name.c_str());
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PushItemWidth(-1);
-    ImGui::DragInt("##value", static_cast<int*>(data), 1);
-    ImGui::PopItemWidth();
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PopID();
-  }
-  void CreateFloatDragComponent(const std::string &name, void *data, int id) {
-    ImGui::PushID(id);
-    ImGui::AlignTextToFramePadding();
-    // -------------------
-    ImGui::Bullet();
-    ImGui::Selectable(name.c_str());
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PushItemWidth(-1);
-    ImGui::DragFloat("##value", static_cast<float*>(data), 0.01f);
-    ImGui::PopItemWidth();
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PopID();
-  }
-  void CreateColorPickerComponent(const std::string &name, void *data, int id) {
-    ImGui::PushID(id);
-    ImGui::AlignTextToFramePadding();
-    // -------------------
-    ImGui::Bullet();
-    ImGui::Selectable(name.c_str());
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PushItemWidth(-1);
-    ImGui::ColorEdit4("MyColor##2", static_cast<float*>(data), ImGuiColorEditFlags_Uint8); // TODO: This probably won't work!
-    ImGui::PopItemWidth();
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PopID();
-  }
-  void CreateParent(const std::string & name, void *data) {
-    ImGui::PushID(data);
-    ImGui::Separator();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text(name.c_str());
-    ImGui::NextColumn();
-    ImGui::AlignTextToFramePadding();
-    ImGui::Text("");
-    ImGui::NextColumn();
-    ImGui::PopID();
-  }
-  void CreateVec3DragComponent(const std::string &name, void *data, int id) {
-    ImGui::PushID(id);
-    ImGui::AlignTextToFramePadding();
-    // -------------------
-    ImGui::Bullet();
-    ImGui::Selectable(name.c_str());
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PushItemWidth(-1);
-    ImGui::DragFloat3("##value", static_cast<float*>(data));
-    ImGui::PopItemWidth();
-    ImGui::NextColumn();
-    // -------------------
-    ImGui::PopID();
-  }
-  std::vector<Property> _PropertiesVector;
+  std::vector<std::shared_ptr<IProperty> > _PropertiesVector;
 };
