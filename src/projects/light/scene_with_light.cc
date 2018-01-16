@@ -98,42 +98,42 @@ const GLfloat BOX_POINTS[] = {
 // According to : https://www.opengl.org/discussion_boards/showthread.php/171379-VBOs-Drawing-vertices-of-same-color
 // "You have to specify the color for each vertex."
 const unsigned char BOX_COLOR[] = {
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
-  225u,128u,15u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
+    200u,200u,200u,255u,
 };
 
 bool    debug_mode;
@@ -150,7 +150,7 @@ GLuint  shader_program_ID;
 std::once_flag init_flag;
 std::once_flag terminate_flag;
 
-light::Material box_material;
+light::Material material;
 
 void DrawDebugObjects() {
   glBindVertexArray(vertex_array_IDs[0]);
@@ -270,16 +270,17 @@ void InitializeTestingBox() {
 }
 
 void UpdateMaterialUniform() {
-  shader::module::SetUniformVec3(shader_program_ID, "material.ambientFactor", box_material.ambientFactor);
-  shader::module::SetUniformVec3(shader_program_ID, "material.diffuseFactor", box_material.diffuseFactor);
-  shader::module::SetUniformVec3(shader_program_ID, "material.specularFactor", box_material.specularFactor);
-  shader::module::SetUniformFloat(shader_program_ID, "material.shininessFactor", box_material.shininessFactor);
+  shader::module::SetUniformVec3(shader_program_ID, "material.ambientFactor", material.ambientFactor);
+  shader::module::SetUniformVec3(shader_program_ID, "material.diffuseFactor", material.diffuseFactor);
+  shader::module::SetUniformVec3(shader_program_ID, "material.specularFactor", material.specularFactor);
+  shader::module::SetUniformFloat(shader_program_ID, "material.shininessFactor", material.shininessFactor);
 }
 }
 
 void Init(bool a_isDebug) {
   std::call_once(init_flag, [&]() {
     debug_mode = a_isDebug;
+    glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
     shader::factory::CompileShaderFile("scene.vert", GL_VERTEX_SHADER);
     shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
@@ -291,10 +292,10 @@ void Init(bool a_isDebug) {
     shader::module::SetUniformFloat(shader_program_ID, "ambient_light_intensity", 0.5f);
 
     // Color of the box is sent through the material
-    box_material.ambientFactor    = { 1.0f, 0.5f, 0.31f }; 
-    box_material.diffuseFactor    = { 1.0f, 0.5f, 0.31f };
-    box_material.specularFactor   = { 0.5f, 0.5f, 0.5f };
-    box_material.shininessFactor  = 32.0f;
+    material.ambientFactor    = { 0.6f, 0.6f, 0.6f };
+    material.diffuseFactor    = { 0.65f, 0.65f, 0.65f };
+    material.specularFactor   = { 0.6f, 0.6f, 0.5f };
+    material.shininessFactor  = 40.0f;
     UpdateMaterialUniform();
     shader::module::Detach();
     
@@ -302,21 +303,21 @@ void Init(bool a_isDebug) {
     light::module::Init();
 
     // Add lights in the scene in the SSBO
-    light::Light wFrontLight, wBackLight;
+    light::Light wFrontLight/*, wBackLight*/;
     wFrontLight.position = { 0.0f, 0.0f, 2.0f, 0.0f };
     wFrontLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
     wFrontLight.intensity = 1.0f;
     wFrontLight.attenuation = 0.0f;
     wFrontLight.radius = 10.0f;
 
-    wBackLight.position = { 2.0f, 0.0f, 0.0f, 0.0f };
-    wBackLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-    wBackLight.intensity = 1.0f;
-    wBackLight.attenuation = 0.0f;
-    wBackLight.radius = 10.0f;
+    //wBackLight.position = { 2.0f, 0.0f, 0.0f, 0.0f };
+    //wBackLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+    //wBackLight.intensity = 1.0f;
+    //wBackLight.attenuation = 0.0f;
+    //wBackLight.radius = 10.0f;
 
-    light::module::AddLight(wFrontLight);
-    light::module::AddLight(wBackLight);
+    light::module::AddLight(wFrontLight);/*
+    light::module::AddLight(wBackLight);*/
 
     glGenVertexArrays(2, vertex_array_IDs);
     ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",
@@ -333,33 +334,27 @@ void Init(bool a_isDebug) {
 
     // Add properties to the editor
     ImGuiPropertyEditor &editor = ImGuiPropertyEditor::GetInstance();
-    editor.AddObject("Box material", &box_material);
-    editor.AddProperty<PropertyType::VEC3>("Ambient factor", &(box_material.ambientFactor), [&]() {
+    editor.AddObject("Box material", &material);
+    editor.AddProperty<PropertyType::VEC3>("Ambient factor", &(material.ambientFactor), [&]() {
       shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
       UpdateMaterialUniform();
       shader::module::Detach();
-    }, 0.1f);
-    editor.AddProperty<PropertyType::VEC3>("Diffuse factor", &(box_material.diffuseFactor), [&]() {
+    }, 0.05f);
+    editor.AddProperty<PropertyType::VEC3>("Diffuse factor", &(material.diffuseFactor), [&]() {
       shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
       UpdateMaterialUniform();
       shader::module::Detach();
-    }, 0.1f);
-    editor.AddProperty<PropertyType::VEC3>("Specular factor", &(box_material.specularFactor), [&]() {
+    }, 0.05f);
+    editor.AddProperty<PropertyType::VEC3>("Specular factor", &(material.specularFactor), [&]() {
       shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
       UpdateMaterialUniform();
       shader::module::Detach();
-    }, 0.1f);
-    editor.AddProperty<PropertyType::DRAG_FLOAT>("Shininess factor", &(box_material.shininessFactor), [&]() {
+    }, 0.05f);
+    editor.AddProperty<PropertyType::DRAG_FLOAT>("Shininess factor", &(material.shininessFactor), [&]() {
       shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
       UpdateMaterialUniform();
       shader::module::Detach();
-    }, 0.1f);
-    // Doesn't work wtf
-    //light::Light *light1 = light::module::GetLightRef(1U);
-    //editor.AddObject("Light #1", light1);
-    //editor.AddProperty<PropertyType::VEC3>("Position", &(light1->position), [&]() {
-    //  light::module::UpdateLight(0U, *light1);
-    //}, 0.1f);
+    }, 0.05f);
   });
 }
 
@@ -391,8 +386,8 @@ void Terminate() {
   });
 }
 
-void UpdateMaterial(const light::Material& a_material) { box_material = a_material; }
-light::Material GetMaterial() { return box_material; }
+void UpdateMaterial(const light::Material& a_material) { material = a_material; }
+light::Material GetMaterial() { return material; }
 
 bool IsDebug() { return debug_mode; }
 void SetDebugOption(bool a_isDebug) { debug_mode = a_isDebug; }

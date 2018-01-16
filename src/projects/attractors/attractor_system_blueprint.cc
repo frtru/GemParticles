@@ -36,9 +36,9 @@ const glm::f32vec3 _ZeroVector = glm::f32vec3(0.0f, 0.0f, 0.0f);
 glm::vec4   _HotColor           = { 1.0f, 1.0f, 0.5f, 1.0f };
 glm::vec4   _ColdColor          = { 1.0f, 0u, 0u, 1.0f };
 glm::f32vec3  _POI              = { 1.0f, 1.0f, 1.0f };
-float         _InitialRadius    = 0.5f;
-float         _AccelerationRate = 15.0f;
-float         _MaxDistance      = 7.0f;
+float         _InitialRadius    = 1.0f;
+float         _AccelerationRate = 0.0f;
+float         _MaxDistance      = 10.0f;
 std::size_t   _ParticleCount    = 1000000u;
 std::string   _ParticleSystemName;
 

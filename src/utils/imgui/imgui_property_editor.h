@@ -288,11 +288,11 @@ struct Property<PropertyType::COLOR> : IProperty {
     // -------------------
     ImGui::PopID();
 
-    if (_callback != nullptr  &&
-      std::fabs(*wData - *wPreviousData) >= 0.1f &&
-      std::fabs(*(wData + 1) - *(wPreviousData + 1)) >= 0.1f &&
-      std::fabs(*(wData + 2) - *(wPreviousData + 2)) >= 0.1f &&
-      std::fabs(*(wData + 3) - *(wPreviousData + 3)) >= 0.1f) {
+    if (_callback != nullptr  && (
+      std::fabs(*wData - *wPreviousData) >= 0.1f ||
+      std::fabs(*(wData + 1) - *(wPreviousData + 1)) >= 0.1f ||
+      std::fabs(*(wData + 2) - *(wPreviousData + 2)) >= 0.1f ||
+      std::fabs(*(wData + 3) - *(wPreviousData + 3)) >= 0.1f )) {
       _callback();
       *wPreviousData = *wData;
       *(wPreviousData + 1) = *(wData + 1);
@@ -331,11 +331,11 @@ struct Property<PropertyType::VEC3> : IProperty {
     ImGui::NextColumn();
     // -------------------
     ImGui::PopID();
-
-    if (_callback != nullptr  &&
-      std::fabs(*wData - *wPreviousData) >= 0.1f &&
-      std::fabs(*(wData + 1) - *(wPreviousData + 1)) >= 0.1f &&
-      std::fabs(*(wData + 2) - *(wPreviousData + 2)) >= 0.1f) {
+    //ImGuiLog::GetInstance().AddLog("%f,%f,%f - %f,%f,%f\n", *wData, *(wData + 1), *(wData + 2), *wPreviousData, *(wPreviousData + 1), *(wPreviousData + 2));
+    if (_callback != nullptr  && (
+      std::fabs(*wData - *wPreviousData) >= 0.1f ||
+      std::fabs(*(wData + 1) - *(wPreviousData + 1)) >= 0.1f ||
+      std::fabs(*(wData + 2) - *(wPreviousData + 2)) >= 0.1f)) {
       _callback();
       *wPreviousData = *wData;
       *(wPreviousData + 1) = *(wData + 1);
