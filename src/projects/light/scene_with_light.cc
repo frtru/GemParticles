@@ -93,6 +93,22 @@ const GLfloat BOX_POINTS[] = {
   -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f
 };
 
+const GLfloat WALL_AND_FLOOR_POINTS[] = {
+  -1500.0f, 500.0f, -10.0f,  0.0f,  0.0f, 1.0f,
+  -1500.0f, -1.0f, -10.0f,  0.0f,  0.0f, 1.0f,
+  1500.0f, -1.0f, -10.0f,  0.0f,  0.0f, 1.0f,
+  1500.0f, -1.0f, -10.0f,  0.0f,  0.0f, 1.0f,
+  1500.0f, 500.0f, -10.0f,  0.0f,  0.0f, 1.0f,
+  -1500.0f, 500.0f, -10.0f,  0.0f,  0.0f, 1.0f,
+
+  -1500.0f, -1.0f,  -10.0f,  0.0f,  1.0f,  0.0f,
+  -1500.0f, -1.0f,  100.0f,  0.0f,  1.0f,  0.0f,
+  1500.0f, -1.0f,  100.0f,  0.0f,  1.0f,  0.0f,
+  1500.0f, -1.0f,  100.0f,  0.0f,  1.0f,  0.0f,
+  1500.0f, -1.0f,  -10.0f,  0.0f,  1.0f,  0.0f,
+  -1500.0f, -1.0f,  -10.0f,  0.0f,  1.0f,  0.0f,
+};
+
 // NOTE : With the material being sent through with an uniform,
 // This is actually not being used. The color is sent in the material directly.
 // According to : https://www.opengl.org/discussion_boards/showthread.php/171379-VBOs-Drawing-vertices-of-same-color
@@ -136,6 +152,21 @@ const unsigned char BOX_COLOR[] = {
     200u,200u,200u,255u,
 };
 
+const unsigned char WALL_AND_FLOOR_COLOR[] = {
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u,
+  200u,200u,200u,255u
+};
+
 bool    debug_mode;
 GLuint  vertex_array_IDs[2];
 
@@ -145,6 +176,7 @@ const std::size_t COLORS_VBO_IDX = 1;
 
 GLuint  axes_VBO_IDs[2];
 GLuint  box_VBO_IDs[2];
+GLuint  wall_and_floor_VBO_IDs[2];
 GLuint  shader_program_ID;
 
 std::once_flag init_flag;
@@ -158,7 +190,13 @@ void DrawDebugObjects() {
   glDrawArrays(GL_LINES, 2, 2);
   glDrawArrays(GL_LINES, 4, 2);
   glBindVertexArray(vertex_array_IDs[1]);
-  glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
+  glDrawArrays(GL_TRIANGLES, 0, 36);
+  glBindVertexArray(0);
+}
+
+void DrawWallAndFloor() {
+  glBindVertexArray(vertex_array_IDs[2]);
+  glDrawArrays(GL_TRIANGLES, 0, 12);
   glBindVertexArray(0);
 }
 
@@ -268,6 +306,66 @@ void InitializeTestingBox() {
       4 * sizeof(unsigned char), nullptr);
   }
 }
+void InitializeWallAndFloor() {
+  glGenBuffers(2, wall_and_floor_VBO_IDs);
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeWallAndFloor -> Generated 2 VBOs, IDs = %d & %d\n",
+    wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX], wall_and_floor_VBO_IDs[COLORS_VBO_IDX]);
+
+  // Positions
+  glBindBuffer(GL_ARRAY_BUFFER, wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX]);
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeWallAndFloor -> Allocated buffer memory for ID = %d\n",
+    wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX]);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(WALL_AND_FLOOR_POINTS), WALL_AND_FLOOR_POINTS, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(0);
+  if (GL_ARB_vertex_attrib_binding) {
+    glBindVertexBuffer(0, wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX], 0, 6 * sizeof(GL_FLOAT));
+    glVertexAttribFormat(0, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexAttribBinding(0, 0);
+  }
+  else {
+    glVertexAttribPointer(
+      0, 3,
+      GL_FLOAT, GL_FALSE,
+      6 * sizeof(GL_FLOAT), nullptr);
+  }
+
+  // Normals
+  glEnableVertexAttribArray(2);
+  if (GL_ARB_vertex_attrib_binding) {
+    glBindVertexBuffer(2, wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX], 3 * sizeof(GL_FLOAT), 6 * sizeof(GL_FLOAT));
+    glVertexAttribFormat(2, 3, GL_FLOAT, GL_FALSE, 0);
+    glVertexAttribBinding(2, 2);
+  }
+  else {
+    glVertexAttribPointer(
+      2, 3,
+      GL_FLOAT, GL_FALSE,
+      6 * sizeof(GL_FLOAT), (void*)(3 * sizeof(GL_FLOAT)));
+  }
+
+  // Colors
+
+  //Color VBO Initialization
+  glBindBuffer(GL_ARRAY_BUFFER, wall_and_floor_VBO_IDs[COLORS_VBO_IDX]);
+  ImGuiLog::GetInstance().AddLog("Scene::InitializeWallAndFloor -> Allocated buffer memory for ID = %d\n",
+    wall_and_floor_VBO_IDs[COLORS_VBO_IDX]);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(WALL_AND_FLOOR_COLOR), WALL_AND_FLOOR_COLOR, GL_STATIC_DRAW);
+
+  glEnableVertexAttribArray(1);
+  if (GL_ARB_vertex_attrib_binding) {
+    glBindVertexBuffer(1, wall_and_floor_VBO_IDs[COLORS_VBO_IDX], 0, 4 * sizeof(unsigned char));
+    glVertexAttribFormat(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0);
+    glVertexAttribBinding(1, 1);
+  }
+  else {
+    glVertexAttribPointer(
+      1, 4,
+      GL_UNSIGNED_BYTE, GL_TRUE,
+      4 * sizeof(unsigned char), nullptr);
+  }
+
+}
 
 void UpdateMaterialUniform() {
   shader::module::SetUniformVec3(shader_program_ID, "material.ambientFactor", material.ambientFactor);
@@ -280,7 +378,7 @@ void UpdateMaterialUniform() {
 void Init(bool a_isDebug) {
   std::call_once(init_flag, [&]() {
     debug_mode = a_isDebug;
-    glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
+    glClearColor(0.5686274509803922f, 0.5686274509803922f, 0.5686274509803922f, 1.0f);
 
     shader::factory::CompileShaderFile("scene.vert", GL_VERTEX_SHADER);
     shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
@@ -292,7 +390,7 @@ void Init(bool a_isDebug) {
     shader::module::SetUniformFloat(shader_program_ID, "ambient_light_intensity", 0.5f);
 
     // Color of the box is sent through the material
-    material.ambientFactor    = { 0.6f, 0.6f, 0.6f };
+    material.ambientFactor    = { 0.9f, 0.9f, 0.9f };
     material.diffuseFactor    = { 0.65f, 0.65f, 0.65f };
     material.specularFactor   = { 0.6f, 0.6f, 0.5f };
     material.shininessFactor  = 40.0f;
@@ -304,7 +402,7 @@ void Init(bool a_isDebug) {
 
     // Add lights in the scene in the SSBO
     light::Light wFrontLight/*, wBackLight*/;
-    wFrontLight.position = { 0.0f, 0.0f, 2.0f, 0.0f };
+    wFrontLight.position = { 0.0f, 10.0f, 8.0f, 0.0f };
     wFrontLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
     wFrontLight.intensity = 1.0f;
     wFrontLight.attenuation = 0.0f;
@@ -319,7 +417,7 @@ void Init(bool a_isDebug) {
     light::module::AddLight(wFrontLight);/*
     light::module::AddLight(wBackLight);*/
 
-    glGenVertexArrays(2, vertex_array_IDs);
+    glGenVertexArrays(3, vertex_array_IDs);
     ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",
       vertex_array_IDs[0], vertex_array_IDs[1]);
 
@@ -330,6 +428,10 @@ void Init(bool a_isDebug) {
     glBindVertexArray(vertex_array_IDs[1]);
     ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[1]);
     InitializeTestingBox();
+
+    glBindVertexArray(vertex_array_IDs[2]);
+    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[2]);
+    InitializeWallAndFloor();
     glBindVertexArray(0);
 
     // Add properties to the editor
@@ -380,7 +482,16 @@ void Terminate() {
       glDeleteBuffers(1, &box_VBO_IDs[COLORS_VBO_IDX]);
       box_VBO_IDs[COLORS_VBO_IDX] = 0;
     }
-
+    if (wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
+      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating vertex VBO\n");
+      glDeleteBuffers(1, &wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX]);
+      wall_and_floor_VBO_IDs[POSITIONS_VBO_IDX] = 0;
+    }
+    if (wall_and_floor_VBO_IDs[COLORS_VBO_IDX] != 0) {
+      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating color VBO\n");
+      glDeleteBuffers(1, &wall_and_floor_VBO_IDs[COLORS_VBO_IDX]);
+      wall_and_floor_VBO_IDs[COLORS_VBO_IDX] = 0;
+    }
     // Should already be done, but just in case
     light::module::Terminate();
   });
@@ -393,12 +504,12 @@ bool IsDebug() { return debug_mode; }
 void SetDebugOption(bool a_isDebug) { debug_mode = a_isDebug; }
 
 void Render() {
-  if (debug_mode) {
-    shader::module::Use(shader_program_ID);
-    UpdateMaterialUniform();
-    DrawDebugObjects();
-    shader::module::Detach();
-  }
+  shader::module::Use(shader_program_ID);
+  UpdateMaterialUniform();
+  if (debug_mode)
+    DrawDebugObjects(); 
+  DrawWallAndFloor();
+  shader::module::Detach();
 }
 } /* namespace scene */
 } /* namespace light_project */
