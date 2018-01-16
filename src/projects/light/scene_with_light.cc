@@ -378,7 +378,7 @@ void UpdateMaterialUniform() {
 void Init(bool a_isDebug) {
   std::call_once(init_flag, [&]() {
     debug_mode = a_isDebug;
-    glClearColor(0.5686274509803922f, 0.5686274509803922f, 0.5686274509803922f, 1.0f);
+    glClearColor(0.78431372549019607843137254901961f, 0.78431372549019607843137254901961f, 0.78431372549019607843137254901961f, 1.0f);
 
     shader::factory::CompileShaderFile("scene.vert", GL_VERTEX_SHADER);
     shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
@@ -390,10 +390,10 @@ void Init(bool a_isDebug) {
     shader::module::SetUniformFloat(shader_program_ID, "ambient_light_intensity", 0.5f);
 
     // Color of the box is sent through the material
-    material.ambientFactor    = { 0.9f, 0.9f, 0.9f };
-    material.diffuseFactor    = { 0.65f, 0.65f, 0.65f };
-    material.specularFactor   = { 0.6f, 0.6f, 0.5f };
-    material.shininessFactor  = 40.0f;
+    material.ambientFactor    = { 0.25f, 0.25f, 0.25f };
+    material.diffuseFactor    = { 0.15f, 0.15f, 0.15f };
+    material.specularFactor   = { 0.3f, 0.3f, 0.3f };
+    material.shininessFactor  = 4.0f;
     UpdateMaterialUniform();
     shader::module::Detach();
     
@@ -401,21 +401,21 @@ void Init(bool a_isDebug) {
     light::module::Init();
 
     // Add lights in the scene in the SSBO
-    light::Light wFrontLight/*, wBackLight*/;
-    wFrontLight.position = { 0.0f, 10.0f, 8.0f, 0.0f };
-    wFrontLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+    light::Light wFrontLight, wBackLight;
+    wFrontLight.position = { 0.0f, 0.0f, 2.0f, 0.0f };
+    wFrontLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
     wFrontLight.intensity = 1.0f;
     wFrontLight.attenuation = 0.0f;
-    wFrontLight.radius = 10.0f;
+    wFrontLight.radius = 20.0f;
 
-    //wBackLight.position = { 2.0f, 0.0f, 0.0f, 0.0f };
-    //wBackLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-    //wBackLight.intensity = 1.0f;
-    //wBackLight.attenuation = 0.0f;
-    //wBackLight.radius = 10.0f;
+    wBackLight.position = { -40.0f, 0.0f, 0.0f, 0.0f };
+    wBackLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
+    wBackLight.intensity = 1.0f;
+    wBackLight.attenuation = 0.0f;
+    wBackLight.radius = 20.0f;
 
-    light::module::AddLight(wFrontLight);/*
-    light::module::AddLight(wBackLight);*/
+    light::module::AddLight(wFrontLight);
+    light::module::AddLight(wBackLight);
 
     glGenVertexArrays(3, vertex_array_IDs);
     ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",

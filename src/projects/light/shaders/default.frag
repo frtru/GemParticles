@@ -51,6 +51,8 @@ bool checkzerof(float test, float epsilon) {
 
 void main(void)
 {
+	out_Color = ex_Color;
+
 	// Basic ambient light
 	vec3 ambient_light = ambient_light_color * ambient_light_intensity * material.ambientFactor;
 
@@ -59,6 +61,10 @@ void main(void)
 	vec3 specular = vec3(0.0,0.0,0.0);
 	for (i = 0; i < lights.length(); ++i) {
 		Light wLight = lights[i];
+		float distance = distance(wLight.position, vec4(ex_FragPos,1.0));
+		if (wLight.radius < distance) continue;
+		float dist_intensity = 1 - distance/wLight.radius;
+
 		vec3 wLightColorsIntensity = wLight.color.rgb * wLight.intensity;
 		// Basic diffuse light
 		vec3 norm = normalize(ex_Normal); // in this project the normals are all normalized anyway...
@@ -72,10 +78,6 @@ void main(void)
 		float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininessFactor);
 		vec3 specLight = wLightColorsIntensity * (spec * material.specularFactor);
 		specular = max(specLight,specular);
-		//out_Color.rgb = normalize(vec3(wLight.intensity, wLight.attenuation, wLight.radius));
-		//out_Color.a = 1.0;
-		//return;
+		out_Color.rgb += vec3(specular + diffuse + ambient_light) * dist_intensity;
 	}
-
-	out_Color = vec4(specular + diffuse + ambient_light,1.0); 
 }

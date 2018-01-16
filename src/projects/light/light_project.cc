@@ -65,7 +65,7 @@ void Init() {
   // Camera initialization
   camera::Init();
   camera::LookAt( 
-    glm::vec3(4, 4, 4),   // Camera is at (4,4,4), in World Space
+    glm::vec3(10, 10, 10),   // Camera is at (4,4,4), in World Space
     glm::vec3(0, 0, 0),   // and looks at the origin
     glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
   camera::SetPerspectiveProjection( 

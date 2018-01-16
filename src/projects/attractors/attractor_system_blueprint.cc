@@ -33,12 +33,12 @@ namespace {
 const glm::f32vec3 _ZeroVector = glm::f32vec3(0.0f, 0.0f, 0.0f);
 // Instead of using setters for every attribute, might as well put them public.
 // These parameters will be used during the Create() function to properly build the particle system
-glm::vec4   _HotColor           = { 1.0f, 1.0f, 0.5f, 1.0f };
-glm::vec4   _ColdColor          = { 1.0f, 0u, 0u, 1.0f };
+glm::vec4   _HotColor           = { 0.8235294117647059f, 0.0941176470588235f, 0.1803921568627451f, 1.0f };
+glm::vec4   _ColdColor          = { 0.1294117647058824f, 0.1607843137254902, 0.6392156862745098, 1.0f };
 glm::f32vec3  _POI              = { 1.0f, 1.0f, 1.0f };
 float         _InitialRadius    = 1.0f;
 float         _AccelerationRate = 0.0f;
-float         _MaxDistance      = 10.0f;
+float         _MaxDistance      = 6.0f;
 std::size_t   _ParticleCount    = 1000000u;
 std::string   _ParticleSystemName;
 
