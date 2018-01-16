@@ -186,7 +186,9 @@ bool ImGui_ImplGlfwGL3_CreateFontsTexture()
   // Build texture atlas
   ImGuiIO& io = ImGui::GetIO();
   unsigned char* pixels;
+  float size_in_pixels = 15.0f;
   int width, height;
+  ImFont* font1 = io.Fonts->AddFontFromFileTTF("src/utils/imgui/extra_fonts/Roboto-Medium.ttf", size_in_pixels);
   io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);   // Load as RGBA 32-bits (75% of the memory is wasted, but default font is so small) because it is more likely to be compatible with user's existing shaders. If your ImTextureId represent a higher-level concept than just a GL texture id, consider calling GetTexDataAsAlpha8() instead to save on GPU memory.
 
                                                             // Upload texture to graphics system
