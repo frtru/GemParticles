@@ -38,9 +38,12 @@
     <ClCompile Include="src\projects\light\light_event_handler.cc" />
     <ClCompile Include="src\projects\light\light_project.cc" />
     <ClCompile Include="src\projects\light\scene_with_light.cc" />
+    <ClCompile Include="src\projects\lit_particles\ground_collision.cc" />
+    <ClCompile Include="src\projects\lit_particles\lit_particles_blueprint.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_event_handler.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_project.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_scene.cc" />
+    <ClCompile Include="src\projects\lit_particles\lit_particles_updater.cc" />
     <ClCompile Include="src\projects\rain\rain_emitter.cc" />
     <ClCompile Include="src\projects\rain\rain_particles_blueprint.cc" />
     <ClCompile Include="src\projects\rain\rain_project.cc" />
@@ -92,9 +95,12 @@
     <ClInclude Include="src\projects\light\light_event_handler.hh" />
     <ClInclude Include="src\projects\light\light_project.hh" />
     <ClInclude Include="src\projects\light\scene_with_light.hh" />
+    <ClInclude Include="src\projects\lit_particles\ground_collision.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_blueprint.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_event_handler.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_project.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_scene.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_updater.hh" />
     <ClInclude Include="src\projects\rain\rain_emitter.hh" />
     <ClInclude Include="src\projects\rain\rain_particles_blueprint.hh" />
     <ClInclude Include="src\projects\rain\rain_project.hh" />
@@ -145,6 +151,8 @@
     <None Include="src\projects\light\shaders\particle_billboard.geom" />
     <None Include="src\projects\light\shaders\particle_billboard.vert" />
     <None Include="src\projects\light\shaders\simple_texture.frag" />
+    <None Include="src\projects\lit_particles\shaders\default.frag" />
+    <None Include="src\projects\lit_particles\shaders\default.vert" />
     <None Include="src\projects\lit_particles\shaders\light_material.frag" />
     <None Include="src\projects\lit_particles\shaders\light_material.vert" />
     <None Include="src\projects\rain\shaders\debug_axes.vert" />

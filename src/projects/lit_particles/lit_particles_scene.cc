@@ -255,12 +255,12 @@ void Init(bool a_isDebug) {
     light::module::Init();
 
     // Add lights in the scene in the SSBO
-    light::Light wFrontLight/*, wBackLight*/;
-    wFrontLight.position = { 0.0f, 4.0f, 4.0f, 0.0f };
-    wFrontLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
-    wFrontLight.intensity = 1.0f;
-    wFrontLight.attenuation = 0.0f;
-    wFrontLight.radius = 40.0f;
+    //light::Light wFrontLight/*, wBackLight*/;
+    //wFrontLight.position = { 0.0f, 4.0f, 4.0f, 0.0f };
+    //wFrontLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
+    //wFrontLight.intensity = 1.0f;
+    //wFrontLight.attenuation = 0.0f;
+    //wFrontLight.radius = 40.0f;
 /*
     wBackLight.position = { -40.0f, 0.0f, 0.0f, 0.0f };
     wBackLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
@@ -268,7 +268,7 @@ void Init(bool a_isDebug) {
     wBackLight.attenuation = 0.0f;
     wBackLight.radius = 10.0f;*/
 
-    light::module::AddLight(wFrontLight);/*
+    /*light::module::AddLight(wFrontLight);
     light::module::AddLight(wBackLight);*/
 
     glGenVertexArrays(3, vertex_array_IDs);

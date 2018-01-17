@@ -32,6 +32,7 @@
 
 // Specific project particle blueprints
 #include "projects/lit_particles/lit_particles_event_handler.hh"
+#include "projects/lit_particles/lit_particles_blueprint.hh"
 #include "projects/lit_particles/lit_particles_scene.hh"
 
 namespace gem { namespace particle {
@@ -65,8 +66,8 @@ void Init() {
   // Camera initialization
   camera::Init();
   camera::LookAt( 
-    glm::vec3(10, 10, 10),   // Camera is at (4,4,4), in World Space
-    glm::vec3(0, 0, 0),   // and looks at the origin
+    glm::vec3(0, 10, 10),   // Camera is at (4,4,4), in World Space
+    glm::vec3(0.0f, 0.0f, -1.5f),   // and looks at the origin
     glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
   camera::SetPerspectiveProjection( 
     glm::radians(45.0f), 
@@ -82,6 +83,9 @@ void Init() {
 
   // Particle system initialization
   particle_module::Init();
+  blueprint::lit_particles_system_builder::SetParticleSystemName("Amazing lit particles system");
+  blueprint::lit_particles_system_builder::SetParticleCount(5001u);
+  blueprint::lit_particles_system_builder::Create();
 
   // Event handler initialization
   event_handler::Init(graphic_context);

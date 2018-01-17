@@ -11,33 +11,20 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_EMITTER_HH
-#define FOUNTAIN_EMITTER_HH
-
-#include "emitters/emitter.hh"
-#include "core/particle_pool_core.hh"
+#include "projects/lit_particles/ground_collision.hh"
 
 namespace gem {
 namespace particle {
-class RandomFountainEmitter : public Emitter<CoreParticles> {
-public:
-  RandomFountainEmitter() = default; // Can be defaulted to base default constructor
-  RandomFountainEmitter(
-    const glm::f32vec3& a_spawnLocation,
-    float a_fLifetime,
-    double a_dEmissionRate,
-    float velocity = 2.0f,
-    const glm::u8vec4& a_initialColor = glm::u8vec4(0u, 162u, 232u, 180u));
-	~RandomFountainEmitter() = default;
+void GroundCollision::Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) {
+  // TODO: Deal with the delta double precision casted to float later
+  // (GLM vec3 or vec4 doesn't support operations with doubles...)
+  const float fDt = static_cast<float>(a_dt);
 
-private:
-  void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-
-  float        m_velocity;
-  glm::u8vec4  m_initialColor;
-}; /* class RandomFountainEmitter*/
+  // Using the euler model to update the positions and velocities
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+    if (a_pPool->pCoreData->m_position[i].y < -0.9f)
+      a_pPool->pCoreData->m_velocity[i].y *= -0.5f;
+  }
+}
 } /* namespace particle */
 } /* namespace gem */
-
-#endif /* end of include guard: FOUNTAIN_EMITTER_HH */

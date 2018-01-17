@@ -11,33 +11,23 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_EMITTER_HH
-#define FOUNTAIN_EMITTER_HH
+#ifndef LIT_PARTICLES_PARTICLE_UPDATER
+#define LIT_PARTICLES_PARTICLE_UPDATER
 
-#include "emitters/emitter.hh"
+#include "dynamics/dynamic.hh"
 #include "core/particle_pool_core.hh"
 
 namespace gem {
 namespace particle {
-class RandomFountainEmitter : public Emitter<CoreParticles> {
+class LitParticleUpdater : public Dynamic<CoreParticles> {
 public:
-  RandomFountainEmitter() = default; // Can be defaulted to base default constructor
-  RandomFountainEmitter(
-    const glm::f32vec3& a_spawnLocation,
-    float a_fLifetime,
-    double a_dEmissionRate,
-    float velocity = 2.0f,
-    const glm::u8vec4& a_initialColor = glm::u8vec4(0u, 162u, 232u, 180u));
-	~RandomFountainEmitter() = default;
+  LitParticleUpdater() = default;
+  ~LitParticleUpdater() = default;
 
-private:
-  void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
-    std::size_t a_unStartID, std::size_t a_unEndID) override;
-
-  float        m_velocity;
-  glm::u8vec4  m_initialColor;
-}; /* class RandomFountainEmitter*/
+  void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
+  bool AltersParticleLifeCycle() const override { return true; }
+}; /* class LitParticleUpdater*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: FOUNTAIN_EMITTER_HH */
+#endif /* end of include guard: LIT_PARTICLES_PARTICLE_UPDATER */
