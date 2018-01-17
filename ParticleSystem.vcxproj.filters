@@ -59,6 +59,12 @@
     <Filter Include="utils\imgui\extra_fonts">
       <UniqueIdentifier>{30a62775-a8e2-4f14-8ea6-ff6818110d0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="projects\lit_particles">
+      <UniqueIdentifier>{b43169b9-4e36-4c91-8479-6e1a05ec3309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="projects\lit_particles\shaders">
+      <UniqueIdentifier>{4cac4fb3-4c41-4ca4-8941-8d03a95bd7ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\particle_module.cc">
@@ -180,6 +186,15 @@
     </ClCompile>
     <ClCompile Include="src\utils\imgui\imgui_glfw.cpp">
       <Filter>utils\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\lit_particles\lit_particles_event_handler.cc">
+      <Filter>projects\lit_particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\lit_particles\lit_particles_project.cc">
+      <Filter>projects\lit_particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\lit_particles\lit_particles_scene.cc">
+      <Filter>projects\lit_particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +368,15 @@
     <ClInclude Include="src\utils\imgui\imgui_property_editor.h">
       <Filter>utils\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_event_handler.hh">
+      <Filter>projects\lit_particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_project.hh">
+      <Filter>projects\lit_particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_scene.hh">
+      <Filter>projects\lit_particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\projects\rain\shaders\debug_axes.vert">
@@ -438,6 +462,12 @@
     </None>
     <None Include="src\projects\skybox\shaders\skybox.vert">
       <Filter>projects\skybox\shaders</Filter>
+    </None>
+    <None Include="src\projects\lit_particles\shaders\light_material.vert">
+      <Filter>projects\lit_particles\shaders</Filter>
+    </None>
+    <None Include="src\projects\lit_particles\shaders\light_material.frag">
+      <Filter>projects\lit_particles\shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

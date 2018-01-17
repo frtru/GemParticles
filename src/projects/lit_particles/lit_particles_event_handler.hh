@@ -11,15 +11,22 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-//C system files
-//C++ system files
-//Other libraries' .h files
-//Your project's .h files
-#include "app.hh"
+#ifndef LIT_PARTICLES_EVENT_HANDLER_HH
+#define LIT_PARTICLES_EVENT_HANDLER_HH
 
-using namespace gem::particle;
+#include <memory>
+#include "graphic_contexts/graphic_context.hh"
 
-int main(int argc, const char *argv[]) {
-  app::Launch("lit_particles");
-  return app::GetAppStatusError();
-}
+namespace gem { namespace particle {
+namespace lit_particles_project {
+namespace event_handler {
+void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
+void Terminate();
+void Update();
+} /* namespace event_handler*/
+} /* namespace lit lit_particles_project */
+} /* namespace particle */
+} /* namespace gem */
+
+#endif /* end of include guard: LIT_PARTICLES_EVENT_HANDLER_HH */
+
