@@ -31,6 +31,7 @@ void Create();
 void SetParticleColor(const glm::vec4 &color);
 void SetPOI(const glm::f32vec3 &pos);
 void SetParticleCount(std::size_t count);
+void SetTexture(const std::string& a_sTexturePath);
 void SetParticleSystemName(const std::string &name);
 } /* namespace lit_particles_system_builder */
 } /* namespace blueprint */

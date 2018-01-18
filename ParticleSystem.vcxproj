@@ -42,6 +42,7 @@
     <ClCompile Include="src\projects\lit_particles\lit_particles_blueprint.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_event_handler.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_project.cc" />
+    <ClCompile Include="src\projects\lit_particles\lit_particles_renderer.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_scene.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_updater.cc" />
     <ClCompile Include="src\projects\rain\rain_emitter.cc" />
@@ -99,6 +100,7 @@
     <ClInclude Include="src\projects\lit_particles\lit_particles_blueprint.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_event_handler.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_project.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_renderer.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_scene.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_updater.hh" />
     <ClInclude Include="src\projects\rain\rain_emitter.hh" />
@@ -151,10 +153,12 @@
     <None Include="src\projects\light\shaders\particle_billboard.geom" />
     <None Include="src\projects\light\shaders\particle_billboard.vert" />
     <None Include="src\projects\light\shaders\simple_texture.frag" />
-    <None Include="src\projects\lit_particles\shaders\default.frag" />
     <None Include="src\projects\lit_particles\shaders\default.vert" />
     <None Include="src\projects\lit_particles\shaders\light_material.frag" />
     <None Include="src\projects\lit_particles\shaders\light_material.vert" />
+    <None Include="src\projects\lit_particles\shaders\particles.frag" />
+    <None Include="src\projects\lit_particles\shaders\particle_billboard.geom" />
+    <None Include="src\projects\lit_particles\shaders\particle_billboard.vert" />
     <None Include="src\projects\rain\shaders\debug_axes.vert" />
     <None Include="src\projects\rain\shaders\default.frag" />
     <None Include="src\projects\rain\shaders\particle_billboard.geom" />

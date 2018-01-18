@@ -208,6 +208,9 @@
     <ClCompile Include="src\projects\lit_particles\lit_particles_updater.cc">
       <Filter>projects\lit_particles\dynamics</Filter>
     </ClCompile>
+    <ClCompile Include="src\projects\lit_particles\lit_particles_renderer.cc">
+      <Filter>projects\lit_particles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\particle_core_data.hh">
@@ -398,6 +401,9 @@
     <ClInclude Include="src\projects\lit_particles\lit_particles_updater.hh">
       <Filter>projects\lit_particles\dynamics</Filter>
     </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_renderer.hh">
+      <Filter>projects\lit_particles</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\projects\rain\shaders\debug_axes.vert">
@@ -490,10 +496,16 @@
     <None Include="src\projects\lit_particles\shaders\light_material.frag">
       <Filter>projects\lit_particles\shaders</Filter>
     </None>
-    <None Include="src\projects\lit_particles\shaders\default.frag">
+    <None Include="src\projects\lit_particles\shaders\default.vert">
       <Filter>projects\lit_particles\shaders</Filter>
     </None>
-    <None Include="src\projects\lit_particles\shaders\default.vert">
+    <None Include="src\projects\lit_particles\shaders\particle_billboard.geom">
+      <Filter>projects\lit_particles\shaders</Filter>
+    </None>
+    <None Include="src\projects\lit_particles\shaders\particle_billboard.vert">
+      <Filter>projects\lit_particles\shaders</Filter>
+    </None>
+    <None Include="src\projects\lit_particles\shaders\particles.frag">
       <Filter>projects\lit_particles\shaders</Filter>
     </None>
   </ItemGroup>
