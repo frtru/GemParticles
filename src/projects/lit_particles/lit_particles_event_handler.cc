@@ -119,35 +119,28 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
     if (pitch < -89.0f)
       pitch = -89.0f;
 
+    double yaw_rad = glm::radians(yaw);
+    double pitch_rad = glm::radians(pitch);
+
+    // front vector
     glm::vec3 front = {
-      cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-      sin(glm::radians(pitch)),
-      sin(glm::radians(yaw)) * cos(glm::radians(pitch))
+      cos(pitch_rad) * cos(yaw_rad),
+      sin(pitch_rad),
+      cos(pitch_rad) * sin(yaw_rad)
     };
 
+    // Right vector
+    glm::vec3 right = glm::vec3(
+      cos(yaw_rad - glm::half_pi<double>()),
+      0,
+      sin(yaw_rad - glm::half_pi<double>())
+    );
+
     camera_direction = glm::normalize(front);
-    auto  position = camera::GetEyePosition(),
-      up = camera::GetUpVector();
+    auto position = camera::GetEyePosition();
+    auto up = glm::cross(camera_direction, right);
     camera::LookAt(position, position + camera_direction, up);
   }
-  //else if (mouse_state == POI_MOVING) {
-  //  glm::mat4 P = camera::GetProjectionMatrix();
-  //  glm::mat4 V = camera::GetViewMatrix();
-
-  //  glm::vec3 from = glm::unProject(
-  //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
-  //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
-  //  glm::vec3 to = glm::unProject(
-  //    glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
-  //    glm::vec4(0, 0, _WindowWidth, _WindowHeight));
-
-  //  const glm::f32vec3 wCameraPos = camera::GetEyePosition();
-
-  //  glm::f32vec3 wNewPos = from + glm::normalize((to - from)) *
-  //    glm::distance(wCameraPos, glm::f32vec3(0.0f, 0.0f, 0.0f));
-  //  _AttractorHandle->SetAttractorPosition(wNewPos);
-  //  _ColorUpdaterHandle->SetPOI(wNewPos);
-  //}
   else {
     // DO NOTHING
   }
