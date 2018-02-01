@@ -25,9 +25,9 @@ void LitParticleUpdater::Update(double a_dt, const std::shared_ptr<ParticlePool<
     if (a_pPool->pCoreData->m_lifetime[i] <= 0.0f) {
       a_pPool->Sleep(i);
     }
-    //else if (a_pPool->pCoreData->m_lifetime[i] <= 1.0f) {
-    //  a_pPool->pCoreData->m_color[i] *= 0.8f; // Doesn't work for some odd reasons
-    //}
+    else if (a_pPool->pCoreData->m_lifetime[i] <= .9f) {
+      a_pPool->pCoreData->m_color[i].a -= 4ui8;
+    }
   }
 
   // Using the euler model to update the positions and velocities

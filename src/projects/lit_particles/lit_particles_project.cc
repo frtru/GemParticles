@@ -85,7 +85,7 @@ void Init() {
   particle_module::Init();
   blueprint::lit_particles_system_builder::SetParticleSystemName("Amazing lit particles system");
   blueprint::lit_particles_system_builder::SetTexture("textures/welding_sparkle.png");
-  blueprint::lit_particles_system_builder::SetParticleCount(51u);
+  blueprint::lit_particles_system_builder::SetParticleCount(5001u);
   blueprint::lit_particles_system_builder::Create();
 
   // Event handler initialization

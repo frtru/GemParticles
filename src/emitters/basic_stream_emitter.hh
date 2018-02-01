@@ -26,12 +26,19 @@ public:
     const glm::f32vec3& a_spawnLocation,
     const glm::f32vec3& a_spawnVelocity,
     float a_fLifetime,
-    double a_dEmissionRate);
+    double a_dEmissionRate,
+    float a_dVelocityRandomization = 0.0f,
+    const glm::u8vec4& a_color = DEFAULT_COLOR);
 	virtual ~BasicStreamEmitter() = default;
 
 private:
   void Init(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool,
     std::size_t a_unStartID, std::size_t a_unEndID) override;
+  
+  glm::f32vec3 RandomVelocity() const;
+
+  float       m_fVelocityRandomization;
+  glm::u8vec4 m_color;
 }; /* class BasicStreamEmitter*/
 } /* namespace particle */
 } /* namespace gem */

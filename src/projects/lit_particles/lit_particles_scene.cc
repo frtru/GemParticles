@@ -245,8 +245,8 @@ void Init(bool a_isDebug) {
 
     // Color of the box is sent through the material
     material.ambientFactor    = { 0.0f, 0.0f, 0.0f };
-    material.diffuseFactor    = { 0.8f, 0.6f, 0.35f };
-    material.specularFactor   = { 0.1f, 0.1f, 0.1f };
+    material.diffuseFactor    = { 0.4f, 0.3f, 0.15f };
+    material.specularFactor   = { 0.0f, 0.0f, 0.0f };
     material.shininessFactor  = 4.0f;
     UpdateMaterialUniform();
     shader::module::Detach();
@@ -255,22 +255,17 @@ void Init(bool a_isDebug) {
     light::module::Init();
 
     // Add lights in the scene in the SSBO
-    //light::Light wFrontLight/*, wBackLight*/;
-    //wFrontLight.position = { 0.0f, 4.0f, 4.0f, 0.0f };
+    //light::Light wFrontLight, wBackLight;
+    //wFrontLight.position = { 0.0f, 0.1f, 0.0f, 0.0f };
     //wFrontLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
     //wFrontLight.intensity = 1.0f;
     //wFrontLight.attenuation = 0.0f;
-    //wFrontLight.radius = 40.0f;
-/*
-    wBackLight.position = { -40.0f, 0.0f, 0.0f, 0.0f };
-    wBackLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
-    wBackLight.intensity = 1.0f;
-    wBackLight.attenuation = 0.0f;
-    wBackLight.radius = 10.0f;*/
-
-    /*light::module::AddLight(wFrontLight);
-    light::module::AddLight(wBackLight);*/
-
+    //wFrontLight.radius = 5.0f;
+    //
+    //for (int i = 0; i < 20; ++i) {
+    //  light::module::AddLight(wFrontLight);
+    //}
+    
     glGenVertexArrays(3, vertex_array_IDs);
     ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",
       vertex_array_IDs[0], vertex_array_IDs[1]);

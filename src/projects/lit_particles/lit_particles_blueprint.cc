@@ -21,7 +21,8 @@
 #include "core/particle_module.hh"
 #include "core/particle_system.hh"
 #include "dynamics/gravity_acceleration.hh"
-#include "emitters/random_fountain_emitter.hh"
+//#include "emitters/random_fountain_emitter.hh"
+#include "emitters/basic_stream_emitter.hh"
 
 //Project specific components
 #include "projects/lit_particles/lit_particles_renderer.hh"
@@ -38,7 +39,8 @@ const glm::f32vec3 _ZeroVector = glm::f32vec3(0.0f, 0.0f, 0.0f);
 // These parameters will be used during the Create() function to properly build the particle system
 //glm::u8vec4   _ParticleColor    = { 255u, 0u, 255u, 255u };
 glm::u8vec4   _ParticleColor    = { 240u, 186u, 0u, 255u };
-glm::f32vec3  _POI              = { 0.0f, 0.0f, -1.5f };
+glm::f32vec3  _POI              = { 0.0f, 0.0f, 0.0f };
+glm::f32vec3  _InitialVelocity  = { -4.0f, 4.0f, 4.0f };
 std::size_t   _ParticleCount    = 5001u;
 std::string   _TexturePath;
 std::string   _ParticleSystemName;
@@ -49,11 +51,12 @@ std::string   _ParticleSystemName;
 
 void Create() {
   auto wParticleSystem = std::make_unique<ParticleSystem<LifeDeathCycle::Enabled, CoreParticles> >(_ParticleCount, _ParticleSystemName);
-  wParticleSystem->BindRenderer(std::make_unique<TextureCoreGLRenderer>(_TexturePath,0.2f));
+  wParticleSystem->BindRenderer(std::make_unique<TextureCoreGLRenderer>(_TexturePath,0.15f));
   wParticleSystem->AddDynamic(std::make_unique<LitParticleUpdater>());
   wParticleSystem->AddDynamic(std::make_unique<GroundCollision>());
   wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RandomFountainEmitter>(_POI, 1.5f, 600.0, 4.0f, _ParticleColor));
+  wParticleSystem->AddEmitter(std::make_unique<BasicStreamEmitter>(_POI, _InitialVelocity, 1.3f, 200.0, 0.85f, _ParticleColor));
+  //wParticleSystem->AddEmitter(std::make_unique<RandomFountainEmitter>(_POI, 1.5f, 600.0, 4.0f, _ParticleColor));
   particle_module::AddSystem(std::move(wParticleSystem));
 }
 
