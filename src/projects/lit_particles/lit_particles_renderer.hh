@@ -46,6 +46,7 @@ private:
 
   GLuint  m_shaderProgram;
   GLuint  m_textureID;
+  float   m_fParticleSize;
 }; /* class TextureCoreGLRenderer*/
 } /* lit_particles_project */
 } /* namespace particle */

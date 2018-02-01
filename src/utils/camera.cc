@@ -62,8 +62,20 @@ void UpdateProjectionView() {
   shader::module::SetUniformBlockValue(
     CameraInfoBindingPoint,
     sizeof(ProjectionView),
-    sizeof(eye_position),
+    sizeof(glm::vec4),
     glm::value_ptr(eye_position)
+  );
+  shader::module::SetUniformBlockValue(
+    CameraInfoBindingPoint,
+    sizeof(ProjectionView) + sizeof(glm::vec4),
+    sizeof(glm::vec4),
+    glm::value_ptr(target_position)
+  );
+  shader::module::SetUniformBlockValue(
+    CameraInfoBindingPoint,
+    sizeof(ProjectionView) + sizeof(glm::vec4) + sizeof(glm::vec4),
+    sizeof(glm::vec4),
+    glm::value_ptr(up_vector)
   );
 }
 
@@ -81,7 +93,7 @@ void Init() {
 
     shader::module::RegisterGlobalUniformBlock(
       CameraInfoBindingPoint,
-      sizeof(ProjectionView) + sizeof(eye_position));
+      sizeof(ProjectionView) + 3 * sizeof(glm::vec4));
 
     UpdateProjectionView();
   });
@@ -125,7 +137,7 @@ void SetTargetPosition(const glm::vec3& a_vTarget) {
 }
 
 void SetUpVector(const glm::vec3& a_vUp) {
-  up_vector = a_vUp;
+  up_vector = glm::normalize(a_vUp);
   UpdateViewMatrixAndProjectionView();
 }
 
@@ -139,7 +151,7 @@ void LookAt(const glm::vec3& a_Eye,
 	const glm::vec3& a_Up) {
   eye_position = a_Eye;
   target_position = a_Target;
-  up_vector = a_Up;
+  up_vector = glm::normalize(a_Up);
   view_matrix = glm::lookAt(a_Eye, a_Target, a_Up);
   UpdateProjectionView();
 }

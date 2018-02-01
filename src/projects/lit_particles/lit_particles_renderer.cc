@@ -22,20 +22,22 @@
 #include "utils/texture_module.hh"
 
 #include "utils/imgui/imgui_log.h"
+#include "utils/imgui/imgui_property_editor.h"
 
 #include <glm/glm.hpp>
 #include <GL/glew.h>
 
 namespace gem { namespace particle {
 namespace lit_particles_project {
-TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath, float a_fParticleSize) {
+TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath, float a_fParticleSize)
+ : m_fParticleSize(a_fParticleSize) {
   shader::factory::CompileShaderFile("particle_billboard.vert", GL_VERTEX_SHADER);
   shader::factory::CompileShaderFile("particle_billboard.geom", GL_GEOMETRY_SHADER);
   shader::factory::CompileShaderFile("particles.frag", GL_FRAGMENT_SHADER);
   m_shaderProgram = shader::factory::CreateProgram();
 
   shader::module::Use(m_shaderProgram);
-  shader::module::SetUniformFloat(m_shaderProgram,"particle_size", a_fParticleSize);
+  shader::module::SetUniformFloat(m_shaderProgram,"particle_size", m_fParticleSize);
   shader::module::Detach();
 
   // VAO initialization
@@ -45,6 +47,14 @@ TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath, 
   ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::TextureCoreGLRenderer -> Allocated array memory for ID = %d\n", m_vertexArrayID);
 
   ParticleTexturesInit(a_sTexturePath);
+
+  ImGuiPropertyEditor &editor = ImGuiPropertyEditor::GetInstance();
+  editor.AddObject("Particles renderer", this);
+  editor.AddProperty<PropertyType::DRAG_FLOAT>("Particle size", &m_fParticleSize, [&]() {
+    shader::module::Use(m_shaderProgram); // Got to use the program before setting uniforms
+    shader::module::SetUniformFloat(m_shaderProgram, "particle_size", m_fParticleSize);
+    shader::module::Detach();
+  }, 0.05f);
 
   glBindVertexArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -171,23 +181,28 @@ void TextureCoreGLRenderer::Update() {
   const std::size_t wActiveParticleCount =
     m_pPool->GetActiveParticleCount();
 
-  // TODO: See if the "if" branching is even necessary here
-  // (test performance)
   if (wActiveParticleCount > 0) {
+    glm::f32vec3 *positions = m_pPool->pCoreData->m_position.get();
+    glm::u8vec4 *colors = m_pPool->pCoreData->m_color.get();
+    glm::f32vec3 *velocities = m_pPool->pCoreData->m_velocity.get();
+
+    // TODO : Sort particles by distance to camera
+    //for (int i = 0; i < wActiveParticleCount; ++i) {
+
+
+    //}
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 
-      sizeof(glm::f32vec3)*wActiveParticleCount, 
-      m_pPool->pCoreData->m_position.get());
+      sizeof(glm::f32vec3)*wActiveParticleCount, positions);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_colorVBOID);
     glBufferSubData(GL_ARRAY_BUFFER, 0,
-      sizeof(glm::u8vec4)*wActiveParticleCount,
-      m_pPool->pCoreData->m_color.get());
+      sizeof(glm::u8vec4)*wActiveParticleCount, colors);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_directionVBOID);
     glBufferSubData(GL_ARRAY_BUFFER, 0,
-      sizeof(glm::f32vec3)*wActiveParticleCount,
-      m_pPool->pCoreData->m_velocity.get());
+      sizeof(glm::f32vec3)*wActiveParticleCount, velocities);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
@@ -195,8 +210,9 @@ void TextureCoreGLRenderer::Update() {
 void TextureCoreGLRenderer::Render() {
   shader::module::Use(m_shaderProgram);
   glEnable(GL_BLEND);
+  glDepthMask(false);
   //glBlendFunc(GL_SRC_COLOR, GL_ONE); // Useful for White on Black textures
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, m_textureID);
@@ -209,6 +225,7 @@ void TextureCoreGLRenderer::Render() {
   }
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);
+  glDepthMask(true);
   glDisable(GL_BLEND);
 }
 } /* namespace lit_particles_project */
