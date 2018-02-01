@@ -5,6 +5,8 @@
 layout (std140, binding = 0) uniform CameraInfo {
   mat4	ProjectionView; 
   vec3	eye;
+  vec3  target;
+  vec3  up_vector;
 };
 
 layout(location = 0) in vec3 vertexPosition_modelspace;
