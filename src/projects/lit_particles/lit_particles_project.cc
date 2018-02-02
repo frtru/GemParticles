@@ -107,6 +107,7 @@ void Run() {
     scene::Render();
     particle_module::Update(dt);
     event_handler::Update(); // Has to be placed before before clearing depth buffer bit
+    light::module::FlushDataToGPU();
 
     ImGuiPropertyEditor::GetInstance().Draw("Property editor");
     ImGuiLog::GetInstance().Draw("Debugging logs");

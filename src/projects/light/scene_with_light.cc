@@ -457,6 +457,22 @@ void Init(bool a_isDebug) {
       UpdateMaterialUniform();
       shader::module::Detach();
     }, 0.05f);
+    editor.AddObject("Light #0", &light::module::GetLightRef(0));
+    editor.AddProperty<PropertyType::VEC4>("Position", &light::module::GetLightRef(0).position, [&]() {
+      light::module::SetDirty();
+    }, 0.05f);
+    editor.AddProperty<PropertyType::VEC4>("Color", &light::module::GetLightRef(0).color, [&]() {
+      light::module::SetDirty();
+    }, 0.05f);
+    editor.AddProperty<PropertyType::DRAG_FLOAT>("Intensity", &light::module::GetLightRef(0).intensity, [&]() {
+      light::module::SetDirty();
+    }, 0.05f);
+    editor.AddProperty<PropertyType::DRAG_FLOAT>("Attenuation", &light::module::GetLightRef(0).attenuation, [&]() {
+      light::module::SetDirty();
+    }, 0.05f);
+    editor.AddProperty<PropertyType::DRAG_FLOAT>("Radius", &light::module::GetLightRef(0).radius, [&]() {
+      light::module::SetDirty();
+    }, 0.05f);
   });
 }
 

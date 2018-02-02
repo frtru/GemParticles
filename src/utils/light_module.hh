@@ -25,10 +25,10 @@ namespace light {
 struct Light {
   glm::vec4  position;
   glm::vec4  color;
-  float         intensity;
-  float         attenuation;
-  float         radius;
-  float         padding;
+  float      intensity;
+  float      attenuation;
+  float      radius;
+  float      padding;
 };
 struct SpotLight {
   glm::f32vec3  position;
@@ -50,16 +50,28 @@ namespace module {
 void Init();
 void Terminate();
 
+/* These methods must be used in order for the module to work*/
+// Resize should be used at the beginning of the application, 
+// equivalent to std::vector::resize
+void Resize(std::size_t LightCount, const Light& defaultLight = Light());
+// FlushDataToGPU should be used at the end of each iteration
+void FlushDataToGPU();
+// SetDirty is called when one don't want to call FlushDataToGPU right away, 
+// but wants to eventually send new data to GPU
+void SetDirty();
+
 /* Alters the lights count. The AddLight functions return the ID of the lights added. */
 std::size_t AddLight(const Light &light);
 std::size_t AddLight(Light&& light);
-void ExpandLightsCapacityBy(std::size_t numberOfAdditionalLights);
 
 /* Getters */
-std::size_t GetNumberOfLights();
-Light GetLight(std::size_t lightID);
+std::size_t GetLightsCount();
+Light  GetLight(std::size_t lightID);
+Light& GetLightRef(std::size_t lightID);
+Light* GetLightPointer(std::size_t lightID);
 
-/* By using the light ID, one can update the corresponding light in the module. */
+/* By using the light ID, one can update the corresponding light in 
+the module if he or she used GetLight instead of the reference getters. */
 void UpdateLight(std::size_t lightID, const Light &light);
 void UpdateLight(std::size_t lightID, Light &&light);
 } /* namespace module */

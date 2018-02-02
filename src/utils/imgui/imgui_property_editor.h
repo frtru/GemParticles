@@ -66,6 +66,7 @@ enum class PropertyType {
   DRAG_FLOAT,
   COLOR,
   VEC3,
+  VEC4,
   STRING,
   NEW_OBJECT
 };
@@ -340,6 +341,50 @@ struct Property<PropertyType::VEC3> : IProperty {
       *wPreviousData = *wData;
       *(wPreviousData + 1) = *(wData + 1);
       *(wPreviousData + 2) = *(wData + 2);
+    }
+  }
+};
+template <>
+struct Property<PropertyType::VEC4> : IProperty {
+  Property(const std::string &name,
+    void* data, std::function<void()> callback,
+    float delta)
+    : IProperty(name, data, callback, delta) {}
+
+  ~Property() { free(_previous_data); }
+
+  virtual void AllocateDataCopy() override {
+    _previous_data = malloc(4 * sizeof(float));
+    memcpy(_previous_data, _data, 4 * sizeof(float));
+  }
+  virtual void Draw(int id) override {
+    float *wData = static_cast<float*>(_data),
+      *wPreviousData = static_cast<float*>(_previous_data);
+
+    ImGui::PushID(id);
+    ImGui::AlignTextToFramePadding();
+    // -------------------
+    ImGui::Bullet();
+    ImGui::Selectable(_name.c_str());
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PushItemWidth(-1);
+    ImGui::DragFloat4("##value", wData, _delta);
+    ImGui::PopItemWidth();
+    ImGui::NextColumn();
+    // -------------------
+    ImGui::PopID();
+    //ImGuiLog::GetInstance().AddLog("%f,%f,%f - %f,%f,%f\n", *wData, *(wData + 1), *(wData + 2), *wPreviousData, *(wPreviousData + 1), *(wPreviousData + 2));
+    if (_callback != nullptr && (
+    std::fabs(*wData - *wPreviousData) >= 0.1f ||
+    std::fabs(*(wData + 1) - *(wPreviousData + 1)) >= 0.1f ||
+    std::fabs(*(wData + 2) - *(wPreviousData + 2)) >= 0.1f ||
+    std::fabs(*(wData + 3) - *(wPreviousData + 3)) >= 0.1f)) {
+      _callback();
+      *wPreviousData = *wData;
+      *(wPreviousData + 1) = *(wData + 1);
+      *(wPreviousData + 2) = *(wData + 2);
+      *(wPreviousData + 3) = *(wData + 3);
     }
   }
 };

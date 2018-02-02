@@ -23,32 +23,25 @@ namespace gem { namespace particle {
 namespace light {
 namespace {
 constexpr GLuint        LIGHTS_SSBO_BINDING_POINT = 1U;
-GLuint                  _MaxLightCount = 0u;
 std::vector<Light>      _Lights;
+bool                    _DirtyFlag;
 std::once_flag          _InitFlag;
 std::once_flag          _TerminateFlag;
 
-void UpdateLightsGPUBuffer(std::size_t a_unIndex) {
+void UpdateGPUBufferSize() {
   // Check if capacity changed after add
-  if (_MaxLightCount != _Lights.size()) {
-    _MaxLightCount = _Lights.size();
-    shader::module::UpdateSSBOBlockData(
-      LIGHTS_SSBO_BINDING_POINT, _MaxLightCount* sizeof(Light),
-      static_cast<void*>(_Lights.data()));
-  }
-  else { // Otherwise just update 
-    shader::module::SetSSBOBlockSubData(
-      LIGHTS_SSBO_BINDING_POINT,
-      a_unIndex * sizeof(Light), &_Lights[a_unIndex],
-      sizeof(Light));
-  }
+  shader::module::UpdateSSBOBlockData(
+  LIGHTS_SSBO_BINDING_POINT, _Lights.size() * sizeof(Light),
+  static_cast<void*>(_Lights.data()));
+  // this also updates the buffer data so no need to send it a second time in the same iteration
+  _DirtyFlag = false;
 }
 }
 
 namespace module {
 void Init() {
   std::call_once(_InitFlag, [&]() {
-    _Lights.reserve(_MaxLightCount);
+    _DirtyFlag = false;
     shader::module::RegisterSSBOBlock(
       LIGHTS_SSBO_BINDING_POINT,
       _Lights.size() * sizeof(Light),
@@ -60,34 +53,51 @@ void Terminate() {
   std::call_once(_TerminateFlag, [&]() {});
 }
 
+
+void Resize(std::size_t LightCount, const Light& defaultLight) {
+  _Lights.resize(LightCount, defaultLight);
+  UpdateGPUBufferSize();
+  ImGuiLog::GetInstance().AddLog("light_module::Resize -> Resized lights pool to size = %d\n", LightCount);
+}
+
+void FlushDataToGPU() {
+  if (_DirtyFlag) {
+    // Send data to GPU
+    shader::module::SetSSBOBlockSubData(
+      LIGHTS_SSBO_BINDING_POINT,
+      0,                                  // Offset is set at the beginning of pool
+      static_cast<void*>(_Lights.data()), // Lights data
+      sizeof(Light) * _Lights.size());    // Send _Lights.size() light data
+    _DirtyFlag = false;
+  }
+}
+
+void SetDirty() {
+  _DirtyFlag = true;
+}
+
 /* Alters the lights count. The AddLight functions return the ID of the lights added. */
 std::size_t AddLight(const Light &light) {
   // Add to _Lights
+  std::size_t wIndex = _Lights.size();
   _Lights.push_back(light);
-  std::size_t wIndex = _Lights.size() - 1;
-  UpdateLightsGPUBuffer(wIndex);
+  UpdateGPUBufferSize();
   // Return the index of the newly added light
-  ImGuiLog::GetInstance().AddLog("light_module::AddLight -> Added a light with index = %d\n", wIndex);
+  ImGuiLog::GetInstance().AddLog("light_module::AddLight(&) -> Added a light with index = %d\n", wIndex);
   return wIndex;
 }
 std::size_t AddLight(Light&& light) {
   // Add to _Lights
+  std::size_t wIndex = _Lights.size();
   _Lights.push_back(std::move(light));
-  std::size_t wIndex = _Lights.size() - 1;
-  UpdateLightsGPUBuffer(wIndex);
+  UpdateGPUBufferSize();
   // Return the index of the newly added light
+  ImGuiLog::GetInstance().AddLog("light_module::AddLight(&&) -> Added a light with index = %d\n", wIndex);
   return wIndex;
-}
-void ExpandLightsCapacityBy(std::size_t numberOfAdditionalLights) {
-  _MaxLightCount += numberOfAdditionalLights;
-  _Lights.reserve(_MaxLightCount);
-  shader::module::UpdateSSBOBlockData(
-    LIGHTS_SSBO_BINDING_POINT, _MaxLightCount,
-    static_cast<void*>(_Lights.data()));
 }
 
 /* Getters */
-std::size_t GetNumberOfLights() {
+std::size_t GetLightsCount() {
   return _Lights.size();
 }
 Light GetLight(std::size_t lightID) {
@@ -97,15 +107,29 @@ Light GetLight(std::size_t lightID) {
   ImGuiLog::GetInstance().AddLog("[ERROR]light_module::GetNumberOfLights -> lightID is out of bound.\n");
   return Light();
 }
+Light& GetLightRef(std::size_t lightID) {
+  if (lightID < _Lights.size()) {
+    _DirtyFlag = true; // Assume change from the user
+    return _Lights[lightID];
+  }
+  ImGuiLog::GetInstance().AddLog("[ERROR]light_module::GetNumberOfLights -> lightID is out of bound.\n");
+  return Light();
+}
+Light* GetLightPointer(std::size_t lightID) {
+  if (lightID < _Lights.size()) {
+    _DirtyFlag = true; // Assume change from the user
+    return &(_Lights[lightID]);
+  }
+  ImGuiLog::GetInstance().AddLog("[ERROR]light_module::GetNumberOfLights -> lightID is out of bound.\n");
+  return nullptr;
+}
 
-/* By using the light ID, one can update the corresponding light in the module. */
+/* By using the light ID, one can update the corresponding light in
+the module if he or she used GetLight instead of the reference getters. */
 void UpdateLight(std::size_t lightID, const Light &light) {
   if (lightID >= 0 && lightID < _Lights.size()) {
     _Lights[lightID] = light;
-    shader::module::SetSSBOBlockSubData(
-      LIGHTS_SSBO_BINDING_POINT,
-      lightID * sizeof(Light), &_Lights[lightID],
-      sizeof(Light));
+    _DirtyFlag = true;
     return;
   }
   ImGuiLog::GetInstance().AddLog("[ERROR]light_module::UpdateLight -> lightID is out of bound.\n");
@@ -113,10 +137,7 @@ void UpdateLight(std::size_t lightID, const Light &light) {
 void UpdateLight(std::size_t lightID, Light &&light) {
   if (lightID >= 0 && lightID < _Lights.size()) {
     _Lights[lightID] = std::move(light);
-    shader::module::SetSSBOBlockSubData(
-      LIGHTS_SSBO_BINDING_POINT,
-      lightID * sizeof(Light), &_Lights[lightID],
-      sizeof(Light));
+    _DirtyFlag = true;
     return;
   }
   ImGuiLog::GetInstance().AddLog("[ERROR]light_module::UpdateLight -> lightID is out of bound.\n");
