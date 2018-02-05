@@ -156,6 +156,7 @@ void TextureCoreGLRenderer::Update() {
 void TextureCoreGLRenderer::Render() {
   shader::module::Use(m_shaderProgram);
   glEnable(GL_BLEND);
+  glDepthMask(false);
   //glBlendFunc(GL_SRC_COLOR, GL_ONE); // Useful for White on Black textures
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -170,6 +171,7 @@ void TextureCoreGLRenderer::Render() {
   }
   glBindVertexArray(0);
   glBindTexture(GL_TEXTURE_2D, 0);
+  glDepthMask(true);
   glDisable(GL_BLEND);
 }
 } /* namespace rain_project */
