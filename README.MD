@@ -10,7 +10,7 @@ __Lit particles *or* particles with 200 dynamic cpu lights__
 __500000 cpu particles attracted toward a location with hot and cold colors__
 <img src="https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/attractor_1_cropped.gif" width="434" height="250">        <img src="https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/attractor_2_cropped.gif" width="434" height="250">
 
-__and some rain... (1 million cpu particles)__
+__and some rain... (1 million cpu particles with a steady 50 FPS)__
 <img src="https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/heavy_rain_cropped_big.gif">
 
 ## External libraries
@@ -23,7 +23,7 @@ I'm using various external libraries in this project.
 * OpenGL
 
 ## Utilities
-I pretty much built this from scratch looking up efficient design patterns, tutorials. So you'll find a handful of utilities that I named *modules*.
+I pretty much built this from scratch looking up efficient design patterns, tutorials. So you'll find a handful of utilities that I built to help me create stuff more easily. Most of them are named as *modules*.
 * Camera
 * Light module
 * Shader module
