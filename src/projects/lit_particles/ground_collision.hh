@@ -15,18 +15,19 @@
 #define GROUND_COLLISION
 
 #include "dynamics/dynamic.hh"
-#include "core/particle_pool_core.hh"
+#include "projects/lit_particles/lit_particles_pool.hh"
 
-namespace gem {
-namespace particle {
-class GroundCollision : public Dynamic<CoreParticles> {
+namespace gem { namespace particle {
+namespace lit_particles_project {
+class GroundCollision : public Dynamic<LitParticlesData> {
 public:
   GroundCollision() = default;
   ~GroundCollision() = default;
 
-  void Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) override;
+  void Update(double a_dt, const std::shared_ptr<ParticlePool<LitParticlesData> >& a_pPool) override;
   bool AltersParticleLifeCycle() const override { return true; }
 }; /* class GroundCollision*/
+} /* namespace lit_particles_project */
 } /* namespace particle */
 } /* namespace gem */
 

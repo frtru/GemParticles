@@ -40,7 +40,9 @@
     <ClCompile Include="src\projects\light\scene_with_light.cc" />
     <ClCompile Include="src\projects\lit_particles\ground_collision.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_blueprint.cc" />
+    <ClCompile Include="src\projects\lit_particles\lit_particles_emitter.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_event_handler.cc" />
+    <ClCompile Include="src\projects\lit_particles\lit_particles_gravity_acceleration.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_project.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_renderer.cc" />
     <ClCompile Include="src\projects\lit_particles\lit_particles_scene.cc" />
@@ -98,10 +100,15 @@
     <ClInclude Include="src\projects\light\scene_with_light.hh" />
     <ClInclude Include="src\projects\lit_particles\ground_collision.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_blueprint.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_data.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_emitter.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_event_handler.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_gravity_acceleration.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_pool.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_project.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_renderer.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_scene.hh" />
+    <ClInclude Include="src\projects\lit_particles\lit_particles_system.hh" />
     <ClInclude Include="src\projects\lit_particles\lit_particles_updater.hh" />
     <ClInclude Include="src\projects\rain\rain_emitter.hh" />
     <ClInclude Include="src\projects\rain\rain_particles_blueprint.hh" />

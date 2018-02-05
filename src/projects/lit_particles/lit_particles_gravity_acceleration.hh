@@ -11,24 +11,25 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef LIT_PARTICLES_PARTICLE_UPDATER
-#define LIT_PARTICLES_PARTICLE_UPDATER
+#ifndef LIT_PARTICLES_ACCELERATION_HH
+#define LIT_PARTICLES_ACCELERATION_HH
 
 #include "dynamics/dynamic.hh"
 #include "projects/lit_particles/lit_particles_pool.hh"
 
 namespace gem { namespace particle {
 namespace lit_particles_project {
-class LitParticleUpdater : public Dynamic<LitParticlesData> {
+class GravityAcceleration : public Dynamic<LitParticlesData> {
+private:
+  static const glm::f32vec3 GRAVITY_ACCEL;
 public:
-  LitParticleUpdater() = default;
-  ~LitParticleUpdater() = default;
+  GravityAcceleration() = default;
+  ~GravityAcceleration() = default;
 
   void Update(double a_dt, const std::shared_ptr<ParticlePool<LitParticlesData> >& a_pPool) override;
-  bool AltersParticleLifeCycle() const override { return true; }
-}; /* class LitParticleUpdater*/
+}; /* class GravityAcceleration*/
 } /* namespace lit_particles_project */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: LIT_PARTICLES_PARTICLE_UPDATER */
+#endif /* end of include guard: LIT_PARTICLES_ACCELERATION_HH */

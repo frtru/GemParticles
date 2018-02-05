@@ -17,26 +17,26 @@
 #include <GL/glew.h>
 
 #include "renderers/renderer.hh"
-#include "core/particle_pool_core.hh"
+#include "projects/lit_particles/lit_particles_pool.hh"
 
 namespace gem { namespace particle {
 namespace lit_particles_project {
-class TextureCoreGLRenderer : public Renderer<CoreParticles> {
+class LitParticlesRenderer : public Renderer<LitParticlesData> {
 public:
-  TextureCoreGLRenderer(const std::string& a_sTexturePath, float a_fParticleSize = 1.0f);
-  virtual ~TextureCoreGLRenderer();
+  LitParticlesRenderer(const std::string& a_sTexturePath, float a_fParticleSize = 1.0f);
+  virtual ~LitParticlesRenderer();
 
   inline std::size_t GetProgramID() const override {
     return m_shaderProgram;
   }
   
-  virtual void Bind(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) override;
+  virtual void Bind(const std::shared_ptr<ParticlePool<LitParticlesData> > &a_pPool) override;
   virtual void Update() override;
   virtual void Render() override;
 private:
-  void ParticlePositionsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
-  void ParticleColorsInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
-  void ParticleDirectionInit(const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool);
+  void ParticlePositionsInit(const std::shared_ptr<ParticlePool<LitParticlesData> > & a_pPool);
+  void ParticleColorsInit(const std::shared_ptr<ParticlePool<LitParticlesData> > & a_pPool);
+  void ParticleDirectionInit(const std::shared_ptr<ParticlePool<LitParticlesData> > & a_pPool);
   void ParticleTexturesInit(const std::string& a_sTexturePath);
 
   GLuint  m_vertexArrayID;
@@ -47,7 +47,7 @@ private:
   GLuint  m_shaderProgram;
   GLuint  m_textureID;
   float   m_fParticleSize;
-}; /* class TextureCoreGLRenderer*/
+}; /* class LitParticlesRenderer*/
 } /* lit_particles_project */
 } /* namespace particle */
 } /* namespace gem */

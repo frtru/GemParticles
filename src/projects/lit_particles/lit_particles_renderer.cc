@@ -29,7 +29,7 @@
 
 namespace gem { namespace particle {
 namespace lit_particles_project {
-TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath, float a_fParticleSize)
+LitParticlesRenderer::LitParticlesRenderer(const std::string& a_sTexturePath, float a_fParticleSize)
  : m_fParticleSize(a_fParticleSize) {
   shader::factory::CompileShaderFile("particle_billboard.vert", GL_VERTEX_SHADER);
   shader::factory::CompileShaderFile("particle_billboard.geom", GL_GEOMETRY_SHADER);
@@ -60,7 +60,7 @@ TextureCoreGLRenderer::TextureCoreGLRenderer(const std::string& a_sTexturePath, 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-TextureCoreGLRenderer::~TextureCoreGLRenderer() {
+LitParticlesRenderer::~LitParticlesRenderer() {
   if (m_colorVBOID != 0) {
     ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::~TextureCoreGLRenderer -> Deallocating color VBO\n");
     glDeleteBuffers(1, &m_colorVBOID);
@@ -73,8 +73,8 @@ TextureCoreGLRenderer::~TextureCoreGLRenderer() {
   }
 }
 
-void TextureCoreGLRenderer::Bind(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {
-  Renderer<CoreParticles>::Bind(a_pPool);
+void LitParticlesRenderer::Bind(const std::shared_ptr<ParticlePool<LitParticlesData> > &a_pPool) {
+  Renderer<LitParticlesData>::Bind(a_pPool);
   glBindVertexArray(m_vertexArrayID);
   ParticlePositionsInit(m_pPool);
   ParticleColorsInit(m_pPool);
@@ -82,8 +82,8 @@ void TextureCoreGLRenderer::Bind(const std::shared_ptr<ParticlePool<CoreParticle
   glBindVertexArray(0);
 }
 
-void TextureCoreGLRenderer::ParticlePositionsInit(
-  const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
+void LitParticlesRenderer::ParticlePositionsInit(
+  const std::shared_ptr<ParticlePool<LitParticlesData> > & a_pPool) {
   // Positions VBO initialization
   glGenBuffers(1, &m_vertexBufferID);
   ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::ParticlePositionsInit -> Generated vertex VBO ID = %d\n", m_vertexBufferID);
@@ -94,7 +94,7 @@ void TextureCoreGLRenderer::ParticlePositionsInit(
 
   glBufferData(GL_ARRAY_BUFFER,
     sizeof(glm::f32vec3)*wParticleCount,
-    a_pPool->pCoreData->m_position.get(),
+    a_pPool->pData->m_position.get(),
     GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(0);
@@ -112,8 +112,8 @@ void TextureCoreGLRenderer::ParticlePositionsInit(
   }
 }
 
-void TextureCoreGLRenderer::ParticleColorsInit(
-  const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
+void LitParticlesRenderer::ParticleColorsInit(
+  const std::shared_ptr<ParticlePool<LitParticlesData> > & a_pPool) {
   //Color VBO Initialization
   glGenBuffers(1, &m_colorVBOID);
   ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::ParticleColorsInit -> Generated color VBO ID = %d\n", m_colorVBOID);
@@ -124,7 +124,7 @@ void TextureCoreGLRenderer::ParticleColorsInit(
 
   glBufferData(GL_ARRAY_BUFFER,
     sizeof(glm::u8vec4)*wParticleCount,
-    a_pPool->pCoreData->m_color.get(),
+    a_pPool->pData->m_color.get(),
     GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(1);
@@ -141,8 +141,8 @@ void TextureCoreGLRenderer::ParticleColorsInit(
       sizeof(glm::u8vec4), nullptr);
   }
 }
-void TextureCoreGLRenderer::ParticleDirectionInit(
-  const std::shared_ptr<ParticlePool<CoreParticles> > & a_pPool) {
+void LitParticlesRenderer::ParticleDirectionInit(
+  const std::shared_ptr<ParticlePool<LitParticlesData> > & a_pPool) {
   //Direction VBO Initialization
   glGenBuffers(1, &m_directionVBOID);
   ImGuiLog::GetInstance().AddLog("TextureCoreGLRenderer::ParticleColorsInit -> Generated direction VBO ID = %d\n", m_directionVBOID);
@@ -153,7 +153,7 @@ void TextureCoreGLRenderer::ParticleDirectionInit(
 
   glBufferData(GL_ARRAY_BUFFER,
     sizeof(glm::f32vec3)*wParticleCount,
-    a_pPool->pCoreData->m_velocity.get(),
+    a_pPool->pData->m_velocity.get(),
     GL_STATIC_DRAW);
 
   glEnableVertexAttribArray(2);
@@ -171,20 +171,20 @@ void TextureCoreGLRenderer::ParticleDirectionInit(
   }
 }
 
-void TextureCoreGLRenderer::ParticleTexturesInit(const std::string& a_sTexturePath) {
+void LitParticlesRenderer::ParticleTexturesInit(const std::string& a_sTexturePath) {
   m_textureID = texture::factory::Create2DTexture(a_sTexturePath);
   shader::module::GetUniformLocation(m_shaderProgram, "mytexture");
 }
 
-void TextureCoreGLRenderer::Update() {
+void LitParticlesRenderer::Update() {
   shader::module::Use(m_shaderProgram);
   const std::size_t wActiveParticleCount =
     m_pPool->GetActiveParticleCount();
 
   if (wActiveParticleCount > 0) {
-    glm::f32vec3 *positions = m_pPool->pCoreData->m_position.get();
-    glm::u8vec4 *colors = m_pPool->pCoreData->m_color.get();
-    glm::f32vec3 *velocities = m_pPool->pCoreData->m_velocity.get();
+    glm::f32vec3 *positions = m_pPool->pData->m_position.get();
+    glm::u8vec4 *colors = m_pPool->pData->m_color.get();
+    glm::f32vec3 *velocities = m_pPool->pData->m_velocity.get();
 
     // TODO : Sort particles by distance to camera
     //for (int i = 0; i < wActiveParticleCount; ++i) {
@@ -207,7 +207,7 @@ void TextureCoreGLRenderer::Update() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 }
-void TextureCoreGLRenderer::Render() {
+void LitParticlesRenderer::Render() {
   shader::module::Use(m_shaderProgram);
   glEnable(GL_BLEND);
   glDepthMask(false);

@@ -96,7 +96,7 @@ public:
     m_pRenderer->Render();
   }
 
-private:
+protected:
   void Spawn(double a_dt) {
     for (auto& emmiter : m_vEmitters) {
       emmiter->Emit(a_dt, m_pParticlePool);

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 FranÃ§ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,24 +11,30 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef LIT_PARTICLES_PARTICLE_UPDATER
-#define LIT_PARTICLES_PARTICLE_UPDATER
+#ifndef LIT_PARTICLES_DATA_HH
+#define LIT_PARTICLES_DATA_HH
 
-#include "dynamics/dynamic.hh"
-#include "projects/lit_particles/lit_particles_pool.hh"
+#include <memory>
+#include "glm/glm.hpp"
 
 namespace gem { namespace particle {
 namespace lit_particles_project {
-class LitParticleUpdater : public Dynamic<LitParticlesData> {
-public:
-  LitParticleUpdater() = default;
-  ~LitParticleUpdater() = default;
+struct LitParticlesData {
+  std::unique_ptr<float[]       > m_lifetime;
+  std::unique_ptr<glm::u8vec4[] >	m_color;
+  std::unique_ptr<glm::f32vec3[]>	m_position;
+  std::unique_ptr<glm::f32vec3[]>	m_velocity;
+  std::unique_ptr<std::size_t[] > m_lightIndex;
 
-  void Update(double a_dt, const std::shared_ptr<ParticlePool<LitParticlesData> >& a_pPool) override;
-  bool AltersParticleLifeCycle() const override { return true; }
-}; /* class LitParticleUpdater*/
+  explicit LitParticlesData(std::size_t a_unMaxParticleCount)
+    : m_lifetime(new float[a_unMaxParticleCount]),
+      m_color(new glm::u8vec4[a_unMaxParticleCount]),
+      m_position(new glm::f32vec3[a_unMaxParticleCount]),
+      m_velocity(new glm::f32vec3[a_unMaxParticleCount]),
+      m_lightIndex(new std::size_t[a_unMaxParticleCount]) {}
+}; /* class LitParticlesData */
 } /* namespace lit_particles_project */
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: LIT_PARTICLES_PARTICLE_UPDATER */
+#endif /* end of include guard: LIT_PARTICLES_DATA_HH */

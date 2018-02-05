@@ -68,6 +68,9 @@
     <Filter Include="projects\lit_particles\dynamics">
       <UniqueIdentifier>{7fa5a678-ac72-4af9-90d4-150a09bead03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="projects\lit_particles\pool">
+      <UniqueIdentifier>{a397db53-dcb1-446a-bfb2-358d432f7f52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\particle_module.cc">
@@ -209,6 +212,12 @@
       <Filter>projects\lit_particles\dynamics</Filter>
     </ClCompile>
     <ClCompile Include="src\projects\lit_particles\lit_particles_renderer.cc">
+      <Filter>projects\lit_particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\lit_particles\lit_particles_gravity_acceleration.cc">
+      <Filter>projects\lit_particles\dynamics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\projects\lit_particles\lit_particles_emitter.cc">
       <Filter>projects\lit_particles</Filter>
     </ClCompile>
   </ItemGroup>
@@ -403,6 +412,21 @@
     </ClInclude>
     <ClInclude Include="src\projects\lit_particles\lit_particles_renderer.hh">
       <Filter>projects\lit_particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_data.hh">
+      <Filter>projects\lit_particles\pool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_pool.hh">
+      <Filter>projects\lit_particles\pool</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_gravity_acceleration.hh">
+      <Filter>projects\lit_particles\dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_emitter.hh">
+      <Filter>projects\lit_particles</Filter>
+    </ClInclude>
+    <ClInclude Include="src\projects\lit_particles\lit_particles_system.hh">
+      <Filter>projects\lit_particles\pool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

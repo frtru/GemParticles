@@ -13,18 +13,19 @@
 *************************************************************************/
 #include "projects/lit_particles/ground_collision.hh"
 
-namespace gem {
-namespace particle {
-void GroundCollision::Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) {
+namespace gem { namespace particle {
+namespace lit_particles_project {
+void GroundCollision::Update(double a_dt, const std::shared_ptr<ParticlePool<LitParticlesData> >& a_pPool) {
   // TODO: Deal with the delta double precision casted to float later
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
   const float fDt = static_cast<float>(a_dt);
 
   // Using the euler model to update the positions and velocities
   for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    if (a_pPool->pCoreData->m_position[i].y < -0.9f)
-      a_pPool->pCoreData->m_velocity[i].y *= -0.5f;
+    if (a_pPool->pData->m_position[i].y < -0.9f)
+      a_pPool->pData->m_velocity[i].y *= -0.5f;
   }
 }
+} /* namespace lit_particles_project */
 } /* namespace particle */
 } /* namespace gem */

@@ -13,27 +13,39 @@
 *************************************************************************/
 #include "projects/lit_particles/lit_particles_updater.hh"
 
-namespace gem {
-namespace particle {
-void LitParticleUpdater::Update(double a_dt, const std::shared_ptr<ParticlePool<CoreParticles> >& a_pPool) {
+namespace gem { namespace particle {
+namespace lit_particles_project {
+void LitParticleUpdater::Update(double a_dt, const std::shared_ptr<ParticlePool<LitParticlesData> >& a_pPool) {
   // TODO: Deal with the delta double precision casted to float later
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
   const float fDt = static_cast<float>(a_dt);
 
   for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->pCoreData->m_lifetime[i] -= fDt;
-    if (a_pPool->pCoreData->m_lifetime[i] <= 0.0f) {
+    a_pPool->pData->m_lifetime[i] -= fDt;
+    if (a_pPool->pData->m_lifetime[i] <= 0.0f) {
+      // Do something with the lights before particle sleep
+      a_pPool->ReleaseLightIndex(a_pPool->pData->m_lightIndex[i]);
       a_pPool->Sleep(i);
-    }
-    else if (a_pPool->pCoreData->m_lifetime[i] <= .9f) {
-      a_pPool->pCoreData->m_color[i].a -= 4ui8;
     }
   }
 
-  // Using the euler model to update the positions and velocities
-    for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
-    a_pPool->pCoreData->m_position[i] += a_pPool->pCoreData->m_velocity[i] * fDt;
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+    //Particle update
+    a_pPool->pData->m_position[i] += a_pPool->pData->m_velocity[i] * fDt;
+
+    //Light update
+    light::Light& wLight = light::module::GetLightRef(
+      a_pPool->pData->m_lightIndex[i]);
+    wLight.position = glm::vec4(a_pPool->pData->m_position[i], 0.0);
+
+    // End of life update
+    if (a_pPool->pData->m_lifetime[i] <= .9f) {
+      a_pPool->pData->m_color[i].a -= 4ui8;
+      wLight.intensity -= 0.01; // TODO: test this once the rest works
+      wLight.radius -= 0.04;
+    }
   }
 }
+} /* namespace lit_particles_project */
 } /* namespace particle */
 } /* namespace gem */

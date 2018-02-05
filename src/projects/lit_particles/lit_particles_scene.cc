@@ -255,14 +255,14 @@ void Init(bool a_isDebug) {
     light::module::Init();
 
     // Add lights in the scene in the SSBO
-    light::Light wLight;
-    wLight.position = { 0.0f, 0.1f, 0.0f, 0.0f };
-    wLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
-    wLight.intensity = 1.0f;
-    wLight.attenuation = 0.0f;
-    wLight.radius = 5.0f;
+    //light::Light wLight;
+    //wLight.position = { 0.0f, 0.1f, 0.0f, 0.0f };
+    //wLight.color = { 0.5f, 0.5f, 0.5f, 0.5f };
+    //wLight.intensity = 1.0f;
+    //wLight.attenuation = 0.0f;
+    //wLight.radius = 5.0f;
 
-    light::module::Resize(20, wLight);
+    //light::module::Resize(20, wLight);
     
     glGenVertexArrays(3, vertex_array_IDs);
     ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",
