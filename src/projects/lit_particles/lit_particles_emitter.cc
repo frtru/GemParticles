@@ -50,13 +50,13 @@ void LitParticlesEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<L
   }
   for (std::size_t i = a_unStartID; i < a_unEndID; ++i) {
     std::size_t wIndex = a_pPool->TakeLightIndex();
-    if (wIndex != -1) {
+    if (wIndex <= light::module::MAX_LIGHTS) {
       a_pPool->pData->m_lightIndex[i] = wIndex;
       light::Light& wLight = light::module::GetLightRef(
         a_pPool->pData->m_lightIndex[i]);
       wLight.position = glm::vec4(m_spawnLocation, 0.0);
       wLight.color = LIGHT_COLOR;
-      wLight.intensity = 0.5f;
+      wLight.intensity = 0.1f;
       wLight.radius = 3.0f;
     }
   }

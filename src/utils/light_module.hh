@@ -46,6 +46,9 @@ struct Material {
   float         shininessFactor;
 };
 namespace module {
+/* CONSTANT THAT DEFINES THE SYSTEM LIGHT MAXIMAL CAPACITY */
+constexpr std::size_t MAX_LIGHTS = 1000;
+
 /* Setup functions */
 void Init();
 void Terminate();

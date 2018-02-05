@@ -186,7 +186,7 @@ void UpdateSSBOBlockData(GLuint a_unBindingPoint,
     GLuint unSSBOID = SSBO->second.first;
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, unSSBOID);
     glBufferData(GL_SHADER_STORAGE_BUFFER, a_unSSBOSize, a_pData, a_eUsage);
-    ImGuiLog::GetInstance().AddLog("shader_module::UpdateSSBOBlockData -> Updated SSBO with ID %d, final size = %d\n", unSSBOID, a_unSSBOSize);
+    //ImGuiLog::GetInstance().AddLog("shader_module::UpdateSSBOBlockData -> Updated SSBO with ID %d, final size = %d\n", unSSBOID, a_unSSBOSize);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); //unbind
   }
   else {
@@ -202,7 +202,7 @@ void SetSSBOBlockSubData(GLuint a_unBindingPoint,
     GLuint unSSBOID = SSBO->second.first;
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, unSSBOID);
     glBufferSubData(GL_SHADER_STORAGE_BUFFER, a_unOffset, a_unSize, a_pData);
-    ImGuiLog::GetInstance().AddLog("shader_module::SetSSBOBlockSubData -> Set sub data in SSBO with ID %d, offset = %d, size = %d\n", unSSBOID, a_unOffset, a_unSize);
+    //ImGuiLog::GetInstance().AddLog("shader_module::SetSSBOBlockSubData -> Set sub data in SSBO with ID %d, offset = %d, size = %d\n", unSSBOID, a_unOffset, a_unSize);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
   }
   else {

@@ -21,7 +21,7 @@
 
 namespace gem { namespace particle {
 namespace light {
-namespace {
+
 constexpr GLuint        LIGHTS_SSBO_BINDING_POINT = 1U;
 std::vector<Light>      _Lights;
 bool                    _DirtyFlag;
@@ -36,7 +36,7 @@ void UpdateGPUBufferSize() {
   // this also updates the buffer data so no need to send it a second time in the same iteration
   _DirtyFlag = false;
 }
-}
+
 
 namespace module {
 void Init() {
@@ -55,6 +55,10 @@ void Terminate() {
 
 
 void Resize(std::size_t LightCount, const Light& defaultLight) {
+  if (LightCount > MAX_LIGHTS) {
+    ImGuiLog::GetInstance().AddLog("[ERROR]light_module::Resize -> Trying to resize above the maximal capacity.\n");
+    return;
+  }
   _Lights.resize(LightCount, defaultLight);
   UpdateGPUBufferSize();
   ImGuiLog::GetInstance().AddLog("light_module::Resize -> Resized lights pool to size = %d\n", LightCount);
@@ -78,6 +82,10 @@ void SetDirty() {
 
 /* Alters the lights count. The AddLight functions return the ID of the lights added. */
 std::size_t AddLight(const Light &light) {
+  if (_Lights.size() + 1 > MAX_LIGHTS) {
+    ImGuiLog::GetInstance().AddLog("[ERROR]light_module::AddLight -> Trying to add one light above the maximal capacity.\n");
+    return -1;
+  }
   // Add to _Lights
   std::size_t wIndex = _Lights.size();
   _Lights.push_back(light);
@@ -87,6 +95,10 @@ std::size_t AddLight(const Light &light) {
   return wIndex;
 }
 std::size_t AddLight(Light&& light) {
+  if (_Lights.size() + 1 > MAX_LIGHTS) {
+    ImGuiLog::GetInstance().AddLog("[ERROR]light_module::AddLight -> Trying to add one light above the maximal capacity.\n");
+    return -1;
+  }
   // Add to _Lights
   std::size_t wIndex = _Lights.size();
   _Lights.push_back(std::move(light));

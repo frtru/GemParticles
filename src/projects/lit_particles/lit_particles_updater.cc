@@ -24,7 +24,9 @@ void LitParticleUpdater::Update(double a_dt, const std::shared_ptr<ParticlePool<
     a_pPool->pData->m_lifetime[i] -= fDt;
     if (a_pPool->pData->m_lifetime[i] <= 0.0f) {
       // Do something with the lights before particle sleep
-      a_pPool->ReleaseLightIndex(a_pPool->pData->m_lightIndex[i]);
+      std::size_t lightIndex = a_pPool->pData->m_lightIndex[i];
+      if (lightIndex <= light::module::MAX_LIGHTS)
+        a_pPool->ReleaseLightIndex(lightIndex);
       a_pPool->Sleep(i);
     }
   }
@@ -34,15 +36,24 @@ void LitParticleUpdater::Update(double a_dt, const std::shared_ptr<ParticlePool<
     a_pPool->pData->m_position[i] += a_pPool->pData->m_velocity[i] * fDt;
 
     //Light update
-    light::Light& wLight = light::module::GetLightRef(
-      a_pPool->pData->m_lightIndex[i]);
-    wLight.position = glm::vec4(a_pPool->pData->m_position[i], 0.0);
+    std::size_t lightIndex = a_pPool->pData->m_lightIndex[i];
+    if (lightIndex <= light::module::MAX_LIGHTS) {
+      light::Light& wLight = light::module::GetLightRef(
+        a_pPool->pData->m_lightIndex[i]);
+      wLight.position = glm::vec4(a_pPool->pData->m_position[i], 0.0);
 
+      // End of life update
+      //if (a_pPool->pData->m_lifetime[i] <= .9f) {
+      //  wLight.intensity -= 0.01f; // TODO: test this once the rest works
+      //  wLight.radius -= 0.04f;
+      //}
+    }
+  }
+
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
     // End of life update
     if (a_pPool->pData->m_lifetime[i] <= .9f) {
       a_pPool->pData->m_color[i].a -= 4ui8;
-      wLight.intensity -= 0.01; // TODO: test this once the rest works
-      wLight.radius -= 0.04;
     }
   }
 }
