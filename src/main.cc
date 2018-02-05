@@ -17,13 +17,9 @@
 //Your project's .h files
 #include "app.hh"
 
+using namespace gem::particle;
+
 int main(int argc, const char *argv[]) {
-  (void)argc;(void)argv;
-
-  // Can't get much simpler than that
-  gem::particle::app::Init();
-  gem::particle::app::Run();
-  gem::particle::app::Terminate();
-
-  return 0;
+  app::Launch("lit_particles");
+  return app::GetAppStatusError();
 }

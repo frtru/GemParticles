@@ -14,15 +14,31 @@
 #ifndef APP_HH
 #define APP_HH
 
+#include <cstddef>
 #include <string>
 
 namespace gem {
 namespace particle {
 namespace app {
-void Init();
-void Run();
-void Terminate();
-}
+enum ErrCode {
+  NO_ERROR                = 0x00,
+  UNRECOGNIZED_PROJECT    = 0x01,
+  PROJECT_LOADING_ERROR   = 0x02,
+  UNRECOGNIZED_BLUEPRINT  = 0x03,
+  MEMORY_ACCESS_ERROR     = 0x04,
+  APP_LOGIC_ERROR         = 0x05
+}; /* enum ErrCode */
+
+struct Status {
+  bool        _Running;
+  ErrCode     _Error;
+};
+
+void LoadProjects();
+ErrCode Launch(const std::string& a_sProjectName);
+ErrCode GetAppStatusError();
+void SetAppStatusError(ErrCode a_unErrorCode);
+} /* namespace app */
 } /* namespace particle */
 } /* namespace gem */
 

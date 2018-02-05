@@ -14,102 +14,50 @@
 #include "app.hh"
 //C system files
 //C++ system files
-#include <memory>
 #include <iostream>
-#include <sstream>
 //Other libraries' .h files
 //Your project's .h files
-#include "timer.hh"
-#include "opengl_context.hh"
-#include "shader_module.hh"
-#include "texture_module.hh"
-#include "camera.hh"
-#include "event_handler.hh"
-#include "particle_module.hh"
-#include "particle_system_interface.hh"
-#include "scene.hh"
-
-// TODO: Temporary includes since test suite
-// or factory/builder are not built yet...
-#include "particle_system.hh"
-#include "core_opengl_renderer.hh"
-#include "rain_emitter.hh"
-#include "gravity_acceleration.hh"
-#include "euler_particle_updater.hh"
+#include "project_dictionary.hh"
 
 namespace gem {
 namespace particle {
 namespace app {
 namespace {
-// A pointer to interface, to enable flexibility over
-// window management system or 3D API (GLFW/Windows
-// & OpenGL/Direct3D)
-std::shared_ptr<GraphicContext> graphic_context;
+bool    _ProjectsLoaded = false;
+Status  _AppStatus;
 }
 
-void Init() {
-  // OpenGL setup
-  graphic_context = std::make_shared<OpenGLContext>();
-  graphic_context->Init();
-
-  shader::module::Init();
-  texture::module::Init();
-
-  // Camera initialization
-  camera::Init();
-  camera::LookAt( 
-    glm::vec3(4, 4, 4),   // Camera is at (0,0,4), in World Space
-    glm::vec3(0, 0, 0),   // and looks at the origin
-    glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
-  camera::SetPerspectiveProjection( 
-    glm::radians(45.0f), 
-    4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
-    0.1f, 100.0f);
-
-  // Event handler initialization
-  event_handler::Init(graphic_context);
-
-  // Scene initialization
-  scene::Init();
-  scene::SetDebugOption(true);
-
-  // Particle system initialization
-  particle_module::Init();
-  std::unique_ptr<ParticleSystem<CoreGLRenderer> > wParticleSystem =
-    std::make_unique<ParticleSystem<CoreGLRenderer> >(1000000, "OBVIOUSLY_TEMPORARY");
-  wParticleSystem->AddDynamic(std::make_unique<EulerParticleUpdater>());
-  wParticleSystem->AddDynamic(std::make_unique<GravityAcceleration>());
-  wParticleSystem->AddEmitter(std::make_unique<RainEmitter>(10.0f,100000.0));
-  particle_module::AddSystem(std::move(wParticleSystem));
-}
-
-void Run() {
-
-  while (!graphic_context->PollWindowClosedEvent()) {
-    double dt = timer::chrono::GetTimeElapsedInSeconds();
-    std::stringstream ss; 
-    ss << "GemParticles, FPS: "  << timer::chrono::GetFPS()
-      << " | Active Particles: " << particle_module::GetActiveParticlesCount();
-    glfwSetWindowTitle(static_cast<GLFWwindow*>(
-      graphic_context->GetWindowHandle()), ss.str().c_str());
-    
-    scene::Render();
-    particle_module::Update(dt);    
-    
-    graphic_context->Update();
-    timer::chrono::Update();
+void LoadProjects() {
+  if (!_ProjectsLoaded) {
+    project_dict::Init();
+    _ProjectsLoaded = true;
   }
 }
 
-void Terminate() {
-  // App destruction
-  particle_module::Terminate();
-  scene::Terminate();
-  event_handler::Terminate();
-  texture::module::Terminate();
-  shader::module::Terminate();
-  graphic_context->Terminate();
+ErrCode Launch(const std::string& a_sProjectName) {
+  // Load the projects beforehand, in case the user forgot to
+  LoadProjects();
+
+  // Check if the project in input is recognized in the dictionary
+  ProjectPipeline *wPipeline = project_dict::LookUp(a_sProjectName);
+  if (wPipeline == nullptr) {
+    _AppStatus._Error = UNRECOGNIZED_PROJECT;
+    _AppStatus._Running = false;
+    std::cerr << __func__ << " -> Unrecognized project error." << std::endl;
+  }
+  else
+  {
+    _AppStatus._Error = NO_ERROR;
+    // Execute the pipeline of the project sequentially
+    for (auto stage : *wPipeline) {
+      stage();
+    }
+  }
+  return _AppStatus._Error;
 }
+
+ErrCode GetAppStatusError() { return _AppStatus._Error; }
+void SetAppStatusError(ErrCode a_unErrorCode) { _AppStatus._Error = a_unErrorCode; }
 } /* namespace app */
 } /* namespace particle */
 } /* namespace gem */
