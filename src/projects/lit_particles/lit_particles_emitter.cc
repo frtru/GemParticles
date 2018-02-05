@@ -17,6 +17,7 @@
 #include <algorithm>
 
 #include "utils/light_module.hh"
+#include "utils/imgui/imgui_property_editor.h"
 
 namespace gem { namespace particle {
 namespace lit_particles_project {
@@ -26,13 +27,18 @@ float RandomFloat(float a_fMin, float a_fMax) {
   return a_fMin + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX / (a_fMax - a_fMin)));
 }
 LitParticlesEmitter::LitParticlesEmitter()
-  : Emitter() {}
+  : Emitter() { }
 
 LitParticlesEmitter::LitParticlesEmitter(const glm::f32vec3& a_spawnLocation,
   const glm::f32vec3& a_spawnVelocity, float a_fLifetime, double a_dEmissionRate, 
   float a_fVelocityRandomization, const glm::u8vec4& a_color)
   : Emitter(a_spawnLocation, a_spawnVelocity, a_fLifetime, a_dEmissionRate),
-    m_fVelocityRandomization(a_fVelocityRandomization), m_color(a_color) { }
+    m_fVelocityRandomization(a_fVelocityRandomization), m_color(a_color) {
+  // Add properties to the editor
+  ImGuiPropertyEditor &editor = ImGuiPropertyEditor::GetInstance();
+  editor.AddObject("Emitter", this);
+  editor.AddProperty<PropertyType::VEC3>("Spawn velocity", &m_spawnVelocity, nullptr, 0.1f);
+}
 
 void LitParticlesEmitter::Init(double a_dt, const std::shared_ptr<ParticlePool<LitParticlesData> >& a_pPool,
   std::size_t a_unStartID, std::size_t a_unEndID) {
