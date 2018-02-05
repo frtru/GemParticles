@@ -29,6 +29,7 @@ I pretty much built this from scratch looking up efficient design patterns, tuto
 * Shader module
 * Texture module
 * Timer
+
 And last but not least, some wrapper utilities I built around ImGui examples. This includes
 * a Property editor
 * a logger
