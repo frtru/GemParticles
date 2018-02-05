@@ -1,6 +1,6 @@
 # GemParticles
 
-Behold, my ability to screw up code at its finest. It also happens to be an flexible core-profile compliant OpenGL particle engine I used to create various visual effects you can see in my other repositories. Here are some highlights that I achieved with it.
+Behold, my ability to screw up code at its finest. It also happens to be an flexible core-profile compliant OpenGL particle engine I used to create various visual effects. Here are some highlights that I achieved with it.
 
 NOTE: I'm currently working on GPU particles with Curl noise...
 
