@@ -70,35 +70,49 @@ enum class PropertyType {
   STRING,
   NEW_OBJECT
 };
-struct IProperty {
+class IProperty {
+public:
   IProperty(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : _name(name), _data(data), _callback(callback), _delta(delta) {
-  }
-  
-  virtual void AllocateDataCopy() = 0;
+    : _name(name), 
+    _data(data), 
+    _callback(callback),
+    _delta(delta), 
+    _previous_data(nullptr) {}
+
   virtual void Draw(int id) = 0;
   
+  void Init() {
+    if (_previous_data == nullptr) {
+      AllocateCopyImpl();
+    }
+    else {
+      ImGuiLog::GetInstance().AddLog("[ERROR] IProperty::Init: %s tried to allocate data over already existing copy.\n", _name.c_str());
+    }
+  }
+
+protected:
+  
+  virtual void AllocateCopyImpl() = 0;
+
+  void*                 _previous_data;
   std::string           _name;
   float                 _delta;
   void*                 _data;
-  void*                 _previous_data;
   std::function<void()> _callback;
 };
 template <PropertyType>
-struct Property : public IProperty{};
+class Property : public IProperty{};
 template <>
-struct Property<PropertyType::NEW_OBJECT> : IProperty {
+class Property<PropertyType::NEW_OBJECT> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
     : IProperty(name, data, callback, 0.0f) {}
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = nullptr;
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     ImGui::PushID(_data);
     ImGui::Separator();
     ImGui::AlignTextToFramePadding();
@@ -109,9 +123,14 @@ struct Property<PropertyType::NEW_OBJECT> : IProperty {
     ImGui::NextColumn();
     ImGui::PopID();
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = nullptr;
+  }
 };
 template <>
-struct Property<PropertyType::INPUT_INT> : IProperty {
+class Property<PropertyType::INPUT_INT> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -119,11 +138,7 @@ struct Property<PropertyType::INPUT_INT> : IProperty {
 
   ~Property() { free(_previous_data); }
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = malloc(sizeof(int));
-    memcpy(_previous_data, _data, sizeof(int));
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     int *wData = static_cast<int*>(_data),
       *wPreviousData = static_cast<int*>(_previous_data);
 
@@ -146,9 +161,15 @@ struct Property<PropertyType::INPUT_INT> : IProperty {
       *wPreviousData = *wData;
     }
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = malloc(sizeof(int));
+    memcpy(_previous_data, _data, sizeof(int));
+  }
 };
 template <>
-struct Property<PropertyType::DRAG_INT> : IProperty {
+class Property<PropertyType::DRAG_INT> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -156,11 +177,7 @@ struct Property<PropertyType::DRAG_INT> : IProperty {
 
   ~Property() { free(_previous_data); }
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = malloc(sizeof(int));
-    memcpy(_previous_data, _data, sizeof(int));
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     int *wData = static_cast<int*>(_data),
       *wPreviousData = static_cast<int*>(_previous_data);
 
@@ -183,9 +200,15 @@ struct Property<PropertyType::DRAG_INT> : IProperty {
       *wPreviousData = *wData;
     }
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = malloc(sizeof(int));
+    memcpy(_previous_data, _data, sizeof(int));
+  }
 };
 template <>
-struct Property<PropertyType::INPUT_FLOAT> : IProperty {
+class Property<PropertyType::INPUT_FLOAT> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -193,11 +216,7 @@ struct Property<PropertyType::INPUT_FLOAT> : IProperty {
 
   ~Property() { free(_previous_data); }
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = malloc(sizeof(float));
-    memcpy(_previous_data, _data, sizeof(float));
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     float *wData = static_cast<float*>(_data),
       *wPreviousData = static_cast<float*>(_previous_data);
 
@@ -220,9 +239,15 @@ struct Property<PropertyType::INPUT_FLOAT> : IProperty {
       *wPreviousData = *wData;
     }
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = malloc(sizeof(float));
+    memcpy(_previous_data, _data, sizeof(float));
+  }
 };
 template <>
-struct Property<PropertyType::DRAG_FLOAT> : IProperty {
+class Property<PropertyType::DRAG_FLOAT> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -230,11 +255,7 @@ struct Property<PropertyType::DRAG_FLOAT> : IProperty {
 
   ~Property() { free(_previous_data); }
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = malloc(sizeof(float));
-    memcpy(_previous_data, _data, sizeof(float));
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     float *wData = static_cast<float*>(_data),
       *wPreviousData = static_cast<float*>(_previous_data);
 
@@ -257,9 +278,15 @@ struct Property<PropertyType::DRAG_FLOAT> : IProperty {
       *wPreviousData = *wData;
     }
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = malloc(sizeof(float));
+    memcpy(_previous_data, _data, sizeof(float));
+  }
 };
 template <>
-struct Property<PropertyType::COLOR> : IProperty {
+class Property<PropertyType::COLOR> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -267,11 +294,7 @@ struct Property<PropertyType::COLOR> : IProperty {
 
   ~Property() { free(_previous_data); }
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = malloc(4 * sizeof(float));
-    memcpy(_previous_data, _data, 4 * sizeof(float));
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     float *wData = static_cast<float*>(_data),
       *wPreviousData = static_cast<float*>(_previous_data);
 
@@ -301,9 +324,15 @@ struct Property<PropertyType::COLOR> : IProperty {
       *(wPreviousData + 3) = *(wData + 3);
     }
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = malloc(4 * sizeof(float));
+    memcpy(_previous_data, _data, 4 * sizeof(float));
+  }
 };
 template <>
-struct Property<PropertyType::VEC3> : IProperty {
+class Property<PropertyType::VEC3> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -311,11 +340,7 @@ struct Property<PropertyType::VEC3> : IProperty {
 
   ~Property() { free(_previous_data); }
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = malloc(3 * sizeof(float));
-    memcpy(_previous_data, _data, 3 * sizeof(float));
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     float *wData = static_cast<float*>(_data),
       *wPreviousData = static_cast<float*>(_previous_data);
 
@@ -343,9 +368,15 @@ struct Property<PropertyType::VEC3> : IProperty {
       *(wPreviousData + 2) = *(wData + 2);
     }
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = malloc(3 * sizeof(float));
+    memcpy(_previous_data, _data, 3 * sizeof(float));
+  }
 };
 template <>
-struct Property<PropertyType::VEC4> : IProperty {
+class Property<PropertyType::VEC4> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -353,11 +384,7 @@ struct Property<PropertyType::VEC4> : IProperty {
 
   ~Property() { free(_previous_data); }
 
-  virtual void AllocateDataCopy() override {
-    _previous_data = malloc(4 * sizeof(float));
-    memcpy(_previous_data, _data, 4 * sizeof(float));
-  }
-  virtual void Draw(int id) override {
+  void Draw(int id) override {
     float *wData = static_cast<float*>(_data),
       *wPreviousData = static_cast<float*>(_previous_data);
 
@@ -387,17 +414,24 @@ struct Property<PropertyType::VEC4> : IProperty {
       *(wPreviousData + 3) = *(wData + 3);
     }
   }
+protected:
+  void AllocateCopyImpl() override {
+    _previous_data = malloc(4 * sizeof(float));
+    memcpy(_previous_data, _data, 4 * sizeof(float));
+  }
 };
 template <>
 // TODO: Complete following property types when they will actually be used
-struct Property<PropertyType::STRING> : IProperty {
+class Property<PropertyType::STRING> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
     : IProperty(name, data, callback, delta) {}
 };
 template <>
-struct Property<PropertyType::TOGGLE_BOOL> : IProperty {
+class Property<PropertyType::TOGGLE_BOOL> : public IProperty {
+public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
@@ -413,9 +447,9 @@ public:
 
   template<PropertyType type>
   void AddProperty(const std::string& name, void* data, std::function<void()> callback = nullptr, float delta = 1.0f) {
-    auto ptr = std::make_shared<Property<type> >(name, data, callback, delta);
-    ptr->AllocateDataCopy();
-    _PropertiesVector.emplace_back(ptr);
+    auto propertyPtr = std::make_shared<Property<type> >(name, data, callback, delta);
+    propertyPtr->Init();
+    _PropertiesVector.emplace_back(propertyPtr);
   }
 
   void Draw(const char* title, bool openFlag = true, bool* p_open = NULL) {
