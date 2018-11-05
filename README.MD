@@ -2,7 +2,9 @@
 
 Behold, my ability to screw up code at its finest. It also happens to be an flexible core-profile compliant OpenGL particle engine I used to create various visual effects. Here are some highlights that I achieved with it.
 
-NOTE: I'm currently working on GPU particles with Curl noise...
+NOTE(s):
+* [2018/11/05] None of the following stats are using multi-threading. I might implement threaded stages in the system's pipeline. WIP
+* [2018/11/05] I'm currently working on GPU particles with Curl noise...
 
 __Lit particles *or* particles with 200 dynamic cpu lights__
 ![lit particles or welding sparkles](https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/lit_particles.gif)
