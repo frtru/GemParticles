@@ -82,20 +82,8 @@ public:
     _previous_data(nullptr) {}
 
   virtual void Draw(int id) = 0;
-  
-  void Init() {
-    if (_previous_data == nullptr) {
-      AllocateCopyImpl();
-    }
-    else {
-      ImGuiLog::GetInstance().AddLog("[ERROR] IProperty::Init: %s tried to allocate data over already existing copy.\n", _name.c_str());
-    }
-  }
 
 protected:
-  
-  virtual void AllocateCopyImpl() = 0;
-
   void*                 _previous_data;
   std::string           _name;
   float                 _delta;
@@ -110,7 +98,9 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, 0.0f) {}
+    : IProperty(name, data, callback, 0.0f) {
+    _previous_data = nullptr;
+  }
 
   void Draw(int id) override {
     ImGui::PushID(_data);
@@ -123,10 +113,6 @@ public:
     ImGui::NextColumn();
     ImGui::PopID();
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = nullptr;
-  }
 };
 template <>
 class Property<PropertyType::INPUT_INT> : public IProperty {
@@ -134,7 +120,10 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, delta) {}
+    : IProperty(name, data, callback, delta) {
+    _previous_data = malloc(sizeof(int));
+    memcpy(_previous_data, _data, sizeof(int));
+  }
 
   ~Property() { free(_previous_data); }
 
@@ -161,11 +150,6 @@ public:
       *wPreviousData = *wData;
     }
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = malloc(sizeof(int));
-    memcpy(_previous_data, _data, sizeof(int));
-  }
 };
 template <>
 class Property<PropertyType::DRAG_INT> : public IProperty {
@@ -173,7 +157,10 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, delta) {}
+    : IProperty(name, data, callback, delta) {
+    _previous_data = malloc(sizeof(int));
+    memcpy(_previous_data, _data, sizeof(int));
+  }
 
   ~Property() { free(_previous_data); }
 
@@ -200,11 +187,6 @@ public:
       *wPreviousData = *wData;
     }
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = malloc(sizeof(int));
-    memcpy(_previous_data, _data, sizeof(int));
-  }
 };
 template <>
 class Property<PropertyType::INPUT_FLOAT> : public IProperty {
@@ -212,7 +194,10 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, delta) {}
+    : IProperty(name, data, callback, delta) {
+    _previous_data = malloc(sizeof(float));
+    memcpy(_previous_data, _data, sizeof(float));
+  }
 
   ~Property() { free(_previous_data); }
 
@@ -239,11 +224,6 @@ public:
       *wPreviousData = *wData;
     }
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = malloc(sizeof(float));
-    memcpy(_previous_data, _data, sizeof(float));
-  }
 };
 template <>
 class Property<PropertyType::DRAG_FLOAT> : public IProperty {
@@ -251,7 +231,10 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, delta) {}
+    : IProperty(name, data, callback, delta) {
+    _previous_data = malloc(sizeof(float));
+    memcpy(_previous_data, _data, sizeof(float));
+  }
 
   ~Property() { free(_previous_data); }
 
@@ -278,11 +261,6 @@ public:
       *wPreviousData = *wData;
     }
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = malloc(sizeof(float));
-    memcpy(_previous_data, _data, sizeof(float));
-  }
 };
 template <>
 class Property<PropertyType::COLOR> : public IProperty {
@@ -290,7 +268,10 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, delta) {}
+    : IProperty(name, data, callback, delta) {
+    _previous_data = malloc(4 * sizeof(float));
+    memcpy(_previous_data, _data, 4 * sizeof(float));
+  }
 
   ~Property() { free(_previous_data); }
 
@@ -324,11 +305,6 @@ public:
       *(wPreviousData + 3) = *(wData + 3);
     }
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = malloc(4 * sizeof(float));
-    memcpy(_previous_data, _data, 4 * sizeof(float));
-  }
 };
 template <>
 class Property<PropertyType::VEC3> : public IProperty {
@@ -336,7 +312,10 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, delta) {}
+    : IProperty(name, data, callback, delta) {
+    _previous_data = malloc(3 * sizeof(float));
+    memcpy(_previous_data, _data, 3 * sizeof(float));
+  }
 
   ~Property() { free(_previous_data); }
 
@@ -368,11 +347,6 @@ public:
       *(wPreviousData + 2) = *(wData + 2);
     }
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = malloc(3 * sizeof(float));
-    memcpy(_previous_data, _data, 3 * sizeof(float));
-  }
 };
 template <>
 class Property<PropertyType::VEC4> : public IProperty {
@@ -380,7 +354,10 @@ public:
   Property(const std::string &name,
     void* data, std::function<void()> callback,
     float delta)
-    : IProperty(name, data, callback, delta) {}
+    : IProperty(name, data, callback, delta) {
+    _previous_data = malloc(4 * sizeof(float));
+    memcpy(_previous_data, _data, 4 * sizeof(float));
+  }
 
   ~Property() { free(_previous_data); }
 
@@ -414,11 +391,6 @@ public:
       *(wPreviousData + 3) = *(wData + 3);
     }
   }
-protected:
-  void AllocateCopyImpl() override {
-    _previous_data = malloc(4 * sizeof(float));
-    memcpy(_previous_data, _data, 4 * sizeof(float));
-  }
 };
 template <>
 // TODO: Complete following property types when they will actually be used
@@ -448,7 +420,6 @@ public:
   template<PropertyType type>
   void AddProperty(const std::string& name, void* data, std::function<void()> callback = nullptr, float delta = 1.0f) {
     auto propertyPtr = std::make_shared<Property<type> >(name, data, callback, delta);
-    propertyPtr->Init();
     _PropertiesVector.emplace_back(propertyPtr);
   }
 
