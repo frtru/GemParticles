@@ -1,5 +1,5 @@
 /*************************************************************************
-* Copyright (c) 2018 François Trudel
+* Copyright (c) 2018 Franï¿½ois Trudel
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 #include <stdlib.h>         // NULL, malloc, free, atoi
 #include <stdint.h>         // intptr_t
 
-#include "utils/imgui/imgui.h"
+#include "imgui/imgui.h"
 #include "utils/singleton.hh"
 
 #ifdef _MSC_VER
