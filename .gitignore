@@ -348,3 +348,6 @@ __pycache__/
 
 # Cmake build directory
 build/*
+
+# Misc
+*.csv
