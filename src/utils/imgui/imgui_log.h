@@ -22,7 +22,7 @@
 #include <stdlib.h>         // NULL, malloc, free, atoi
 #include <stdint.h>         // intptr_t
 
-#include "imgui/imgui.h"
+#include "imgui.h"
 #include "utils/singleton.hh"
 
 #ifdef _MSC_VER
