@@ -1,0 +1,10 @@
+[requires]
+opengl/system
+glew/2.1.0@bincrafters/stable
+glfw/3.3.2
+glm/0.9.9.8
+imgui/1.76
+stb/20200203
+
+[generators]
+cmake
