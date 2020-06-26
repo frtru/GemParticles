@@ -15,7 +15,8 @@
 
 #include <mutex>
 
-#include "FreeImage.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include "utils/imgui/imgui_log.h"
 
 namespace texture {
@@ -24,80 +25,28 @@ namespace {
 std::once_flag init_flag;
 std::once_flag terminate_flag;
 
-FIBITMAP       *bitmap_handle; //pointer to the image, once loaded
-/*  
- * LoadFunction taken from documentation/examples provided by
- * FreeImage. Fixed some issues like 32 bits conversion and
- * image handles not being properly shipped out of the function.
- */
 bool LoadImage(const std::string& a_sFileName,
-  unsigned char **a_pImage,
+  unsigned char** a_pImage,
   GLsizei& a_rWidth,
   GLsizei& a_rHeight,
-  bool a_bImageHasAlphaChannel) {
-  const char *wFilename = a_sFileName.c_str();
-  bitmap_handle = nullptr;
-  //image format
-  FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-
-  //pointer to the image data
-  BYTE* bits(0);
-  //image width and height
-  unsigned int width(0), height(0);
-
-  //check the file signature and deduce its format
-  fif = FreeImage_GetFileType(wFilename, 0);
-  //if still unknown, try to guess the file format from the file extension
-  if (fif == FIF_UNKNOWN)
-    fif = FreeImage_GetFIFFromFilename(wFilename);
-  //if still unkown, return failure
-  if (fif == FIF_UNKNOWN)
-    return false;
-
-  //check that the plugin has reading capabilities and load the file
-  if (FreeImage_FIFSupportsReading(fif))
-    bitmap_handle = a_bImageHasAlphaChannel ?
-      FreeImage_ConvertTo32Bits(FreeImage_Load(fif, wFilename)) :
-      FreeImage_Load(fif, wFilename);
-  //if the image failed to load, return failure
-  if (!bitmap_handle)
-    return false;
-
-  //retrieve the image data
-  bits = FreeImage_GetBits(bitmap_handle);
-  width = FreeImage_GetWidth(bitmap_handle);
-  height = FreeImage_GetHeight(bitmap_handle);
-  //if this somehow failed (it shouldn't), return failure
-  if ((bits == 0) || (width == 0) || (height == 0))
-    return false;
-  
-  *a_pImage = bits;
-  a_rWidth = width;
-  a_rHeight = height;
-
-  return true;
+  GLsizei& a_rNbrChannels) {
+  *a_pImage = stbi_load(a_sFileName.c_str(), &a_rWidth, &a_rHeight, &a_rNbrChannels, 0);
+  return *a_pImage != nullptr;
 }
 
-bool FreeImage() {
-  FreeImage_Unload(bitmap_handle);
-  bitmap_handle = nullptr;
-  return true;
+void FreeImage(unsigned char* a_pImage) {
+  stbi_image_free(a_pImage);
 }
 }
 
 void Init() {
   std::call_once(init_flag, [&]() {
-#ifdef FREEIMAGE_LIB
-    FreeImage_Initialise();
-#endif
+    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
   });
 }
 
 void Terminate() {
   std::call_once(terminate_flag, [&]() {
-#ifdef FREEIMAGE_LIB
-    FreeImage_DeInitialise();
-#endif
   });
 }
 
@@ -105,10 +54,10 @@ GLuint Create2DTexture(const std::string& a_sFileName,
  GLint a_nMagFilterParam, GLint a_nMinFilterParm,
  GLint a_nTexHorizontalWrapParam, GLint a_nTexVerticalWrapParam,
  GLint a_nInternalFormat, GLint a_nImageFormat) {
-  GLsizei wWidth, wHeight;
+  GLsizei wWidth, wHeight, wNbrChannels;
   unsigned char *wImage = nullptr;
   
-  if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight, a_nInternalFormat == GL_RGBA)) {
+  if (!LoadImage(a_sFileName, &wImage, wWidth, wHeight, wNbrChannels)) {
     ImGuiLog::GetInstance().AddLog("[ERROR]texture_factory::Create2DTexture -> Loading image failed.\n Returning 0xFFFFFFFF...\n");
     return 0xFFFFFFFF;
   }
@@ -133,7 +82,7 @@ GLuint Create2DTexture(const std::string& a_sFileName,
     wImage);            // Loaded image
   glGenerateMipmap(GL_TEXTURE_2D);
 
-  FreeImage();
+  FreeImage(wImage);
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return wTexture;
@@ -169,10 +118,10 @@ GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
   
   for (std::size_t i = 0; i < a_vTextures.size(); ++i) {
     std::string textureFileName = a_vTextures[i];
-    GLsizei wWidth, wHeight;
+    GLsizei wWidth, wHeight, wNbrChannels;
     unsigned char *wImage = nullptr;
 
-    if (!LoadImage(textureFileName, &wImage, wWidth, wHeight, a_nInternalFormat == GL_RGBA)) {
+    if (!LoadImage(textureFileName, &wImage, wWidth, wHeight, wNbrChannels)) {
       ImGuiLog::GetInstance().AddLog("[ERROR]texture_factory::CreateCubeMap -> Loading image %s failed.\n Returning 0xFFFFFFFF...\n", textureFileName.c_str());
       return 0xFFFFFFFF;
     }
@@ -186,7 +135,7 @@ GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
       GL_UNSIGNED_BYTE,   // Depends on what the LoadImage function return type
       wImage);            // Loaded image
 
-    FreeImage();
+    FreeImage(wImage);
   }
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, a_nMagFilterParam);
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, a_nMinFilterParm);
