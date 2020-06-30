@@ -18,7 +18,6 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-//#include <AntTweakBar.h>
 
 #include "graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"

@@ -18,7 +18,7 @@
 //Other libraries' .h files
 #include "utils/imgui/imgui_glfw.h"
 //Your project's .h files
-#include "project_dictionary.hh"
+#include "projects/project_dictionary.hh"
 #include "utils/timer.hh"
 #include "utils/shader_module.hh"
 #include "utils/shader_factory.hh"
@@ -44,11 +44,7 @@ namespace {
 std::shared_ptr<GraphicContext> graphic_context;
 }
 
-void RegisterProject() {
-  project_dict::AddStage("lit_particles", std::bind(&Init));
-  project_dict::AddStage("lit_particles", std::bind(&Run));
-  project_dict::AddStage("lit_particles", std::bind(&Terminate));
-}
+REGISTER_STD_PROJECT(lit_particles);
 
 void Init() {
   // OpenGL setup

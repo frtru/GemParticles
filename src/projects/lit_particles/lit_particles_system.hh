@@ -15,7 +15,7 @@
 #ifndef LIT_PARTICLES_SYSTEM_HH
 #define LIT_PARTICLES_SYSTEM_HH
 
-#include "core/particle_system.hh"
+#include "particle_systems/particle_system.hh"
 #include "utils/light_module.hh"
 #include "projects/lit_particles/lit_particles_pool.hh"
 

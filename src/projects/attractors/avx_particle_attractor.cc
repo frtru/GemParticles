@@ -11,11 +11,10 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#include "projects/attractors//avx_particle_attractor.hh"
+#include "projects/attractors/avx_particle_attractor.hh"
 
 #include <immintrin.h>
 #include "utils/macro_definitions.hh"
-#include "glm/gtx/simd_vec4.hpp"
 
 namespace gem { namespace particle {
 namespace attractor_project {

@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 2.8.10)
+
+project(Projects C CXX)
+
+file(GLOB SOURCE_FILES 
+    "*.cc"
+    "*.hh"
+)
+
+add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
+
+# Expose C's definitions (in this case only the ones of XXX transitively)
+# to other subprojects through cache variable.
+# set(${PROJECT_NAME}_DEFINITIONS ${XXX_DEFINITIONS}
+#     CACHE INTERNAL "${PROJECT_NAME}: Definitions" FORCE)
+
+# Expose C's public includes (including the ones of C's dependencies transitively)
+# to other subprojects through cache variable.
+set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
+    CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
+
+set(Projects_LIBS Attractors
+                  Light
+                  LitParticles
+                  Rain
+                  Skybox
+    CACHE INTERNAL "Projects: Libs list" FORCE)
+
+add_subdirectory(attractors)
+add_subdirectory(light)
+add_subdirectory(lit_particles)
+add_subdirectory(rain)
+add_subdirectory(skybox)

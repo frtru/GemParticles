@@ -18,7 +18,7 @@
 //Other libraries' .h files
 //Your project's .h files
 #include "core/particle_module.hh"
-#include "core/particle_system.hh"
+#include "particle_systems/particle_system.hh"
 //#include "basic_stream_emitter.hh" // For debugging
 #include "dynamics/gravity_acceleration.hh"
 #include "dynamics/euler_particle_updater.hh"

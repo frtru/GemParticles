@@ -16,7 +16,6 @@
 
 namespace gem { namespace particle {
 namespace skybox_project {
-void RegisterProject();
 void Init();
 void Run();
 void Terminate();

@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Fran�ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -11,16 +11,15 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef RAIN_PROJECT_HH
-#define RAIN_PROJECT_HH
+//C system files
+//C++ system files
+//Other libraries' .h files
+//Your project's .h files
+#include "app.hh"
 
-namespace gem { namespace particle {
-namespace rain_project {
-void Init();
-void Run();
-void Terminate();
-} /* namespace rain_project */
-} /* namespace particle */
-} /* namespace gem */
+using namespace gem::particle;
 
-#endif /* end of include guard: RAIN_PROJECT_HH */
+int main(int argc, const char *argv[]) {
+  app::Launch(argv[1]);
+  return app::GetAppStatusError();
+}

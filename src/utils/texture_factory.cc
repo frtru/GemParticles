@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2017 François Trudel
+ * Copyright (c) 2017 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,6 @@
 
 #include <mutex>
 
-#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "utils/imgui/imgui_log.h"
 

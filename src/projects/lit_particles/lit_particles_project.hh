@@ -16,7 +16,6 @@
 
 namespace gem { namespace particle {
 namespace lit_particles_project {
-void RegisterProject();
 void Init();
 void Run();
 void Terminate();
