@@ -11,22 +11,40 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef LIT_PARTICLES_EVENT_HANDLER_HH
-#define LIT_PARTICLES_EVENT_HANDLER_HH
+#ifndef OPENGL_CONTEXT_HH
+#define OPENGL_CONTEXT_HH
 
-#include <memory>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include "utils/graphic_contexts/graphic_context.hh"
 
-namespace gem { namespace particle {
-namespace lit_particles_project {
-namespace event_handler {
-void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
-void Terminate();
-void Update();
-} /* namespace event_handler*/
-} /* namespace lit lit_particles_project */
+// TODO: Should the shadermanager initialization be 
+// done by this class?
+
+namespace gem {
+namespace particle {
+class OpenGLContext : public GraphicContext {
+public:
+  OpenGLContext();
+  virtual ~OpenGLContext();
+
+  virtual void Update() override;
+  virtual bool PollWindowClosedEvent() override;
+  virtual void Reshape(int a_width, int a_height) override;
+
+  virtual void* GetWindowHandle() const override;
+  virtual std::size_t GetWindowWidth() const override;
+  virtual std::size_t GetWindowHeight() const override;
+
+private:
+  virtual void InitImpl() override;
+  virtual void TerminateImpl() override;
+
+  GLFWwindow* m_pWindow;
+
+}; /* class OpenGLContext*/
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: LIT_PARTICLES_EVENT_HANDLER_HH */
+#endif /* end of include guard: OPENGL_CONTEXT_HH */
 

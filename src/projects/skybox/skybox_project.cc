@@ -27,7 +27,7 @@
 #include "utils/imgui/imgui_log.h"
 #include "utils/imgui/imgui_property_editor.h"
 #include "utils/light_module.hh"
-#include "graphic_contexts/opengl_context.hh"
+#include "utils/graphic_contexts/opengl_context.hh"
 #include "core/particle_module.hh"
 
 // Specific project particle blueprints
@@ -51,7 +51,7 @@ void Init() {
   graphic_context->Init();
 
   // ImGui initialization
-  ImGui_ImplGlfwGL3_Init(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
+  ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
   ImGui::StyleColorsClassic();
 
   shader::module::Init();
@@ -88,7 +88,7 @@ void Run() {
     graphic_context->GetWindowHandle()), "GemParticles");
   while (!graphic_context->PollWindowClosedEvent()) {
     const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
-    ImGui_ImplGlfwGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
 
     ImGui::Begin("Stats");
     ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -117,7 +117,7 @@ void Terminate() {
   event_handler::Terminate();
   texture::module::Terminate();
   shader::module::Terminate();
-  ImGui_ImplGlfwGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
   graphic_context->Terminate();
 }
 } /* namespace skybox_project */

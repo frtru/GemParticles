@@ -22,7 +22,7 @@
 #include <stdlib.h>         // NULL, malloc, free, atoi
 #include <stdint.h>         // intptr_t
 
-#include "utils/imgui/imgui.h"
+#include "imgui.h"
 #include "utils/singleton.hh"
 
 #ifdef _MSC_VER
@@ -106,7 +106,7 @@ public:
     }
 
     if (ScrollToBottom)
-      ImGui::SetScrollHere(1.0f);
+      ImGui::SetScrollHereY(1.0f);
     ScrollToBottom = false;
     ImGui::EndChild();
     ImGui::End();

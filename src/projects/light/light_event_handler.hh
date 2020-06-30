@@ -1,5 +1,5 @@
 /*************************************************************************
- * Copyright (c) 2016 François Trudel
+ * Copyright (c) 2016 Franï¿½ois Trudel
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -15,7 +15,7 @@
 #define LIGHT_EVENT_HANDLER_HH
 
 #include <memory>
-#include "graphic_contexts/graphic_context.hh"
+#include "utils/graphic_contexts/graphic_context.hh"
 
 namespace gem { namespace particle {
 namespace light_project {

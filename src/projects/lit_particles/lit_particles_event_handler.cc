@@ -19,7 +19,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "graphic_contexts/graphic_context.hh"
+#include "utils/graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"
 #include "utils/timer.hh"
 #include "utils/camera.hh"

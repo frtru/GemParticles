@@ -28,7 +28,6 @@ include_directories(${CONAN_INCLUDE_DIRS}
 # When done tweaking common stuff, configure the components (subprojects).
 # NOTE: The order matters! The most independent ones should go first.
 add_subdirectory(src/utils)
-add_subdirectory(src/graphic_contexts)
 add_subdirectory(src/core)
 add_subdirectory(src/dynamics)
 add_subdirectory(src/emitters)

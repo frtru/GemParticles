@@ -6,8 +6,11 @@ file(GLOB SOURCE_FILES
     "*.cc"
     "*.hh"
     "./imgui/*.hh"
-    "./imgui/*.h"
     "./imgui/*.cc"
+    "./imgui/*.h"
+    "./imgui/*.cpp"
+    "./graphic_contexts/*.hh"
+    "./graphic_contexts/*.cc"
 )
 
 include_directories(.)

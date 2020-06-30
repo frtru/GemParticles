@@ -11,22 +11,28 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef LIT_PARTICLES_EVENT_HANDLER_HH
-#define LIT_PARTICLES_EVENT_HANDLER_HH
-
-#include <memory>
 #include "utils/graphic_contexts/graphic_context.hh"
 
-namespace gem { namespace particle {
-namespace lit_particles_project {
-namespace event_handler {
-void Init(const std::shared_ptr<GraphicContext>& a_pCtxt);
-void Terminate();
-void Update();
-} /* namespace event_handler*/
-} /* namespace lit lit_particles_project */
+namespace gem {
+namespace particle {
+bool GraphicContext::m_bInitialized = false;
+bool GraphicContext::m_bTerminated = false;
+
+void GraphicContext::Init() {
+  if (!m_bInitialized) {
+    InitImpl();
+    m_bInitialized = true;
+  }
+  // TODO: Else log error, already initialized or something
+}
+
+void GraphicContext::Terminate() {
+  if (!m_bTerminated) {
+    TerminateImpl();
+    m_bTerminated = true;
+  }
+  // TODO: Else log error, already terminated or something
+}
+
 } /* namespace particle */
 } /* namespace gem */
-
-#endif /* end of include guard: LIT_PARTICLES_EVENT_HANDLER_HH */
-
