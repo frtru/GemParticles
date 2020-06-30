@@ -17,6 +17,7 @@
 #include <memory>
 //Other libraries' .h files
 #include "utils/imgui/imgui_glfw.h"
+#include "utils/imgui/imgui_impl_opengl3.h"
 //Your project's .h files
 #include "projects/project_dictionary.hh"
 #include "utils/timer.hh"
@@ -51,7 +52,10 @@ void Init() {
   graphic_context->Init();
 
   // ImGui initialization
+  ImGui::CreateContext();
+  ImGuiIO& io = ImGui::GetIO(); (void)io;
   ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
+  ImGui_ImplOpenGL3_Init();
   ImGui::StyleColorsClassic();
 
   shader::module::Init();
@@ -88,7 +92,11 @@ void Run() {
     graphic_context->GetWindowHandle()), "GemParticles");
   while (!graphic_context->PollWindowClosedEvent()) {
     const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
+
+    // Start the Dear ImGui frame
+    ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 
     ImGui::Begin("Stats");
     ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -103,6 +111,7 @@ void Run() {
     ImGuiPropertyEditor::GetInstance().Draw("Property editor");
     ImGuiLog::GetInstance().Draw("Debugging logs");
     ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     graphic_context->Update();
     timer::Chrono::GetInstance().Update();
@@ -117,7 +126,9 @@ void Terminate() {
   event_handler::Terminate();
   texture::module::Terminate();
   shader::module::Terminate();
+  ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
   graphic_context->Terminate();
 }
 } /* namespace skybox_project */
