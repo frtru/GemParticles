@@ -13,6 +13,12 @@
 *************************************************************************/
 #include "project_dictionary.hh"
 
+#include "projects/attractors/attractor_project.hh"
+#include "projects/light/light_project.hh"
+#include "projects/lit_particles/lit_particles_project.hh"
+#include "projects/rain/rain_project.hh"
+#include "projects/skybox/skybox_project.hh"
+
 #include <map>
 #include <mutex>
 #include <iostream>
@@ -28,14 +34,14 @@ using ProjectDictionary = std::map<std::string, ProjectPipeline>;
 ProjectDictionary _Dict;
 }/* unnamed namespace */
 
-Project::Project(const std::string& a_sProjectName, ProjectPipeline&& a_vProjectPipeline)
-  : m_sProjectName(a_sProjectName)
-{
-  SetPipeline(m_sProjectName, std::move(a_vProjectPipeline));
-}
-
 void Init() {
-  std::call_once(init_flag, [&]() {});
+  std::call_once(init_flag, [&]() {
+    REGISTER_STD_PROJECT(attractor);
+    REGISTER_STD_PROJECT(light);
+    REGISTER_STD_PROJECT(lit_particles);
+    REGISTER_STD_PROJECT(rain);
+    REGISTER_STD_PROJECT(skybox);
+  });
 }
 
 ProjectPipeline* LookUp(const std::string& a_sProjectName) {

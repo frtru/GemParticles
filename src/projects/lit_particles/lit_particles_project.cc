@@ -17,7 +17,6 @@
 #include <memory>
 //Other libraries' .h files
 //Your project's .h files
-#include "projects/project_dictionary.hh"
 #include "utils/timer.hh"
 #include "utils/shader_module.hh"
 #include "utils/shader_factory.hh"
@@ -42,8 +41,6 @@ namespace {
 // & OpenGL/Direct3D)
 std::shared_ptr<GraphicContext> graphic_context;
 }
-
-REGISTER_STD_PROJECT(lit_particles);
 
 void Init() {
   // OpenGL setup

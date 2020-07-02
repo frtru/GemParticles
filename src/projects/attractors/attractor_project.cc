@@ -17,7 +17,6 @@
 #include <memory>
 //Other libraries' .h files
 //Your project's .h files
-#include "projects/project_dictionary.hh"
 #include "utils/timer.hh"
 #include "utils/shader_module.hh"
 #include "utils/shader_factory.hh"
@@ -42,13 +41,12 @@ namespace {
 std::shared_ptr<GraphicContext> graphic_context;
 }
 
-REGISTER_STD_PROJECT(attractor);
-
 void Init() {
   // OpenGL setup
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
   shader::module::Init();
+  shader::factory::SetShadersFolderBasePath("shaders/bootstrap");
   texture::module::Init();
 
   // Camera initialization
@@ -94,11 +92,11 @@ void Run() {
     particle_module::Update(dt);
 
     event_handler::Update(); // Has to be placed before before clearing depth buffer bit
-    graphic_context->Update();
 
     ImGuiPropertyEditor::GetInstance().Draw("Property editor");
     ImGuiLog::GetInstance().Draw("Debugging logs");
 
+    graphic_context->Update();
     timer::Chrono::GetInstance().Update();
   }
 }

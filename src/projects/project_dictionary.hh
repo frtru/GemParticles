@@ -37,26 +37,15 @@ void AddStage(const std::string& a_sProjectName, const ProjectStage&& a_fProject
 void AddPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline);
 void SetPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline);
 
-class Project
-{ 
-public:
-    Project() = delete;
-    Project(const std::string& a_sProjectName, ProjectPipeline&& a_vProjectPipeline);
-
-    inline const std::string& GetProjectName() const { return m_sProjectName; }
-    inline void SetProjectName(const std::string& projectName) { m_sProjectName = projectName; }
-
-private: 
-    std::string m_sProjectName;
-};
-
 // Standard project should have those methods defined
 //  - Init
 //  - Run
 //  - Terminate
 #define REGISTER_STD_PROJECT(projectName) \
-        static gem::particle::project_dict::Project projectName##Project(#projectName, std::move(ProjectPipeline({ \
-          std::bind(&Init), std::bind(&Run), std::bind(&Terminate)})))
+        gem::particle::project_dict::SetPipeline(#projectName, std::move(gem::particle::ProjectPipeline({ \
+          std::bind(&gem::particle:: ## projectName ## _project::Init), \
+          std::bind(&gem::particle:: ## projectName ## _project::Run), \
+          std::bind(&gem::particle:: ## projectName ## _project::Terminate)})))
 
 } /* namespace project_dict */
 } /* namespace particle */
