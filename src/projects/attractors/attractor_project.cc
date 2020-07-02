@@ -59,7 +59,6 @@ void Init() {
   ImGui::StyleColorsClassic();
 
   shader::module::Init();
-  shader::factory::SetShadersFolderBasePath("shaders/");
   texture::module::Init();
 
   // Camera initialization

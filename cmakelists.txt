@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.0)
 
 project(GemParticles)
 
-# You can tweak some common (for all subprojects) stuff here. For example:
+# ----- You can tweak some common (for all subprojects) stuff here. -----
 
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 set(CMAKE_DISABLE_SOURCE_CHANGES  ON)
@@ -24,6 +24,9 @@ conan_basic_setup()
 
 include_directories(${CONAN_INCLUDE_DIRS}
                     src)
+
+set(PROJECT_ROOT_PATH ${PROJECT_SOURCE_DIR} 
+    CACHE FILEPATH "PROJECT_ROOT_PATH: Project root path..." FORCE)                    
 
 # When done tweaking common stuff, configure the components (subprojects).
 # NOTE: The order matters! The most independent ones should go first.

@@ -59,7 +59,7 @@ void Init() {
   ImGui::StyleColorsClassic();
 
   shader::module::Init();
-  shader::factory::SetShadersFolderBasePath("src/projects/skybox/shaders/");
+  shader::factory::SetShadersFolderBasePath("shaders/skybox");
   texture::module::Init();
 
   // Camera initialization

@@ -11,13 +11,10 @@ add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers ParticleSystems Projects ${CONAN_LIBS})
 
-# Expose C's definitions (in this case only the ones of XXX transitively)
-# to other subprojects through cache variable.
-# set(${PROJECT_NAME}_DEFINITIONS ${XXX_DEFINITIONS}
-#     CACHE INTERNAL "${PROJECT_NAME}: Definitions" FORCE)
+add_custom_command(TARGET Light POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/bin/shaders/${PROJECT_NAME}
+)
 
-# Expose C's public includes (including the ones of C's dependencies transitively)
-# to other subprojects through cache variable.
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                  ${Projects_INCLUDE_DIRS}
                                  ${ParticleSystems_INCLUDE_DIRS}

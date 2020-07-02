@@ -11,6 +11,18 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers Projects ${Projects_LIBS} ${CONAN_LIBS})
 
+set_target_properties(GemParticlesApp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+set_property(TARGET GemParticlesApp PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set_property(TARGET GemParticlesApp PROPERTY DEBUG_OUTPUT_NAME "GemParticlesApp_Debug")
+set_property(TARGET GemParticlesApp PROPERTY RELEASE_OUTPUT_NAME "GemParticlesApp_Release")
+set_property(TARGET GemParticlesApp PROPERTY RELWITHDEBINFO_OUTPUT_NAME "GemParticlesApp_RelWithDebInfo")
+set_property(TARGET GemParticlesApp PROPERTY MINSIZEREL_OUTPUT_NAME "GemParticlesApp_MinSizeRel")
+
+add_custom_command(TARGET GemParticlesApp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_ROOT_PATH}/textures ${CMAKE_BINARY_DIR}/bin/textures
+)
+             
 # Expose C's definitions (in this case only the ones of XXX transitively)
 # to other subprojects through cache variable.
 # set(${PROJECT_NAME}_DEFINITIONS ${XXX_DEFINITIONS}

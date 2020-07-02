@@ -60,7 +60,7 @@ void Init() {
   ImGui::StyleColorsClassic();
 
   shader::module::Init();
-  shader::factory::SetShadersFolderBasePath("src/projects/lit_particles/shaders/");
+  shader::factory::SetShadersFolderBasePath("shaders/LitParticles");
   texture::module::Init();
 
   // Camera initialization

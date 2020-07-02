@@ -59,7 +59,7 @@ void Init() {
   ImGui::StyleColorsClassic();
 
   shader::module::Init();
-  shader::factory::SetShadersFolderBasePath("src/projects/rain/shaders/");
+  shader::factory::SetShadersFolderBasePath("shaders/rain");
   texture::module::Init();
 
   // Camera initialization
