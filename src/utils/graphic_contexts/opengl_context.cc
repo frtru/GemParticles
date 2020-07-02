@@ -13,6 +13,9 @@
 *************************************************************************/
 #include "utils/graphic_contexts/opengl_context.hh"
 
+#include "utils/imgui/imgui_glfw.h"
+#include "utils/imgui/imgui_impl_opengl3.h"
+
 #include <iostream>
 
 namespace gem {
@@ -42,7 +45,17 @@ std::size_t OpenGLContext::GetWindowHeight() const {
   return height;
 }
 
+void OpenGLContext::NewFrame() {
+  // Start the Dear ImGui frame
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+}
+
 void OpenGLContext::Update() {
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
   /* Poll for and process events */
   glfwPollEvents();
 
@@ -81,7 +94,14 @@ void OpenGLContext::InitImpl() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   /* Create a windowed mode window and its OpenGL context */
-  m_pWindow = glfwCreateWindow(640, 480, "GemParticles", NULL, NULL);
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+  glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+  glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+  glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+  glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+  m_pWindow = glfwCreateWindow(mode->width, mode->height, "GemParticles", monitor, NULL);
   if (!m_pWindow) {
     glfwTerminate();
     std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
@@ -89,6 +109,7 @@ void OpenGLContext::InitImpl() {
 
   /* Make the window's context current */
   glfwMakeContextCurrent(m_pWindow);
+  glfwSwapInterval(0);
 
   /* Ensure we can capture keys being pressed */
   glfwSetInputMode(m_pWindow, GLFW_STICKY_KEYS, GL_TRUE);
@@ -104,7 +125,7 @@ void OpenGLContext::InitImpl() {
   // OpenGL initialization
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glViewport(0, 0, 640, 480);
+  glViewport(0, 0, mode->width, mode->height);
 
   //glEnable(GL_POINT_SMOOTH);
   glEnable(GL_CULL_FACE);
@@ -115,9 +136,21 @@ void OpenGLContext::InitImpl() {
   // TODO: Might have to send the size depending on the 
   // type of particles sent...
   //glPointSize(0.1f);
+
+  // ImGui initialization
+  ImGui::CreateContext();
+  ImGuiIO& io = ImGui::GetIO(); (void)io;
+  ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(GetWindowHandle()), true);
+  ImGui_ImplOpenGL3_Init();
+  ImGui::StyleColorsClassic();
+  glfwSetWindowTitle(static_cast<GLFWwindow*>(GetWindowHandle()), "GemParticles");
 }
 
 void OpenGLContext::TerminateImpl() {
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+
   std::cout << "OpenGLContext::TerminateImpl -> Deleting glfw context." << std::endl;
   glfwTerminate();
 }

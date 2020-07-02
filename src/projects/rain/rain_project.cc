@@ -16,8 +16,6 @@
 //C++ system files
 #include <memory>
 //Other libraries' .h files
-#include "utils/imgui/imgui_glfw.h"
-#include "utils/imgui/imgui_impl_opengl3.h"
 //Your project's .h files
 #include "projects/project_dictionary.hh"
 #include "utils/timer.hh"
@@ -51,13 +49,6 @@ void Init() {
   graphic_context = std::make_shared<OpenGLContext>();
   graphic_context->Init();
 
-  // ImGui initialization
-  ImGui::CreateContext();
-  ImGuiIO& io = ImGui::GetIO(); (void)io;
-  ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(graphic_context->GetWindowHandle()), true);
-  ImGui_ImplOpenGL3_Init();
-  ImGui::StyleColorsClassic();
-
   shader::module::Init();
   shader::factory::SetShadersFolderBasePath("shaders/rain");
   texture::module::Init();
@@ -69,8 +60,9 @@ void Init() {
     glm::vec3(0, 0, 0),   // and looks at the origin
     glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
   camera::SetPerspectiveProjection( 
-    glm::radians(45.0f), 
-    4.0f, 3.0f, // TODO: This fits the hardcoded 640/480 in the opengl_context.cc file, change this accordingly to changes made in the other file
+    glm::radians(45.0f),
+    graphic_context->GetWindowWidth(),
+    graphic_context->GetWindowHeight(),
     0.1f, 100.0f);
 
   // Event handler initialization
@@ -90,14 +82,10 @@ void Init() {
 }
 
 void Run() {
-
   while (!graphic_context->PollWindowClosedEvent()) {
     double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
 
-    // Start the Dear ImGui frame
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+    graphic_context->NewFrame();
 
     ImGui::Begin("Stats");
     ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -109,8 +97,6 @@ void Run() {
 
     ImGuiPropertyEditor::GetInstance().Draw("Property editor");
     ImGuiLog::GetInstance().Draw("Debugging logs");
-    ImGui::Render();
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     graphic_context->Update();
     timer::Chrono::GetInstance().Update();
@@ -124,9 +110,6 @@ void Terminate() {
   event_handler::Terminate();
   texture::module::Terminate();
   shader::module::Terminate();
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
   graphic_context->Terminate();
 }
 } /* namespace rain_project */

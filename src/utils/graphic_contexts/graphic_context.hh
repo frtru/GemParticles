@@ -27,6 +27,7 @@ public:
   GraphicContext() {}
   virtual ~GraphicContext() {}
 
+  virtual void NewFrame() = 0;
   virtual void Update() = 0;
   virtual bool PollWindowClosedEvent() = 0;
   virtual void Reshape(int a_width, int a_height) = 0;
