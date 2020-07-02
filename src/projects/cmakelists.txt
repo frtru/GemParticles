@@ -9,13 +9,6 @@ file(GLOB SOURCE_FILES
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
-# Expose C's definitions (in this case only the ones of XXX transitively)
-# to other subprojects through cache variable.
-# set(${PROJECT_NAME}_DEFINITIONS ${XXX_DEFINITIONS}
-#     CACHE INTERNAL "${PROJECT_NAME}: Definitions" FORCE)
-
-# Expose C's public includes (including the ones of C's dependencies transitively)
-# to other subprojects through cache variable.
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
 

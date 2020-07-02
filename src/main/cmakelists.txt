@@ -9,7 +9,7 @@ file(GLOB SOURCE_FILES
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers Projects ${Projects_LIBS} ${CONAN_LIBS})
+target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers ParticleSystems Projects ${Projects_LIBS} ${CONAN_LIBS})
 
 set_target_properties(GemParticlesApp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -23,13 +23,6 @@ add_custom_command(TARGET GemParticlesApp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_ROOT_PATH}/textures ${CMAKE_BINARY_DIR}/bin/textures
 )
              
-# Expose C's definitions (in this case only the ones of XXX transitively)
-# to other subprojects through cache variable.
-# set(${PROJECT_NAME}_DEFINITIONS ${XXX_DEFINITIONS}
-#     CACHE INTERNAL "${PROJECT_NAME}: Definitions" FORCE)
-
-# Expose C's public includes (including the ones of C's dependencies transitively)
-# to other subprojects through cache variable.
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                  ${Projects_INCLUDE_DIRS}
                                  ${Renderers_INCLUDE_DIRS}
