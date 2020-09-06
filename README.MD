@@ -6,7 +6,7 @@ NOTE(s):
 * [2018/11/05] None of the following stats are using multi-threading. I might implement threaded stages in the system's pipeline. WIP
 * [2018/11/05] I'm currently working on GPU particles with Curl noise...
 
- Here are some highlights that I managed to create with system.
+ Here are some highlights that I managed to create with this system.
 
 __Lit particles *or* particles with 200 dynamic cpu lights__
 ![lit particles or welding sparkles](https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/lit_particles.gif)
@@ -18,7 +18,7 @@ __and some rain... (1 million cpu particles with a steady 50 FPS)__
 <img src="https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/heavy_rain_cropped_big.gif">
 
 ## Launching or installing the project
-The project uses CMake files for portability and the [Conan package manager](conan.io) to manage the dependencies so in order you have to
+The project uses CMake files for portability and the [Conan package manager](conan.io) to manage the dependencies so in order to launch the whole thing you have to
 1. Ensure you have both CMake (at least 3.10) and Conan installed. See https://cmake.org/install/ and https://docs.conan.io/en/latest/installation.html respectively for more details.
 2. `mkdir build && cd build`
 3. `conan install ..` (NOTE: it's possible you have to run `conan profile new default --detect` beforehand and set prefered compiler and architecture to 64 bits which is the architecture I've been using)
