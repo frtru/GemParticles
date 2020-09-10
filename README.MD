@@ -6,7 +6,7 @@ NOTE(s):
 * [2018/11/05] None of the following stats are using multi-threading. I might implement threaded stages in the system's pipeline. WIP
 * [2018/11/05] I'm currently working on GPU particles with Curl noise...
 
- Here are some highlights that I managed to create with this system.
+ Here are some highlights that I managed to create with this system. Please note that my system at the time of taking those screenshots had a i5-3570k CPU and Gefore GTX 660 GPU.
 
 __Lit particles *or* particles with 200 dynamic cpu lights__
 ![lit particles or welding sparkles](https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/lit_particles.gif)
