@@ -14,6 +14,7 @@
 #include "project_dictionary.hh"
 
 #include "projects/attractors/attractor_project.hh"
+#include "projects/gpu_particles/gpu_particles_project.hh"
 #include "projects/light/light_project.hh"
 #include "projects/lit_particles/lit_particles_project.hh"
 #include "projects/rain/rain_project.hh"
@@ -37,6 +38,7 @@ ProjectDictionary _Dict;
 void Init() {
   std::call_once(init_flag, [&]() {
     REGISTER_STD_PROJECT(attractor);
+    REGISTER_STD_PROJECT(gpu_particles);
     REGISTER_STD_PROJECT(light);
     REGISTER_STD_PROJECT(lit_particles);
     REGISTER_STD_PROJECT(rain);
