@@ -1,13 +1,21 @@
-# GemParticles
+# GemParticles - Particles sandbox
 
-Behold, my ability to screw up code at its finest. It also happens to be a flexible core-profile compliant OpenGL particle engine I used to create various visual effects and learning 3D concepts. Big thanks to [Mr. Lariviere](https://github.com/larivierec) for the help!
+This is a basic core-profile compliant OpenGL particle sandbox I used to create various visual effects and learning 3D concepts.
 
-NOTE(s):
+## Updates and important mentions:
+* [2021/08/04] I decided to stop using this code or maintaining it. It was created with the intention of learning and not building a reusable framework for particles.
 * [2018/11/05] None of the following stats are using multi-threading. I might implement threaded stages in the system's pipeline. WIP
 * [2018/11/05] I'm currently working on GPU particles with Curl noise...
+* Big thanks to [Mr. Lariviere](https://github.com/larivierec) for the help!
+ 
+## Description
 
- Here are some highlights that I managed to create with this system. Please note that, at the time of taking those screenshots, I had a i5-3570k CPU and Geforce GTX 660 GPU.
-
+The code itself is pretty simple and follows a templated data-oriented design. The ParticlesSystem class is type-bound to the particle structure. It also contains a renderer, dynamics and emitters and a particle pool. For each experiment that I want to make I create a new cmake library project that is built in the GemParticlesApp executable project and by passing the project name as an argument to the executable you can select which experiment you want to load. 
+ 
+## Highlights 
+ 
+Here are some highlights that I managed to create with this system. Please note that, at the time of taking those screenshots, I had an i5-3570k CPU and Geforce GTX 660 GPU.
+ 
 __Lit particles *or* particles with 200 dynamic cpu lights__
 ![lit particles or welding sparkles](https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/lit_particles.gif)
 
@@ -37,18 +45,17 @@ I'm using various external libraries in this project which are listed in the fil
 
 ## Utilities
 I pretty much built this from scratch looking up efficient design patterns and tutorials. So you'll find a handful of utilities that I built to help me create stuff more easily. Most of them are named as *modules*.
-* Camera
 * Light module
 * Shader module
 * Texture module
 * Timer
 
 And last but not least, some wrapper utilities I built around ImGui examples. This includes
-* a Property editor
-* a logger
+* A property editor
+* A logger
 
 ## Extending the project
-If you desire to create your own project using this "*engine*" or the project structure you can
+If you want to create your own project using this "*engine*" or the project structure you can
 1. Add the project to the list of sub-directories in [projects cmakelists.txt file](https://github.com/frtru/GemParticles/blob/master/src/projects/cmakelists.txt) 
 2. Register the project in the [project dictionary](https://github.com/frtru/GemParticles/blob/master/src/projects/project_dictionary.cc) (if you use the REGISTER_STD_PROJECT you'll have to define the `init`, `run` and `terminate` functions in your project)
 3. Add your own cmakelists.txt and sub-directory in the projects/ folder
