@@ -15,18 +15,10 @@ The code itself is pretty simple and follows a templated data-oriented design. T
 ## Highlights 
  
 Here are some highlights that I managed to create with this system. Please note that, at the time of taking those screenshots, I had an i5-3570k CPU and Geforce GTX 660 GPU.
- 
-__Lit particles *or* particles with 200 dynamic cpu lights__
 
-![lit particles or welding sparkles](https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/lit_particles.gif)
-
-__500000 cpu particles attracted toward a location with hot and cold colors__
-
-<img src="https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/attractor_1_cropped.gif" width="434" height="250"> <img src="https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/attractor_2_cropped.gif" width="434" height="250">
-
-__and some rain... (1 million cpu particles with a steady 50 FPS)__
-
-<img src="https://github.com/frtru/GemParticles/blob/dev-master/gifs_and_screenshots/heavy_rain_cropped_big.gif">
+| Lit particles *or* particles with 200 dynamic CPU lights | 500000 CPU particles attracted toward a location with hot and cold colors | and some rain... (1 million CPU particles) |
+|----------------------------------------------|---------------------------------------------------|------------------------------------------------------|
+| ![](gifs_and_screenshots/lit_particles.gif)  | ![](gifs_and_screenshots/attractor_2_cropped.gif) | ![](gifs_and_screenshots/heavy_rain_cropped_big.gif) |
 
 ## Launching or installing the project
 The project uses CMake files for portability and the [Conan package manager](conan.io) to manage the dependencies so in order to launch the whole thing you have to
