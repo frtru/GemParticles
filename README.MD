@@ -21,7 +21,7 @@ Here are some highlights that I managed to create with this system. Please note 
 | ![](gifs_and_screenshots/lit_particles.gif)  | ![](gifs_and_screenshots/attractor_2_cropped.gif) | ![](gifs_and_screenshots/heavy_rain_cropped_big.gif) |
 
 ## Launching or installing the project
-The project uses CMake files for portability and the [Conan package manager](conan.io) to manage the dependencies so in order to launch the whole thing you have to
+The project uses CMake files for portability and the [Conan package manager](https://conan.io) to manage the dependencies so in order to launch the whole thing you have to
 1. Ensure you have both CMake (at least 3.10) and Conan installed. See https://cmake.org/install/ and https://docs.conan.io/en/latest/installation.html respectively for more details.
 2. `mkdir build && cd build`
 3. `conan install ..` (NOTE: it's possible you have to run `conan profile new default --detect` beforehand and set prefered compiler and architecture to 64 bits which is the architecture I've been using)
