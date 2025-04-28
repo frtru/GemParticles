@@ -351,3 +351,4 @@ build/*
 # Misc
 *.csv
 .venv/
+.cursor/

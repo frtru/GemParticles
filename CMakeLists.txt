@@ -20,14 +20,20 @@ if (WIN32)
 endif ()
 
 # Find required packages
-find_package(glew REQUIRED)
+find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
-find_package(opengl_system REQUIRED)
+find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
 find_package(imgui REQUIRED)
 find_package(stb REQUIRED)
 
+# Include directories for headers
 include_directories(src)
+include_directories(${GLEW_INCLUDE_DIRS})
+include_directories(${OPENGL_INCLUDE_DIR})
+include_directories(${GLM_INCLUDE_DIRS})
+include_directories(${IMGUI_INCLUDE_DIRS})
+include_directories(${GLFW_INCLUDE_DIRS})
 
 set(PROJECT_ROOT_PATH ${PROJECT_SOURCE_DIR} 
     CACHE FILEPATH "PROJECT_ROOT_PATH: Project root path..." FORCE)                    

@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  gemparticles:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=${DISPLAY}
+    network_mode: host 
