@@ -1,5 +1,5 @@
 /*************************************************************************
-* Copyright (c) 2018 François Trudel
+* Copyright (c) 2018 Franois Trudel
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -106,7 +106,7 @@ public:
     ImGui::PushID(_data);
     ImGui::Separator();
     ImGui::AlignTextToFramePadding();
-    ImGui::Text(_name.c_str());
+    ImGui::Text("%s", _name.c_str());
     ImGui::NextColumn();
     ImGui::AlignTextToFramePadding();
     ImGui::Text("");
@@ -135,7 +135,7 @@ public:
     ImGui::AlignTextToFramePadding();
     // -------------------
     ImGui::Bullet();
-    ImGui::Selectable(_name.c_str());
+    ImGui::Selectable("%s", _name.c_str());
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
@@ -172,7 +172,7 @@ public:
     ImGui::AlignTextToFramePadding();
     // -------------------
     ImGui::Bullet();
-    ImGui::Selectable(_name.c_str());
+    ImGui::Selectable("%s", _name.c_str());
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
@@ -209,7 +209,7 @@ public:
     ImGui::AlignTextToFramePadding();
     // -------------------
     ImGui::Bullet();
-    ImGui::Selectable(_name.c_str());
+    ImGui::Selectable("%s", _name.c_str());
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
@@ -246,7 +246,7 @@ public:
     ImGui::AlignTextToFramePadding();
     // -------------------
     ImGui::Bullet();
-    ImGui::Selectable(_name.c_str());
+    ImGui::Selectable("%s", _name.c_str());
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
@@ -283,7 +283,7 @@ public:
     ImGui::AlignTextToFramePadding();
     // -------------------
     ImGui::Bullet();
-    ImGui::Selectable(_name.c_str());
+    ImGui::Selectable("%s", _name.c_str());
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
@@ -327,7 +327,7 @@ public:
     ImGui::AlignTextToFramePadding();
     // -------------------
     ImGui::Bullet();
-    ImGui::Selectable(_name.c_str());
+    ImGui::Selectable("%s", _name.c_str());
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
@@ -369,7 +369,7 @@ public:
     ImGui::AlignTextToFramePadding();
     // -------------------
     ImGui::Bullet();
-    ImGui::Selectable(_name.c_str());
+    ImGui::Selectable("%s", _name.c_str());
     ImGui::NextColumn();
     // -------------------
     ImGui::PushItemWidth(-1);
