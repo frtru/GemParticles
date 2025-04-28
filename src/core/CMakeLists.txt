@@ -9,9 +9,16 @@ file(GLOB SOURCE_FILES
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} Utils ${CONAN_LIBS})
+target_link_libraries(${PROJECT_NAME} 
+    Utils 
+    GLEW::GLEW
+    glfw
+    opengl::opengl
+    glm::glm
+    imgui::imgui
+    stb::stb
+)
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                  ${Utils_INCLUDE_DIRS}
-                                 ${CONAN_INCLUDE_DIRS}
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)

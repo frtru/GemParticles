@@ -9,7 +9,21 @@ file(GLOB SOURCE_FILES
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers ParticleSystems Projects ${CONAN_LIBS})
+target_link_libraries(${PROJECT_NAME} 
+    Utils 
+    Core 
+    Dynamics 
+    Emitters 
+    Renderers 
+    ParticleSystems 
+    Projects 
+    GLEW::GLEW
+    glfw
+    opengl::opengl
+    glm::glm
+    imgui::imgui
+    stb::stb
+)
 
 set_target_properties(GemParticlesApp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -31,5 +45,4 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                  ${Dynamics_INCLUDE_DIRS}
                                  ${Core_INCLUDE_DIRS}
                                  ${Utils_INCLUDE_DIRS}
-                                 ${CONAN_INCLUDE_DIRS}
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)

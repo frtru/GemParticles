@@ -19,11 +19,15 @@ if (WIN32)
   set(CMAKE_SHARED_LIBRARY_PREFIX "")
 endif ()
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+# Find required packages
+find_package(glew REQUIRED)
+find_package(glfw3 REQUIRED)
+find_package(opengl_system REQUIRED)
+find_package(glm REQUIRED)
+find_package(imgui REQUIRED)
+find_package(stb REQUIRED)
 
-include_directories(${CONAN_INCLUDE_DIRS}
-                    src)
+include_directories(src)
 
 set(PROJECT_ROOT_PATH ${PROJECT_SOURCE_DIR} 
     CACHE FILEPATH "PROJECT_ROOT_PATH: Project root path..." FORCE)                    

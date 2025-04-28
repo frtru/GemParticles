@@ -350,3 +350,4 @@ build/*
 
 # Misc
 *.csv
+.venv/
