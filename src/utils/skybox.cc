@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "utils/skybox.hh"
 
-#include <mutex>
 
 #include <GL/glew.h>
 
@@ -75,8 +74,6 @@ const GLfloat SKYBOX_VERTICES[] = {
    1.0f, -1.0f,  1.0f
 };
 
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 GLuint cubemap_id;
 GLuint shader_program_id;
 GLuint skybox_VAO_id;
@@ -119,30 +116,27 @@ void InitializeCube() {
 }
 
 void LoadSkyBox() {
-  std::call_once(init_flag, [&]() {
-    // If custom textures were not used
-    if (texture_file_names.empty()) {
-      texture_file_names.push_back(CUBE_MAP_TEXTURE_RIGHT_FILE_PATH);
-      texture_file_names.push_back(CUBE_MAP_TEXTURE_LEFT_FILE_PATH);
-      texture_file_names.push_back(CUBE_MAP_TEXTURE_BOTTOM_FILE_PATH);
-      texture_file_names.push_back(CUBE_MAP_TEXTURE_TOP_FILE_PATH);
-      texture_file_names.push_back(CUBE_MAP_TEXTURE_BACK_FILE_PATH);
-      texture_file_names.push_back(CUBE_MAP_TEXTURE_FRONT_FILE_PATH);
-    }
-    cubemap_id = texture::factory::CreateCubeMap(texture_file_names);
+  // If custom textures were not used
+  if (texture_file_names.empty()) {
+    texture_file_names.push_back(CUBE_MAP_TEXTURE_RIGHT_FILE_PATH);
+    texture_file_names.push_back(CUBE_MAP_TEXTURE_LEFT_FILE_PATH);
+    texture_file_names.push_back(CUBE_MAP_TEXTURE_BOTTOM_FILE_PATH);
+    texture_file_names.push_back(CUBE_MAP_TEXTURE_TOP_FILE_PATH);
+    texture_file_names.push_back(CUBE_MAP_TEXTURE_BACK_FILE_PATH);
+    texture_file_names.push_back(CUBE_MAP_TEXTURE_FRONT_FILE_PATH);
+  }
+  cubemap_id = texture::factory::CreateCubeMap(texture_file_names);
 
-    shader::factory::CompileShaderFile("skybox.vert", GL_VERTEX_SHADER);
-    shader::factory::CompileShaderFile("skybox.frag", GL_FRAGMENT_SHADER);
-    shader_program_id = shader::factory::CreateProgram();
+  shader::factory::CompileShaderFile("skybox.vert", GL_VERTEX_SHADER);
+  shader::factory::CompileShaderFile("skybox.frag", GL_FRAGMENT_SHADER);
+  shader_program_id = shader::factory::CreateProgram();
 
-    InitializeCube();
-  });
+  InitializeCube();
 }
 
 void Destroy() {
-  std::call_once(terminate_flag, [&]() {
-    glDeleteBuffers(1, &skybox_positions_VBO_id);
-  });
+  glDeleteBuffers(1, &skybox_positions_VBO_id);
+  glDeleteVertexArrays(1, &skybox_VAO_id);
 }
 
 void SetTextures(std::vector<std::string>&& a_vTextures) {

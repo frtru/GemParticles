@@ -12,6 +12,7 @@
  * all copies or substantial portions of the Software.
 *************************************************************************/
 #include "utils/graphic_contexts/opengl_context.hh"
+#include "utils/graphic_contexts/graphic_context_factory.hh"
 
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -46,8 +47,10 @@ OpenGLContext& ContextOf(GLFWwindow* a_pWindow) {
 }
 }
 
+REGISTER_GRAPHIC_CONTEXT("opengl", OpenGLContext)
+
 OpenGLContext::OpenGLContext() 
-  : m_pWindow(nullptr), m_llFrameCount(0) {}
+  : m_pWindow(nullptr) {}
 
 OpenGLContext::~OpenGLContext() {
   // TODO: When closing window first instead of console
@@ -55,8 +58,21 @@ OpenGLContext::~OpenGLContext() {
   // deleted, maybe the shaded_ptr isnt a good idea
 }
 
-void* OpenGLContext::GetWindowHandle() const {
-  return m_pWindow;
+void OpenGLContext::RequestScreenshot(const std::string& a_sPath) {
+  m_sScreenshotPath = a_sPath;
+}
+
+void OpenGLContext::ResetRenderState() {
+  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  //glEnable(GL_POINT_SMOOTH);
+  glEnable(GL_CULL_FACE);
+  // Enable depth test
+  glEnable(GL_DEPTH_TEST);
+  // Accept fragment if it closer to the camera than the former one
+  glDepthFunc(GL_LESS);
+  // TODO: Might have to send the size depending on the 
+  // type of particles sent...
+  //glPointSize(0.1f);
 }
 
 std::size_t OpenGLContext::GetWindowWidth() const {
@@ -82,10 +98,9 @@ void OpenGLContext::Update() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-  ++m_llFrameCount;
-  const ContextOptions& options = GetOptions();
-  if (m_llFrameCount == options.maxFrames && !options.screenshotPath.empty()) {
-    SaveScreenshot(options.screenshotPath);
+  if (!m_sScreenshotPath.empty()) {
+    SaveScreenshot(m_sScreenshotPath);
+    m_sScreenshotPath.clear();
   }
 
   /* Poll for and process events */
@@ -102,10 +117,8 @@ void OpenGLContext::Update() {
 }
 
 bool OpenGLContext::PollWindowClosedEvent() {
-  const long long maxFrames = GetOptions().maxFrames;
   return glfwWindowShouldClose(m_pWindow) != 0 ||
-         glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS ||
-         (maxFrames >= 0 && m_llFrameCount >= maxFrames);
+         glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS;
 }
 
 void OpenGLContext::SaveScreenshot(const std::string& a_sPath) const {
@@ -166,7 +179,7 @@ void OpenGLContext::InstallInputCallbacks() {
   });
 }
 
-void OpenGLContext::InitImpl() {
+void OpenGLContext::InitImpl(const WindowOptions& a_Options) {
   // Provide a way to set windowed mode or not, size and other useful parameters
 
   // GLFW initialization
@@ -185,7 +198,6 @@ void OpenGLContext::InitImpl() {
 #endif
 
   /* Create the window (windowed by default, fullscreen on request) and its OpenGL context */
-  const ContextOptions& options = GetOptions();
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
@@ -193,12 +205,12 @@ void OpenGLContext::InitImpl() {
   glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
   glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
   glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-  if (options.fullscreen) {
+  if (a_Options.fullscreen) {
     m_pWindow = glfwCreateWindow(mode->width, mode->height, "GemParticles", monitor, NULL);
   }
   else {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-    m_pWindow = glfwCreateWindow(1600, 900, "GemParticles", NULL, NULL);
+    m_pWindow = glfwCreateWindow(a_Options.width, a_Options.height, "GemParticles", NULL, NULL);
   }
   if (!m_pWindow) {
     glfwTerminate();
@@ -234,31 +246,21 @@ void OpenGLContext::InitImpl() {
 #endif
 
   // OpenGL initialization
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  ResetRenderState();
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   int framebufferWidth = 0, framebufferHeight = 0;
   glfwGetFramebufferSize(m_pWindow, &framebufferWidth, &framebufferHeight);
   Reshape(framebufferWidth, framebufferHeight);
-
-  //glEnable(GL_POINT_SMOOTH);
-  glEnable(GL_CULL_FACE);
-  // Enable depth test
-  glEnable(GL_DEPTH_TEST);
-  // Accept fragment if it closer to the camera than the former one
-  glDepthFunc(GL_LESS);
-  // TODO: Might have to send the size depending on the 
-  // type of particles sent...
-  //glPointSize(0.1f);
 
   InstallInputCallbacks();
 
   // ImGui initialization
   ImGui::CreateContext();
   ImGuiIO& io = ImGui::GetIO(); (void)io;
-  ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(GetWindowHandle()), true);
+  ImGui_ImplGlfw_InitForOpenGL(m_pWindow, true);
   ImGui_ImplOpenGL3_Init();
   ImGui::StyleColorsClassic();
-  glfwSetWindowTitle(static_cast<GLFWwindow*>(GetWindowHandle()), "GemParticles");
+  glfwSetWindowTitle(m_pWindow, "GemParticles");
 }
 
 void OpenGLContext::TerminateImpl() {

@@ -17,14 +17,13 @@
 #include <optional>
 #include <string>
 
-#include "utils/graphic_contexts/graphic_context.hh"
-
 namespace gem {
 namespace particle {
 namespace app {
+// Command line settings; the persistent ones live in the config file
 struct Options {
-  std::string     project;
-  ContextOptions  context;
+  std::string project;     // Empty: the config's default project
+  std::string configPath;  // Empty: the config next to the executable
 };
 
 // Fills a_rOptions from the command line. Returns the exit code to stop with

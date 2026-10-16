@@ -28,14 +28,10 @@ std::optional<int> ParseOptions(int argc, const char* argv[], Options& a_rOption
   const std::vector<std::string> projects = project_dict::GetProjectNames();
 
   CLI::App cli{ "GemParticles particle sandbox" };
-  cli.add_option("project", a_rOptions.project, "Project to launch")
-    ->check(CLI::IsMember(projects))
-    ->default_val(projects.front());
-  cli.add_flag("--fullscreen", a_rOptions.context.fullscreen, "Fullscreen on the primary monitor");
-  CLI::Option* frames = cli.add_option("--frames", a_rOptions.context.maxFrames, "Exit after N frames")
-    ->check(CLI::PositiveNumber);
-  cli.add_option("--screenshot", a_rOptions.context.screenshotPath, "Save the last frame to a PNG")
-    ->needs(frames);
+  cli.add_option("project", a_rOptions.project, "Project to launch (default: the config's)")
+    ->check(CLI::IsMember(projects));
+  cli.add_option("--config", a_rOptions.configPath, "Config file (default: config.json next to the executable)")
+    ->check(CLI::ExistingFile);
 
   try {
     cli.parse(argc, argv);
@@ -44,8 +40,8 @@ std::optional<int> ParseOptions(int argc, const char* argv[], Options& a_rOption
     return cli.exit(error);
   }
   // Relative to where the user launched from, since the app moves to its own folder
-  if (!a_rOptions.context.screenshotPath.empty()) {
-    a_rOptions.context.screenshotPath = std::filesystem::absolute(a_rOptions.context.screenshotPath).string();
+  if (!a_rOptions.configPath.empty()) {
+    a_rOptions.configPath = std::filesystem::absolute(a_rOptions.configPath).string();
   }
   return std::nullopt;
 }

@@ -57,6 +57,7 @@ CoreGLRenderer::~CoreGLRenderer() {
     glDeleteBuffers(1, &m_vertexBufferID);
     m_vertexBufferID = 0;
   }
+  glDeleteVertexArrays(1, &m_vertexArrayID);
 }
 
 void CoreGLRenderer::Bind(const std::shared_ptr<ParticlePool<CoreParticles> > &a_pPool) {

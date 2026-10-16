@@ -14,40 +14,43 @@
 #ifndef PROJECT_DICTIONARY_HH
 #define PROJECT_DICTIONARY_HH
 
+#include <functional>
+#include <memory>
 #include <string>
 #include <vector>
-#include <functional>
 
 namespace gem {
 namespace particle {
-// For user convenience, this should be used to process the corresponding
-// project pipeline (series of function/stages). In other words,
-// pipeline = series of functions
-// stage    = part of the pipeline (function)
-using ProjectStage    = std::function<void()>;
-using ProjectPipeline = std::vector<ProjectStage>;
+class GraphicContext;
+
+// A project plugs into the app's main loop: the app owns the graphic context
+// and the frame, the project sets itself up and does its part of each frame.
+struct Project {
+  std::function<void(const std::shared_ptr<GraphicContext>& a_pContext)> init;
+  std::function<void(double a_dt)> update;
+  std::function<void()> terminate;
+};
 
 namespace project_dict {
 // Explicitely loads and registers all the recognized
 void Init();
-// Retrieves the correct pipeline related to the given name.
-// Returns nullptr when reaching the end of the dictionary
-ProjectPipeline* LookUp(const std::string& a_sProjectName);
+// Retrieves the project registered under the given name, nullptr if there is none
+const Project* LookUp(const std::string& a_sProjectName);
 // Names of every registered project, in alphabetical order
 std::vector<std::string> GetProjectNames();
-void AddStage(const std::string& a_sProjectName, const ProjectStage&& a_fProjectStage);
-void AddPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline);
-void SetPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline);
+// Name of the project registered after the given one, wrapping around to the first
+std::string NextProjectName(const std::string& a_sProjectName);
+void Register(const std::string& a_sProjectName, Project a_Project);
 
-// Standard project should have those methods defined
-//  - Init
-//  - Run
-//  - Terminate
+// Standard project should have those functions defined
+//  - Init(const std::shared_ptr<GraphicContext>&)
+//  - Update(double)
+//  - Terminate()
 #define REGISTER_STD_PROJECT(projectName) \
-        gem::particle::project_dict::SetPipeline(#projectName, std::move(gem::particle::ProjectPipeline({ \
-          std::bind(&gem::particle::projectName##_project::Init), \
-          std::bind(&gem::particle::projectName##_project::Run), \
-          std::bind(&gem::particle::projectName##_project::Terminate)})))
+        gem::particle::project_dict::Register(#projectName, { \
+          &gem::particle::projectName##_project::Init, \
+          &gem::particle::projectName##_project::Update, \
+          &gem::particle::projectName##_project::Terminate })
 
 } /* namespace project_dict */
 } /* namespace particle */

@@ -422,6 +422,11 @@ public:
     AddProperty<PropertyType::NEW_OBJECT>(name, uid, nullptr);
   }
 
+  // Forgets every property, e.g. when the objects they point to are destroyed
+  void Clear() {
+    _PropertiesVector.clear();
+  }
+
   template<PropertyType type>
   void AddProperty(const std::string& name, void* data, std::function<void()> callback = nullptr, float delta = 1.0f) {
     auto propertyPtr = std::make_shared<Property<type> >(name, data, callback, delta);

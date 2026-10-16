@@ -22,12 +22,11 @@
 
 namespace gem {
 namespace particle {
-// Launch settings shared by every context. The app sets them once,
-// before a project creates its context.
-struct ContextOptions {
-  bool        fullscreen = false;
-  long long   maxFrames  = -1;  // < 0: run until the window is closed
-  std::string screenshotPath;   // PNG written after the last frame when set
+// Settings of the window a context creates (they come from the app config)
+struct WindowOptions {
+  int  width      = 0;
+  int  height     = 0;
+  bool fullscreen = false;  // On the primary monitor, at its resolution
 };
 
 // Input events forwarded by the context. Key, button and action codes are GLFW's.
@@ -51,15 +50,16 @@ public:
   virtual bool PollWindowClosedEvent() = 0;
   virtual void Reshape(int a_width, int a_height) = 0;
 
-  void Init();
+  void Init(const WindowOptions& a_Options);
   void Terminate();
-
-  static void SetOptions(const ContextOptions& a_Options) { m_Options = a_Options; }
-  static const ContextOptions& GetOptions() { return m_Options; }
 
   void SetInputCallbacks(InputCallbacks a_Callbacks) { m_InputCallbacks = std::move(a_Callbacks); }
 
-  virtual void* GetWindowHandle() const = 0;
+  // Saves the next presented frame (scene and UI) as a PNG
+  virtual void RequestScreenshot(const std::string& a_sPath) = 0;
+  // Restores the default render state, so each project starts from the same one
+  virtual void ResetRenderState() = 0;
+
   virtual std::size_t GetWindowWidth() const = 0;
   virtual std::size_t GetWindowHeight() const = 0;
 
@@ -67,12 +67,11 @@ protected:
   const InputCallbacks& GetInputCallbacks() const { return m_InputCallbacks; }
 
 private:
-  virtual void InitImpl() = 0;
+  virtual void InitImpl(const WindowOptions& a_Options) = 0;
   virtual void TerminateImpl() = 0;
 
   static bool  m_bInitialized;
   static bool  m_bTerminated;
-  inline static ContextOptions m_Options;
   InputCallbacks m_InputCallbacks;
 }; /* class GraphicContext*/
 } /* namespace particle */

@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "camera.hh"
 
-#include <mutex>
 
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -21,8 +20,6 @@
 
 namespace camera {
 namespace {
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 glm::mat4 projection_matrix;
 glm::mat4 view_matrix;
 glm::mat4 ProjectionView;
@@ -78,22 +75,18 @@ void UpdateViewMatrixAndProjectionView() {
 }
 
 void Init() {
-  std::call_once(init_flag, [&]() {
-    //glm::mat4() loads a 4x4 identity matrix
-    projection_matrix = glm::mat4();
-    view_matrix = glm::mat4();
+  //glm::mat4() loads a 4x4 identity matrix
+  projection_matrix = glm::mat4();
+  view_matrix = glm::mat4();
 
-    shader::module::RegisterGlobalUniformBlock(
-      CameraInfoBindingPoint,
-      sizeof(ProjectionView) + 3 * sizeof(glm::vec4));
+  shader::module::RegisterGlobalUniformBlock(
+    CameraInfoBindingPoint,
+    sizeof(ProjectionView) + 3 * sizeof(glm::vec4));
 
-    UpdateProjectionView();
-  });
+  UpdateProjectionView();
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {
-  });
 }
 
 const glm::vec3& GetEyePosition() {

@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "utils/texture_factory.hh"
 
-#include <mutex>
 
 #include "stb_image.h"
 #include "utils/imgui/imgui_log.h"
@@ -21,8 +20,8 @@
 namespace texture {
 namespace factory {
 namespace {
-std::once_flag init_flag;
-std::once_flag terminate_flag;
+// Every texture created here, deleted on Terminate
+std::vector<GLuint> textures;
 
 bool LoadImage(const std::string& a_sFileName,
   unsigned char** a_pImage,
@@ -39,14 +38,12 @@ void FreeImage(unsigned char* a_pImage) {
 }
 
 void Init() {
-  std::call_once(init_flag, [&]() {
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
-  });
+  stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {
-  });
+  glDeleteTextures(static_cast<GLsizei>(textures.size()), textures.data());
+  textures.clear();
 }
 
 GLuint Create2DTexture(const std::string& a_sFileName,
@@ -63,6 +60,7 @@ GLuint Create2DTexture(const std::string& a_sFileName,
 
   GLuint wTexture;
   glGenTextures(1, &wTexture);
+  textures.push_back(wTexture);
   glBindTexture(GL_TEXTURE_2D, wTexture);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, a_nMinFilterParm);
@@ -90,6 +88,7 @@ GLuint Create2DTexture(const std::string& a_sFileName,
 GLuint CreateTextureFromMemoryPixels(unsigned char *pixels, GLint width, GLint height) {
   GLuint wTexture;
   glGenTextures(1, &wTexture);
+  textures.push_back(wTexture);
   glBindTexture(GL_TEXTURE_2D, wTexture);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -113,6 +112,7 @@ GLuint CreateCubeMap(const std::vector<std::string>& a_vTextures,
  GLint a_nInternalFormat, GLint a_nImageFormat) {
   GLuint wTexture;
   glGenTextures(1, &wTexture);
+  textures.push_back(wTexture);
   glBindTexture(GL_TEXTURE_CUBE_MAP, wTexture);
   
   for (std::size_t i = 0; i < a_vTextures.size(); ++i) {

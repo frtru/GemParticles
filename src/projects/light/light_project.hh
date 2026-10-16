@@ -14,10 +14,14 @@
 #ifndef LIGHT_PROJECT_HH
 #define LIGHT_PROJECT_HH
 
+#include <memory>
+
 namespace gem { namespace particle {
+class GraphicContext;
+
 namespace light_project {
-void Init();
-void Run();
+void Init(const std::shared_ptr<GraphicContext>& a_pContext);
+void Update(double a_dt);
 void Terminate();
 } /* namespace light_project */
 } /* namespace particle */

@@ -20,11 +20,5 @@
 using namespace gem::particle;
 
 int main(int argc, const char *argv[]) {
-  app::LoadProjects(); // The project argument is checked against the registered ones
-  app::Options options;
-  if (const std::optional<int> exitCode = app::ParseOptions(argc, argv, options)) {
-    return *exitCode;
-  }
-  app::Launch(options);
-  return app::GetAppStatusError();
+  return app::Run(argc, argv);
 }

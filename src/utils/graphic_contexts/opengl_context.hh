@@ -35,19 +35,21 @@ public:
   virtual bool PollWindowClosedEvent() override;
   virtual void Reshape(int a_width, int a_height) override;
 
-  virtual void* GetWindowHandle() const override;
+  virtual void RequestScreenshot(const std::string& a_sPath) override;
+  virtual void ResetRenderState() override;
+
   virtual std::size_t GetWindowWidth() const override;
   virtual std::size_t GetWindowHeight() const override;
 
 private:
-  virtual void InitImpl() override;
+  virtual void InitImpl(const WindowOptions& a_Options) override;
   virtual void TerminateImpl() override;
 
   void InstallInputCallbacks();
   void SaveScreenshot(const std::string& a_sPath) const;
 
   GLFWwindow* m_pWindow;
-  long long   m_llFrameCount;
+  std::string m_sScreenshotPath;  // Pending screenshot, written by the next Update
 
 }; /* class OpenGLContext*/
 } /* namespace particle */

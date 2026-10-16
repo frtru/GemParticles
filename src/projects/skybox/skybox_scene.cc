@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "projects/skybox/skybox_scene.hh"
 
-#include <mutex>
 
 #include <GL/glew.h>
 
@@ -145,8 +144,6 @@ GLuint  axes_VBO_IDs[2];
 GLuint  box_VBO_IDs[2];
 GLuint  shader_program_ID;
 
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 
 light::Material box_material;
 
@@ -276,91 +273,84 @@ void UpdateMaterialUniform() {
 }
 
 void Init(bool a_isDebug) {
-  std::call_once(init_flag, [&]() {
-    debug_mode = a_isDebug;
+  debug_mode = a_isDebug;
 
-    skybox::LoadSkyBox();
+  skybox::LoadSkyBox();
 
-    shader::factory::CompileShaderFile("scene.vert", GL_VERTEX_SHADER);
-    shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
-    shader_program_ID = shader::factory::CreateProgram();
+  shader::factory::CompileShaderFile("scene.vert", GL_VERTEX_SHADER);
+  shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
+  shader_program_ID = shader::factory::CreateProgram();
 
-    // Register light uniforms
-    shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
-    shader::module::SetUniformVec3(shader_program_ID, "ambient_light_color", { 1.0f, 1.0f, 1.0f });
-    shader::module::SetUniformFloat(shader_program_ID, "ambient_light_intensity", 0.5f);
+  // Register light uniforms
+  shader::module::Use(shader_program_ID); // Got to use the program before setting uniforms
+  shader::module::SetUniformVec3(shader_program_ID, "ambient_light_color", { 1.0f, 1.0f, 1.0f });
+  shader::module::SetUniformFloat(shader_program_ID, "ambient_light_intensity", 0.5f);
 
-    // Color of the box is sent through the material
-    box_material.ambientFactor    = { 1.0f, 0.5f, 0.31f }; 
-    box_material.diffuseFactor    = { 1.0f, 0.5f, 0.31f };
-    box_material.specularFactor   = { 0.5f, 0.5f, 0.5f };
-    box_material.shininessFactor  = 32.0f;
-    UpdateMaterialUniform();
-    shader::module::Detach();
-    
-    // Should already be initialized but just in case
-    light::module::Init();
+  // Color of the box is sent through the material
+  box_material.ambientFactor    = { 1.0f, 0.5f, 0.31f }; 
+  box_material.diffuseFactor    = { 1.0f, 0.5f, 0.31f };
+  box_material.specularFactor   = { 0.5f, 0.5f, 0.5f };
+  box_material.shininessFactor  = 32.0f;
+  UpdateMaterialUniform();
+  shader::module::Detach();
+  
 
-    // Add lights in the scene in the SSBO
-    light::Light wFrontLight, wBackLight;
-    wFrontLight.position = { 0.0f, 0.0f, 2.0f, 0.0f };
-    wFrontLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-    wFrontLight.intensity = 1.0f;
-    wFrontLight.attenuation = 0.0f;
-    wFrontLight.radius = 10.0f;
+  // Add lights in the scene in the SSBO
+  light::Light wFrontLight, wBackLight;
+  wFrontLight.position = { 0.0f, 0.0f, 2.0f, 0.0f };
+  wFrontLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+  wFrontLight.intensity = 1.0f;
+  wFrontLight.attenuation = 0.0f;
+  wFrontLight.radius = 10.0f;
 
-    wBackLight.position = { 2.0f, 0.0f, 0.0f, 0.0f };
-    wBackLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
-    wBackLight.intensity = 1.0f;
-    wBackLight.attenuation = 0.0f;
-    wBackLight.radius = 10.0f;
+  wBackLight.position = { 2.0f, 0.0f, 0.0f, 0.0f };
+  wBackLight.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+  wBackLight.intensity = 1.0f;
+  wBackLight.attenuation = 0.0f;
+  wBackLight.radius = 10.0f;
 
-    light::module::AddLight(wFrontLight);
-    light::module::AddLight(wBackLight);
+  light::module::AddLight(wFrontLight);
+  light::module::AddLight(wBackLight);
 
-    glGenVertexArrays(2, vertex_array_IDs);
-    ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",
-      vertex_array_IDs[0], vertex_array_IDs[1]);
+  glGenVertexArrays(2, vertex_array_IDs);
+  ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO IDs = %d & %d respectively for axes and box.\n",
+    vertex_array_IDs[0], vertex_array_IDs[1]);
 
-    glBindVertexArray(vertex_array_IDs[0]);
-    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[0]);
-    InitializeAxes();
+  glBindVertexArray(vertex_array_IDs[0]);
+  ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[0]);
+  InitializeAxes();
 
-    glBindVertexArray(vertex_array_IDs[1]);
-    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[1]);
-    InitializeTestingBox();
+  glBindVertexArray(vertex_array_IDs[1]);
+  ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_IDs[1]);
+  InitializeTestingBox();
 
-    glBindVertexArray(0);
-  });
+  glBindVertexArray(0);
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {
-    skybox::Destroy();
-    if (axes_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
-      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating vertex VBO\n");
-      glDeleteBuffers(1, &axes_VBO_IDs[POSITIONS_VBO_IDX]);
-      axes_VBO_IDs[POSITIONS_VBO_IDX] = 0;
-    }
-    if (axes_VBO_IDs[COLORS_VBO_IDX] != 0) {
-      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating color VBO\n");
-      glDeleteBuffers(1, &axes_VBO_IDs[COLORS_VBO_IDX]);
-      axes_VBO_IDs[COLORS_VBO_IDX] = 0;
-    }
-    if (box_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
-      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating vertex VBO\n");
-      glDeleteBuffers(1, &box_VBO_IDs[POSITIONS_VBO_IDX]);
-      box_VBO_IDs[POSITIONS_VBO_IDX] = 0;
-    }
-    if (box_VBO_IDs[COLORS_VBO_IDX] != 0) {
-      ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating color VBO\n");
-      glDeleteBuffers(1, &box_VBO_IDs[COLORS_VBO_IDX]);
-      box_VBO_IDs[COLORS_VBO_IDX] = 0;
-    }
+  skybox::Destroy();
+  if (axes_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
+    ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating vertex VBO\n");
+    glDeleteBuffers(1, &axes_VBO_IDs[POSITIONS_VBO_IDX]);
+    axes_VBO_IDs[POSITIONS_VBO_IDX] = 0;
+  }
+  if (axes_VBO_IDs[COLORS_VBO_IDX] != 0) {
+    ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating color VBO\n");
+    glDeleteBuffers(1, &axes_VBO_IDs[COLORS_VBO_IDX]);
+    axes_VBO_IDs[COLORS_VBO_IDX] = 0;
+  }
+  if (box_VBO_IDs[POSITIONS_VBO_IDX] != 0) {
+    ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating vertex VBO\n");
+    glDeleteBuffers(1, &box_VBO_IDs[POSITIONS_VBO_IDX]);
+    box_VBO_IDs[POSITIONS_VBO_IDX] = 0;
+  }
+  if (box_VBO_IDs[COLORS_VBO_IDX] != 0) {
+    ImGuiLog::GetInstance().AddLog("scene::Terminate -> Deallocating color VBO\n");
+    glDeleteBuffers(1, &box_VBO_IDs[COLORS_VBO_IDX]);
+    box_VBO_IDs[COLORS_VBO_IDX] = 0;
+  }
 
-    // Should already be done, but just in case
-    light::module::Terminate();
-  });
+  glDeleteVertexArrays(2, vertex_array_IDs);
 }
 
 void UpdateMaterial(const light::Material& a_material) { box_material = a_material; }

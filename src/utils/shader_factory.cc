@@ -17,7 +17,6 @@
 #include <vector>
 #include <map>
 #include <fstream>
-#include <mutex>
 
 #include "utils/imgui/imgui_log.h"
 
@@ -30,21 +29,22 @@ std::map<GLuint, std::vector<std::string> >         shader_programs;
 std::vector<GLuint>                                 compilation_cache;
 std::vector<std::string>                            compilation_sources;
 std::string                                         shader_base_path;
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 }
 void Init() {
-  std::call_once(init_flag, [&]() {
-  });
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {
-    ImGuiLog::GetInstance().AddLog("shader_factory::Terminate -> Deleting shader programs.\n");
-    for (auto shader : shader_programs) {
-      glDeleteProgram(shader.first);
-    }
-  });
+  ImGuiLog::GetInstance().AddLog("shader_factory::Terminate -> Deleting shader programs.\n");
+  for (const auto& shader : shader_programs) {
+    glDeleteProgram(shader.first);
+  }
+  shader_programs.clear();
+  // Shaders compiled but never linked into a program
+  for (GLuint shader : compilation_cache) {
+    glDeleteShader(shader);
+  }
+  compilation_cache.clear();
+  compilation_sources.clear();
 }
 
 void SetShadersFolderBasePath(const std::string & a_sPath) {

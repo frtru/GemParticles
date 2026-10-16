@@ -14,7 +14,6 @@
 #include "utils/light_module.hh"
 
 #include <vector>
-#include <mutex>
 
 #include "utils/shader_module.hh"
 #include "utils/imgui/imgui_log.h"
@@ -25,8 +24,6 @@ namespace light {
 constexpr GLuint        LIGHTS_SSBO_BINDING_POINT = 1U;
 std::vector<Light>      _Lights;
 bool                    _DirtyFlag;
-std::once_flag          _InitFlag;
-std::once_flag          _TerminateFlag;
 
 void UpdateGPUBufferSize() {
   // Check if capacity changed after add
@@ -40,17 +37,17 @@ void UpdateGPUBufferSize() {
 
 namespace module {
 void Init() {
-  std::call_once(_InitFlag, [&]() {
-    _DirtyFlag = false;
-    shader::module::RegisterSSBOBlock(
-      LIGHTS_SSBO_BINDING_POINT,
-      _Lights.size() * sizeof(Light),
-      static_cast<void*>(_Lights.data()));
-  });
+  _DirtyFlag = false;
+  shader::module::RegisterSSBOBlock(
+    LIGHTS_SSBO_BINDING_POINT,
+    _Lights.size() * sizeof(Light),
+    static_cast<void*>(_Lights.data()));
 }
 
 void Terminate() {
-  std::call_once(_TerminateFlag, [&]() {});
+  // The lights SSBO is released by the shader module
+  _Lights.clear();
+  _DirtyFlag = false;
 }
 
 

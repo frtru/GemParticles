@@ -65,6 +65,11 @@ public:
     _CurrentTime = std::chrono::steady_clock::now();
   }
 
+  // Restarts the measurement, so a long pause (e.g. loading a project) isn't seen as a frame
+  inline void Reset() {
+    _PreviousTime = _CurrentTime = std::chrono::steady_clock::now();
+  }
+
   inline double GetFPS() const {
     return NANO_PER_SEC / GetTimeElapsed<std::chrono::nanoseconds>();
   }

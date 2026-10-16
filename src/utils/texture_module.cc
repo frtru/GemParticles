@@ -18,26 +18,19 @@
 #include <map>
 #include <iostream>
 #include <fstream>
-#include <mutex>
 
 #include "utils/texture_factory.hh"
 
 namespace texture {
 namespace module {
 namespace {
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 }
 void Init() {
-  std::call_once(init_flag, [&]() {
-    texture::factory::Init();
-  });
+  texture::factory::Init();
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {
-    texture::factory::Terminate();
-  });
+  texture::factory::Terminate();
 }
 } /* namespace module */
 } /* namespace texture */

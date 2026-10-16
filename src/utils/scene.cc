@@ -13,7 +13,6 @@
 *************************************************************************/
 #include "utils/scene.hh"
 
-#include <mutex>
 
 #include <GL/glew.h>
 
@@ -42,8 +41,6 @@ GLuint  vertex_array_ID;
 GLuint  vertex_buffer_ID;
 GLuint  shader_program_ID;
 
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 
 void DrawAxes() {
   shader::module::Use(shader_program_ID);
@@ -56,36 +53,34 @@ void DrawAxes() {
 }
 
 void Init(bool a_isDebug) {
-  std::call_once(init_flag, [&]() {
-    debug_mode = a_isDebug;
+  debug_mode = a_isDebug;
 
-    shader::factory::CompileShaderFile("debug_axes.vert", GL_VERTEX_SHADER);
-    shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
-    shader_program_ID = shader::factory::CreateProgram();
+  shader::factory::CompileShaderFile("debug_axes.vert", GL_VERTEX_SHADER);
+  shader::factory::CompileShaderFile("default.frag", GL_FRAGMENT_SHADER);
+  shader_program_ID = shader::factory::CreateProgram();
 
-    glGenVertexArrays(1, &vertex_array_ID);
-    ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO ID = %d\n", vertex_array_ID);
-    glBindVertexArray(vertex_array_ID);
-    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_ID);
-    glEnableVertexAttribArray(0);
+  glGenVertexArrays(1, &vertex_array_ID);
+  ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated VAO ID = %d\n", vertex_array_ID);
+  glBindVertexArray(vertex_array_ID);
+  ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated array memory for ID = %d\n", vertex_array_ID);
+  glEnableVertexAttribArray(0);
 
-    glGenBuffers(1, &vertex_buffer_ID);
-    ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated color VBO ID = %d\n", vertex_buffer_ID);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
-    ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated buffer memory for ID = %d\n", vertex_buffer_ID);
-    glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), AXES_POINTS, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-  });
+  glGenBuffers(1, &vertex_buffer_ID);
+  ImGuiLog::GetInstance().AddLog("Scene::Init -> Generated color VBO ID = %d\n", vertex_buffer_ID);
+  glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_ID);
+  ImGuiLog::GetInstance().AddLog("Scene::Init -> Allocated buffer memory for ID = %d\n", vertex_buffer_ID);
+  glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), AXES_POINTS, GL_STATIC_DRAW);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {
-    if (vertex_buffer_ID != 0) {
-      ImGuiLog::GetInstance().AddLog("scene::Terminate->Deallocating vertex VBO\n");
-      glDeleteBuffers(1, &vertex_buffer_ID);
-      vertex_buffer_ID = 0;
-    }
-  });
+  if (vertex_buffer_ID != 0) {
+    ImGuiLog::GetInstance().AddLog("scene::Terminate->Deallocating vertex VBO\n");
+    glDeleteBuffers(1, &vertex_buffer_ID);
+    vertex_buffer_ID = 0;
+  }
+  glDeleteVertexArrays(1, &vertex_array_ID);
+  vertex_array_ID = 0;
 }
 
 bool IsDebug() { return debug_mode; }

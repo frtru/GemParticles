@@ -14,11 +14,6 @@
 #ifndef APP_HH
 #define APP_HH
 
-#include <cstddef>
-#include <string>
-
-#include "options.hh"
-
 namespace gem {
 namespace particle {
 namespace app {
@@ -28,18 +23,14 @@ enum ErrCode {
   PROJECT_LOADING_ERROR   = 0x02,
   UNRECOGNIZED_BLUEPRINT  = 0x03,
   MEMORY_ACCESS_ERROR     = 0x04,
-  APP_LOGIC_ERROR         = 0x05
+  APP_LOGIC_ERROR         = 0x05,
+  CONFIG_ERROR            = 0x06
 }; /* enum ErrCode */
 
-struct Status {
-  bool        _Running;
-  ErrCode     _Error;
-};
-
 void LoadProjects();
-ErrCode Launch(const Options& a_Options);
-ErrCode GetAppStatusError();
-void SetAppStatusError(ErrCode a_unErrorCode);
+// Runs the app from its command line: config, window, then the projects until the
+// window closes or a system asks to exit. Returns the process exit code.
+int Run(int argc, const char* argv[]);
 } /* namespace app */
 } /* namespace particle */
 } /* namespace gem */

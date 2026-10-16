@@ -17,7 +17,6 @@
 #include <vector>
 #include <map>
 #include <fstream>
-#include <mutex>
 
 #include "utils/shader_factory.hh"
 #include "utils/imgui/imgui_log.h"
@@ -33,27 +32,25 @@ std::map<GLuint, std::map<std::string, GLuint> >      attrib_list;
 std::map<BindingPoint, ID >                           uniform_block_list;
 std::map<BindingPoint, std::pair<ID, SSBOCapacity> >  SSBO_list;
 
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 }
 
 void Init() {
-  std::call_once(init_flag, [&]() {
-    shader::factory::Init();
-  });
+  shader::factory::Init();
 }
 
 void Terminate() {
-  std::call_once(terminate_flag, [&]() {
-    shader::factory::Terminate();
-    ImGuiLog::GetInstance().AddLog("shader_module::Terminate -> Deleting UBOs.\n");
-    for (auto uniformBlocks : uniform_block_list) {
-      glDeleteBuffers(1, &uniformBlocks.second);
-    }
-    for (auto SSBO : SSBO_list) {
-      glDeleteBuffers(1, &SSBO.second.first);
-    }
-  });
+  shader::factory::Terminate();
+  ImGuiLog::GetInstance().AddLog("shader_module::Terminate -> Deleting UBOs.\n");
+  for (auto uniformBlocks : uniform_block_list) {
+    glDeleteBuffers(1, &uniformBlocks.second);
+  }
+  for (auto SSBO : SSBO_list) {
+    glDeleteBuffers(1, &SSBO.second.first);
+  }
+  uniform_block_list.clear();
+  SSBO_list.clear();
+  attrib_list.clear();
+  current_program = 0;
 }
 
 GLuint GetProgramID() { 

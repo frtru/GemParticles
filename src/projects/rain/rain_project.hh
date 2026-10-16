@@ -14,10 +14,14 @@
 #ifndef RAIN_PROJECT_HH
 #define RAIN_PROJECT_HH
 
+#include <memory>
+
 namespace gem { namespace particle {
+class GraphicContext;
+
 namespace rain_project {
-void Init();
-void Run();
+void Init(const std::shared_ptr<GraphicContext>& a_pContext);
+void Update(double a_dt);
 void Terminate();
 } /* namespace rain_project */
 } /* namespace particle */

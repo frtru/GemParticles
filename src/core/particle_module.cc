@@ -17,25 +17,20 @@
 #include <vector>
 #include <map>
 #include <string>
-#include <mutex>
 #include <numeric>
 
 namespace gem {
 namespace particle {
 namespace particle_module {
 namespace {
-std::once_flag init_flag;
-std::once_flag terminate_flag;
 std::vector<std::unique_ptr<IParticleSystem> > m_pSystems;
 }
 
-void Init() { std::call_once(init_flag,[&](){}); }
+void Init() {}
 void Terminate() {
-  std::call_once(terminate_flag,[&](){
-    // Systems own GL resources through their renderer: release them now, while the
-    // GL context and the ImGui logger are alive, rather than during static destruction
-    m_pSystems.clear();
-  });
+  // Systems own GL resources through their renderer: release them now, while the
+  // GL context and the ImGui logger are alive, rather than during static destruction
+  m_pSystems.clear();
 }
 
 void Update(double a_dt) {

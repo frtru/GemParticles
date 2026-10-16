@@ -16,29 +16,62 @@
 //C++ system files
 #include <filesystem>
 #include <iostream>
+#include <memory>
+#include <optional>
 //Other libraries' .h files
 //Your project's .h files
+#include "main/app_registry.hh"
+#include "main/app_world.hh"
+#include "main/config.hh"
+#include "main/options.hh"
 #include "projects/project_dictionary.hh"
+#include "utils/graphic_contexts/graphic_context.hh"
+#include "utils/graphic_contexts/graphic_context_factory.hh"
+#include "utils/timer.hh"
 
 namespace gem {
 namespace particle {
 namespace app {
 namespace {
-bool    _ProjectsLoaded = false;
-Status  _AppStatus;
+bool _ProjectsLoaded = false;
 
-// Shaders and textures are loaded relative to the executable's folder
-void MoveToExecutableDirectory() {
+// Shaders, textures and the default config are next to the executable
+std::filesystem::path ExecutableDirectory() {
 #ifdef __linux__
   std::error_code error;
   const auto executable = std::filesystem::read_symlink("/proc/self/exe", error);
   if (!error) {
-    std::filesystem::current_path(executable.parent_path(), error);
+    return executable.parent_path();
   }
-  if (error) {
-    std::cerr << __func__ << " -> " << error.message() << std::endl;
-  }
+  std::cerr << __func__ << " -> " << error.message() << std::endl;
 #endif
+  return std::filesystem::current_path();
+}
+
+int Fail(ErrCode a_eError, const std::string& a_sReason) {
+  std::cerr << "Run -> " << a_sReason << std::endl;
+  return a_eError;
+}
+
+void RunSystems(std::function<void(AppWorld&)> AppSystem::*a_pHook, AppWorld& a_rWorld) {
+  for (const auto& system : AppSystems()) {
+    if (const auto& hook = system.second.*a_pHook) {
+      hook(a_rWorld);
+    }
+  }
+}
+
+// Every project starts from the same render state, and leaves no input callbacks behind
+void StartProject(const Project& a_Project, const std::shared_ptr<GraphicContext>& a_pContext, AppWorld& a_rWorld) {
+  a_pContext->ResetRenderState();
+  a_Project.init(a_pContext);
+  RunSystems(&AppSystem::onProjectStarted, a_rWorld);
+}
+
+void StopProject(const Project& a_Project, AppWorld& a_rWorld) {
+  RunSystems(&AppSystem::onProjectStopped, a_rWorld);
+  a_Project.terminate();
+  a_rWorld.context.SetInputCallbacks({});
 }
 }
 
@@ -49,33 +82,62 @@ void LoadProjects() {
   }
 }
 
-ErrCode Launch(const Options& a_Options) {
-  // Load the projects beforehand, in case the user forgot to
+int Run(int argc, const char* argv[]) {
+  // The project argument is checked against the registered ones
   LoadProjects();
-  GraphicContext::SetOptions(a_Options.context);
-  MoveToExecutableDirectory();
-
-  // Check if the project in input is recognized in the dictionary
-  ProjectPipeline *wPipeline = project_dict::LookUp(a_Options.project);
-  if (wPipeline == nullptr) {
-    _AppStatus._Error = UNRECOGNIZED_PROJECT;
-    _AppStatus._Running = false;
-    std::cerr << __func__ << " -> Unrecognized project error." << std::endl;
+  Options options;
+  if (const std::optional<int> exitCode = ParseOptions(argc, argv, options)) {
+    return *exitCode;
   }
-  else
-  {
-    _AppStatus._Error = NO_ERROR;
-    // Execute the pipeline of the project sequentially
-    for (auto stage : *wPipeline) {
-      stage();
+
+  // Loaded before moving to the executable's folder: its relative paths are the user's
+  const std::filesystem::path executableDirectory = ExecutableDirectory();
+  std::optional<Config> config = LoadConfig(
+    options.configPath.empty() ? (executableDirectory / "config.json").string() : options.configPath);
+  if (!config) {
+    return Fail(CONFIG_ERROR, "Invalid config");
+  }
+  std::filesystem::current_path(executableDirectory);
+
+  const std::string projectName = options.project.empty() ? config->defaultProject : options.project;
+  const Project* project = project_dict::LookUp(projectName);
+  if (project == nullptr) {
+    return Fail(UNRECOGNIZED_PROJECT, "Unrecognized project " + projectName);
+  }
+  const std::shared_ptr<GraphicContext> context = CreateGraphicContext(config->backend);
+  if (context == nullptr) {
+    return Fail(CONFIG_ERROR, "No graphic context");
+  }
+
+  // The app owns the window and the frame; the project and the systems plug into it
+  context->Init(config->window);
+  AppWorld world{ std::move(config->components), *context, projectName };
+  StartProject(*project, context, world);
+
+  timer::Chrono& chrono = timer::Chrono::GetInstance();
+  while (!world.exitRequested && !context->PollWindowClosedEvent()) {
+    const double dt = chrono.GetTimeElapsedInSeconds();
+    context->NewFrame();
+    RunSystems(&AppSystem::update, world);
+    project->update(dt);
+    context->Update();
+    chrono.Update();
+
+    // Projects are switched between frames
+    if (world.nextProjectRequested) {
+      world.nextProjectRequested = false;
+      StopProject(*project, world);
+      world.project = project_dict::NextProjectName(world.project);
+      project = project_dict::LookUp(world.project);
+      StartProject(*project, context, world);
+      chrono.Reset(); // Loading the project isn't part of the next frame
     }
   }
-  return _AppStatus._Error;
-}
 
-ErrCode GetAppStatusError() { return _AppStatus._Error; }
-void SetAppStatusError(ErrCode a_unErrorCode) { _AppStatus._Error = a_unErrorCode; }
+  StopProject(*project, world);
+  context->Terminate();
+  return NO_ERROR;
+}
 } /* namespace app */
 } /* namespace particle */
 } /* namespace gem */
-

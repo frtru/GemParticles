@@ -18,9 +18,9 @@ namespace particle {
 bool GraphicContext::m_bInitialized = false;
 bool GraphicContext::m_bTerminated = false;
 
-void GraphicContext::Init() {
+void GraphicContext::Init(const WindowOptions& a_Options) {
   if (!m_bInitialized) {
-    InitImpl();
+    InitImpl(a_Options);
     m_bInitialized = true;
   }
   // TODO: Else log error, already initialized or something

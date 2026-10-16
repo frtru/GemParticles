@@ -17,15 +17,12 @@
 #include <memory>
 //Other libraries' .h files
 //Your project's .h files
-#include "utils/timer.hh"
 #include "utils/shader_module.hh"
 #include "utils/shader_factory.hh"
 #include "utils/texture_module.hh"
 #include "utils/camera.hh"
-#include "utils/imgui/imgui_log.h"
-#include "utils/imgui/imgui_property_editor.h"
 #include "utils/light_module.hh"
-#include "utils/graphic_contexts/opengl_context.hh"
+#include "utils/graphic_contexts/graphic_context.hh"
 #include "core/particle_module.hh"
 
 // Specific project particle blueprints
@@ -34,18 +31,7 @@
 
 namespace gem { namespace particle {
 namespace light_project {
-namespace {
-// A pointer to interface, to enable flexibility over
-// window management system or 3D API (GLFW/Windows
-// & OpenGL/Direct3D)
-std::shared_ptr<GraphicContext> graphic_context;
-}
-
-void Init() {
-  // OpenGL setup
-  graphic_context = std::make_shared<OpenGLContext>();
-  graphic_context->Init();
-
+void Init(const std::shared_ptr<GraphicContext>& a_pContext) {
   shader::module::Init();
   shader::factory::SetShadersFolderBasePath("shaders/Light");
   texture::module::Init();
@@ -58,8 +44,8 @@ void Init() {
     glm::vec3(0, 1, 0));  // Head is up (set to 0,-1,0 to look upside-down)
   camera::SetPerspectiveProjection( 
     glm::radians(45.0f),
-    graphic_context->GetWindowWidth(),
-    graphic_context->GetWindowHeight(),
+    a_pContext->GetWindowWidth(),
+    a_pContext->GetWindowHeight(),
     0.1f, 100.0f);
 
   // Light module initialization
@@ -73,31 +59,14 @@ void Init() {
   particle_module::Init();
 
   // Event handler initialization
-  event_handler::Init(graphic_context);
+  event_handler::Init(a_pContext);
 }
 
-void Run() {
-  while (!graphic_context->PollWindowClosedEvent()) {
-    const double dt = timer::Chrono::GetInstance().GetTimeElapsedInSeconds();
-
-    graphic_context->NewFrame();
-
-    ImGui::Begin("Stats");
-    ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::Text("Total active particles = %zu\n", particle_module::GetActiveParticlesCount());
-    ImGui::End();
-
-    scene::Render();
-    particle_module::Update(dt);
-    event_handler::Update(); // Has to be placed before before clearing depth buffer bit
-    light::module::FlushDataToGPU();
-
-    ImGuiPropertyEditor::GetInstance().Draw("Property editor");
-    ImGuiLog::GetInstance().Draw("Debugging logs");
-
-    graphic_context->Update();
-    timer::Chrono::GetInstance().Update();
-  }
+void Update(double a_dt) {
+  scene::Render();
+  particle_module::Update(a_dt);
+  event_handler::Update(); // Has to be placed before before clearing depth buffer bit
+  light::module::FlushDataToGPU();
 }
 
 void Terminate() {
@@ -108,7 +77,6 @@ void Terminate() {
   event_handler::Terminate();
   texture::module::Terminate();
   shader::module::Terminate();
-  graphic_context->Terminate();
 }
 } /* namespace light_project */
 } /* namespace particle */

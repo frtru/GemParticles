@@ -1,0 +1,18 @@
+{
+  // Graphics backend that creates the window and renders: "opengl"
+  "graphics": { "backend": "opengl" },
+
+  // Fullscreen uses the primary monitor at its resolution
+  "window": { "width": 1600, "height": 900, "fullscreen": false },
+
+  // Project launched when none is given on the command line
+  "projects": { "default": "attractor" },
+
+  // What the app is made of. Available types: DebugOverlay (stats, property editor
+  // and log windows), NextProjectKey (ImGui key name: "N", "Tab", "F5", ...) and
+  // ScriptedRun ("frames", optional "screenshot": exits after that many frames).
+  "components": [
+    { "type": "DebugOverlay" },
+    { "type": "NextProjectKey", "key": "N" }
+  ]
+}

@@ -36,6 +36,7 @@ find_package(glm REQUIRED)
 find_package(imgui REQUIRED)
 find_package(stb REQUIRED)
 find_package(CLI11 REQUIRED)
+find_package(nlohmann_json REQUIRED)
 
 # Project headers are included from src/; dependency headers come with their imported targets
 include_directories(src)

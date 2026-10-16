@@ -71,6 +71,7 @@ LitParticlesRenderer::~LitParticlesRenderer() {
     glDeleteBuffers(1, &m_vertexBufferID);
     m_vertexBufferID = 0;
   }
+  glDeleteVertexArrays(1, &m_vertexArrayID);
 }
 
 void LitParticlesRenderer::Bind(const std::shared_ptr<ParticlePool<LitParticlesData> > &a_pPool) {

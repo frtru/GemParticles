@@ -14,10 +14,14 @@
 #ifndef SKYBOX_PROJECT_HH
 #define SKYBOX_PROJECT_HH
 
+#include <memory>
+
 namespace gem { namespace particle {
+class GraphicContext;
+
 namespace skybox_project {
-void Init();
-void Run();
+void Init(const std::shared_ptr<GraphicContext>& a_pContext);
+void Update(double a_dt);
 void Terminate();
 } /* namespace skybox_project */
 } /* namespace particle */

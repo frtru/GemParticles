@@ -5,7 +5,7 @@
 #   --nvidia  render on the discrete NVIDIA GPU through PRIME render offload
 #             (without it, the default GPU is used: the integrated Intel one on this laptop)
 #   --cfg     which build to run (default: Release)
-# App arguments: see `scripts/run.sh --help`
+# App arguments: [project] [--config path], see `scripts/run.sh --help`
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

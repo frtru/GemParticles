@@ -29,8 +29,8 @@ namespace project_dict {
 namespace {
 std::once_flag init_flag;
 // For readability, we define the dictionary as collection of entries
-// mapping strings with pipelines
-using ProjectDictionary = std::map<std::string, ProjectPipeline>;
+// mapping strings with projects
+using ProjectDictionary = std::map<std::string, Project>;
 ProjectDictionary _Dict;
 }/* unnamed namespace */
 
@@ -44,13 +44,9 @@ void Init() {
   });
 }
 
-ProjectPipeline* LookUp(const std::string& a_sProjectName) {
-  for (auto& entry : _Dict) {
-    if (entry.first.compare(a_sProjectName) == 0) {
-      return &entry.second;
-    }
-  }
-  return nullptr;
+const Project* LookUp(const std::string& a_sProjectName) {
+  const auto entry = _Dict.find(a_sProjectName);
+  return entry != _Dict.end() ? &entry->second : nullptr;
 }
 
 std::vector<std::string> GetProjectNames() {
@@ -60,26 +56,13 @@ std::vector<std::string> GetProjectNames() {
   }
   return names;
 }
-// NOTE: For the add functions, this is what happens when using them:
-//
-// If the project is not already in the dictionary,
-// construct the key by copy and default construct the
-// pipeline and add a stage/sub-pipeline to it. Otherwise, simply
-// access the pipeline and a stage/sub-pipeline to it.
-void AddStage(const std::string& a_sProjectName, const ProjectStage&& a_fProjectStage) {
-  _Dict[a_sProjectName].push_back(std::move(a_fProjectStage));
+std::string NextProjectName(const std::string& a_sProjectName) {
+  const auto next = _Dict.upper_bound(a_sProjectName);
+  return (next != _Dict.end() ? next : _Dict.begin())->first;
 }
 
-void AddPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline) {
-  _Dict[a_sProjectName].insert(a_vProjectPipeline.end(),
-    a_vProjectPipeline.begin(),
-    a_vProjectPipeline.end());
-  std::cout << "Added pipeline to project " << a_sProjectName << "." << std::endl; 
-}
-
-void SetPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline) {
-  _Dict[a_sProjectName].clear();
-  _Dict[a_sProjectName] = std::move(a_vProjectPipeline);
+void Register(const std::string& a_sProjectName, Project a_Project) {
+  _Dict[a_sProjectName] = std::move(a_Project);
   std::cout << "Project " << a_sProjectName << " has been registered." << std::endl; 
 }
 } /* namespace project_dict */
