@@ -52,6 +52,14 @@ ProjectPipeline* LookUp(const std::string& a_sProjectName) {
   }
   return nullptr;
 }
+
+std::vector<std::string> GetProjectNames() {
+  std::vector<std::string> names;
+  for (const auto& entry : _Dict) {
+    names.push_back(entry.first);
+  }
+  return names;
+}
 // NOTE: For the add functions, this is what happens when using them:
 //
 // If the project is not already in the dictionary,

@@ -53,6 +53,10 @@ glm::vec3 up_vector;
 // Some helper functions
 void UpdateProjectionView() {
   ProjectionView = camera::GetProjectionMatrix() * camera::GetViewMatrix();
+  // std140 pads each vec3 to a vec4 slot: upload padded copies instead of reading past the vec3s
+  glm::vec4 eyeTargetUp[] = {
+    glm::vec4(eye_position, 1.0f), glm::vec4(target_position, 1.0f), glm::vec4(up_vector, 0.0f)
+  };
   shader::module::SetUniformBlockValue(
     CameraInfoBindingPoint,
     0, 
@@ -62,20 +66,8 @@ void UpdateProjectionView() {
   shader::module::SetUniformBlockValue(
     CameraInfoBindingPoint,
     sizeof(ProjectionView),
-    sizeof(glm::vec4),
-    glm::value_ptr(eye_position)
-  );
-  shader::module::SetUniformBlockValue(
-    CameraInfoBindingPoint,
-    sizeof(ProjectionView) + sizeof(glm::vec4),
-    sizeof(glm::vec4),
-    glm::value_ptr(target_position)
-  );
-  shader::module::SetUniformBlockValue(
-    CameraInfoBindingPoint,
-    sizeof(ProjectionView) + sizeof(glm::vec4) + sizeof(glm::vec4),
-    sizeof(glm::vec4),
-    glm::value_ptr(up_vector)
+    sizeof(eyeTargetUp),
+    eyeTargetUp
   );
 }
 

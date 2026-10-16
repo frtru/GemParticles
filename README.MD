@@ -21,13 +21,13 @@ Here are some highlights that I managed to create with this system. Please note 
 | ![](gifs_and_screenshots/lit_particles.gif)  | ![](gifs_and_screenshots/attractor_2_cropped.gif) | ![](gifs_and_screenshots/heavy_rain_cropped_big.gif) |
 
 ## Launching or installing the project
-The project uses CMake files for portability and the [Conan package manager](https://conan.io) to manage the dependencies so in order to launch the whole thing you have to
-1. Ensure you have both CMake (at least 3.10) and Conan installed. See https://cmake.org/install/ and https://docs.conan.io/en/latest/installation.html respectively for more details.
-2. `mkdir build && cd build`
-3. `conan install ..` (NOTE: it's possible you have to run `conan profile new default --detect` beforehand and set prefered compiler and architecture to 64 bits which is the architecture I've been using)
-4. Generate the projects using CMake (`cmake .. -G "MY PREFERED BUILD TOOL"`)
-5. Build using the generated files
-6. Launch by passing the project name to the executable (e.g. `./GemparticlesApp.exe lit_particles`)
+The project uses CMake files for portability and the [Conan 2 package manager](https://conan.io) to manage the dependencies. On Linux (verified on Ubuntu 24.04 with gcc 13 and CMake 3.28):
+1. `scripts/bootstrap.sh` installs Conan into `.venv` if needed and generates the `conan-release`, `conan-debug` and `conan-relwithdebinfo` CMake presets (dependencies are always built in Release).
+2. `cmake --preset conan-release && cmake --build --preset conan-release` (or `conan-debug` / `conan-relwithdebinfo`).
+3. `scripts/run.sh lit_particles` launches a project (`attractor`, `light`, `lit_particles`, `rain` or `skybox`; the first one when omitted).
+   * `--nvidia` renders on a discrete NVIDIA GPU through PRIME offload, `--cfg Debug` runs another build.
+   * `scripts/run.sh --help` lists the app options (`--fullscreen`, `--frames N`, `--screenshot out.png`).
+   * Debug builds create a GL debug context; driver errors and warnings go to the log window and stderr.
 
 ## External libraries
 I'm using various external libraries in this project which are listed in the file conanfile.txt 

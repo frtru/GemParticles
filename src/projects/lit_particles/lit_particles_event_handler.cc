@@ -61,7 +61,7 @@ bool firstMouse = true;
 // Handles
 std::shared_ptr<GraphicContext>         context_handle;
 
-void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
+void MouseButtonCallBack(int a_nButtonID, int a_nAction, int a_nMods) {
   switch (a_nButtonID) {
   case GLFW_MOUSE_BUTTON_LEFT:
     if (a_nAction == GLFW_PRESS) {
@@ -87,7 +87,7 @@ void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, 
   }
 }
 
-void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a_dYPos) {
+void MouseCursorPositionCallback(double a_dXPos, double a_dYPos) {
   if (mouse_state == CAMERA_MOVING) {
     /*
     * Reference: https://learnopengl.com/index.php#!Getting-started/Camera
@@ -146,7 +146,7 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
   }
 }
 
-void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nAction, int n_aMods) {
+void KeyCallback(int a_nKeyID, int a_nScanCode, int a_nAction, int n_aMods) {
   if (a_nAction == GLFW_PRESS || a_nAction == GLFW_REPEAT) {
   auto position       = camera::GetEyePosition();
   auto targetPosition = camera::GetTargetPosition();
@@ -191,10 +191,9 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
   }
 }
 
-void FramebufferSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight) {
+void FramebufferSizeCallback(int a_nWidth, int a_nHeight) {
   _WindowWidth = a_nWidth;
   _WindowHeight = a_nHeight;
-  glViewport(0, 0, a_nWidth, a_nHeight);
   camera::SetPerspectiveProjection(
     glm::radians(45.0f),
     a_nWidth, a_nHeight,
@@ -220,13 +219,10 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt) {
 
     context_handle = a_pCtxt;
     mouse_state = FREE_CURSOR;
-    GLFWwindow* window = static_cast<GLFWwindow*>(context_handle->GetWindowHandle());
 
     // Set callbacks
-    glfwSetMouseButtonCallback(window, MouseButtonCallBack);
-    glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
-    glfwSetKeyCallback(window, KeyCallback);
-    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
+    context_handle->SetInputCallbacks({ MouseButtonCallBack, MouseCursorPositionCallback,
+      KeyCallback, FramebufferSizeCallback });
   });
 }
 

@@ -30,7 +30,13 @@ std::vector<std::unique_ptr<IParticleSystem> > m_pSystems;
 }
 
 void Init() { std::call_once(init_flag,[&](){}); }
-void Terminate() { std::call_once(terminate_flag,[&](){ }); }
+void Terminate() {
+  std::call_once(terminate_flag,[&](){
+    // Systems own GL resources through their renderer: release them now, while the
+    // GL context and the ImGui logger are alive, rather than during static destruction
+    m_pSystems.clear();
+  });
+}
 
 void Update(double a_dt) {
   // TODO: This update could very well be 

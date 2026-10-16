@@ -350,3 +350,8 @@ build/*
 
 # Misc
 *.csv
+.venv/
+.cursor/
+
+# Conan-generated presets (point at build/<Cfg>/generators)
+CMakeUserPresets.json

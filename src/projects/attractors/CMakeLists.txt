@@ -9,6 +9,11 @@ file(GLOB SOURCE_FILES
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
+# GCC/Clang only allow AVX intrinsics in code compiled for an AVX target
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  set_source_files_properties(avx_particle_attractor.cc PROPERTIES COMPILE_OPTIONS "-mavx2;-mfma")
+endif ()
+
 target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers ParticleSystems ${CONAN_LIBS})
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}

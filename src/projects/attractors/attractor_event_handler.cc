@@ -18,7 +18,6 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "utils/imgui/imgui_glfw.h"
 //#include <AntTweakBar.h>
 
 #include "utils/graphic_contexts/graphic_context.hh"
@@ -38,10 +37,6 @@ std::once_flag init_flag;
 std::once_flag terminate_flag;
 
 // TODO: If it's worth it, move these settings someplace else
-// Window dimension
-int _WindowWidth  = 640;
-int _WindowHeight = 480;
-
 // Camera settings
 glm::vec3 camera_direction;
 float camera_speed;
@@ -71,7 +66,7 @@ std::shared_ptr<GraphicContext>         context_handle;
 std::shared_ptr<ParticleAttractor>      _AttractorHandle;
 std::shared_ptr<ProximityColorUpdater>  _ColorUpdaterHandle;
 
-void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, int a_nMods) {
+void MouseButtonCallBack(int a_nButtonID, int a_nAction, int a_nMods) {
   //if (!TwEventMouseButtonGLFW(a_nButtonID, a_nAction)) {
   switch (a_nButtonID) {
   case GLFW_MOUSE_BUTTON_LEFT:
@@ -100,7 +95,7 @@ void MouseButtonCallBack(GLFWwindow* a_pWindow, int a_nButtonID, int a_nAction, 
   //}
 }
 
-void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a_dYPos) {
+void MouseCursorPositionCallback(double a_dXPos, double a_dYPos) {
   //if (!TwEventMousePosGLFW(static_cast<int>(a_dXPos), static_cast<int>(a_dYPos))) {
     if (mouse_state == CAMERA_MOVING) {
       /*
@@ -147,13 +142,15 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
     else if (mouse_state == POI_MOVING) {
       glm::mat4 P = camera::GetProjectionMatrix();
       glm::mat4 V = camera::GetViewMatrix();
+      const float width = static_cast<float>(context_handle->GetWindowWidth());
+      const float height = static_cast<float>(context_handle->GetWindowHeight());
 
       glm::vec3 from = glm::unProject(
-        glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 0.0f), V, P,
-        glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+        glm::vec3(a_dXPos, height - a_dYPos, 0.0f), V, P,
+        glm::vec4(0, 0, width, height));
       glm::vec3 to = glm::unProject(
-        glm::vec3(a_dXPos, _WindowHeight - a_dYPos, 1.0f), V, P,
-        glm::vec4(0, 0, _WindowWidth, _WindowHeight));
+        glm::vec3(a_dXPos, height - a_dYPos, 1.0f), V, P,
+        glm::vec4(0, 0, width, height));
 
       const glm::f32vec3 wCameraPos = camera::GetEyePosition();
 
@@ -168,8 +165,7 @@ void MouseCursorPositionCallback(GLFWwindow* a_pWindow, double a_dXPos, double a
   //}
 }
 
-void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nAction, int n_aMods) {
-  ImGui_ImplGlfw_KeyCallback(a_pWindow, a_nKeyID, a_nScanCode, a_nAction, n_aMods);
+void KeyCallback(int a_nKeyID, int a_nScanCode, int a_nAction, int n_aMods) {
   if (a_nAction == GLFW_PRESS || a_nAction == GLFW_REPEAT) {
   auto position       = camera::GetEyePosition();
   auto targetPosition = camera::GetTargetPosition();
@@ -214,10 +210,7 @@ void KeyCallback(GLFWwindow* a_pWindow,  int a_nKeyID, int a_nScanCode, int a_nA
   }
 }
 
-void FramebufferSizeCallback(GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight) {
-  _WindowWidth = a_nWidth;
-  _WindowHeight = a_nHeight;
-  glViewport(0, 0, a_nWidth, a_nHeight);
+void FramebufferSizeCallback(int a_nWidth, int a_nHeight) {
   camera::SetPerspectiveProjection(
     glm::radians(45.0f),
     a_nWidth, a_nHeight,
@@ -272,13 +265,10 @@ void Init(const std::shared_ptr<GraphicContext>& a_pCtxt,
 
     context_handle = a_pCtxt;
     mouse_state = FREE_CURSOR;
-    GLFWwindow* window = static_cast<GLFWwindow*>(context_handle->GetWindowHandle());
 
     // Set callbacks
-    glfwSetMouseButtonCallback(window, MouseButtonCallBack);
-    glfwSetCursorPosCallback(window, MouseCursorPositionCallback);
-    glfwSetKeyCallback(window, KeyCallback);
-    glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
+    context_handle->SetInputCallbacks({ MouseButtonCallBack, MouseCursorPositionCallback,
+      KeyCallback, FramebufferSizeCallback });
   });
 }
 

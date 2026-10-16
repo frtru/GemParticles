@@ -47,7 +47,7 @@ void Init() {
   graphic_context->Init();
 
   shader::module::Init();
-  shader::factory::SetShadersFolderBasePath("shaders/skybox");
+  shader::factory::SetShadersFolderBasePath("shaders/Skybox");
   texture::module::Init();
 
   // Camera initialization
@@ -84,7 +84,7 @@ void Run() {
 
     ImGui::Begin("Stats");
     ImGui::Text("Application average %.3f ms / frame(%.1f FPS)\n", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-    ImGui::Text("Total active particles = %d\n", particle_module::GetActiveParticlesCount());
+    ImGui::Text("Total active particles = %zu\n", particle_module::GetActiveParticlesCount());
     ImGui::End();
 
     scene::Render();

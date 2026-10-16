@@ -69,6 +69,8 @@ public:
     va_start(args, fmt);
     Buf.appendfv(fmt, args);
     va_end(args);
+    // Mirrored to stderr so messages are visible without the window (headless runs, crashes)
+    fputs(Buf.c_str() + old_size, stderr);
     for (int new_size = Buf.size(); old_size < new_size; old_size++)
       if (Buf[old_size] == '\n')
         LineOffsets.push_back(old_size);
@@ -77,7 +79,10 @@ public:
 
   void    Draw(const char* title, bool* p_open = NULL)
   {
-    ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
+    // Bottom-left corner until the user moves it (then imgui.ini remembers)
+    const ImVec2 workSize = ImGui::GetMainViewport()->WorkSize;
+    ImGui::SetNextWindowPos(ImVec2(10.0f, workSize.y - 310.0f), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(500, 300), ImGuiCond_FirstUseEver);
     ImGui::Begin(title, p_open);
     if (ImGui::Button("Clear")) Clear();
     ImGui::SameLine();

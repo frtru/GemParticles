@@ -13,15 +13,41 @@
 *************************************************************************/
 #include "utils/graphic_contexts/opengl_context.hh"
 
-#include "utils/imgui/imgui_glfw.h"
-#include "utils/imgui/imgui_impl_opengl3.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include "utils/imgui/imgui_log.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
 
 #include <iostream>
+#include <unordered_set>
+#include <vector>
 
 namespace gem {
 namespace particle {
+namespace {
+#ifndef NDEBUG
+void GLAPIENTRY GLDebugCallback(GLenum a_eSource, GLenum a_eType, GLuint a_unID,
+  GLenum a_eSeverity, GLsizei a_nLength, const GLchar* a_sMessage, const void* a_pUserParam) {
+  // Performance warnings repeat every frame (e.g. per-frame buffer uploads): report each once
+  static std::unordered_set<GLuint> s_ReportedPerformanceIDs;
+  if (a_eType == GL_DEBUG_TYPE_PERFORMANCE && !s_ReportedPerformanceIDs.insert(a_unID).second) {
+    return;
+  }
+  const char* severity = a_eSeverity == GL_DEBUG_SEVERITY_HIGH   ? "HIGH" :
+                         a_eSeverity == GL_DEBUG_SEVERITY_MEDIUM ? "MEDIUM" : "LOW";
+  ImGuiLog::GetInstance().AddLog("[GL %s] %s\n", severity, a_sMessage);
+}
+#endif
+
+OpenGLContext& ContextOf(GLFWwindow* a_pWindow) {
+  return *static_cast<OpenGLContext*>(glfwGetWindowUserPointer(a_pWindow));
+}
+}
+
 OpenGLContext::OpenGLContext() 
-  : m_pWindow(nullptr) {}
+  : m_pWindow(nullptr), m_llFrameCount(0) {}
 
 OpenGLContext::~OpenGLContext() {
   // TODO: When closing window first instead of console
@@ -56,6 +82,12 @@ void OpenGLContext::Update() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+  ++m_llFrameCount;
+  const ContextOptions& options = GetOptions();
+  if (m_llFrameCount == options.maxFrames && !options.screenshotPath.empty()) {
+    SaveScreenshot(options.screenshotPath);
+  }
+
   /* Poll for and process events */
   glfwPollEvents();
 
@@ -70,12 +102,68 @@ void OpenGLContext::Update() {
 }
 
 bool OpenGLContext::PollWindowClosedEvent() {
+  const long long maxFrames = GetOptions().maxFrames;
   return glfwWindowShouldClose(m_pWindow) != 0 ||
-         glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+         glfwGetKey(m_pWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS ||
+         (maxFrames >= 0 && m_llFrameCount >= maxFrames);
+}
+
+void OpenGLContext::SaveScreenshot(const std::string& a_sPath) const {
+  // Reads the back buffer (scene + ImGui) before it gets swapped
+  int width = 0, height = 0;
+  glfwGetFramebufferSize(m_pWindow, &width, &height);
+  std::vector<unsigned char> pixels(static_cast<std::size_t>(width) * height * 3);
+  glPixelStorei(GL_PACK_ALIGNMENT, 1);
+  glReadBuffer(GL_BACK);
+  glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, pixels.data());
+
+  stbi_flip_vertically_on_write(1);
+  if (stbi_write_png(a_sPath.c_str(), width, height, 3, pixels.data(), width * 3)) {
+    std::cout << "OpenGLContext::SaveScreenshot -> Saved " << width << "x" << height
+              << " screenshot to " << a_sPath << std::endl;
+  }
+  else {
+    std::cerr << "OpenGLContext::SaveScreenshot -> Failed to write " << a_sPath << std::endl;
+  }
 }
 
 void OpenGLContext::Reshape(int a_width, int a_height) {
+  glViewport(0, 0, a_width, a_height);
+}
 
+void OpenGLContext::InstallInputCallbacks() {
+  // Installed before ImGui's backend, which chains to them: ImGui sees each event first,
+  // so the ones it wants can be kept away from the project's callbacks
+  glfwSetWindowUserPointer(m_pWindow, this);
+  glfwSetMouseButtonCallback(m_pWindow, [](GLFWwindow* a_pWindow, int a_nButton, int a_nAction, int a_nMods) {
+    // Releases always go through so a drag started outside ImGui can't get stuck
+    if (a_nAction == GLFW_PRESS && ImGui::GetIO().WantCaptureMouse) {
+      return;
+    }
+    if (const auto& callback = ContextOf(a_pWindow).GetInputCallbacks().mouseButton) {
+      callback(a_nButton, a_nAction, a_nMods);
+    }
+  });
+  glfwSetCursorPosCallback(m_pWindow, [](GLFWwindow* a_pWindow, double a_dX, double a_dY) {
+    if (const auto& callback = ContextOf(a_pWindow).GetInputCallbacks().cursorPosition) {
+      callback(a_dX, a_dY);
+    }
+  });
+  glfwSetKeyCallback(m_pWindow, [](GLFWwindow* a_pWindow, int a_nKey, int a_nScanCode, int a_nAction, int a_nMods) {
+    if (ImGui::GetIO().WantCaptureKeyboard) {
+      return;
+    }
+    if (const auto& callback = ContextOf(a_pWindow).GetInputCallbacks().key) {
+      callback(a_nKey, a_nScanCode, a_nAction, a_nMods);
+    }
+  });
+  glfwSetFramebufferSizeCallback(m_pWindow, [](GLFWwindow* a_pWindow, int a_nWidth, int a_nHeight) {
+    OpenGLContext& context = ContextOf(a_pWindow);
+    context.Reshape(a_nWidth, a_nHeight);
+    if (const auto& callback = context.GetInputCallbacks().resize) {
+      callback(a_nWidth, a_nHeight);
+    }
+  });
 }
 
 void OpenGLContext::InitImpl() {
@@ -92,8 +180,12 @@ void OpenGLContext::InitImpl() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifndef NDEBUG
+  glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+#endif
 
-  /* Create a windowed mode window and its OpenGL context */
+  /* Create the window (windowed by default, fullscreen on request) and its OpenGL context */
+  const ContextOptions& options = GetOptions();
   GLFWmonitor* monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
@@ -101,7 +193,13 @@ void OpenGLContext::InitImpl() {
   glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
   glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
   glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-  m_pWindow = glfwCreateWindow(mode->width, mode->height, "GemParticles", monitor, NULL);
+  if (options.fullscreen) {
+    m_pWindow = glfwCreateWindow(mode->width, mode->height, "GemParticles", monitor, NULL);
+  }
+  else {
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+    m_pWindow = glfwCreateWindow(1600, 900, "GemParticles", NULL, NULL);
+  }
   if (!m_pWindow) {
     glfwTerminate();
     std::cerr << "OpenGLSetup -> glfwCreateWindow failed!" << std::endl;
@@ -117,15 +215,30 @@ void OpenGLContext::InitImpl() {
   
   //TODO: Insert other glfw parameters here
 
-  // GLEW initialization
+  // GLEW initialization (experimental is required to load every entry point in a core profile)
+  glewExperimental = GL_TRUE;
   if (GLEW_OK != glewInit()) {
     std::cerr << "GLEW is not initialized!" << std::endl;
   }
+  // glewInit queries extensions the legacy way, which raises a harmless GL_INVALID_ENUM in core profile
+  glGetError();
+  std::cout << "OpenGLContext::InitImpl -> " << glGetString(GL_VENDOR) << " | "
+            << glGetString(GL_RENDERER) << " | " << glGetString(GL_VERSION) << std::endl;
+
+#ifndef NDEBUG
+  // Debug output is core since GL 4.3, the version requested above
+  glEnable(GL_DEBUG_OUTPUT);
+  glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); // Report on the offending call's stack
+  glDebugMessageCallback(GLDebugCallback, nullptr);
+  glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, nullptr, GL_FALSE);
+#endif
 
   // OpenGL initialization
   glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glViewport(0, 0, mode->width, mode->height);
+  int framebufferWidth = 0, framebufferHeight = 0;
+  glfwGetFramebufferSize(m_pWindow, &framebufferWidth, &framebufferHeight);
+  Reshape(framebufferWidth, framebufferHeight);
 
   //glEnable(GL_POINT_SMOOTH);
   glEnable(GL_CULL_FACE);
@@ -136,6 +249,8 @@ void OpenGLContext::InitImpl() {
   // TODO: Might have to send the size depending on the 
   // type of particles sent...
   //glPointSize(0.1f);
+
+  InstallInputCallbacks();
 
   // ImGui initialization
   ImGui::CreateContext();

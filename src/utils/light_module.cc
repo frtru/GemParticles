@@ -61,7 +61,7 @@ void Resize(std::size_t LightCount, const Light& defaultLight) {
   }
   _Lights.resize(LightCount, defaultLight);
   UpdateGPUBufferSize();
-  ImGuiLog::GetInstance().AddLog("light_module::Resize -> Resized lights pool to size = %d\n", LightCount);
+  ImGuiLog::GetInstance().AddLog("light_module::Resize -> Resized lights pool to size = %zu\n", LightCount);
 }
 
 void FlushDataToGPU() {
@@ -91,7 +91,7 @@ std::size_t AddLight(const Light &light) {
   _Lights.push_back(light);
   UpdateGPUBufferSize();
   // Return the index of the newly added light
-  ImGuiLog::GetInstance().AddLog("light_module::AddLight(&) -> Added a light with index = %d\n", wIndex);
+  ImGuiLog::GetInstance().AddLog("light_module::AddLight(&) -> Added a light with index = %zu\n", wIndex);
   return wIndex;
 }
 std::size_t AddLight(Light&& light) {
@@ -104,7 +104,7 @@ std::size_t AddLight(Light&& light) {
   _Lights.push_back(std::move(light));
   UpdateGPUBufferSize();
   // Return the index of the newly added light
-  ImGuiLog::GetInstance().AddLog("light_module::AddLight(&&) -> Added a light with index = %d\n", wIndex);
+  ImGuiLog::GetInstance().AddLog("light_module::AddLight(&&) -> Added a light with index = %zu\n", wIndex);
   return wIndex;
 }
 
@@ -120,12 +120,8 @@ Light GetLight(std::size_t lightID) {
   return Light();
 }
 Light& GetLightRef(std::size_t lightID) {
-  if (lightID < _Lights.size()) {
-    _DirtyFlag = true; // Assume change from the user
-    return _Lights[lightID];
-  }
-  ImGuiLog::GetInstance().AddLog("[ERROR]light_module::GetNumberOfLights -> lightID is out of bound.\n");
-  return Light();
+  _DirtyFlag = true; // Assume change from the user
+  return _Lights.at(lightID); // No light to refer to when out of bound: use GetLightPointer if unsure
 }
 Light* GetLightPointer(std::size_t lightID) {
   if (lightID < _Lights.size()) {

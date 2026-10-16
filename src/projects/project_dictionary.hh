@@ -33,6 +33,8 @@ void Init();
 // Retrieves the correct pipeline related to the given name.
 // Returns nullptr when reaching the end of the dictionary
 ProjectPipeline* LookUp(const std::string& a_sProjectName);
+// Names of every registered project, in alphabetical order
+std::vector<std::string> GetProjectNames();
 void AddStage(const std::string& a_sProjectName, const ProjectStage&& a_fProjectStage);
 void AddPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline);
 void SetPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vProjectPipeline);
@@ -43,9 +45,9 @@ void SetPipeline(const std::string& a_sProjectName, const ProjectPipeline&& a_vP
 //  - Terminate
 #define REGISTER_STD_PROJECT(projectName) \
         gem::particle::project_dict::SetPipeline(#projectName, std::move(gem::particle::ProjectPipeline({ \
-          std::bind(&gem::particle:: ## projectName ## _project::Init), \
-          std::bind(&gem::particle:: ## projectName ## _project::Run), \
-          std::bind(&gem::particle:: ## projectName ## _project::Terminate)})))
+          std::bind(&gem::particle::projectName##_project::Init), \
+          std::bind(&gem::particle::projectName##_project::Run), \
+          std::bind(&gem::particle::projectName##_project::Terminate)})))
 
 } /* namespace project_dict */
 } /* namespace particle */

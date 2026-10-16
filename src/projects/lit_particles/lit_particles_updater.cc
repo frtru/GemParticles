@@ -53,7 +53,7 @@ void LitParticleUpdater::Update(double a_dt, const std::shared_ptr<ParticlePool<
   for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
     // End of life update
     if (a_pPool->pData->m_lifetime[i] <= .9f) {
-      a_pPool->pData->m_color[i].a -= 4ui8;
+      a_pPool->pData->m_color[i].a -= 4;
     }
   }
 }

@@ -69,7 +69,9 @@ public:
   }
 
   virtual void Emit(double a_dt, const std::shared_ptr<ParticlePool<ParticleType> >& a_pPool) {
-    const std::size_t maxNewParticles     = static_cast<std::size_t>(a_dt*m_dEmissionRate);
+    // Clamped as a double: converting an out-of-range double (e.g. a DBL_MAX rate) to size_t is UB
+    const std::size_t maxNewParticles     = static_cast<std::size_t>(std::min(a_dt*m_dEmissionRate,
+      static_cast<double>(a_pPool->GetParticleCount())));
     const std::size_t firstParticleIndex  = a_pPool->GetActiveParticleCount();
     const std::size_t lastParticleIndex   = std::min(firstParticleIndex + maxNewParticles,
       a_pPool->GetParticleCount() - 1);

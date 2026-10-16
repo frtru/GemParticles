@@ -14,6 +14,7 @@
 #include "app.hh"
 //C system files
 //C++ system files
+#include <filesystem>
 #include <iostream>
 //Other libraries' .h files
 //Your project's .h files
@@ -25,6 +26,20 @@ namespace app {
 namespace {
 bool    _ProjectsLoaded = false;
 Status  _AppStatus;
+
+// Shaders and textures are loaded relative to the executable's folder
+void MoveToExecutableDirectory() {
+#ifdef __linux__
+  std::error_code error;
+  const auto executable = std::filesystem::read_symlink("/proc/self/exe", error);
+  if (!error) {
+    std::filesystem::current_path(executable.parent_path(), error);
+  }
+  if (error) {
+    std::cerr << __func__ << " -> " << error.message() << std::endl;
+  }
+#endif
+}
 }
 
 void LoadProjects() {
@@ -34,12 +49,14 @@ void LoadProjects() {
   }
 }
 
-ErrCode Launch(const std::string& a_sProjectName) {
+ErrCode Launch(const Options& a_Options) {
   // Load the projects beforehand, in case the user forgot to
   LoadProjects();
+  GraphicContext::SetOptions(a_Options.context);
+  MoveToExecutableDirectory();
 
   // Check if the project in input is recognized in the dictionary
-  ProjectPipeline *wPipeline = project_dict::LookUp(a_sProjectName);
+  ProjectPipeline *wPipeline = project_dict::LookUp(a_Options.project);
   if (wPipeline == nullptr) {
     _AppStatus._Error = UNRECOGNIZED_PROJECT;
     _AppStatus._Running = false;

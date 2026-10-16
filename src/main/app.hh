@@ -17,6 +17,8 @@
 #include <cstddef>
 #include <string>
 
+#include "options.hh"
+
 namespace gem {
 namespace particle {
 namespace app {
@@ -35,7 +37,7 @@ struct Status {
 };
 
 void LoadProjects();
-ErrCode Launch(const std::string& a_sProjectName);
+ErrCode Launch(const Options& a_Options);
 ErrCode GetAppStatusError();
 void SetAppStatusError(ErrCode a_unErrorCode);
 } /* namespace app */
