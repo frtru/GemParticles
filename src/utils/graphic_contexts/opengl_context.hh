@@ -14,6 +14,8 @@
 #ifndef OPENGL_CONTEXT_HH
 #define OPENGL_CONTEXT_HH
 
+#include <string>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "utils/graphic_contexts/graphic_context.hh"
@@ -41,7 +43,11 @@ private:
   virtual void InitImpl() override;
   virtual void TerminateImpl() override;
 
+  void InstallInputCallbacks();
+  void SaveScreenshot(const std::string& a_sPath) const;
+
   GLFWwindow* m_pWindow;
+  long long   m_llFrameCount;
 
 }; /* class OpenGLContext*/
 } /* namespace particle */

@@ -16,6 +16,10 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
+#include <memory>
 #include <string>
 #include <vector>
 #include <tuple>
@@ -80,6 +84,7 @@ public:
     _callback(callback),
     _delta(delta), 
     _previous_data(nullptr) {}
+  virtual ~IProperty() = default;
 
   virtual void Draw(int id) = 0;
 
@@ -106,7 +111,7 @@ public:
     ImGui::PushID(_data);
     ImGui::Separator();
     ImGui::AlignTextToFramePadding();
-    ImGui::Text(_name.c_str());
+    ImGui::Text("%s", _name.c_str());
     ImGui::NextColumn();
     ImGui::AlignTextToFramePadding();
     ImGui::Text("");
@@ -426,6 +431,10 @@ public:
   void Draw(const char* title, bool openFlag = true, bool* p_open = NULL) {
     if (!openFlag)
       return;
+    // Top-right corner until the user moves it (then imgui.ini remembers)
+    const ImVec2 workSize = ImGui::GetMainViewport()->WorkSize;
+    ImGui::SetNextWindowPos(ImVec2(workSize.x - 410.0f, 10.0f), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(400.0f, 300.0f), ImGuiCond_FirstUseEver);
     if (!ImGui::Begin(title, p_open))
     {
       ImGui::End();

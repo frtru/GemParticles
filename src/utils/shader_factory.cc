@@ -84,7 +84,7 @@ bool CompileShaderText(const std::string& a_rShaderText,
     glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogSize);
     GLchar *infoLog = new GLchar[infoLogSize];
     glGetShaderInfoLog(shader, infoLogSize, nullptr, infoLog);
-    ImGuiLog::GetInstance().AddLog("[ERROR]shader_factory::CompileShaderText -> %s.\n", infoLog);
+    ImGuiLog::GetInstance().AddLog("[ERROR]shader_factory::CompileShaderText -> %s: %s.\n", a_sFileName.c_str(), infoLog);
     delete[] infoLog;
     return false;
   }

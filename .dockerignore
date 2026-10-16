@@ -1,0 +1,11 @@
+# Host build outputs and tools must not leak into the image (paths differ)
+build/
+.venv/
+CMakeUserPresets.json
+compile_commands.json
+.git/
+# Not needed to build or run
+gifs_and_screenshots/
+tasks/
+.vscode/
+.cursor/

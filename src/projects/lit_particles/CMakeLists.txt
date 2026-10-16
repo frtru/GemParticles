@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
 
-project(Light C CXX)
+project(LitParticles C CXX)
 
 file(GLOB SOURCE_FILES 
     "*.cc"
@@ -11,9 +11,7 @@ add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers ParticleSystems ${CONAN_LIBS})
 
-add_custom_command(TARGET Light POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/bin/shaders/${PROJECT_NAME}
-)
+gem_copy_shaders(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/shaders ${PROJECT_NAME})
 
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                  ${Projects_INCLUDE_DIRS}

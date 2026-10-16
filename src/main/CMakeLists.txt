@@ -9,7 +9,16 @@ file(GLOB SOURCE_FILES
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
-target_link_libraries(${PROJECT_NAME} Utils Core Dynamics Emitters Renderers ParticleSystems Projects ${CONAN_LIBS})
+target_link_libraries(${PROJECT_NAME} 
+    Utils 
+    Core 
+    Dynamics 
+    Emitters 
+    Renderers 
+    ParticleSystems 
+    Projects 
+    CLI11::CLI11
+)
 
 set_target_properties(GemParticlesApp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
@@ -21,8 +30,8 @@ set_property(TARGET GemParticlesApp PROPERTY MINSIZEREL_OUTPUT_NAME "GemParticle
 
 add_custom_command(TARGET GemParticlesApp POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_ROOT_PATH}/textures ${CMAKE_BINARY_DIR}/bin/textures
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_ROOT_PATH}/shaders ${CMAKE_BINARY_DIR}/bin/shaders/bootstrap
 )
+gem_copy_shaders(${PROJECT_NAME} ${PROJECT_ROOT_PATH}/shaders bootstrap)
              
 set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                  ${Projects_INCLUDE_DIRS}
@@ -31,5 +40,4 @@ set(${PROJECT_NAME}_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}
                                  ${Dynamics_INCLUDE_DIRS}
                                  ${Core_INCLUDE_DIRS}
                                  ${Utils_INCLUDE_DIRS}
-                                 ${CONAN_INCLUDE_DIRS}
     CACHE INTERNAL "${PROJECT_NAME}: Include Directories" FORCE)
