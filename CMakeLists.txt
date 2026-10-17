@@ -18,6 +18,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# BUILD_TESTING (default ON) adds the unit and system tests under tests/
+include(CTest)
+
 # Keep frame pointers in the profiling build so perf/valgrind get reliable call stacks
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   string(APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO " -fno-omit-frame-pointer")
@@ -62,3 +65,7 @@ add_subdirectory(src/renderers)
 add_subdirectory(src/particle_systems)
 add_subdirectory(src/projects)
 add_subdirectory(src/main)
+
+if (BUILD_TESTING)
+  add_subdirectory(tests)
+endif ()

@@ -8,6 +8,9 @@ stb/cci.20240531
 cli11/2.5.0
 nlohmann_json/3.11.3
 
+[test_requires]
+gtest/1.17.0
+
 [generators]
 CMakeDeps
 CMakeToolchain

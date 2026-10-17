@@ -7,10 +7,12 @@ file(GLOB SOURCE_FILES
     "*.hh"
     "systems/*.cc"
 )
+list(REMOVE_ITEM SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/main.cc)
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-
-target_link_libraries(${PROJECT_NAME} 
+# The app without main(), so the tests can link it too. The systems register themselves
+# while the program starts: as an OBJECT library, every registrar is linked.
+add_library(App OBJECT ${SOURCE_FILES})
+target_link_libraries(App PUBLIC
     GraphicContexts
     Utils 
     Core 
@@ -22,6 +24,11 @@ target_link_libraries(${PROJECT_NAME}
     CLI11::CLI11
     nlohmann_json::nlohmann_json
 )
+
+add_executable(${PROJECT_NAME} main.cc)
+
+# Objects of an OBJECT library only reach the targets linking it directly
+target_link_libraries(${PROJECT_NAME} App GraphicContexts)
 
 set_target_properties(GemParticlesApp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
