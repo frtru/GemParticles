@@ -41,7 +41,7 @@ std::vector<glm::f32vec3> GenerateSphericalBoundCoordinates(
     coord[0] = a_fRadius * sin(phi) * cos(theta);
     coord[1] = a_fRadius * sin(phi) * sin(theta);
     coord[2] = a_fRadius * cos(phi);
-    coords.push_back(std::move(coord));
+    coords.push_back(a_CenterCoordinate + coord);
   }
   return coords;
 }

@@ -73,6 +73,10 @@ void MouseButtonCallBack(int a_nButtonID, int a_nAction, int a_nMods) {
   case GLFW_MOUSE_BUTTON_RIGHT:
     if (a_nAction == GLFW_PRESS) {
       mouse_state = CAMERA_MOVING;
+      // The drag starts from where the camera looks: a project or a key may have aimed it
+      const glm::vec3 direction = glm::normalize(camera::GetTargetPosition() - camera::GetEyePosition());
+      yaw   = glm::degrees(atan2(direction.z, direction.x));
+      pitch = glm::degrees(asin(direction.y));
     }
     else {
       mouse_state = FREE_CURSOR;

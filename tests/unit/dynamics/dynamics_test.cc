@@ -43,9 +43,8 @@ TEST(EulerParticleUpdaterTest, MovesParticlesAlongTheirVelocity) {
   EXPECT_EQ(pool->pCoreData->m_velocity[0], glm::f32vec3(4.0f, 0.0f, -2.0f));
 }
 
-// Finding: when particle i expires, Sleep(i) moves the last active particle into slot i
-// and the loop goes on with i + 1, so that particle isn't aged during this update.
-TEST(EulerParticleUpdaterTest, DISABLED_AgesTheParticleSwappedIntoAnExpiredSlot) {
+// Sleep(i) moves the last active particle into the expired slot i: it must still be aged
+TEST(EulerParticleUpdaterTest, AgesTheParticleSwappedIntoAnExpiredSlot) {
   auto pool = std::make_shared<CorePool>(8);
   WakeParticle(*pool, 0.1f);
   WakeParticle(*pool, 1.0f);

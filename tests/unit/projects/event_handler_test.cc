@@ -118,22 +118,19 @@ TEST_P(EventHandlerTest, ReleasingTheRightButtonEndsTheDrag) {
   EXPECT_EQ(camera::GetTargetPosition(), target);
 }
 
-// Finding: the handlers start from yaw -90 and pitch 0 (looking down -Z) whatever the
-// camera looks at, so the second cursor event of a drag turns the view towards -Z:
-// ~55 degrees away from the point of interest for the projects' diagonal start.
-TEST_P(EventHandlerTest, DISABLED_DragStartsFromTheCurrentView) {
+// A drag turns the view from where the camera looks, not from a fixed initial direction
+TEST_P(EventHandlerTest, DragStartsFromTheCurrentView) {
   RightButton(GLFW_PRESS);
   Cursor(100.0, 100.0);
   Cursor(101.0, 100.0);
   EXPECT_LT(DegreesTo(POINT_OF_INTEREST), ONE_PIXEL_DRAG_TOLERANCE);
 }
 
-// Finding: Space looks back at the origin without updating yaw and pitch,
-// so the next drag jumps back to the view of the previous drag.
-TEST_P(EventHandlerTest, DISABLED_DragAfterReaimingStartsFromTheCurrentView) {
-  if (!GetParam().reaimsWithSpace) {
-    GTEST_SKIP() << GetParam().name << " has no re-aim key";
-  }
+// Handlers whose Space key looks back at the origin
+class ReaimingEventHandlerTest : public EventHandlerTest {};
+
+// The next drag starts from the re-aimed view, not from where the previous drag left it
+TEST_P(ReaimingEventHandlerTest, DragAfterReaimingStartsFromTheCurrentView) {
   Drag(100.0, 400.0);
   Callbacks().key(GLFW_KEY_SPACE, 0, GLFW_PRESS, 0);
   ASSERT_LT(DegreesTo(POINT_OF_INTEREST), 0.1f);
@@ -143,8 +140,20 @@ TEST_P(EventHandlerTest, DISABLED_DragAfterReaimingStartsFromTheCurrentView) {
   EXPECT_LT(DegreesTo(POINT_OF_INTEREST), ONE_PIXEL_DRAG_TOLERANCE);
 }
 
-INSTANTIATE_TEST_SUITE_P(Projects, EventHandlerTest, testing::ValuesIn(Handlers()),
-  [](const testing::TestParamInfo<Handler>& a_Info) { return a_Info.param.name; });
+std::vector<Handler> ReaimingHandlers() {
+  std::vector<Handler> handlers;
+  for (const Handler& handler : Handlers()) {
+    if (handler.reaimsWithSpace) {
+      handlers.push_back(handler);
+    }
+  }
+  return handlers;
+}
+
+std::string HandlerName(const testing::TestParamInfo<Handler>& a_Info) { return a_Info.param.name; }
+
+INSTANTIATE_TEST_SUITE_P(Projects, EventHandlerTest, testing::ValuesIn(Handlers()), HandlerName);
+INSTANTIATE_TEST_SUITE_P(Projects, ReaimingEventHandlerTest, testing::ValuesIn(ReaimingHandlers()), HandlerName);
 } /* namespace */
 } /* namespace particle */
 } /* namespace gem */

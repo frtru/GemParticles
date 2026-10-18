@@ -11,8 +11,8 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
 *************************************************************************/
-#ifndef FOUNTAIN_EMITTER_HH
-#define FOUNTAIN_EMITTER_HH
+#ifndef SPHERICAL_STREAM_EMITTER_HH
+#define SPHERICAL_STREAM_EMITTER_HH
 
 #include "emitters/emitter.hh"
 #include "core/particle_pool_core.hh"
@@ -39,4 +39,4 @@ private:
 } /* namespace particle */
 } /* namespace gem */
 
-#endif /* end of include guard: FOUNTAIN_EMITTER_HH */
+#endif /* end of include guard: SPHERICAL_STREAM_EMITTER_HH */

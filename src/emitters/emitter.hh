@@ -74,7 +74,7 @@ public:
       static_cast<double>(a_pPool->GetParticleCount())));
     const std::size_t firstParticleIndex  = a_pPool->GetActiveParticleCount();
     const std::size_t lastParticleIndex   = std::min(firstParticleIndex + maxNewParticles,
-      a_pPool->GetParticleCount() - 1);
+      a_pPool->GetParticleCount());
 
     Init(a_dt, a_pPool, firstParticleIndex, lastParticleIndex);
 

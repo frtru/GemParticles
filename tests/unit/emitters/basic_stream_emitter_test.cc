@@ -45,9 +45,7 @@ TEST(BasicStreamEmitterTest, NeverEmitsMoreThanThePool) {
   EXPECT_LE(pool->GetActiveParticleCount(), pool->GetParticleCount());
 }
 
-// Finding: Emit clamps the last emitted index to GetParticleCount() - 1, so the
-// last particle of the pool is never used (99 active particles out of 100).
-TEST(BasicStreamEmitterTest, DISABLED_FillsTheWholePool) {
+TEST(BasicStreamEmitterTest, FillsTheWholePool) {
   auto pool = std::make_shared<CorePool>(100);
   BasicStreamEmitter emitter(SPAWN_LOCATION, SPAWN_VELOCITY, 2.0f, 1.0e9);
   emitter.Emit(1.0, pool);

@@ -20,10 +20,14 @@ void EulerParticleUpdater::Update(double a_dt, const std::shared_ptr<ParticlePoo
   // (GLM vec3 or vec4 doesn't support operations with doubles...)
   const float fDt = static_cast<float>(a_dt);
 
-  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount(); ++i) {
+  for (std::size_t i = 0; i < a_pPool->GetActiveParticleCount();) {
     a_pPool->pCoreData->m_lifetime[i] -= fDt;
     if (a_pPool->pCoreData->m_lifetime[i] <= 0.0f) {
+      // The last active particle takes this slot: it is aged on the next iteration
       a_pPool->Sleep(i);
+    }
+    else {
+      ++i;
     }
   }
 

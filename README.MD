@@ -33,7 +33,6 @@ The project uses CMake files for portability and the [Conan 2 package manager](h
 4. `scripts/test.sh` runs the tests of a build with ctest (googletest; `-DBUILD_TESTING=OFF` builds without them).
    * `-L unit` runs the unit tests (`tests/unit/`: particle core, emitters, dynamics, app config/options/systems), which need no window.
    * `-L system` runs the system tests (`tests/system/`): every project does a scripted run and saves its last frame, and invalid configs must stop the app before any window opens. They need a display; `--nvidia` and `--cfg Debug` work as for `run.sh`.
-   * `DISABLED_` tests describe known bugs, not fixed yet; run them with `build/Release/bin/GemParticlesUnitTests --gtest_also_run_disabled_tests`.
 
 ## External libraries
 I'm using various external libraries in this project which are listed in the file conanfile.txt 

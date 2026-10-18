@@ -1,6 +1,4 @@
 // Random emitter: checked on invariants of its distribution, not exact values
-// Finding: spherical_stream_emitter.hh reuses random_fountain_emitter.hh's include guard
-// (FOUNTAIN_EMITTER_HH), so no file can include both.
 #include <memory>
 
 #include <gtest/gtest.h>
@@ -29,9 +27,7 @@ TEST(SphericalStreamEmitterTest, SpawnsParticlesOnTheSphere) {
   }
 }
 
-// Finding: GenerateSphericalBoundCoordinates takes the spawn location as the
-// sphere's center but never uses it, so every sphere is centered on the origin.
-TEST(SphericalStreamEmitterTest, DISABLED_SphereIsCenteredOnTheSpawnLocation) {
+TEST(SphericalStreamEmitterTest, SphereIsCenteredOnTheSpawnLocation) {
   auto pool = std::make_shared<CorePool>(1000);
   const float radius = 3.0f;
   const glm::f32vec3 center = { 10.0f, 0.0f, 0.0f };
