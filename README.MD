@@ -26,6 +26,7 @@ The project uses CMake files for portability and the [Conan 2 package manager](h
 2. `cmake --preset conan-release && cmake --build --preset conan-release` (or `conan-debug` / `conan-relwithdebinfo`).
 3. `scripts/run.sh lit_particles` launches a project (`attractor`, `light`, `lit_particles`, `rain` or `skybox`; the first one when omitted).
    * `--nvidia` renders on a discrete NVIDIA GPU through PRIME offload, `--cfg Debug` runs another build.
+   * `--build` builds first, recompiling only what changed since the last build; `--rebuild` cleans and builds everything.
    * `N` switches to the next project while the app runs.
    * `src/main/config.json` (copied next to the executable) holds the app settings (graphics backend, window, default project) and lists the app's components: `DebugOverlay`, `NextProjectKey`, `ScriptedRun`.
    * `--config other.json` runs with another config, e.g. a scripted run: `{ "type": "ScriptedRun", "frames": 300, "screenshot": "out.png" }` exits after 300 frames and saves the last one.
